@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Certification Roadmap</title>
     <style>
-        /* Domain color variables */
+        /* Domain color variables - revised to match original design */
         :root {
-            /* Colors from the original design */
+            /* Colors from the original design - carefully checked against visual reference */
             --green: #70AD47;
             --greendk: #548235;
             --teal: #008080;
@@ -126,33 +126,30 @@
             display: inline-block;
         }
 
-        /* Certification grid styles */
+        /* Certification grid styles - maintaining precise dimensions from original */
         .certchart {
             background: white;
             color: #323232;
             font-weight: 300;
             margin-top: 1vmax;
             display: block;
-            text-align: center;
-            width: 98vw;
+            width: 100%;
             position: relative;
-            min-height: 45.7vmax; /* Ensure enough space for the grid */
+            min-height: 47vmax; /* Increased to ensure full visibility */
         }
 
-        /* Background grid for domain titles and borders */
+        /* Background grid with precise column specifications from original design */
         .certbg {
             background: #ffffff;
-            justify-content: left;
             display: grid;
             position: relative;
-            grid-template-columns: [skilllevel] 0.8vmax [net] 7.5vmax [iam] 2.65vmax [eng] 17.2vmax [ast] 5.1vmax [rsk] 21.8vmax [tst] 7.5vmax [dev] 2.7vmax [ops] 31.5vmax;
-            grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
+            /* Exact column measurements from original design */
+            grid-template-columns: [skilllevel] 4vmax [net] 8vmax [iam] 8vmax [eng] 17vmax [ast] 8vmax [rsk] 15vmax [tst] 10vmax [dev] 8vmax [ops] 20vmax;
+            grid-template-rows: [domain] 5vmax [chart] 42vmax;
             column-gap: 0.2vmax;
             white-space: pre-wrap;
             line-height: 130%;
-            left: -0.7vmax;
             width: 100%;
-            min-height: 45.7vmax; /* Total of domain + chart rows height */
         }
 
         /* Style for the domain titles */
@@ -160,22 +157,57 @@
             font-weight: 450;
             font-size: 0.8vmax;
             text-align: center;
-            align-content: bottom;
-            justify-content: center;
             align-self: flex-end;
             display: flex;
-            margin-bottom: 0.1vmax;
-            width: 100%;
+            justify-content: center;
+            margin-bottom: 0.5vmax;
+            padding: 0 0.5vmax;
+            grid-row: domain;
         }
 
-        /* Styles for domain containers */
+        /* Skill level section styling - vertical labels */
+        .skilllevelcontainer {
+            grid-column: skilllevel;
+            grid-row: chart;
+            position: relative;
+            height: 100%;
+        }
+
+        .skilllevelitem {
+            transform: rotate(270deg);
+            position: absolute;
+            font-weight: 600;
+            font-size: 0.9vmax;
+            white-space: nowrap;
+            transform-origin: left center;
+        }
+
+        /* Positioned skill level labels */
+        .skilllevel-expert {
+            top: 15%;
+            left: 50%;
+            color: var(--reddk);
+        }
+
+        .skilllevel-intermediate {
+            top: 50%;
+            left: 50%;
+            color: var(--orangedk);
+        }
+
+        .skilllevel-beginner {
+            top: 85%;
+            left: 50%;
+            color: var(--greendk);
+        }
+
+        /* Domain containers - specific styling for each domain */
         .networkcontainer, .iamcontainer, .engineercontainer, 
         .assetcontainer, .mgmtcontainer, .testingcontainer, 
         .softwarecontainer, .operationscontainer {
             display: grid;
             border-radius: 0.25vmax;
-            grid-row: chart; /* Important: Position in the chart row */
-            min-height: 43.7vmax; /* Match the chart row height */
+            grid-row: chart;
             height: 100%;
         }
 
@@ -183,170 +215,99 @@
             border: 2px solid var(--green); 
             grid-column: net;
         }
+
         .iamcontainer { 
             border: 2px solid var(--teal); 
             grid-column: iam;
         }
+
         .engineercontainer { 
             border: 2px solid var(--orange);
             grid-column: eng;
-            grid-template-columns: 2.3vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
         }
+
         .assetcontainer { 
             border: 2px solid var(--yellow); 
             grid-column: ast;
         }
+
         .mgmtcontainer { 
             border: 2px solid var(--black);
             grid-column: rsk;
-            grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
         }
+
         .testingcontainer { 
             border: 2px solid var(--purple); 
             grid-column: tst;
         }
+
         .softwarecontainer { 
             border: 2px solid var(--skyblue); 
             grid-column: dev;
         }
+
         .operationscontainer { 
-            border: 2px solid var(--red);
+            border: 2px solid var(--blue);
             grid-column: ops;
-            grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.1vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
         }
 
-        /* Subdomain title styles */
+        /* Subdomain styling */
         .subtitle1, .subtitle2, .subtitle3, .subtitle4, .subtitle5 {
             font-weight: 400;
-            font-size: 0.5vmax;
+            font-size: 0.7vmax;
             text-align: center;
-            align-content: bottom;
-            justify-content: center;
-            align-self: flex-end;
-            display: flex;
+            padding: 0.2vmax 0;
         }
-        .subtitle2 { grid-column: span 2; }
-        .subtitle3 { grid-column: span 3; }
-        .subtitle4 { grid-column: span 4; }
-        .subtitle5 { grid-column: span 5; }
 
-        /* Subdomain background styles */
-        .engsubdomain1, .engsubdomain4, .mgmtsubdomain4, .bluesubdomain2, .redsubdomain2, .redsubdomain5 {
-            display: flex;
-            column-gap: 1vmax;
+        /* Engineer subdomain backgrounds */
+        .engsubdomain1 { 
+            background: var(--orangelt);
+            padding: 0.2vmax;
+            height: 100%;
         }
-        .engsubdomain1 { background: var(--orangelt); }
-        .engsubdomain4 { 
-            background: var(--orangelt); 
-            grid-column: span 4;
-            margin-left: 0.3vmax;
-        }
-        .mgmtsubdomain4 { 
-            background: var(--blacklt);
-            grid-column: span 4;
-            margin-left: 0.3vmax;
-        }
+
+        /* Operations subdomain backgrounds */
         .bluesubdomain2 { 
             background: var(--bluelt);
-            grid-column: span 2;
-            margin-left: 0.1vmax;
+            height: 100%;
         }
+
         .redsubdomain2 { 
             background: var(--redlt);
-            grid-column: span 2;
-        }
-        .redsubdomain5 { 
-            background: var(--redlt);
-            grid-column: span 5;
+            height: 100%;
         }
 
-        /* Foreground grid for cert tiles */
+        /* GRC subdomain background */
+        .mgmtsubdomain4 { 
+            background: var(--blacklt);
+            height: 100%;
+        }
+
+        /* Foreground grid for cert tiles - will be populated later */
         .certcontainer {
-            justify-content: center;
-            text-align: center;
-            align-content: center;
-            line-height: 120%;
-            display: grid;
             position: absolute;
-            font-size: 0.6vmax;
-            top: 4.8vmax;
-            left: -0.31vmax;
-            grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
-            grid-template-rows: repeat(27, 1.5vmax);
-            column-gap: 0.1vmax;
-            row-gap: 0.1vmax;
-            white-space: pre-wrap;
-        }
-
-        /* Skill level labels */
-        .skilllevelitem {
-            transform: rotate(270deg);
-            justify-items: right;
-            align-items: flex-end;
-            font-weight: 600;
-            font-size: 0.8vmax;
+            top: 5vmax; /* Aligns with the start of chart row */
+            left: 0;
+            width: 100%;
+            height: 42vmax;
             display: grid;
+            pointer-events: none; /* Allow clicks to pass through to background */
         }
 
-        /* Generic cert item styles */
+        /* Certification tiles will be added here later */
         .certlink {
-            color: #ffffff;
-            font-weight: 400;
+            pointer-events: auto; /* Re-enable clicks for cert tiles */
+            background-color: var(--tileColor, #666);
+            color: white;
+            font-size: 0.7vmax;
+            text-align: center;
+            display: flex;
             align-items: center;
-            justify-items: center;
-            text-decoration: none;
-            display: grid;
+            justify-content: center;
             border-radius: 0.25vmax;
-        }
-
-        /* Cert status styles */
-        body.candidate-view .certlink.achieved {
-            outline: 0.15vmax solid limegreen;
-            box-shadow: 0 0 0.4vmax limegreen;
-        }
-
-        body.candidate-view .certlink.planned {
-            outline: 0.15vmax dashed darkgoldenrod;
-            box-shadow: 0 0 0.4vmax darkgoldenrod;
-        }
-
-        /* Transparent view styles */
-        body.candidate-view.transparent-view .certlink {
-            opacity: 0.4;
-            transition: opacity 0.2s ease;
-        }
-
-        body.candidate-view.transparent-view .certlink.achieved,
-        body.candidate-view.transparent-view .certlink.planned {
-            opacity: 1;
-        }
-
-        body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover,
-        body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover * {
-            opacity: 1 !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
             cursor: pointer;
-        }
-
-        /* Session visibility styles */
-        .certlink.session-visible.achieved,
-        .certlink.session-visible.planned {
-            box-shadow: 0 0 0.4vmax currentColor;
-        }
-
-        .certlink.session-visible.achieved {
-            outline: 0.15vmax solid limegreen;
-            color: limegreen;
-        }
-
-        .certlink.session-visible.planned {
-            outline: 0.15vmax dashed darkgoldenrod;
-            color: darkgoldenrod;
+            z-index: 10;
         }
 
         /* Tooltip styles */
@@ -453,6 +414,15 @@
             #interactive {display: none;}
             #static {display: block;}
         }
+
+        /* Debug info panel */
+        #debug-info {
+            background: #f8f8f8;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -460,7 +430,7 @@
         <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap</div>
         
         <!-- Debug Info Section -->
-        <div id="debug-info" style="background:#f8f8f8;padding:10px;margin-bottom:10px;border:1px solid #ccc;display:none;">
+        <div id="debug-info">
             <h3>Debug Information</h3>
             <div id="debug-messages"></div>
             <button onclick="document.getElementById('debug-info').style.display='none'">Close</button>
@@ -639,10 +609,36 @@
             // Create domain header row
             this.createDomainHeaders(bgGrid);
             
+            // Create skill level indicators
+            this.createSkillLevels(bgGrid);
+            
             // Create domain containers
             this.createDomainContainers(bgGrid);
             
             return bgGrid;
+        },
+        
+        // Create skill level indicators
+        createSkillLevels: function(bgGrid) {
+            const skillLevelContainer = document.createElement('div');
+            skillLevelContainer.className = 'skilllevelcontainer';
+            
+            // Define skill levels
+            const skillLevels = [
+                { name: 'Expert', class: 'skilllevel-expert' },
+                { name: 'Intermediate', class: 'skilllevel-intermediate' },
+                { name: 'Beginner', class: 'skilllevel-beginner' }
+            ];
+            
+            // Create skill level labels
+            skillLevels.forEach(level => {
+                const levelLabel = document.createElement('div');
+                levelLabel.className = `skilllevelitem ${level.class}`;
+                levelLabel.textContent = level.name;
+                skillLevelContainer.appendChild(levelLabel);
+            });
+            
+            bgGrid.appendChild(skillLevelContainer);
         },
         
         // Create domain header titles
@@ -650,21 +646,13 @@
             // Sort domains by order
             const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
             
-            // Create empty skill level header (for left column)
-            const emptyHeader = document.createElement('div');
-            emptyHeader.className = 'domaintitle';
-            emptyHeader.style.gridRow = 'domain';
-            emptyHeader.style.gridColumn = 'skilllevel';
-            bgGrid.appendChild(emptyHeader);
-            
             // Create a header for each domain
             sortedDomains.forEach(domain => {
                 const domainTitle = document.createElement('div');
                 domainTitle.className = 'domaintitle';
                 domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.textContent = domain.name;
-                domainTitle.style.gridRow = 'domain';
                 domainTitle.style.gridColumn = domain.id.toLowerCase();
+                domainTitle.textContent = domain.name;
                 
                 // Add tooltip with domain description
                 if (domain.description) {
@@ -682,13 +670,6 @@
             // Sort domains by order
             const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
             
-            // Create empty container for skill level column
-            const skillLevelContainer = document.createElement('div');
-            skillLevelContainer.className = 'skilllevelcontainer';
-            skillLevelContainer.style.gridRow = 'chart';
-            skillLevelContainer.style.gridColumn = 'skilllevel';
-            bgGrid.appendChild(skillLevelContainer);
-            
             // Create a container for each domain
             sortedDomains.forEach(domain => {
                 // Determine container class based on domain ID
@@ -703,51 +684,50 @@
                     subdomain => subdomain.domainId === domain.id
                 );
                 
-                // If domain has subdomains, create them
+                // Create subdomain sections if any exist
                 if (domainSubdomains.length > 0) {
-                    this.createSubdomains(domainContainer, domainSubdomains, domain);
+                    this.createSubdomainContainers(domainContainer, domainSubdomains, domain);
                 }
                 
                 bgGrid.appendChild(domainContainer);
-                
-                // Log container creation for debugging
                 console.log(`Created container for domain ${domain.id} with class ${containerClass}`);
             });
         },
         
-        // Create subdomain titles and backgrounds
-        createSubdomains: function(domainContainer, subdomains, domain) {
-            // First create subdomain titles
+        // Create subdomain containers within a domain
+        createSubdomainContainers: function(domainContainer, subdomains, domain) {
+            // Create container for each subdomain
             subdomains.forEach(subdomain => {
-                // Create subdomain title
-                const span = subdomain.gridRowSpan || 1;
-                const titleElement = document.createElement('div');
-                titleElement.className = `subtitle${span}`;
-                titleElement.textContent = subdomain.name;
-                titleElement.setAttribute('data-subdomain-id', subdomain.id);
-                domainContainer.appendChild(titleElement);
+                // Create subdomain container
+                const subdomainContainer = document.createElement('div');
                 
-                // Create subdomain background
-                const bgElement = document.createElement('div');
+                // Determine the background class based on team role and domain
+                let bgClass = '';
                 const teamRole = subdomain.teamRole || 'DefaultTeam';
+                const domainId = domain.id.toLowerCase();
                 
-                // Set appropriate background color
-                const domainIdLower = domain.id.toLowerCase();
                 if (teamRole === 'RedTeam' && domain.id === 'OPS') {
-                    bgElement.className = `redsubdomain${span}`;
+                    bgClass = 'redsubdomain2';
                 } else if (teamRole === 'BlueTeam' && domain.id === 'OPS') {
-                    bgElement.className = `bluesubdomain${span}`;
+                    bgClass = 'bluesubdomain2';
                 } else if (domain.id === 'ENG') {
-                    bgElement.className = `engsubdomain${span}`;
+                    bgClass = 'engsubdomain1';
                 } else if (domain.id === 'RSK') {
-                    bgElement.className = `mgmtsubdomain${span}`;
+                    bgClass = 'mgmtsubdomain4';
                 } else {
-                    bgElement.className = `${domainIdLower}subdomain${span}`;
+                    bgClass = `${domainId}subdomain1`;
                 }
                 
-                bgElement.setAttribute('data-subdomain-id', subdomain.id);
+                subdomainContainer.className = bgClass;
+                subdomainContainer.setAttribute('data-subdomain-id', subdomain.id);
                 
-                domainContainer.appendChild(bgElement);
+                // Add subdomain title
+                const titleElement = document.createElement('div');
+                titleElement.className = 'subtitle1';
+                titleElement.textContent = subdomain.name;
+                subdomainContainer.appendChild(titleElement);
+                
+                domainContainer.appendChild(subdomainContainer);
             });
         },
         
@@ -756,40 +736,10 @@
             const fgGrid = document.createElement('div');
             fgGrid.className = 'certcontainer';
             
-            // Add skill level indicators
-            this.addSkillLevels(fgGrid);
-            
-            // Placeholder message for candidate view with no certs
-            const noVisibleCertsMsg = document.createElement('div');
-            noVisibleCertsMsg.id = 'noCertsMessage';
-            noVisibleCertsMsg.className = 'candidate-only';
-            noVisibleCertsMsg.style.display = 'none';
-            noVisibleCertsMsg.style.textAlign = 'center';
-            noVisibleCertsMsg.style.fontSize = '1.2vmax';
-            noVisibleCertsMsg.style.marginTop = '2vmax';
-            noVisibleCertsMsg.textContent = '🚫 No certifications are available for this domain.';
-            fgGrid.appendChild(noVisibleCertsMsg);
+            // This will later contain certification tiles
+            // For now, it's just an empty grid that overlays the background
             
             return fgGrid;
-        },
-        
-        // Add skill level indicators to the grid
-        addSkillLevels: function(fgGrid) {
-            // Define skill levels
-            const skillLevels = [
-                { name: 'Expert', color: 'var(--reddk)', row: 6 },
-                { name: 'Intermediate', color: 'var(--orangedk)', row: 18 },
-                { name: 'Beginner', color: 'var(--greendk)', row: 27 }
-            ];
-            
-            // Create and position skill level indicators
-            skillLevels.forEach(level => {
-                const levelLabel = document.createElement('div');
-                levelLabel.className = 'skilllevelitem';
-                levelLabel.innerHTML = `<span style="color:${level.color}">${level.name}</span>`;
-                
-                fgGrid.appendChild(levelLabel);
-            });
         },
         
         // Helper to get the container class based on domain ID
@@ -944,941 +894,4 @@
     });
     </script>
 </body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Certification Roadmap</title>
-    <style>
-        /* Domain color variables */
-        :root {
-            /* Colors from the original design */
-            --green: #70AD47;
-            --greendk: #548235;
-            --teal: #008080;
-            --tealdk: #003F3E;
-            --orange: #fa8e36;
-            --orangedk: #c06216;
-            --orangelt: #fdeada;
-            --yellow: #e4ac03;
-            --yellowdk: #7F6000;
-            --black: #2a2a2a;
-            --blackdk: #000000; 
-            --blacklt: #d9d9d9;
-            --purple: #683e9b;
-            --purpledk: #352647;
-            --purplelt: #eddbff;
-            --skyblue: #6bb3f6;
-            --skybluedk: #2665a0;
-            --blue: #2e5688;
-            --bluedk: #1f3147;
-            --bluelt: #dce6f2;
-            --red: #c0514d;
-            --reddk: #8c3736;
-            --redlt: #f2dcdb;
-            --magenta: #830083;
-            --magentadk: #490e49;
-            
-            /* Domain-specific variables */
-            --net: var(--green);
-            --netdk: var(--greendk);
-            --iam: var(--teal);
-            --iamdk: var(--tealdk);
-            --eng: var(--orange);
-            --engdk: var(--orangedk);
-            --ast: var(--yellow);
-            --astdk: var(--yellowdk);
-            --rsk: var(--black);
-            --rskdk: var(--blackdk);
-            --tst: var(--purple);
-            --tstdk: var(--purpledk);
-            --dev: var(--skyblue);
-            --devdk: var(--skybluedk);
-            --ops: var(--blue);
-            --opsdk: var(--bluedk);
-        }
-
-        body {
-            font-family: "Segoe UI", "Calibri", Tahoma, "Geneva", Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        #certmap-container {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: auto;
-            padding: 1vmax;
-            box-sizing: border-box;
-        }
-
-        #certmap-container h1 {
-            font-size: 2vmax;
-            font-weight: 500;
-            margin-bottom: 0.5vmax;
-        }
-
-        /* Toolbar styles */
-        #certmap-toolbar {
-            margin-top: 1vmax;
-            margin-bottom: 1vmax;
-            text-align: center;
-        }
-
-        .toolbar-button {
-            padding: 0.5vmax 1vmax;
-            font-size: 1vmax;
-            margin-right: 1vmax;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-        }
-
-        .toolbar-button:last-child {
-            margin-right: 0;
-        }
-
-        .toolbar-button:hover {
-            background-color: #eaeaea;
-        }
-
-        /* Filter container */
-        .filter-container {
-            margin-top: 1vmax;
-            display: flex;
-            justify-content: center;
-            gap: 2vmax;
-        }
-
-        /* Hide candidate-only elements by default */
-        .candidate-only {
-            display: none;
-        }
-
-        /* Show them when in candidate view */
-        body.candidate-view .candidate-only {
-            display: inline-block;
-        }
-
-        /* Hide opacity mode button by default */
-        #toggleOpacityMode {
-            display: none;
-        }
-
-        /* Show it only when both candidate-view AND edit-mode are active */
-        body.candidate-view.edit-mode #toggleOpacityMode {
-            display: inline-block;
-        }
-
-        /* Certification grid styles */
-        .certchart {
-            background: white;
-            color: #323232;
-            font-weight: 300;
-            margin-top: 1vmax;
-            display: block;
-            text-align: center;
-            width: 98vw;
-            position: relative;
-            min-height: 45.7vmax; /* Ensure enough space for the grid */
-        }
-
-        /* Background grid for domain titles and borders */
-        .certbg {
-            background: #ffffff;
-            justify-content: left;
-            display: grid;
-            position: relative;
-            grid-template-columns: [skilllevel] 0.8vmax [net] 7.5vmax [iam] 2.65vmax [eng] 17.2vmax [ast] 5.1vmax [rsk] 21.8vmax [tst] 7.5vmax [dev] 2.7vmax [ops] 31.5vmax;
-            grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
-            column-gap: 0.2vmax;
-            white-space: pre-wrap;
-            line-height: 130%;
-            left: -0.7vmax;
-            width: 100%;
-            min-height: 45.7vmax; /* Total of domain + chart rows height */
-        }
-
-        /* Style for the domain titles */
-        .domaintitle {
-            font-weight: 450;
-            font-size: 0.8vmax;
-            text-align: center;
-            align-content: bottom;
-            justify-content: center;
-            align-self: flex-end;
-            display: flex;
-            margin-bottom: 0.1vmax;
-            width: 100%;
-        }
-
-        /* Styles for domain containers */
-        .networkcontainer, .iamcontainer, .engineercontainer, 
-        .assetcontainer, .mgmtcontainer, .testingcontainer, 
-        .softwarecontainer, .operationscontainer {
-            display: grid;
-            border-radius: 0.25vmax;
-            grid-row: chart; /* Important: Position in the chart row */
-            min-height: 43.7vmax; /* Match the chart row height */
-            height: 100%;
-        }
-
-        .networkcontainer { 
-            border: 2px solid var(--green); 
-            grid-column: net;
-        }
-        .iamcontainer { 
-            border: 2px solid var(--teal); 
-            grid-column: iam;
-        }
-        .engineercontainer { 
-            border: 2px solid var(--orange);
-            grid-column: eng;
-            grid-template-columns: 2.3vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
-        }
-        .assetcontainer { 
-            border: 2px solid var(--yellow); 
-            grid-column: ast;
-        }
-        .mgmtcontainer { 
-            border: 2px solid var(--black);
-            grid-column: rsk;
-            grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
-        }
-        .testingcontainer { 
-            border: 2px solid var(--purple); 
-            grid-column: tst;
-        }
-        .softwarecontainer { 
-            border: 2px solid var(--skyblue); 
-            grid-column: dev;
-        }
-        .operationscontainer { 
-            border: 2px solid var(--red);
-            grid-column: ops;
-            grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.1vmax;
-            grid-template-rows: 1vmax auto;
-            column-gap: 0.2vmax;
-        }
-
-        /* Subdomain title styles */
-        .subtitle1, .subtitle2, .subtitle3, .subtitle4, .subtitle5 {
-            font-weight: 400;
-            font-size: 0.5vmax;
-            text-align: center;
-            align-content: bottom;
-            justify-content: center;
-            align-self: flex-end;
-            display: flex;
-        }
-        .subtitle2 { grid-column: span 2; }
-        .subtitle3 { grid-column: span 3; }
-        .subtitle4 { grid-column: span 4; }
-        .subtitle5 { grid-column: span 5; }
-
-        /* Subdomain background styles */
-        .engsubdomain1, .engsubdomain4, .mgmtsubdomain4, .bluesubdomain2, .redsubdomain2, .redsubdomain5 {
-            display: flex;
-            column-gap: 1vmax;
-        }
-        .engsubdomain1 { background: var(--orangelt); }
-        .engsubdomain4 { 
-            background: var(--orangelt); 
-            grid-column: span 4;
-            margin-left: 0.3vmax;
-        }
-        .mgmtsubdomain4 { 
-            background: var(--blacklt);
-            grid-column: span 4;
-            margin-left: 0.3vmax;
-        }
-        .bluesubdomain2 { 
-            background: var(--bluelt);
-            grid-column: span 2;
-            margin-left: 0.1vmax;
-        }
-        .redsubdomain2 { 
-            background: var(--redlt);
-            grid-column: span 2;
-        }
-        .redsubdomain5 { 
-            background: var(--redlt);
-            grid-column: span 5;
-        }
-
-        /* Foreground grid for cert tiles */
-        .certcontainer {
-            justify-content: center;
-            text-align: center;
-            align-content: center;
-            line-height: 120%;
-            display: grid;
-            position: absolute;
-            font-size: 0.6vmax;
-            top: 4.8vmax;
-            left: -0.31vmax;
-            grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
-            grid-template-rows: repeat(27, 1.5vmax);
-            column-gap: 0.1vmax;
-            row-gap: 0.1vmax;
-            white-space: pre-wrap;
-        }
-
-        /* Skill level labels */
-        .skilllevelitem {
-            transform: rotate(270deg);
-            justify-items: right;
-            align-items: flex-end;
-            font-weight: 600;
-            font-size: 0.8vmax;
-            display: grid;
-        }
-
-        /* Generic cert item styles */
-        .certlink {
-            color: #ffffff;
-            font-weight: 400;
-            align-items: center;
-            justify-items: center;
-            text-decoration: none;
-            display: grid;
-            border-radius: 0.25vmax;
-        }
-
-        /* Cert status styles */
-        body.candidate-view .certlink.achieved {
-            outline: 0.15vmax solid limegreen;
-            box-shadow: 0 0 0.4vmax limegreen;
-        }
-
-        body.candidate-view .certlink.planned {
-            outline: 0.15vmax dashed darkgoldenrod;
-            box-shadow: 0 0 0.4vmax darkgoldenrod;
-        }
-
-        /* Transparent view styles */
-        body.candidate-view.transparent-view .certlink {
-            opacity: 0.4;
-            transition: opacity 0.2s ease;
-        }
-
-        body.candidate-view.transparent-view .certlink.achieved,
-        body.candidate-view.transparent-view .certlink.planned {
-            opacity: 1;
-        }
-
-        body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover,
-        body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover * {
-            opacity: 1 !important;
-            cursor: pointer;
-        }
-
-        /* Session visibility styles */
-        .certlink.session-visible.achieved,
-        .certlink.session-visible.planned {
-            box-shadow: 0 0 0.4vmax currentColor;
-        }
-
-        .certlink.session-visible.achieved {
-            outline: 0.15vmax solid limegreen;
-            color: limegreen;
-        }
-
-        .certlink.session-visible.planned {
-            outline: 0.15vmax dashed darkgoldenrod;
-            color: darkgoldenrod;
-        }
-
-        /* Tooltip styles */
-        [tooltiptext]:before {
-            position: absolute;
-            content: attr(tooltiptext);
-            width: max-content;
-            height: max-content;
-            padding: 0.4vmax;
-            background: inherit;
-            border: inherit;
-            border-radius: 0.2vmax;
-            color: inherit;
-            text-align: left;
-            display: none;
-            font-size: 125%;
-        }
-        
-        [tooltiptext]:hover:before {
-            display: block;    
-        }
-        
-        [tooltiptexttitle]:before {
-            position: absolute;
-            content: attr(tooltiptexttitle);
-            width: 25vmax;
-            height: max-content;
-            padding: 0.4vmax;
-            background: var(--black);
-            border: var(--blackdk);
-            border-radius: 0.2vmax;
-            color: white;
-            text-align: left;
-            display: none;
-            font-size: 100%;
-            z-index: 1;
-            top: 4.5%;
-        }
-        
-        [tooltiptexttitle]:hover:before {
-            display: block;    
-        }
-        
-        [tooltiptexttitleleft]:before {
-            position: absolute;
-            content: attr(tooltiptexttitleleft);
-            width: 25vmax;
-            height: max-content;
-            padding: 0.4vmax;
-            background: var(--black);
-            border: var(--blackdk);
-            border-radius: 0.2vmax;
-            color: white;
-            text-align: left;
-            display: none;
-            font-size: 100%;
-            z-index: 1;
-            top: 4.5%;
-            left: 0%;
-        }
-        
-        [tooltiptexttitleleft]:hover:before {
-            display: block;    
-        }
-
-        /* Cert popup styles */
-        .cert-popup-menu {
-            position: absolute;
-            background-color: white;
-            border: 1px solid #888;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            z-index: 9999;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .cert-popup-menu button {
-            display: block;
-            width: 100%;
-            margin: 0.2vmax 0;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            padding: 5px;
-        }
-
-        .cert-popup-menu button:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Footer styles */
-        .certmap-footer {
-            text-align: right;
-            color: #000000;
-            padding: 0.2vmax;
-            font-size: 1vmax;
-            margin-top: 1vmax;
-        }
-
-        /* Responsive adjustments */
-        @media screen and (max-width: 897px) {
-            #interactive {display: none;}
-            #static {display: block;}
-        }
-    </style>
-</head>
-<body>
-    <div id="certmap-container">
-        <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap</div>
-        
-        <!-- Debug Info Section -->
-        <div id="debug-info" style="background:#f8f8f8;padding:10px;margin-bottom:10px;border:1px solid #ccc;display:none;">
-            <h3>Debug Information</h3>
-            <div id="debug-messages"></div>
-            <button onclick="document.getElementById('debug-info').style.display='none'">Close</button>
-        </div>
-        <button onclick="document.getElementById('debug-info').style.display='block';CertMap.debug()">Show Debug Info</button>
-        
-        <!-- Toolbar with filters and controls -->
-        <div id="certmap-toolbar" class="cert-toolbar">
-            <!-- Will be populated dynamically -->
-            <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
-            <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
-            <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
-            <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
-            <br>
-            
-            <!-- Domain and Vendor filters -->
-            <div class="filter-container candidate-only">
-                <label for="domainGroupFilter" style="font-size: 1vmax;">
-                    🔍 Domain:
-                    <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Domains</option>
-                        <!-- Will be populated from domains.json -->
-                    </select>
-                </label>
-                
-                <label for="vendorFilter" style="font-size: 1vmax;">
-                    🏷️ Vendor:
-                    <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Vendors</option>
-                        <!-- Will be populated from certs.json -->
-                    </select>
-                </label>
-            </div>
-        </div>
-        
-        <!-- The main grid that will hold domains and certs -->
-        <div id="certmap-grid">
-            <!-- Empty placeholder - will be populated by JavaScript -->
-        </div>
-        
-        <!-- Footer with info -->
-        <div class="certmap-footer">
-            <span id="cert-count">Loading certification data...</span>
-        </div>
-    </div>
-
-    <!-- Script to load and initialize the certification map -->
-    <script>
-    // Initialize the global CertMap object
-    window.CertMap = window.CertMap || {};
-
-    // Configuration module for the Certification Roadmap
-    CertMap.config = {
-        dataPath: {
-            domains: 'domains.json',
-            subdomains: 'subdomains.json',
-            certs: 'certs.json'  // Not created yet but will be needed
-        },
-        viewModes: {
-            default: 'default',
-            candidate: 'candidate-view'
-        },
-        storageKeys: {
-            achievedCerts: 'achievedCerts',
-            plannedCerts: 'plannedCerts',
-            transparentView: 'transparentView'
-        }
-    };
-
-    // Data storage
-    CertMap.data = {
-        domains: [],
-        subdomains: [],
-        certs: [],
-        // State management
-        state: {
-            currentView: CertMap.config.viewModes.default,
-            editMode: false,
-            filters: {
-                domain: 'ALL',
-                vendor: 'ALL'
-            }
-        }
-    };
-
-    // Function to load domain data from JSON files
-    CertMap.loadData = async function() {
-        try {
-            // Load domains data
-            console.log('Fetching domains from:', CertMap.config.dataPath.domains);
-            const domainsResponse = await fetch(CertMap.config.dataPath.domains);
-            if (!domainsResponse.ok) {
-                throw new Error(`Failed to fetch domains: ${domainsResponse.status} ${domainsResponse.statusText}`);
-            }
-            CertMap.data.domains = await domainsResponse.json();
-            console.log('Loaded domains:', CertMap.data.domains.length);
-            
-            // Debug domain details
-            CertMap.data.domains.forEach(domain => {
-                console.log(`Domain: ${domain.id}, Name: ${domain.name}, Order: ${domain.order}`);
-            });
-            
-            // Load subdomains data
-            console.log('Fetching subdomains from:', CertMap.config.dataPath.subdomains);
-            const subdomainsResponse = await fetch(CertMap.config.dataPath.subdomains);
-            if (!subdomainsResponse.ok) {
-                throw new Error(`Failed to fetch subdomains: ${subdomainsResponse.status} ${subdomainsResponse.statusText}`);
-            }
-            CertMap.data.subdomains = await subdomainsResponse.json();
-            console.log('Loaded subdomains:', CertMap.data.subdomains.length);
-            
-            // Fix AUD name to TST for compatibility with CSS
-            CertMap.data.domains.forEach(domain => {
-                if (domain.id === 'AUD') {
-                    console.log('Fixing AUD domain to TST for CSS compatibility');
-                    domain.id = 'TST';
-                }
-            });
-            
-            // No certs for now
-            CertMap.data.certs = [];
-            
-            console.log('All data loaded successfully');
-            return true;
-        } catch (error) {
-            console.error('Error loading data:', error);
-            return false;
-        }
-    };
-
-    // Renderer module for the Certification Roadmap
-    CertMap.renderer = {
-        // Main render function
-        renderCertMap: function() {
-            console.log('Rendering certification map...');
-            const container = document.getElementById('certmap-grid');
-            if (!container) {
-                console.error('Grid container not found');
-                return false;
-            }
-            
-            // Clear previous content
-            container.innerHTML = '';
-            
-            // Add main chart container
-            const chartContainer = document.createElement('div');
-            chartContainer.className = 'certchart';
-            
-            // Create background grid (domains and subdomains)
-            const bgGrid = this.createBackgroundGrid();
-            chartContainer.appendChild(bgGrid);
-            
-            // Create foreground grid (cert tiles will go here)
-            const fgGrid = this.createForegroundGrid();
-            chartContainer.appendChild(fgGrid);
-            
-            // Add the completed grid to the container
-            container.appendChild(chartContainer);
-            
-            // Update cert count
-            const countElement = document.getElementById('cert-count');
-            if (countElement) {
-                const date = new Date();
-                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                countElement.textContent = `${CertMap.data.domains.length} domains loaded | ${monthYear}`;
-            }
-            
-            return true;
-        },
-        
-        // Create the background grid with domains and subdomains
-        createBackgroundGrid: function() {
-            const bgGrid = document.createElement('div');
-            bgGrid.className = 'certbg';
-            
-            // Create domain header row
-            this.createDomainHeaders(bgGrid);
-            
-            // Create domain containers
-            this.createDomainContainers(bgGrid);
-            
-            return bgGrid;
-        },
-        
-        // Create domain header titles
-        createDomainHeaders: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create empty skill level header (for left column)
-            const emptyHeader = document.createElement('div');
-            emptyHeader.className = 'domaintitle';
-            emptyHeader.style.gridRow = 'domain';
-            emptyHeader.style.gridColumn = 'skilllevel';
-            bgGrid.appendChild(emptyHeader);
-            
-            // Create a header for each domain
-            sortedDomains.forEach(domain => {
-                const domainTitle = document.createElement('div');
-                domainTitle.className = 'domaintitle';
-                domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.textContent = domain.name;
-                domainTitle.style.gridRow = 'domain';
-                domainTitle.style.gridColumn = domain.id.toLowerCase();
-                
-                // Add tooltip with domain description
-                if (domain.description) {
-                    // Determine tooltip positioning (left-aligned for domains on the left side)
-                    const tooltipAttr = domain.order <= 4 ? 'tooltiptexttitleleft' : 'tooltiptexttitle';
-                    domainTitle.setAttribute(tooltipAttr, domain.description);
-                }
-                
-                bgGrid.appendChild(domainTitle);
-            });
-        },
-        
-        // Create containers for each domain
-        createDomainContainers: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create empty container for skill level column
-            const skillLevelContainer = document.createElement('div');
-            skillLevelContainer.className = 'skilllevelcontainer';
-            skillLevelContainer.style.gridRow = 'chart';
-            skillLevelContainer.style.gridColumn = 'skilllevel';
-            bgGrid.appendChild(skillLevelContainer);
-            
-            // Create a container for each domain
-            sortedDomains.forEach(domain => {
-                // Determine container class based on domain ID
-                const containerClass = this.getDomainContainerClass(domain.id);
-                
-                const domainContainer = document.createElement('div');
-                domainContainer.className = containerClass;
-                domainContainer.setAttribute('data-domain-id', domain.id);
-                
-                // Get subdomains for this domain
-                const domainSubdomains = CertMap.data.subdomains.filter(
-                    subdomain => subdomain.domainId === domain.id
-                );
-                
-                // If domain has subdomains, create them
-                if (domainSubdomains.length > 0) {
-                    this.createSubdomains(domainContainer, domainSubdomains, domain);
-                }
-                
-                bgGrid.appendChild(domainContainer);
-                
-                // Log container creation for debugging
-                console.log(`Created container for domain ${domain.id} with class ${containerClass}`);
-            });
-        },
-        
-        // Create subdomain titles and backgrounds
-        createSubdomains: function(domainContainer, subdomains, domain) {
-            // First create subdomain titles
-            subdomains.forEach(subdomain => {
-                // Create subdomain title
-                const span = subdomain.gridRowSpan || 1;
-                const titleElement = document.createElement('div');
-                titleElement.className = `subtitle${span}`;
-                titleElement.textContent = subdomain.name;
-                titleElement.setAttribute('data-subdomain-id', subdomain.id);
-                domainContainer.appendChild(titleElement);
-                
-                // Create subdomain background
-                const bgElement = document.createElement('div');
-                const teamRole = subdomain.teamRole || 'DefaultTeam';
-                
-                // Set appropriate background color
-                const domainIdLower = domain.id.toLowerCase();
-                if (teamRole === 'RedTeam' && domain.id === 'OPS') {
-                    bgElement.className = `redsubdomain${span}`;
-                } else if (teamRole === 'BlueTeam' && domain.id === 'OPS') {
-                    bgElement.className = `bluesubdomain${span}`;
-                } else if (domain.id === 'ENG') {
-                    bgElement.className = `engsubdomain${span}`;
-                } else if (domain.id === 'RSK') {
-                    bgElement.className = `mgmtsubdomain${span}`;
-                } else {
-                    bgElement.className = `${domainIdLower}subdomain${span}`;
-                }
-                
-                bgElement.setAttribute('data-subdomain-id', subdomain.id);
-                
-                domainContainer.appendChild(bgElement);
-            });
-        },
-        
-        // Create the foreground grid for cert tiles
-        createForegroundGrid: function() {
-            const fgGrid = document.createElement('div');
-            fgGrid.className = 'certcontainer';
-            
-            // Add skill level indicators
-            this.addSkillLevels(fgGrid);
-            
-            // Placeholder message for candidate view with no certs
-            const noVisibleCertsMsg = document.createElement('div');
-            noVisibleCertsMsg.id = 'noCertsMessage';
-            noVisibleCertsMsg.className = 'candidate-only';
-            noVisibleCertsMsg.style.display = 'none';
-            noVisibleCertsMsg.style.textAlign = 'center';
-            noVisibleCertsMsg.style.fontSize = '1.2vmax';
-            noVisibleCertsMsg.style.marginTop = '2vmax';
-            noVisibleCertsMsg.textContent = '🚫 No certifications are available for this domain.';
-            fgGrid.appendChild(noVisibleCertsMsg);
-            
-            return fgGrid;
-        },
-        
-        // Add skill level indicators to the grid
-        addSkillLevels: function(fgGrid) {
-            // Define skill levels
-            const skillLevels = [
-                { name: 'Expert', color: 'var(--reddk)', row: 6 },
-                { name: 'Intermediate', color: 'var(--orangedk)', row: 18 },
-                { name: 'Beginner', color: 'var(--greendk)', row: 27 }
-            ];
-            
-            // Create and position skill level indicators
-            skillLevels.forEach(level => {
-                const levelLabel = document.createElement('div');
-                levelLabel.className = 'skilllevelitem';
-                levelLabel.innerHTML = `<span style="color:${level.color}">${level.name}</span>`;
-                
-                fgGrid.appendChild(levelLabel);
-            });
-        },
-        
-        // Helper to get the container class based on domain ID
-        getDomainContainerClass: function(domainId) {
-            const domainMap = {
-                'NET': 'networkcontainer',
-                'IAM': 'iamcontainer',
-                'ENG': 'engineercontainer',
-                'AST': 'assetcontainer',
-                'RSK': 'mgmtcontainer',
-                'TST': 'testingcontainer',
-                'DEV': 'softwarecontainer',
-                'OPS': 'operationscontainer'
-            };
-            
-            return domainMap[domainId] || `${domainId.toLowerCase()}container`;
-        }
-    };
-
-    // Add a debugging function to help identify issues
-    CertMap.debug = function() {
-        console.log('CertMap Debug Info:');
-        console.log('- Domains loaded:', this.data.domains ? this.data.domains.length : 0);
-        console.log('- Subdomains loaded:', this.data.subdomains ? this.data.subdomains.length : 0);
-        console.log('- Grid container exists:', !!document.getElementById('certmap-grid'));
-        
-        // Display debug info in the debug-info panel
-        const debugMessages = document.getElementById('debug-messages');
-        if (debugMessages) {
-            debugMessages.innerHTML = `
-                <p><strong>Domains loaded:</strong> ${this.data.domains ? this.data.domains.length : 0}</p>
-                <p><strong>Subdomains loaded:</strong> ${this.data.subdomains ? this.data.subdomains.length : 0}</p>
-                <p><strong>Grid container exists:</strong> ${!!document.getElementById('certmap-grid')}</p>
-                <p><strong>Current View Mode:</strong> ${this.data.state.currentView}</p>
-            `;
-            
-            // Add domain names if loaded
-            if (this.data.domains && this.data.domains.length > 0) {
-                debugMessages.innerHTML += `<p><strong>Domain IDs:</strong> ${this.data.domains.map(d => d.id).join(', ')}</p>`;
-            }
-        }
-    };
-
-    // Add a simple test function to display domain names
-    CertMap.testDomainsDisplay = function() {
-        console.log('Testing domain display...');
-        
-        // Get a container to show our test output
-        const container = document.getElementById('certmap-grid');
-        if (!container) {
-            console.error('Grid container not found');
-            return;
-        }
-        
-        // Clear any existing content
-        container.innerHTML = '';
-        
-        // Create a simple list of domains
-        const list = document.createElement('ul');
-        list.style.listStyle = 'none';
-        list.style.padding = '1vmax';
-        
-        // Add each domain as a list item
-        CertMap.data.domains.forEach(domain => {
-            const item = document.createElement('li');
-            item.textContent = `${domain.id}: ${domain.name}`;
-            item.style.color = domain.teamRoles.DefaultTeam.tileColor;
-            item.style.fontWeight = 'bold';
-            item.style.padding = '0.5vmax';
-            item.style.marginBottom = '0.5vmax';
-            item.style.borderLeft = `4px solid ${domain.teamRoles.DefaultTeam.tileColor}`;
-            list.appendChild(item);
-            
-            // Add subdomains for this domain
-            const subdomains = CertMap.data.subdomains.filter(
-                subdomain => subdomain.domainId === domain.id
-            );
-            
-            if (subdomains.length > 0) {
-                const subList = document.createElement('ul');
-                subList.style.listStyle = 'none';
-                subList.style.paddingLeft = '2vmax';
-                
-                subdomains.forEach(subdomain => {
-                    const subItem = document.createElement('li');
-                    subItem.textContent = subdomain.name;
-                    subItem.style.color = '#444';
-                    subItem.style.padding = '0.3vmax';
-                    subList.appendChild(subItem);
-                });
-                
-                list.appendChild(subList);
-            }
-        });
-        
-        // Add the list to the container
-        container.appendChild(list);
-        
-        // Update cert count in footer
-        const countElement = document.getElementById('cert-count');
-        if (countElement) {
-            countElement.textContent = `${CertMap.data.domains.length} domains, ${CertMap.data.subdomains.length} subdomains loaded | Test Mode`;
-        }
-    };
-
-    // Improved initialization function with error handling
-    CertMap.init = async function() {
-        console.log('Initializing CertMap...');
-        
-        try {
-            // Load data first
-            const dataLoaded = await this.loadData();
-            if (!dataLoaded) {
-                console.error('Failed to load certification data');
-                document.getElementById('certmap-grid').innerHTML = '<div style="color:red;padding:20px;">Failed to load certification data. Please check console for errors.</div>';
-                return;
-            }
-            
-            console.log('Data loaded successfully');
-            
-            // Render the certification map
-            const renderSuccess = this.renderer.renderCertMap();
-            if (!renderSuccess) {
-                console.error('Failed to render certification map');
-                document.getElementById('certmap-grid').innerHTML = '<div style="color:red;padding:20px;">Failed to render certification map. Check console for errors.</div>';
-                return;
-            }
-            
-            console.log('CertMap initialization completed successfully');
-        } catch (error) {
-            console.error('Error during CertMap initialization:', error);
-            const gridContainer = document.getElementById('certmap-grid');
-            if (gridContainer) {
-                gridContainer.innerHTML = `<div style="color:red;padding:20px;">Error: ${error.message}</div>`;
-            }
-        }
-    };
-
-    // Initialize on DOM content loaded
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize the certification map
-        CertMap.init();
-        
-        // Run debug after a short delay to ensure all async operations complete
-        setTimeout(() => CertMap.debug(), 1000);
-    });
+</html>
