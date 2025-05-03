@@ -1,7 +1,7 @@
 [
     {
       "id": "NET",
-      "name": "Communication & Network",
+      "name": "Network & Communication",
       "order": 1,
       "gridColumn": 1,
       "description": "The communication and network security domain covers the ability to secure communication channels and networks. Topics include secure and converged protocols, wireless networks, cellular networks, hardware operation (warranty and redundant power) and third-party connectivity. IP networking (IPSec, IPv4 and IPv6) are also included in this domain.",

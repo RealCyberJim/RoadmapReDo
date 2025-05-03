@@ -182,7 +182,7 @@
         /* Style for the domain titles */
         .domaintitle {
             font-weight: 450;
-            font-size: 0.7vmax;
+            font-size: 0.8vmax;
             text-align: center;
             align-self: center;
             width: 100%;
@@ -503,34 +503,34 @@
         <div class="certmap-footer">
             <span id="cert-count">Loading certification data...</span>
         </div>
-                <!-- Toolbar with filters and controls -->
-                <div id="certmap-toolbar" class="cert-toolbar">
-                    <!-- Will be populated dynamically -->
-                    <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
-                    <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
-                    <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
-                    <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
-                    <br>
-                    
-                    <!-- Domain and Vendor filters -->
-                    <div class="filter-container candidate-only">
-                        <label for="domainGroupFilter" style="font-size: 1vmax;">
-                            🔍 Domain:
-                            <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                                <option value="ALL">All Domains</option>
-                                <!-- Will be populated from domains.json -->
-                            </select>
-                        </label>
-                        
-                        <label for="vendorFilter" style="font-size: 1vmax;">
-                            🏷️ Vendor:
-                            <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                                <option value="ALL">All Vendors</option>
-                                <!-- Will be populated from certs.json -->
-                            </select>
-                        </label>
-                    </div>
-                </div>
+        <!-- Toolbar with filters and controls -->
+        <div id="certmap-toolbar" class="cert-toolbar">
+            <!-- Will be populated dynamically -->
+            <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
+            <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
+            <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
+            <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
+            <br>
+            
+            <!-- Domain and Vendor filters -->
+            <div class="filter-container candidate-only">
+                <label for="domainGroupFilter" style="font-size: 1vmax;">
+                    🔍 Domain:
+                    <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                        <option value="ALL">All Domains</option>
+                        <!-- Will be populated from domains.json -->
+                    </select>
+                </label>
+                
+                <label for="vendorFilter" style="font-size: 1vmax;">
+                    🏷️ Vendor:
+                    <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                        <option value="ALL">All Vendors</option>
+                        <!-- Will be populated from certs.json -->
+                    </select>
+                </label>
+            </div>
+        </div>
     </div>
 
     <!-- Script to load and initialize the certification map -->
@@ -1006,14 +1006,6 @@
         // Initialize the certification map
         CertMap.init();
         
-        // Set up the debug button event listener after CertMap is fully initialized
-        document.getElementById('debugButton').addEventListener('click', function() {
-            document.getElementById('debug-info').style.display = 'block';
-            CertMap.debug();
-        });
-        
-        // Run debug after a short delay to ensure all async operations complete
-        setTimeout(() => CertMap.debug(), 1000);
     });
     </script>
 </body>
