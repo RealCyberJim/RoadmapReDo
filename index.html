@@ -180,6 +180,13 @@
             grid-row: domain;
         }
 
+        .subdomain-title {
+            font-weight: 400;
+            font-size: 0.5vmax;
+            text-align: center;
+            padding: 0.2vmax 0;
+        }
+
         /* Skill level section styling - vertical labels */
         .skilllevelcontainer {
             grid-column: skilllevel;
@@ -815,12 +822,8 @@
                     
                     // Add subdomain header
                     const titleElement = document.createElement('div');
-                    titleElement.className = 'subtitle1';
+                    titleElement.className = 'subdomain-title';
                     titleElement.textContent = subdomain.name;
-                    titleElement.style.textAlign = 'center';
-                    titleElement.style.padding = '0.2vmax 0';
-                    titleElement.style.fontWeight = '400';
-                    titleElement.style.fontSize = '0.7vmax';
                     columnContainer.appendChild(titleElement);
                     
                     // Add to domain container
