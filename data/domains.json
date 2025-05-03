@@ -16,7 +16,7 @@
     
     {
       "id": "IAM",
-      "name": "Identity\nand Access",
+      "name": "Identity\n& Access",
       "order": 2,
       "gridColumn": 2,
       "description": "The identity and access management domain covers the attacks that target the human gateway to gain access to data. Other topics include ways to identify users with rights to access the information and servers. Identity and access management covers the topics of applications, Single sign-on authentication, privilege escalation, Kerberos, rule-based or risk-based access control, proofing and establishment of identity.",
