@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Certification Roadmap</title>
+  <style>
+    .cert-roadmap .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-auto-rows: 30px;
+      gap: 4px;
+      position: relative;
+      border: 1px solid #ccc;
+    }
+
+    .cert-roadmap .domain-zone {
+      border: 2px solid;
+      display: grid;
+      grid-template-rows: repeat(27, 1fr);
+      position: relative;
+    }
+
+    .cert-roadmap .domain-title {
+      text-align: center;
+      font-weight: bold;
+      padding: 4px;
+      background: #f9f9f9;
+    }
+
+    .cert-roadmap .subdomain-zone {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border-top: 1px solid #ddd;
+    }
+
+    .cert-roadmap .subdomain-label {
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      padding: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 2;
+    }
+
+    /* Placeholder for mobile responsiveness */
+    @media (max-width: 768px) {
+      .cert-roadmap .roadmap-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cert-roadmap">
+    <div id="roadmap" class="roadmap-grid"></div>
+  </div>
+
+  <script>
+    async function loadRoadmap() {
+      const [domains, subdomains] = await Promise.all([
+        fetch('domains.json').then(res => res.json()),
+        fetch('subdomains.json').then(res => res.json()),
+      ]);
+
+      const roadmap = document.getElementById('roadmap');
+
+      domains.forEach(domain => {
+        const domainDiv = document.createElement('div');
+        domainDiv.classList.add('domain-zone');
+        domainDiv.dataset.domainId = domain.id;
+        domainDiv.style.borderColor = domain.teamRoles.DefaultTeam.tileColor;
+
+        // Add domain title
+        const title = document.createElement('div');
+        title.classList.add('domain-title');
+        title.textContent = domain.name;
+        domainDiv.appendChild(title);
+
+        // Get subdomains for this domain
+        const subList = subdomains.filter(sub => sub.domainId === domain.id);
+
+        subList.forEach(sub => {
+          const subDiv = document.createElement('div');
+          subDiv.classList.add('subdomain-zone');
+          subDiv.dataset.subdomainId = sub.id;
+
+          // Set grid position
+          subDiv.style.gridRow = `${sub.gridRowStart} / span ${sub.gridRowSpan}`;
+
+          // Set background color from domain + teamRole mapping
+          const bg = domain.subdomainBackgrounds?.[sub.teamRole] || '#eee';
+          subDiv.style.backgroundColor = bg;
+
+          // Add subdomain label
+          const label = document.createElement('div');
+          label.classList.add('subdomain-label');
+          label.textContent = sub.name;
+
+          subDiv.appendChild(label);
+          domainDiv.appendChild(subDiv);
+        });
+
+        roadmap.appendChild(domainDiv);
+      });
+    }
+
+    loadRoadmap().catch(console.error);
+  </script>
+</body>
+</html>
