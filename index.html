@@ -187,17 +187,13 @@
             grid-row: domain;
             
             line-height: 0.95; /* Make lines closer together */
-            max-height: 2vmax; /* Reduced to ensure 2 lines max */
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* Limit to 2 lines */
-            -webkit-box-orient: vertical;
             
-            /* Added properties to fix issues */
+            overflow: visible;
+            white-space: nowrap;
             width: 100%; /* Constrain width */
             box-sizing: border-box; /* Include padding in width */
             flex-direction: column; /* Stack text vertically */
-            white-space: normal; /* Allow wrapping */
+            
         }
 
         .subdomain-title {
