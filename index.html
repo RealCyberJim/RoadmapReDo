@@ -707,8 +707,11 @@
                 const domainTitle = document.createElement('div');
                 domainTitle.className = 'domaintitle';
                 domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.style.gridColumn = domain.id.toLowerCase() + " / span 1";
+                domainTitle.style.gridColumn = domain.id.toLowerCase();
                 domainTitle.textContent = domain.name;
+                domainTitle.style.width = '100%'; 
+                domainTitle.style.textAlign = 'center';
+                domainTitle.style.display = 'block'; // Removes flexbox
                 
                 // Add tooltip with domain description
                 if (domain.description) {
