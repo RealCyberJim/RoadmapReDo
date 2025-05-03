@@ -183,15 +183,21 @@
             display: flex;
             justify-content: center;
             margin-bottom: 0.5vmax;
-            padding: 0 0.5vmax;
+            padding: 0 0.5vmax; /* Reduced horizontal padding */
             grid-row: domain;
-
+            
             line-height: 0.95; /* Make lines closer together */
-            max-height: 2.2vmax; /* Limit height to force two lines max */
+            max-height: 2vmax; /* Reduced to ensure 2 lines max */
+            overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 2; /* Limit to 2 lines */
             -webkit-box-orient: vertical;
-            /* word-break: break-word; /* Allow words to break if needed */
+            
+            /* Added properties to fix issues */
+            width: 100%; /* Constrain width */
+            box-sizing: border-box; /* Include padding in width */
+            flex-direction: column; /* Stack text vertically */
+            white-space: normal; /* Allow wrapping */
         }
 
         .subdomain-title {
