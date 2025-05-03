@@ -159,12 +159,28 @@
             display: grid;
             position: relative;
             /* Exact column measurements from original design */
-            grid-template-columns: [skilllevel] 1vmax [net] 8vmax [iam] 4vmax [eng] 17vmax [ast] 8vmax [rsk] 15vmax [tst] 10vmax [dev] 4vmax [ops] 20vmax;
-            grid-template-rows: [domain] 5vmax [chart] 42vmax;
+            grid-template-columns: [skilllevel] 0.8vmax 
+                                    [network] 7.5vmax 
+                                    [iam] 2.65vmax
+                                    [engineer] 17.2vmax
+                                    [asset] 5.1vmax
+                                    [mgmt] 21.8vmax
+                                    [testing] 7.5vmax
+                                    [software] 2.7vmax
+                                    [operations] 31.5vmax;
+        grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
             column-gap: 0.2vmax;
             white-space: pre-wrap;
             line-height: 130%;
             width: 100%;
+        }
+
+        /* A wrapper container that will control the visible width */
+        .certmap-grid-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center; /* Center the grid when not using full width */
         }
 
         /* Style for the domain titles */
@@ -480,6 +496,11 @@
     </style>
 </head>
 <body>
+    <div class="certmap-grid-wrapper">
+        <div id="certmap-grid">
+            <!-- Your grid content will be rendered here -->
+        </div>
+    </div>
     <div id="certmap-container">
         <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap</div>
         
@@ -769,68 +790,85 @@
         
         // Create columns for each subdomain group
         createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
-            const domainId = domain.id;
-            
-            // Define subdomain positions based on domain
-            const subdomainPositions = {
-                'ENG': {
-                    'ENG_cloudSysOps': { start: 1, span: 4 },
-                    'ENG_nix': { start: 5, span: 1 },
-                    'ENG_icsiot': { start: 6, span: 1 }
-                },
-                'RSK': {
-                    'RSK_grc': { start: 4, span: 4 }
-                },
-                'OPS': {
-                    'OPS_forensics': { start: 3, span: 2 },
-                    'OPS_incidentHandling': { start: 5, span: 2 },
-                    'OPS_penTesting': { start: 7, span: 5 },
-                    'OPS_exploitation': { start: 12, span: 2 }
+        const domainId = domain.id;
+        
+        // Instead of absolute positioning, use CSS Grid for layout
+        domainContainer.style.display = 'grid';
+        
+        // Define how many columns each domain has for subdomains
+        const domainColumnCounts = {
+            'ENG': 7,
+            'RSK': 9,
+            'OPS': 13
+        };
+        
+        // Set up grid columns if this domain has a defined count
+        if (domainColumnCounts[domainId]) {
+            domainContainer.style.gridTemplateColumns = `repeat(${domainColumnCounts[domainId]}, 1fr)`;
+            domainContainer.style.gridTemplateRows = 'auto 1fr'; // Header row and content
+        }
+        
+        // Define subdomain spans
+        const subdomainSpans = {
+            'ENG': {
+                'ENG_cloudSysOps': { start: 1, span: 4 },
+                'ENG_nix': { start: 5, span: 1 },
+                'ENG_icsiot': { start: 6, span: 1 }
+            },
+            'RSK': {
+                'RSK_grc': { start: 4, span: 4 }
+            },
+            'OPS': {
+                'OPS_forensics': { start: 3, span: 2 },
+                'OPS_incidentHandling': { start: 5, span: 2 },
+                'OPS_penTesting': { start: 7, span: 5 },
+                'OPS_exploitation': { start: 12, span: 2 }
+            }
+        };
+        
+        // Handle each subdomain separately to create columns
+        Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
+            subdomains.forEach(subdomain => {
+                const position = subdomainSpans[domainId]?.[subdomain.id];
+                if (!position) return;
+                
+                // Create subdomain column container
+                const columnContainer = document.createElement('div');
+                
+                // Determine background class based on team role and domain
+                let backgroundClass = '';
+                
+                if (teamRole === 'RedTeam' && domainId === 'OPS') {
+                    backgroundClass = 'subdomain-ops-red';
+                    columnContainer.style.backgroundColor = 'var(--redlt)';
+                } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
+                    backgroundClass = 'subdomain-ops-blue';
+                    columnContainer.style.backgroundColor = 'var(--bluelt)';
+                } else if (domainId === 'ENG') {
+                    backgroundClass = 'subdomain-eng';
+                    columnContainer.style.backgroundColor = 'var(--orangelt)';
+                } else if (domainId === 'RSK') {
+                    backgroundClass = 'subdomain-rsk';
+                    columnContainer.style.backgroundColor = 'var(--blacklt)';
                 }
-            };
-            
-            // Handle each subdomain separately to create columns
-            Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
-                subdomains.forEach(subdomain => {
-                    const position = subdomainPositions[domainId]?.[subdomain.id];
-                    if (!position) return;
-                    
-                    // Create subdomain column container
-                    const columnContainer = document.createElement('div');
-                    
-                    // Determine background class based on team role and domain
-                    let backgroundClass = '';
-                    
-                    if (teamRole === 'RedTeam' && domainId === 'OPS') {
-                        backgroundClass = 'redsubdomain2';
-                        columnContainer.style.backgroundColor = 'var(--redlt)';
-                    } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
-                        backgroundClass = 'bluesubdomain2';
-                        columnContainer.style.backgroundColor = 'var(--bluelt)';
-                    } else if (domainId === 'ENG') {
-                        backgroundClass = 'engsubdomain1';
-                        columnContainer.style.backgroundColor = 'var(--orangelt)';
-                    } else if (domainId === 'RSK') {
-                        backgroundClass = 'mgmtsubdomain4';
-                        columnContainer.style.backgroundColor = 'var(--blacklt)';
-                    }
-                    
-                    columnContainer.className = backgroundClass;
-                    columnContainer.setAttribute('data-subdomain-id', subdomain.id);
-                    columnContainer.style.height = '100%';
-                    columnContainer.style.gridColumn = `${position.start} / span ${position.span}`;
-                    
-                    // Add subdomain header
-                    const titleElement = document.createElement('div');
-                    titleElement.className = 'subdomain-title';
-                    titleElement.textContent = subdomain.name;
-                    columnContainer.appendChild(titleElement);
-                    
-                    // Add to domain container
-                    domainContainer.appendChild(columnContainer);
-                });
+                
+                columnContainer.className = backgroundClass;
+                columnContainer.setAttribute('data-subdomain-id', subdomain.id);
+                columnContainer.style.gridRow = '2'; // Place in the content row
+                columnContainer.style.gridColumn = `${position.start} / span ${position.span}`;
+                columnContainer.style.height = '100%';
+                
+                // Add subdomain header
+                const titleElement = document.createElement('div');
+                titleElement.className = 'subdomain-title';
+                titleElement.textContent = subdomain.name;
+                columnContainer.appendChild(titleElement);
+                
+                // Add to domain container
+                domainContainer.appendChild(columnContainer);
             });
-        },
+        });
+    },
         
         // Create the foreground grid for cert tiles
         createForegroundGrid: function() {
