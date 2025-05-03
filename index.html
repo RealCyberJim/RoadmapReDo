@@ -10,13 +10,16 @@
             /* Colors from the original design - carefully checked against visual reference */
             --green: #70AD47;
             --greendk: #548235;
+            --greenlt: #c3dbb8;  /* New light green for Network Security subdomains */
             --teal: #008080;
             --tealdk: #003F3E;
+            --teallt: #8fc6c6;  /* New light teal for IAM subdomains */
             --orange: #fa8e36;
             --orangedk: #c06216;
             --orangelt: #fdeada;
             --yellow: #e4ac03;
             --yellowdk: #7F6000;
+            --yellowlt: #f7e69e;  /* New light yellow for Asset Security subdomains */
             --black: #2a2a2a;
             --blackdk: #000000; 
             --blacklt: #d9d9d9;
@@ -25,6 +28,7 @@
             --purplelt: #eddbff;
             --skyblue: #6bb3f6;
             --skybluedk: #2665a0;
+            --skybluelit: #b8e0ff;  /* New light sky blue for Development subdomains */
             --blue: #2e5688;
             --bluedk: #1f3147;
             --bluelt: #dce6f2;
@@ -37,20 +41,31 @@
             /* Domain-specific variables */
             --net: var(--green);
             --netdk: var(--greendk);
+            --netlt: var(--greenlt);
             --iam: var(--teal);
             --iamdk: var(--tealdk);
+            --iamlt: var(--teallt);
             --eng: var(--orange);
             --engdk: var(--orangedk);
+            --englt: var(--orangelt);
             --ast: var(--yellow);
             --astdk: var(--yellowdk);
+            --astlt: var(--yellowlt);
             --rsk: var(--black);
             --rskdk: var(--blackdk);
+            --rsklt: var(--blacklt);
             --tst: var(--purple);
             --tstdk: var(--purpledk);
+            --tstlt: var(--purplelt);
             --dev: var(--skyblue);
             --devdk: var(--skybluedk);
-            --ops: var(--red);
-            --opsdk: var(--reddk);
+            --devlt: var(--skybluelt);
+            --ops: var(--blue);
+            --opsdk: var(--bluedk);
+            --opslt: var(--bluelt);
+            --opsred: var(--red);
+            --opsreddk: var(--reddk);
+            --opsredlt: var(--redlt);
         }
 
         body {
@@ -226,6 +241,7 @@
             grid-column: eng;
             display: grid;
             grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: auto;
             column-gap: 0.2vmax;
 }
 
@@ -239,6 +255,7 @@
             grid-column: rsk;
             display: grid;
             grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: auto;
             column-gap: 0.2vmax;
         }
 
@@ -257,6 +274,7 @@
             grid-column: ops;
             display: grid;
             grid-template-columns: repeat(13, 1fr);
+            grid-template-rows: auto;
             column-gap: 0.2vmax;
         }
 
@@ -290,24 +308,24 @@
             }
 
         /* Engineer subdomain backgrounds */
-        .engsubdomain1 { 
+        .subdomain-eng { 
             background: var(--orangelt);
             height: 100%;
         }
 
         /* Operations subdomain backgrounds */
-        .bluesubdomain2 { 
+        .subdomain-ops-blue { 
             background: var(--bluelt);
             height: 100%;
         }
 
-        .redsubdomain2 { 
+        .subdomain-ops-red { 
             background: var(--redlt);
             height: 100%;
         }
 
         /* GRC subdomain background */
-        .mgmtsubdomain4 { 
+        .subdomain-rsk { 
             background: var(--blacklt);
             height: 100%;
         }
@@ -743,71 +761,73 @@
         },
         
         // Create columns for each subdomain group
-createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
-    const domainId = domain.id;
-    
-    // Define subdomain positions based on domain
-    const subdomainPositions = {
-        'ENG': {
-            'ENG_cloudSysOps': { start: 1, span: 4 },
-            'ENG_nix': { start: 5, span: 1 },
-            'ENG_icsiot': { start: 6, span: 1 }
+        createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
+            const domainId = domain.id;
+            
+            // Define subdomain positions based on domain
+            const subdomainPositions = {
+                'ENG': {
+                    'ENG_cloudSysOps': { start: 1, span: 4 },
+                    'ENG_nix': { start: 5, span: 1 },
+                    'ENG_icsiot': { start: 6, span: 1 }
+                },
+                'RSK': {
+                    'RSK_grc': { start: 4, span: 4 }
+                },
+                'OPS': {
+                    'OPS_forensics': { start: 3, span: 2 },
+                    'OPS_incidentHandling': { start: 5, span: 2 },
+                    'OPS_penTesting': { start: 7, span: 5 },
+                    'OPS_exploitation': { start: 12, span: 2 }
+                }
+            };
+            
+            // Handle each subdomain separately to create columns
+            Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
+                subdomains.forEach(subdomain => {
+                    const position = subdomainPositions[domainId]?.[subdomain.id];
+                    if (!position) return;
+                    
+                    // Create subdomain column container
+                    const columnContainer = document.createElement('div');
+                    
+                    // Determine background class based on team role and domain
+                    let backgroundClass = '';
+                    
+                    if (teamRole === 'RedTeam' && domainId === 'OPS') {
+                        backgroundClass = 'redsubdomain2';
+                        columnContainer.style.backgroundColor = 'var(--redlt)';
+                    } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
+                        backgroundClass = 'bluesubdomain2';
+                        columnContainer.style.backgroundColor = 'var(--bluelt)';
+                    } else if (domainId === 'ENG') {
+                        backgroundClass = 'engsubdomain1';
+                        columnContainer.style.backgroundColor = 'var(--orangelt)';
+                    } else if (domainId === 'RSK') {
+                        backgroundClass = 'mgmtsubdomain4';
+                        columnContainer.style.backgroundColor = 'var(--blacklt)';
+                    }
+                    
+                    columnContainer.className = backgroundClass;
+                    columnContainer.setAttribute('data-subdomain-id', subdomain.id);
+                    columnContainer.style.height = '100%';
+                    columnContainer.style.gridColumn = `${position.start} / span ${position.span}`;
+                    
+                    // Add subdomain header
+                    const titleElement = document.createElement('div');
+                    titleElement.className = 'subtitle1';
+                    titleElement.textContent = subdomain.name;
+                    titleElement.style.textAlign = 'center';
+                    titleElement.style.padding = '0.2vmax 0';
+                    titleElement.style.fontWeight = '400';
+                    titleElement.style.fontSize = '0.7vmax';
+                    columnContainer.appendChild(titleElement);
+                    
+                    // Add to domain container
+                    domainContainer.appendChild(columnContainer);
+                });
+            });
         },
-        'RSK': {
-            'RSK_grc': { start: 4, span: 4 }
-        },
-        'OPS': {
-            'OPS_forensics': { start: 3, span: 2 },
-            'OPS_incidentHandling': { start: 5, span: 2 },
-            'OPS_penTesting': { start: 7, span: 5 },
-            'OPS_exploitation': { start: 12, span: 2 }
-        }
-    };
-    
-    // Create title row elements first
-    Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
-        subdomains.forEach(subdomain => {
-            const position = subdomainPositions[domainId]?.[subdomain.id];
-            if (!position) return;
-            
-            // Create subdomain header
-            const titleElement = document.createElement('div');
-            titleElement.className = 'subtitle' + position.span;
-            titleElement.textContent = subdomain.name;
-            titleElement.style.gridRow = '1';
-            titleElement.style.gridColumn = `${position.start} / span ${position.span}`;
-            domainContainer.appendChild(titleElement);
-            
-            // Create subdomain background area
-            const columnContainer = document.createElement('div');
-            
-            // Determine background class based on team role and domain
-            let backgroundClass = '';
-            
-            if (teamRole === 'RedTeam' && domainId === 'OPS') {
-                backgroundClass = 'redsubdomain2';
-                columnContainer.style.backgroundColor = 'var(--redlt)';
-            } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
-                backgroundClass = 'bluesubdomain2';
-                columnContainer.style.backgroundColor = 'var(--bluelt)';
-            } else if (domainId === 'ENG') {
-                backgroundClass = 'engsubdomain1';
-                columnContainer.style.backgroundColor = 'var(--orangelt)';
-            } else if (domainId === 'RSK') {
-                backgroundClass = 'mgmtsubdomain4';
-                columnContainer.style.backgroundColor = 'var(--blacklt)';
-            }
-            
-            columnContainer.className = backgroundClass;
-            columnContainer.setAttribute('data-subdomain-id', subdomain.id);
-            columnContainer.style.gridRow = '2';
-            columnContainer.style.gridColumn = `${position.start} / span ${position.span}`;
-            
-            // Add to domain container
-            domainContainer.appendChild(columnContainer);
-        });
-    });
-},
         
         // Create the foreground grid for cert tiles
         createForegroundGrid: function() {
