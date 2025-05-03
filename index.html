@@ -175,25 +175,16 @@
         }
 
         /* Style for the domain titles */
-        .domaintitle {
+        ..domaintitle {
             font-weight: 450;
             font-size: 0.8vmax;
             text-align: center;
-            align-self: center;
+            align-self: flex-end;
             display: flex;
             justify-content: center;
             margin-bottom: 0.5vmax;
-            padding: 0 0.5vmax; /* Reduced horizontal padding */
+            padding: 0 0.5vmax;
             grid-row: domain;
-            
-            line-height: 0.95; /* Make lines closer together */
-            
-            overflow: visible;
-            white-space: nowrap;
-            width: 100%; /* Constrain width */
-            box-sizing: border-box; /* Include padding in width */
-            flex-direction: column; /* Stack text vertically */
-            
         }
 
         .subdomain-title {
