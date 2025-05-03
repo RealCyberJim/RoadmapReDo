@@ -177,7 +177,7 @@
         /* Style for the domain titles */
         .domaintitle {
             font-weight: 450;
-            font-size: 0.7vmax;
+            font-size: 0.9vmax;
             text-align: center;
             align-self: flex-end;
             display: flex;
@@ -185,7 +185,14 @@
             margin-bottom: 0.5vmax;
             padding: 0 0.5vmax;
             grid-row: domain;
+
             line-height: 0.9; /* Make lines closer together */
+            max-height: 2.2vmax; /* Limit height to force two lines max */
+            overflow: hidden; /* Hide any text beyond two lines */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Limit to 2 lines */
+            -webkit-box-orient: vertical;
+            /* word-break: break-word; /* Allow words to break if needed */
         }
 
         .subdomain-title {
