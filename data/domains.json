@@ -1,7 +1,7 @@
 [
     {
       "id": "NET",
-      "name": "Communication and Network Security",
+      "name": "Communication & Network Security",
       "order": 1,
       "gridColumn": 1,
       "description": "The communication and network security domain covers the ability to secure communication channels and networks. Topics include secure and converged protocols, wireless networks, cellular networks, hardware operation (warranty and redundant power) and third-party connectivity. IP networking (IPSec, IPv4 and IPv6) are also included in this domain.",
@@ -15,7 +15,7 @@
     },
     {
       "id": "IAM",
-      "name": "Identity and Access Management",
+      "name": "Identity & Access",
       "order": 2,
       "gridColumn": 2,
       "description": "The identity and access management domain covers the attacks that target the human gateway to gain access to data. Other topics include ways to identify users with rights to access the information and servers. Identity and access management covers the topics of applications, Single sign-on authentication, privilege escalation, Kerberos, rule-based or risk-based access control, proofing and establishment of identity.",
@@ -29,7 +29,7 @@
     },
     {
       "id": "ENG",
-      "name": "Security Architecture and Engineering",
+      "name": "Security Architecture & Engineering",
       "order": 3,
       "gridColumn": 3,
       "description": "The security architecture and engineering domain covers important topics concerning security engineering plans, designs, and principles. Topics include assessing and mitigating information system vulnerabilities, fundamental concepts of security models and security architectures in critical areas like access control. Cloud systems, cryptography, system infiltrations (ransomware, fault-injection and more) and virtualized systems are also covered in this domain.",
@@ -57,7 +57,7 @@
     },
     {
       "id": "RSK",
-      "name": "Security and Risk Management",
+      "name": "Security & Risk Management",
       "order": 5,
       "gridColumn": 5,
       "description": "The security and risk management domain covers general skills related to the implementation of user awareness programs as well as security procedures. Emphasis is also placed on risk management concerning the acquisition of new services, hardware and software (supply chain). Other skills include social engineering defense mechanisms.",
@@ -71,7 +71,7 @@
     },
     {
       "id": "AUD",
-      "name": "Security Assessment and Testing",
+      "name": "Security Assessment & Testing",
       "order": 6,
       "gridColumn": 6,
       "description": "The security assessment and testing domain deals with all the techniques and tools used to find system vulnerabilities, weaknesses and potential areas of concern not addressed by security procedures and policies. Attack simulations, vulnerability assessment, compliance checks, and ethical disclosure also fall under this domain.",
