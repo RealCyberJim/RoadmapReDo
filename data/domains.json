@@ -16,7 +16,7 @@
     
     {
       "id": "IAM",
-      "name": "Identity\n& Access",
+      "name": "Identity & Access",
       "order": 2,
       "gridColumn": 2,
       "description": "The identity and access management domain covers the attacks that target the human gateway to gain access to data. Other topics include ways to identify users with rights to access the information and servers. Identity and access management covers the topics of applications, Single sign-on authentication, privilege escalation, Kerberos, rule-based or risk-based access control, proofing and establishment of identity.",
@@ -72,7 +72,7 @@
     },
     {
       "id": "AUD",
-      "name": "Security Assessment\nand Testing",
+      "name": "Security Assessment and Testing",
       "order": 6,
       "gridColumn": 6,
       "description": "The security assessment and testing domain deals with all the techniques and tools used to find system vulnerabilities, weaknesses and potential areas of concern not addressed by security procedures and policies. Attack simulations, vulnerability assessment, compliance checks, and ethical disclosure also fall under this domain.",
