@@ -707,7 +707,7 @@
                 const domainTitle = document.createElement('div');
                 domainTitle.className = 'domaintitle';
                 domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.style.gridColumn = `${domain.id.toLowerCase()} / span 1`;
+                domainTitle.style.gridColumn = domain.id.toLowerCase() + " / span 1";
                 domainTitle.textContent = domain.name;
                 
                 // Add tooltip with domain description
