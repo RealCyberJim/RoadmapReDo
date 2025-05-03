@@ -224,6 +224,9 @@
         .engineercontainer { 
             border: 2px solid var(--orange);
             grid-column: eng;
+            /* Define columnar layout for Engineering subdomains */
+            grid-template-columns: repeat(3, 1fr);
+            column-gap: 0.2vmax;
         }
 
         .assetcontainer { 
@@ -234,6 +237,8 @@
         .mgmtcontainer { 
             border: 2px solid var(--black);
             grid-column: rsk;
+            /* Define columnar layout for GRC subdomains */
+            grid-template-columns: repeat(1, 1fr);
         }
 
         .testingcontainer { 
@@ -249,6 +254,9 @@
         .operationscontainer { 
             border: 2px solid var(--blue);
             grid-column: ops;
+            /* Define columnar layout for Operations subdomains */
+            grid-template-columns: repeat(4, 1fr);
+            column-gap: 0.2vmax;
         }
 
         /* Subdomain styling */
@@ -686,7 +694,11 @@
                 
                 // Create subdomain sections if any exist
                 if (domainSubdomains.length > 0) {
-                    this.createSubdomainContainers(domainContainer, domainSubdomains, domain);
+                    // Group subdomains by teamRole for columnar layout
+                    const groupedSubdomains = this.groupSubdomainsByTeamRole(domainSubdomains);
+                    
+                    // Create subdomain columns
+                    this.createSubdomainColumns(domainContainer, groupedSubdomains, domain);
                 }
                 
                 bgGrid.appendChild(domainContainer);
@@ -694,40 +706,61 @@
             });
         },
         
-        // Create subdomain containers within a domain
-        createSubdomainContainers: function(domainContainer, subdomains, domain) {
-            // Create container for each subdomain
+        // Group subdomains by teamRole for columnar display
+        groupSubdomainsByTeamRole: function(subdomains) {
+            const groups = {};
+            
             subdomains.forEach(subdomain => {
-                // Create subdomain container
-                const subdomainContainer = document.createElement('div');
-                
-                // Determine the background class based on team role and domain
-                let bgClass = '';
-                const teamRole = subdomain.teamRole || 'DefaultTeam';
-                const domainId = domain.id.toLowerCase();
-                
-                if (teamRole === 'RedTeam' && domain.id === 'OPS') {
-                    bgClass = 'redsubdomain2';
-                } else if (teamRole === 'BlueTeam' && domain.id === 'OPS') {
-                    bgClass = 'bluesubdomain2';
-                } else if (domain.id === 'ENG') {
-                    bgClass = 'engsubdomain1';
-                } else if (domain.id === 'RSK') {
-                    bgClass = 'mgmtsubdomain4';
-                } else {
-                    bgClass = `${domainId}subdomain1`;
+                const role = subdomain.teamRole || 'DefaultTeam';
+                if (!groups[role]) {
+                    groups[role] = [];
                 }
-                
-                subdomainContainer.className = bgClass;
-                subdomainContainer.setAttribute('data-subdomain-id', subdomain.id);
-                
-                // Add subdomain title
-                const titleElement = document.createElement('div');
-                titleElement.className = 'subtitle1';
-                titleElement.textContent = subdomain.name;
-                subdomainContainer.appendChild(titleElement);
-                
-                domainContainer.appendChild(subdomainContainer);
+                groups[role].push(subdomain);
+            });
+            
+            return groups;
+        },
+        
+        // Create columns for each subdomain group
+        createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
+            const domainId = domain.id;
+            
+            // Handle each subdomain separately to create columns
+            Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
+                subdomains.forEach(subdomain => {
+                    // Create subdomain column container
+                    const columnContainer = document.createElement('div');
+                    
+                    // Determine background class based on team role and domain
+                    let backgroundClass = '';
+                    
+                    if (teamRole === 'RedTeam' && domainId === 'OPS') {
+                        backgroundClass = 'redsubdomain2';
+                        columnContainer.style.backgroundColor = 'var(--redlt)';
+                    } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
+                        backgroundClass = 'bluesubdomain2';
+                        columnContainer.style.backgroundColor = 'var(--bluelt)';
+                    } else if (domainId === 'ENG') {
+                        backgroundClass = 'engsubdomain1';
+                        columnContainer.style.backgroundColor = 'var(--orangelt)';
+                    } else if (domainId === 'RSK') {
+                        backgroundClass = 'mgmtsubdomain4';
+                        columnContainer.style.backgroundColor = 'var(--blacklt)';
+                    }
+                    
+                    columnContainer.className = backgroundClass;
+                    columnContainer.setAttribute('data-subdomain-id', subdomain.id);
+                    columnContainer.style.height = '100%';
+                    
+                    // Add subdomain header
+                    const titleElement = document.createElement('div');
+                    titleElement.className = 'subtitle1';
+                    titleElement.textContent = subdomain.name;
+                    columnContainer.appendChild(titleElement);
+                    
+                    // Add to domain container
+                    domainContainer.appendChild(columnContainer);
+                });
             });
         },
         
