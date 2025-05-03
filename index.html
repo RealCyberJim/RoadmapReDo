@@ -489,44 +489,7 @@
 <body>
         <div id="certmap-container">
         <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap</div>
-        
-        <!-- Debug Info Section -->
-        <div id="debug-info">
-            <h3>Debug Information</h3>
-            <div id="debug-messages"></div>
-            <button onclick="document.getElementById('debug-info').style.display='none'">Close</button>
-        </div>
-        <button id="debugButton">Show Debug Info</button>
-        
-        <!-- Toolbar with filters and controls -->
-        <div id="certmap-toolbar" class="cert-toolbar">
-            <!-- Will be populated dynamically -->
-            <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
-            <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
-            <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
-            <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
-            <br>
-            
-            <!-- Domain and Vendor filters -->
-            <div class="filter-container candidate-only">
-                <label for="domainGroupFilter" style="font-size: 1vmax;">
-                    🔍 Domain:
-                    <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Domains</option>
-                        <!-- Will be populated from domains.json -->
-                    </select>
-                </label>
-                
-                <label for="vendorFilter" style="font-size: 1vmax;">
-                    🏷️ Vendor:
-                    <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Vendors</option>
-                        <!-- Will be populated from certs.json -->
-                    </select>
-                </label>
-            </div>
-        </div>
-        
+
         <!-- The main grid that will hold domains and certs -->
         <div id="certmap-grid">
             <!-- Empty placeholder - will be populated by JavaScript -->
@@ -536,6 +499,34 @@
         <div class="certmap-footer">
             <span id="cert-count">Loading certification data...</span>
         </div>
+                <!-- Toolbar with filters and controls -->
+                <div id="certmap-toolbar" class="cert-toolbar">
+                    <!-- Will be populated dynamically -->
+                    <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
+                    <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
+                    <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
+                    <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
+                    <br>
+                    
+                    <!-- Domain and Vendor filters -->
+                    <div class="filter-container candidate-only">
+                        <label for="domainGroupFilter" style="font-size: 1vmax;">
+                            🔍 Domain:
+                            <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                                <option value="ALL">All Domains</option>
+                                <!-- Will be populated from domains.json -->
+                            </select>
+                        </label>
+                        
+                        <label for="vendorFilter" style="font-size: 1vmax;">
+                            🏷️ Vendor:
+                            <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                                <option value="ALL">All Vendors</option>
+                                <!-- Will be populated from certs.json -->
+                            </select>
+                        </label>
+                    </div>
+                </div>
     </div>
 
     <!-- Script to load and initialize the certification map -->
