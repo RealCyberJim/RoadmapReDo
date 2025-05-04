@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Certification Roadmap</title>
     <style>
-        /* note to force version change and update */
+        /*  note to force version change and update */
         /* makes all elements include padding and borders in their width/height calculations */
         * {
             box-sizing: border-box;
@@ -513,33 +513,36 @@
             <span id="cert-count">Loading certification data...</span>
         </div>
         <!-- Toolbar with filters and controls -->
-        <div id="certmap-toolbar" class="cert-toolbar">
-            <!-- Will be populated dynamically -->
-            <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
-            <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
-            <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
-            <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
-            <br>
-            
-            <!-- Domain and Vendor filters -->
-            <div class="filter-container candidate-only">
-                <label for="domainGroupFilter" style="font-size: 1vmax;">
-                    🔍 Domain:
-                    <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Domains</option>
-                        <!-- Will be populated from domains.json -->
-                    </select>
-                </label>
-                
-                <label for="vendorFilter" style="font-size: 1vmax;">
-                    🏷️ Vendor:
-                    <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                        <option value="ALL">All Vendors</option>
-                        <!-- Will be populated from certs.json -->
-                    </select>
-                </label>
-            </div>
-        </div>
+                                <!-- TOOLBAR SECTION DISABLED
+                                 
+                                <div id="certmap-toolbar" class="cert-toolbar">
+                                    <!-- Will be populated dynamically -->
+                                    <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
+                                    <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
+                                    <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
+                                    <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
+                                    <br>
+                                    
+                                    <!-- Domain and Vendor filters -->
+                                    <div class="filter-container candidate-only">
+                                        <label for="domainGroupFilter" style="font-size: 1vmax;">
+                                            🔍 Domain:
+                                            <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                                                <option value="ALL">All Domains</option>
+                                                <!-- Will be populated from domains.json -->
+                                            </select>
+                                        </label>
+                                        
+                                        <label for="vendorFilter" style="font-size: 1vmax;">
+                                            🏷️ Vendor:
+                                            <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                                                <option value="ALL">All Vendors</option>
+                                                <!-- Will be populated from certs.json -->
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                TOOLBAR SECTION DISABLED -->
     </div>
 
     <!-- Script to load and initialize the certification map -->
