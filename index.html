@@ -714,16 +714,6 @@
         return groupedCerts;
     },
 
-            // Position each certification tile based on its domain and skill strata
-            positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
-                // Domain positioning - horizontal
-                // Find the corresponding domain
-                const domain = CertMap.data.domains.find(d => d.id === cert.domain);
-                if (!domain) {
-                    console.error(`Domain not found for certification: ${cert.id}`);
-                    return;
-                }
-                
                 // Set width and height of the tile (in vmax units)
                 const tileWidth = 2.4;
                 const tileHeight = 1.0;
