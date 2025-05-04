@@ -1269,8 +1269,8 @@
     "label": "PCI QSA"
   },
   {
-    "id": "DEV_gweb",
-    "domain": "DEV",
+    "id": "SOF_gweb",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -1563,8 +1563,8 @@
     "label": "CIS LA"
   },
   {
-    "id": "DEV_scspl",
-    "domain": "DEV",
+    "id": "SOF_scspl",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -1866,8 +1866,8 @@
     "label": "MGRC"
   },
   {
-    "id": "DEV_csslp",
-    "domain": "DEV",
+    "id": "SOF_csslp",
+    "domain": "SOF",
     "crossDomains": [
       "RSK",
       "TST",
@@ -2256,8 +2256,8 @@
     "label": "PECB 27001LA"
   },
   {
-    "id": "DEV_devnetpro",
-    "domain": "DEV",
+    "id": "SOF_devnetpro",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -2608,8 +2608,8 @@
     "label": "APMG 27001A"
   },
   {
-    "id": "DEV_case",
-    "domain": "DEV",
+    "id": "SOF_case",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -2772,8 +2772,8 @@
     "label": "Programming Language"
   },
   {
-    "id": "DEV_gmle",
-    "domain": "DEV",
+    "id": "SOF_gmle",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -3162,8 +3162,8 @@
     "label": "CIS IA"
   },
   {
-    "id": "DEV_casst",
-    "domain": "DEV",
+    "id": "SOF_casst",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -3526,8 +3526,8 @@
     "label": "T\ufffdV MSA"
   },
   {
-    "id": "DEV_devneta",
-    "domain": "DEV",
+    "id": "SOF_devneta",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -3912,8 +3912,8 @@
     "label": "IIA CIA"
   },
   {
-    "id": "DEV_ccsc",
-    "domain": "DEV",
+    "id": "SOF_ccsc",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -4298,8 +4298,8 @@
     "label": "CISST"
   },
   {
-    "id": "DEV_cswae",
-    "domain": "DEV",
+    "id": "SOF_cswae",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -4842,8 +4842,8 @@
     "label": "SSCP"
   },
   {
-    "id": "DEV_sogcap",
-    "domain": "DEV",
+    "id": "SOF_sogcap",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -5380,8 +5380,8 @@
     "label": "T\ufffdV CySec"
   },
   {
-    "id": "DEV_csst",
-    "domain": "DEV",
+    "id": "SOF_csst",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -5694,8 +5694,8 @@
     "label": "T\ufffdV CyAware"
   },
   {
-    "id": "DEV_mase",
-    "domain": "DEV",
+    "id": "SOF_mase",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",
@@ -5876,8 +5876,8 @@
     "label": "CIS F"
   },
   {
-    "id": "DEV_sspf",
-    "domain": "DEV",
+    "id": "SOF_sspf",
+    "domain": "SOF",
     "crossDomains": [],
     "subdomain": "",
     "teamRole": "DefaultTeam",

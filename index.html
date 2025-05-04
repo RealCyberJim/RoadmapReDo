@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Certification Roadmap</title>
     <style>
+        /* note to force version change and update */
         /* makes all elements include padding and borders in their width/height calculations */
         * {
             box-sizing: border-box;
@@ -33,7 +35,7 @@
             --purplelt: #eddbff;
             --skyblue: #6bb3f6;
             --skybluedk: #2665a0;
-            --skybluelt: #b8e0ff;  /* New light sky blue for Development subdomains */
+            --skybluelt: #b8e0ff;  /* New light sky blue for Software subdomains */
             --blue: #2e5688;
             --bluedk: #1f3147;
             --bluelt: #dce6f2;
@@ -62,9 +64,9 @@
             --tst: var(--purple);
             --tstdk: var(--purpledk);
             --tstlt: var(--purplelt);
-            --dev: var(--skyblue);
-            --devdk: var(--skybluedk);
-            --devlt: var(--skybluelt);
+            --sof: var(--skyblue);
+            --sofdk: var(--skybluedk);
+            --soflt: var(--skybluelt);
             --ops: var(--red);
             --opsdk: var(--reddk);
             --opslt: var(--redlt);
@@ -170,7 +172,7 @@
                                     [ast] 5.1vmax
                                     [rsk] 21.8vmax
                                     [tst] 7.5vmax
-                                    [dev] 2.7vmax
+                                    [sof] 2.7vmax
                                     [ops] 31.5vmax;
             grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
             column-gap: 0.2vmax;
@@ -284,7 +286,7 @@
 
         .softwarecontainer { 
             border: 2px solid var(--skyblue); 
-            grid-column: dev;
+            grid-column: sof;
         }
 
         .operationscontainer { 
@@ -732,7 +734,7 @@
                 'AST': 16,
                 'RSK': 19,
                 'TST': 29,
-                'DEV': 33,
+                'SOF': 33,
                 'OPS': 35
             };
             
@@ -744,7 +746,7 @@
                 'AST': 2,
                 'RSK': 9,
                 'TST': 3,
-                'DEV': 1,
+                'SOF': 1,
                 'OPS': 13
             };
             
@@ -1104,7 +1106,7 @@
                 'AST': 'assetcontainer',
                 'RSK': 'mgmtcontainer',
                 'TST': 'testingcontainer',
-                'DEV': 'softwarecontainer',
+                'SOF': 'softwarecontainer',
                 'OPS': 'operationscontainer'
             };
             
