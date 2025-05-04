@@ -765,7 +765,7 @@
             let colPos;
             if (totalInGroup <= colSpan) {
                 // If we have fewer certs than columns, space them evenly
-                colPos = colStart + Math.floor(indexInGroup * (colSpan / total));
+                colPos = colStart + Math.floor(indexInGroup * (colSpan / totalInGroup));
             } else {
                 // If we have more certs than columns, distribute them
                 const rowsNeeded = Math.ceil(totalInGroup / colSpan);
@@ -790,6 +790,9 @@
         positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
         // Calculate grid position using our helper method
         const position = this.getGridPosition(cert, indexInGroup, totalInGroup);
+        
+        // Set the color based on domain and team role
+        this.setTileColor(tileElement, cert);
         
         // Find the corresponding domain
         const domain = CertMap.data.domains.find(d => d.id === cert.domain);
