@@ -714,163 +714,95 @@
         return groupedCerts;
     },
 
-                // Set width and height of the tile (in vmax units)
-                const tileWidth = 2.4;
-                const tileHeight = 1.0;
-                
-                // Calculate horizontal position based on domain order
-                let left = 0.4; // Start after skill level column
-                
-                // Add up column widths for domains before this one
-                for (let i = 1; i < domain.order; i++) {
-                    const prevDomain = CertMap.data.domains.find(d => d.order === i);
-                    if (prevDomain) {
-                        // Add to the left position based on the column width in the grid
-                        switch (prevDomain.id) {
-                            case 'NET': left += 7.5; break;
-                            case 'IAM': left += 2.65; break;
-                            case 'ENG': left += 17.2; break;
-                            case 'AST': left += 5.1; break;
-                            case 'RSK': left += 21.8; break;
-                            case 'TST': left += 7.5; break;
-                            case 'DEV': left += 2.7; break;
-                            case 'OPS': left += 31.5; break;
-                            default: left += 2; break;
-                        }
-                        left += 0.2; // column gap
-                    }
+        positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
+        // Find the corresponding domain
+        const domain = CertMap.data.domains.find(d => d.id === cert.domain);
+        if (!domain) {
+            console.error(`Domain not found for certification: ${cert.id}`);
+            return;
+        }
+        
+        // Set width and height of the tile
+        const tileWidth = 2.4;
+        const tileHeight = 1.0;
+        
+        // Calculate horizontal position based on domain
+        let left = 0.4; // Start after skill level column
+        
+        // Add up column widths for domains before this one
+        for (let i = 1; i < domain.order; i++) {
+            const prevDomain = CertMap.data.domains.find(d => d.order === i);
+            if (prevDomain) {
+                switch (prevDomain.id) {
+                    case 'NET': left += 7.5; break;
+                    case 'IAM': left += 2.65; break;
+                    case 'ENG': left += 17.2; break;
+                    case 'AST': left += 5.1; break;
+                    case 'RSK': left += 21.8; break;
+                    case 'TST': left += 7.5; break;
+                    case 'DEV': left += 2.7; break;
+                    case 'OPS': left += 31.5; break;
+                    default: left += 2; break;
                 }
-                
-                // Determine base position within the domain column
-                let basePosition;
-                switch (domain.id) {
-                    case 'NET': basePosition = 2.5; break;
-                    case 'IAM': basePosition = 0.5; break;
-                    case 'ENG': basePosition = 1.0; break; 
-                    case 'AST': basePosition = 1.5; break;
-                    case 'RSK': basePosition = 1.0; break;
-                    case 'TST': basePosition = 3.0; break;
-                    case 'DEV': basePosition = 0.5; break;
-                    case 'OPS': basePosition = 1.0; break;
-                    default: basePosition = 1.0; break;
-                }
-                
-                // Calculate horizontal offset based on the index in the group
-                // The more certifications in the same domain/strata, the more we need to spread them out
-                let horizontalOffset = 0;
-                
-                if (totalInGroup > 1) {
-                    // Calculate domain column width to determine how much space we have
-                    let domainWidth;
-                    switch (domain.id) {
-                        case 'NET': domainWidth = 7.5; break;
-                        case 'IAM': domainWidth = 2.65; break;
-                        case 'ENG': domainWidth = 17.2; break;
-                        case 'AST': domainWidth = 5.1; break;
-                        case 'RSK': domainWidth = 21.8; break;
-                        case 'TST': domainWidth = 7.5; break;
-                        case 'DEV': domainWidth = 2.7; break;
-                        case 'OPS': domainWidth = 31.5; break;
-                        default: domainWidth = 3.0; break;
-                    }
-                    
-                    // Calculate how much space each tile should take
-                    const tileSpace = (domainWidth - 2) / totalInGroup; // Leave some margin
-                    horizontalOffset = indexInGroup * tileSpace;
-                }
-                
-                // Set final left position
-                left += basePosition + horizontalOffset;
-                
-                // Calculate vertical position based on skill strata
-                // In the original design, strata 1 is at the top (expert) and 27 at the bottom (beginner)
-                const top = 1.5 + ((cert.skillStrata - 1) * (tileHeight + 0.1));
-                
-                // Apply the calculated position
-                tileElement.style.position = 'absolute';
-                tileElement.style.left = `${left}vmax`;
-                tileElement.style.top = `${top}vmax`;
-                tileElement.style.width = `${tileWidth}vmax`;
-                tileElement.style.height = `${tileHeight}vmax`;
-                
-                // Add data attributes for filtering
-                tileElement.setAttribute('data-domain', cert.domain);
-                tileElement.setAttribute('data-skill-strata', cert.skillStrata);
-                tileElement.setAttribute('data-vendor', cert.vendor);
-                if (cert.subdomain) {
-                    tileElement.setAttribute('data-subdomain', cert.subdomain);
-                }
-                if (cert.teamRole) {
-                    tileElement.setAttribute('data-team-role', cert.teamRole);
-                }
-            },
-                // Domain positioning - horizontal
-                // Find the corresponding domain
-                const domain = CertMap.data.domains.find(d => d.id === cert.domain);
-                if (!domain) {
-                    console.error(`Domain not found for certification: ${cert.id}`);
-                    return;
-                }
-                
-                // Calculate position based on the domain and skill strata
-                // The position is based on a grid system that matches the original design
-                
-                // Set width and height of the tile (in vmax units)
-                const tileWidth = 2.4;
-                const tileHeight = 1.0;
-                
-                // Dimensions of the certification container
-                const containerWidth = 97; // vmax - based on your CSS
-                const containerHeight = 42; // vmax - based on your CSS
-                
-                // Calculate horizontal position based on domain order
-                let left = 0.4; // Start after skill level column
-                
-                // Add up column widths for domains before this one
-                for (let i = 1; i < domain.order; i++) {
-                    const prevDomain = CertMap.data.domains.find(d => d.order === i);
-                    if (prevDomain) {
-                        // Add to the left position based on the column width in the grid
-                        // These values should match your grid-template-columns in CSS
-                        switch (prevDomain.id) {
-                            case 'NET': left += 7.5; break;
-                            case 'IAM': left += 2.65; break;
-                            case 'ENG': left += 17.2; break;
-                            case 'AST': left += 5.1; break;
-                            case 'RSK': left += 21.8; break;
-                            case 'TST': left += 7.5; break;
-                            case 'DEV': left += 2.7; break;
-                            case 'OPS': left += 31.5; break;
-                            default: left += 2; break;
-                        }
-                        left += 0.2; // column gap
-                    }
-                }
-                
-                // Now add a specific offset within this domain's column
-                // This is just an example, you may need to adjust this
-                switch (domain.id) {
-                    case 'NET': left += 2.5; break;
-                    case 'IAM': left += 0.5; break;
-                    case 'ENG': left += 1.0; break; 
-                    case 'AST': left += 1.5; break;
-                    case 'RSK': left += 1.0; break;
-                    case 'TST': left += 3.0; break;
-                    case 'DEV': left += 0.5; break;
-                    case 'OPS': left += 1.0; break;
-                }
-                
-                // Calculate vertical position based on skill strata
-                // In the original design, strata 1 is at the top (expert) and 27 at the bottom (beginner)
-                const top = 1.5 + ((cert.skillStrata - 1) * (tileHeight + 0.1));
-                
-                // Apply the calculated position
-                tileElement.style.position = 'absolute';
-                tileElement.style.left = `${left}vmax`;
-                tileElement.style.top = `${top}vmax`;
-                tileElement.style.width = `${tileWidth}vmax`;
-                tileElement.style.height = `${tileHeight}vmax`;
-            },
+                left += 0.2; // column gap
+            }
+        }
+        
+        // Get base position within domain column
+        let basePosition;
+        switch (domain.id) {
+            case 'NET': basePosition = 2.5; break;
+            case 'IAM': basePosition = 0.5; break;
+            case 'ENG': basePosition = 1.0; break; 
+            case 'AST': basePosition = 1.5; break;
+            case 'RSK': basePosition = 1.0; break;
+            case 'TST': basePosition = 3.0; break;
+            case 'DEV': basePosition = 0.5; break;
+            case 'OPS': basePosition = 1.0; break;
+            default: basePosition = 1.0; break;
+        }
+        
+        // Calculate horizontal spacing for multiple tiles
+        let horizontalOffset = 0;
+        if (totalInGroup > 1) {
+            let domainWidth;
+            switch (domain.id) {
+                case 'NET': domainWidth = 7.5; break;
+                case 'IAM': domainWidth = 2.65; break;
+                case 'ENG': domainWidth = 17.2; break;
+                case 'AST': domainWidth = 5.1; break;
+                case 'RSK': domainWidth = 21.8; break;
+                case 'TST': domainWidth = 7.5; break;
+                case 'DEV': domainWidth = 2.7; break;
+                case 'OPS': domainWidth = 31.5; break;
+                default: domainWidth = 3.0; break;
+            }
+            const tileSpace = (domainWidth - 2) / totalInGroup;
+            horizontalOffset = indexInGroup * tileSpace;
+        }
+        
+        // Calculate final position
+        left += basePosition + horizontalOffset;
+        const top = 1.5 + ((cert.skillStrata - 1) * (tileHeight + 0.1));
+        
+        // Apply position to the tile
+        tileElement.style.position = 'absolute';
+        tileElement.style.left = `${left}vmax`;
+        tileElement.style.top = `${top}vmax`;
+        tileElement.style.width = `${tileWidth}vmax`;
+        tileElement.style.height = `${tileHeight}vmax`;
+        
+        // Add data attributes for filtering
+        tileElement.setAttribute('data-domain', cert.domain);
+        tileElement.setAttribute('data-skill-strata', cert.skillStrata);
+        tileElement.setAttribute('data-vendor', cert.vendor);
+        if (cert.subdomain) {
+            tileElement.setAttribute('data-subdomain', cert.subdomain);
+        }
+        if (cert.teamRole) {
+            tileElement.setAttribute('data-team-role', cert.teamRole);
+        }
+    },
 
             // Set the color of the certification tile based on domain and team role
             setTileColor: function(tileElement, cert) {
