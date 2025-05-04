@@ -790,9 +790,7 @@
         positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
         // Calculate grid position using our helper method
         const position = this.getGridPosition(cert, indexInGroup, totalInGroup);
-        
-        // Set the color based on domain and team role
-        this.setTileColor(tileElement, cert);
+
         
         // Find the corresponding domain
         const domain = CertMap.data.domains.find(d => d.id === cert.domain);
@@ -808,6 +806,9 @@
         // Set standard dimensions for certification tiles
         tileElement.style.width = "2.3vmax";
         tileElement.style.height = "1.5vmax";
+
+        // Set the color based on domain and team role
+        this.setTileColor(tileElement, cert);
         
         // Add data attributes for filtering
         tileElement.setAttribute('data-domain', cert.domain);
@@ -822,7 +823,7 @@
         if (cert.teamRole) {
             tileElement.setAttribute('data-team-role', cert.teamRole);
         }
-    },
+    }
     },
 
             // Set the color of the certification tile based on domain and team role
