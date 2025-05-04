@@ -33,7 +33,7 @@
             --purplelt: #eddbff;
             --skyblue: #6bb3f6;
             --skybluedk: #2665a0;
-            --skybluelit: #b8e0ff;  /* New light sky blue for Development subdomains */
+            --skybluelt: #b8e0ff;  /* New light sky blue for Development subdomains */
             --blue: #2e5688;
             --bluedk: #1f3147;
             --bluelt: #dce6f2;
@@ -542,90 +542,92 @@
 
     <!-- Script to load and initialize the certification map -->
     <script>
-    // Initialize CertMap object FIRST before any event handlers are set up
-    window.CertMap = {};
-    
-    // Configuration module for the Certification Roadmap
-    CertMap.config = {
-        dataPath: {
-            domains: 'data/domains.json',
-            subdomains: 'data/subdomains.json',
-            certs: 'data/certs.json'  // Not created yet but will be needed
-        },
-        viewModes: {
-            default: 'default',
-            candidate: 'candidate-view'
-        },
-        storageKeys: {
-            achievedCerts: 'achievedCerts',
-            plannedCerts: 'plannedCerts',
-            transparentView: 'transparentView'
+    JAVASCRIPTR PORTION
+
+// Initialize CertMap object FIRST before any event handlers are set up
+window.CertMap = {};
+
+// Configuration module for the Certification Roadmap
+CertMap.config = {
+    dataPath: {
+        domains: 'data/domains.json',
+        subdomains: 'data/subdomains.json',
+        certs: 'data/certs.json'
+    },
+    viewModes: {
+        default: 'default',
+        candidate: 'candidate-view'
+    },
+    storageKeys: {
+        achievedCerts: 'achievedCerts',
+        plannedCerts: 'plannedCerts',
+        transparentView: 'transparentView'
+    }
+};
+
+// Data storage
+CertMap.data = {
+    domains: [],
+    subdomains: [],
+    certs: [],
+    // State management
+    state: {
+        currentView: CertMap.config.viewModes.default,
+        editMode: false,
+        filters: {
+            domain: 'ALL',
+            vendor: 'ALL'
         }
-    };
+    }
+};
 
-    // Data storage
-    CertMap.data = {
-        domains: [],
-        subdomains: [],
-        certs: [],
-        // State management
-        state: {
-            currentView: CertMap.config.viewModes.default,
-            editMode: false,
-            filters: {
-                domain: 'ALL',
-                vendor: 'ALL'
-            }
+// Function to load domain data from JSON files
+CertMap.loadData = async function() {
+    try {
+        // Load domains data
+        console.log('Fetching domains from:', CertMap.config.dataPath.domains);
+        const domainsResponse = await fetch(CertMap.config.dataPath.domains);
+        if (!domainsResponse.ok) {
+            throw new Error(`Failed to fetch domains: ${domainsResponse.status} ${domainsResponse.statusText}`);
         }
-    };
-
-    // Function to load domain data from JSON files
-    CertMap.loadData = async function() {
-        try {
-            // Load domains data
-            console.log('Fetching domains from:', CertMap.config.dataPath.domains);
-            const domainsResponse = await fetch(CertMap.config.dataPath.domains);
-            if (!domainsResponse.ok) {
-                throw new Error(`Failed to fetch domains: ${domainsResponse.status} ${domainsResponse.statusText}`);
-            }
-            CertMap.data.domains = await domainsResponse.json();
-            console.log('Loaded domains:', CertMap.data.domains.length);
-            
-            // Debug domain details
-            CertMap.data.domains.forEach(domain => {
-                console.log(`Domain: ${domain.id}, Name: ${domain.name}, Order: ${domain.order}`);
-            });
-            
-            // Load subdomains data
-            console.log('Fetching subdomains from:', CertMap.config.dataPath.subdomains);
-            const subdomainsResponse = await fetch(CertMap.config.dataPath.subdomains);
-            if (!subdomainsResponse.ok) {
-                throw new Error(`Failed to fetch subdomains: ${subdomainsResponse.status} ${subdomainsResponse.statusText}`);
-            }
-            CertMap.data.subdomains = await subdomainsResponse.json();
-            console.log('Loaded subdomains:', CertMap.data.subdomains.length);
-
-            // Load certification data
-            console.log('Fetching certifications from:', CertMap.config.dataPath.certs);
-            const certsResponse = await fetch(CertMap.config.dataPath.certs);
-            if (!certsResponse.ok) {
-                throw new Error(`Failed to fetch certifications: ${certsResponse.status} ${certsResponse.statusText}`);
-            }
-            CertMap.data.certs = await certsResponse.json();
-            console.log('Loaded certifications:', CertMap.data.certs.length);
-            
-            console.log('All data loaded successfully');
-            return true;
-        } catch (error) {
-            console.error('Error loading data:', error);
-            return false;
+        CertMap.data.domains = await domainsResponse.json();
+        console.log('Loaded domains:', CertMap.data.domains.length);
+        
+        // Debug domain details
+        CertMap.data.domains.forEach(domain => {
+            console.log(`Domain: ${domain.id}, Name: ${domain.name}, Order: ${domain.order}`);
+        });
+        
+        // Load subdomains data
+        console.log('Fetching subdomains from:', CertMap.config.dataPath.subdomains);
+        const subdomainsResponse = await fetch(CertMap.config.dataPath.subdomains);
+        if (!subdomainsResponse.ok) {
+            throw new Error(`Failed to fetch subdomains: ${subdomainsResponse.status} ${subdomainsResponse.statusText}`);
         }
-    };
+        CertMap.data.subdomains = await subdomainsResponse.json();
+        console.log('Loaded subdomains:', CertMap.data.subdomains.length);
 
-    // Renderer module for the Certification Roadmap
-    CertMap.renderer = {
-        // Add to the CertMap.renderer object
-        createCertificationTiles: function() {
+        // Load certification data
+        console.log('Fetching certifications from:', CertMap.config.dataPath.certs);
+        const certsResponse = await fetch(CertMap.config.dataPath.certs);
+        if (!certsResponse.ok) {
+            throw new Error(`Failed to fetch certifications: ${certsResponse.status} ${certsResponse.statusText}`);
+        }
+        CertMap.data.certs = await certsResponse.json();
+        console.log('Loaded certifications:', CertMap.data.certs.length);
+        
+        console.log('All data loaded successfully');
+        return true;
+    } catch (error) {
+        console.error('Error loading data:', error);
+        return false;
+    }
+};
+
+// Renderer module for the Certification Roadmap
+CertMap.renderer = {
+    // Create certification tiles
+    createCertificationTiles: function() {
         console.log('Creating certification tiles...');
         const container = document.querySelector('.certcontainer');
         if (!container) {
@@ -675,7 +677,7 @@
                     certTile.textContent = cert.label;
                     
                     // Add tooltip with detailed info
-                    certTile.setAttribute('tooltiptext', cert.tooltip);
+                    certTile.setAttribute('tooltiptext', cert.tooltip || cert.label);
                     
                     // Add the tile to the container
                     container.appendChild(certTile);
@@ -694,7 +696,7 @@
         return true;
     },
 
-        groupCertificationsByDomainAndStrata: function(certs) {
+    groupCertificationsByDomainAndStrata: function(certs) {
         console.log('Grouping certifications by domain and skill strata');
         const groupedCerts = {};
         
@@ -721,76 +723,75 @@
         return groupedCerts;
     },
 
-        // Helper for grid positioning - calculates grid position for certification tiles
-        getGridPosition: function(cert, indexInGroup, totalInGroup) {
-            // Domain column mapping (where each domain starts in the grid)
-            const domainColumns = {
-                'NET': 2,
-                'IAM': 6,
-                'ENG': 8,
-                'AST': 16,
-                'RSK': 19,
-                'TST': 29,
-                'DEV': 33,
-                'OPS': 35
-            };
+    // Helper for grid positioning - calculates grid position for certification tiles
+    getGridPosition: function(cert, indexInGroup, totalInGroup) {
+        // Domain column mapping (where each domain starts in the grid)
+        const domainColumns = {
+            'NET': 2,
+            'IAM': 6,
+            'ENG': 8,
+            'AST': 16,
+            'RSK': 19,
+            'TST': 29,
+            'DEV': 33,
+            'OPS': 35
+        };
+        
+        // Domain column spans (how many columns each domain occupies)
+        const domainSpans = {
+            'NET': 3,
+            'IAM': 1,
+            'ENG': 7,
+            'AST': 2,
+            'RSK': 9,
+            'TST': 3,
+            'DEV': 1,
+            'OPS': 13
+        };
+        
+        // Skill level row ranges (where each skill level starts and ends)
+        const skillRows = {
+            3: { start: 3, end: 9 },   // Expert
+            2: { start: 12, end: 18 }, // Intermediate
+            1: { start: 21, end: 27 }  // Beginner
+        };
+        
+        // Get domain data
+        const colStart = domainColumns[cert.domain] || 2;
+        const colSpan = domainSpans[cert.domain] || 1;
+        
+        // Get skill level row range
+        const rowRange = skillRows[cert.skillStrata] || skillRows[1];
+        
+        // Calculate column position within domain area
+        let colPos;
+        if (totalInGroup <= colSpan) {
+            // If we have fewer certs than columns, space them evenly
+            colPos = colStart + Math.floor(indexInGroup * (colSpan / totalInGroup));
+        } else {
+            // If we have more certs than columns, distribute them
+            const rowsNeeded = Math.ceil(totalInGroup / colSpan);
+            const rowIndex = Math.floor(indexInGroup / colSpan);
+            colPos = colStart + (indexInGroup % colSpan);
             
-            // Domain column spans (how many columns each domain occupies)
-            const domainSpans = {
-                'NET': 3,
-                'IAM': 1,
-                'ENG': 7,
-                'AST': 2,
-                'RSK': 9,
-                'TST': 3,
-                'DEV': 1,
-                'OPS': 13
-            };
-            
-            // Skill level row ranges (where each skill level starts and ends)
-            const skillRows = {
-                3: { start: 3, end: 9 },   // Expert
-                2: { start: 12, end: 18 }, // Intermediate
-                1: { start: 21, end: 27 }  // Beginner
-            };
-            
-            // Get domain data
-            const colStart = domainColumns[cert.domain] || 2;
-            const colSpan = domainSpans[cert.domain] || 1;
-            
-            // Get skill level row range
-            const rowRange = skillRows[cert.skillStrata] || skillRows[1];
-            
-            // Calculate column position within domain area
-            let colPos;
-            if (totalInGroup <= colSpan) {
-                // If we have fewer certs than columns, space them evenly
-                colPos = colStart + Math.floor(indexInGroup * (colSpan / totalInGroup));
-            } else {
-                // If we have more certs than columns, distribute them
-                const rowsNeeded = Math.ceil(totalInGroup / colSpan);
-                const rowIndex = Math.floor(indexInGroup / colSpan);
-                colPos = colStart + (indexInGroup % colSpan);
-                
-                // Adjust row based on distribution
-                const rowPos = rowRange.start + rowIndex;
-                return { 
-                    column: colPos, 
-                    row: rowPos < rowRange.end ? rowPos : rowRange.end - 1 
-                };
-            }
-            
-            // Return position with row distribution
+            // Adjust row based on distribution
+            const rowPos = rowRange.start + rowIndex;
             return { 
                 column: colPos, 
-                row: rowRange.start + (indexInGroup % (rowRange.end - rowRange.start)) 
+                row: rowPos < rowRange.end ? rowPos : rowRange.end - 1 
             };
-        },
+        }
+        
+        // Return position with row distribution
+        return { 
+            column: colPos, 
+            row: rowRange.start + (indexInGroup % (rowRange.end - rowRange.start)) 
+        };
+    },
 
-        positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
+    positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
         // Calculate grid position using our helper method
         const position = this.getGridPosition(cert, indexInGroup, totalInGroup);
-
         
         // Find the corresponding domain
         const domain = CertMap.data.domains.find(d => d.id === cert.domain);
@@ -806,14 +807,11 @@
         // Set standard dimensions for certification tiles
         tileElement.style.width = "2.3vmax";
         tileElement.style.height = "1.5vmax";
-
-        // Set the color based on domain and team role
-        this.setTileColor(tileElement, cert);
         
         // Add data attributes for filtering
         tileElement.setAttribute('data-domain', cert.domain);
         tileElement.setAttribute('data-skill-strata', cert.skillStrata);
-        tileElement.setAttribute('data-vendor', cert.vendor);
+        tileElement.setAttribute('data-vendor', cert.vendor || '');
         tileElement.setAttribute('data-grid-col', position.column);
         tileElement.setAttribute('data-grid-row', position.row);
         
@@ -823,191 +821,197 @@
         if (cert.teamRole) {
             tileElement.setAttribute('data-team-role', cert.teamRole);
         }
-    }
     },
 
-            // Set the color of the certification tile based on domain and team role
-            setTileColor: function(tileElement, cert) {
-                // Find the corresponding domain
-                const domain = CertMap.data.domains.find(d => d.id === cert.domain);
-                if (!domain) {
-                    console.error(`Domain not found for certification: ${cert.id}`);
-                    return;
-                }
-                
-                // Determine the team role
-                const teamRole = cert.teamRole || 'DefaultTeam';
-                
-                // Set the background color based on domain and team role
-                if (domain.teamRoles && domain.teamRoles[teamRole]) {
-                    tileElement.style.backgroundColor = domain.teamRoles[teamRole].tileColor;
-                    tileElement.style.border = `1px solid ${domain.teamRoles[teamRole].borderColor}`;
-                } else {
-                    // Fallback to domain default color
-                    tileElement.style.backgroundColor = domain.teamRoles.DefaultTeam.tileColor;
-                    tileElement.style.border = `1px solid ${domain.teamRoles.DefaultTeam.borderColor}`;
-                }
-            },
+    // Set the color of the certification tile based on domain and team role
+    setTileColor: function(tileElement, cert) {
+        // Find the corresponding domain
+        const domain = CertMap.data.domains.find(d => d.id === cert.domain);
+        if (!domain) {
+            console.error(`Domain not found for certification: ${cert.id}`);
+            return;
+        }
         
-        // Main render function
-        renderCertMap: function() {
-            console.log('Rendering certification map...');
-            const container = document.getElementById('certmap-grid');
-            if (!container) {
-                console.error('Grid container not found');
-                this.createCertificationTiles();
-                return false;
-            }
-            
-            // Clear previous content
-            container.innerHTML = '';
-            
-            // Add main chart container
-            const chartContainer = document.createElement('div');
-            chartContainer.className = 'certchart';
-            
-            // Create background grid (domains and subdomains)
-            const bgGrid = this.createBackgroundGrid();
-            chartContainer.appendChild(bgGrid);
-            
-            // Create foreground grid (cert tiles will go here)
-            const fgGrid = this.createForegroundGrid();
-            chartContainer.appendChild(fgGrid);
-            
-            // Add the completed grid to the container
-            container.appendChild(chartContainer);
-            
-            // Update cert count
-            const countElement = document.getElementById('cert-count');
-            if (countElement) {
-                const date = new Date();
-                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                countElement.textContent = `${CertMap.data.domains.length} domains loaded | ${monthYear}`;
-            }
-            this.createCertificationTiles();
-            return true;
-        },
+        // Determine the team role
+        const teamRole = cert.teamRole || 'DefaultTeam';
         
-        // Create the background grid with domains and subdomains
-        createBackgroundGrid: function() {
-            const bgGrid = document.createElement('div');
-            bgGrid.className = 'certbg';
-            
-            // Create domain header row
-            this.createDomainHeaders(bgGrid);
-            
-            // Create skill level indicators
-            this.createSkillLevels(bgGrid);
-            
-            // Create domain containers
-            this.createDomainContainers(bgGrid);
-            
-            return bgGrid;
-        },
+        // Set the background color based on domain and team role
+        if (domain.teamRoles && domain.teamRoles[teamRole]) {
+            tileElement.style.backgroundColor = domain.teamRoles[teamRole].tileColor;
+            tileElement.style.border = `1px solid ${domain.teamRoles[teamRole].borderColor}`;
+        } else {
+            // Fallback to domain default color
+            if (domain.teamRoles && domain.teamRoles.DefaultTeam) {
+                tileElement.style.backgroundColor = domain.teamRoles.DefaultTeam.tileColor;
+                tileElement.style.border = `1px solid ${domain.teamRoles.DefaultTeam.borderColor}`;
+            } else {
+                // Final fallback
+                tileElement.style.backgroundColor = '#666';
+                tileElement.style.border = '1px solid #444';
+            }
+        }
+    },
+    
+    // Main render function
+    renderCertMap: function() {
+        console.log('Rendering certification map...');
+        const container = document.getElementById('certmap-grid');
+        if (!container) {
+            console.error('Grid container not found');
+            return false;
+        }
+        
+        // Clear previous content
+        container.innerHTML = '';
+        
+        // Add main chart container
+        const chartContainer = document.createElement('div');
+        chartContainer.className = 'certchart';
+        
+        // Create background grid (domains and subdomains)
+        const bgGrid = this.createBackgroundGrid();
+        chartContainer.appendChild(bgGrid);
+        
+        // Create foreground grid (cert tiles will go here)
+        const fgGrid = this.createForegroundGrid();
+        chartContainer.appendChild(fgGrid);
+        
+        // Add the completed grid to the container
+        container.appendChild(chartContainer);
+        
+        // Update cert count
+        const countElement = document.getElementById('cert-count');
+        if (countElement) {
+            const date = new Date();
+            const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            countElement.textContent = `${CertMap.data.domains.length} domains loaded | ${monthYear}`;
+        }
+        
+        // Create certification tiles
+        this.createCertificationTiles();
+        return true;
+    },
+    
+    // Create the background grid with domains and subdomains
+    createBackgroundGrid: function() {
+        const bgGrid = document.createElement('div');
+        bgGrid.className = 'certbg';
+        
+        // Create domain header row
+        this.createDomainHeaders(bgGrid);
         
         // Create skill level indicators
-        createSkillLevels: function(bgGrid) {
-            const skillLevelContainer = document.createElement('div');
-            skillLevelContainer.className = 'skilllevelcontainer';
-            
-            // Define skill levels
-            const skillLevels = [
-                { name: 'Expert', class: 'skilllevel-expert' },
-                { name: 'Intermediate', class: 'skilllevel-intermediate' },
-                { name: 'Beginner', class: 'skilllevel-beginner' }
-            ];
-            
-            // Create skill level labels
-            skillLevels.forEach(level => {
-                const levelLabel = document.createElement('div');
-                levelLabel.className = `skilllevelitem ${level.class}`;
-                levelLabel.textContent = level.name;
-                skillLevelContainer.appendChild(levelLabel);
-            });
-            
-            bgGrid.appendChild(skillLevelContainer);
-        },
+        this.createSkillLevels(bgGrid);
         
-        // Create domain header titles
-        createDomainHeaders: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create a header for each domain
-            sortedDomains.forEach(domain => {
-                const domainTitle = document.createElement('div');
-                domainTitle.className = 'domaintitle';
-                domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.style.gridColumn = domain.id.toLowerCase();
-                domainTitle.textContent = domain.name;
-                domainTitle.style.width = '100%'; 
-                domainTitle.style.textAlign = 'center';
-                domainTitle.style.display = 'block'; // Removes flexbox
-                
-                // Add tooltip with domain description
-                if (domain.description) {
-                    // Determine tooltip positioning (left-aligned for domains on the left side)
-                    const tooltipAttr = domain.order <= 4 ? 'tooltiptexttitleleft' : 'tooltiptexttitle';
-                    domainTitle.setAttribute(tooltipAttr, domain.description);
-                }
-                
-                bgGrid.appendChild(domainTitle);
-            });
-        },
+        // Create domain containers
+        this.createDomainContainers(bgGrid);
         
-        // Create containers for each domain
-        createDomainContainers: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create a container for each domain
-            sortedDomains.forEach(domain => {
-                // Determine container class based on domain ID
-                const containerClass = this.getDomainContainerClass(domain.id);
-                
-                const domainContainer = document.createElement('div');
-                domainContainer.className = containerClass;
-                domainContainer.setAttribute('data-domain-id', domain.id);
-                
-                // Get subdomains for this domain
-                const domainSubdomains = CertMap.data.subdomains.filter(
-                    subdomain => subdomain.domainId === domain.id
-                );
-                
-                // Create subdomain sections if any exist
-                if (domainSubdomains.length > 0) {
-                    // Group subdomains by teamRole for columnar layout
-                    const groupedSubdomains = this.groupSubdomainsByTeamRole(domainSubdomains);
-                    
-                    // Create subdomain columns
-                    this.createSubdomainColumns(domainContainer, groupedSubdomains, domain);
-                }
-                
-                bgGrid.appendChild(domainContainer);
-                console.log(`Created container for domain ${domain.id} with class ${containerClass}`);
-            });
-        },
+        return bgGrid;
+    },
+    
+    // Create skill level indicators
+    createSkillLevels: function(bgGrid) {
+        const skillLevelContainer = document.createElement('div');
+        skillLevelContainer.className = 'skilllevelcontainer';
         
-        // Group subdomains by teamRole for columnar display
-        groupSubdomainsByTeamRole: function(subdomains) {
-            const groups = {};
-            
-            subdomains.forEach(subdomain => {
-                const role = subdomain.teamRole || 'DefaultTeam';
-                if (!groups[role]) {
-                    groups[role] = [];
-                }
-                groups[role].push(subdomain);
-            });
-            
-            return groups;
-        },
+        // Define skill levels
+        const skillLevels = [
+            { name: 'Expert', class: 'skilllevel-expert' },
+            { name: 'Intermediate', class: 'skilllevel-intermediate' },
+            { name: 'Beginner', class: 'skilllevel-beginner' }
+        ];
         
-        // Create columns for each subdomain group
-        createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
+        // Create skill level labels
+        skillLevels.forEach(level => {
+            const levelLabel = document.createElement('div');
+            levelLabel.className = `skilllevelitem ${level.class}`;
+            levelLabel.textContent = level.name;
+            skillLevelContainer.appendChild(levelLabel);
+        });
+        
+        bgGrid.appendChild(skillLevelContainer);
+    },
+    
+    // Create domain header titles
+    createDomainHeaders: function(bgGrid) {
+        // Sort domains by order
+        const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
+        
+        // Create a header for each domain
+        sortedDomains.forEach(domain => {
+            const domainTitle = document.createElement('div');
+            domainTitle.className = 'domaintitle';
+            domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
+            domainTitle.style.gridColumn = domain.id.toLowerCase();
+            domainTitle.textContent = domain.name;
+            domainTitle.style.width = '100%'; 
+            domainTitle.style.textAlign = 'center';
+            domainTitle.style.display = 'block'; // Removes flexbox
+            
+            // Add tooltip with domain description
+            if (domain.description) {
+                // Determine tooltip positioning (left-aligned for domains on the left side)
+                const tooltipAttr = domain.order <= 4 ? 'tooltiptexttitleleft' : 'tooltiptexttitle';
+                domainTitle.setAttribute(tooltipAttr, domain.description);
+            }
+            
+            bgGrid.appendChild(domainTitle);
+        });
+    },
+    
+    // Create containers for each domain
+    createDomainContainers: function(bgGrid) {
+        // Sort domains by order
+        const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
+        
+        // Create a container for each domain
+        sortedDomains.forEach(domain => {
+            // Determine container class based on domain ID
+            const containerClass = this.getDomainContainerClass(domain.id);
+            
+            const domainContainer = document.createElement('div');
+            domainContainer.className = containerClass;
+            domainContainer.setAttribute('data-domain-id', domain.id);
+            
+            // Get subdomains for this domain
+            const domainSubdomains = CertMap.data.subdomains.filter(
+                subdomain => subdomain.domainId === domain.id
+            );
+            
+            // Create subdomain sections if any exist
+            if (domainSubdomains.length > 0) {
+                // Group subdomains by teamRole for columnar layout
+                const groupedSubdomains = this.groupSubdomainsByTeamRole(domainSubdomains);
+                
+                // Create subdomain columns
+                this.createSubdomainColumns(domainContainer, groupedSubdomains, domain);
+            }
+            
+            bgGrid.appendChild(domainContainer);
+            console.log(`Created container for domain ${domain.id} with class ${containerClass}`);
+        });
+    },
+    
+    // Group subdomains by teamRole for columnar display
+    groupSubdomainsByTeamRole: function(subdomains) {
+        const groups = {};
+        
+        subdomains.forEach(subdomain => {
+            const role = subdomain.teamRole || 'DefaultTeam';
+            if (!groups[role]) {
+                groups[role] = [];
+            }
+            groups[role].push(subdomain);
+        });
+        
+        return groups;
+    },
+    
+    // Create columns for each subdomain group
+    createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
         const domainId = domain.id;
         
-        // Instead of absolute positioning, use CSS Grid for layout
+        // Set up CSS grid for layout
         domainContainer.style.display = 'grid';
         
         // Define how many columns each domain has for subdomains
@@ -1083,129 +1087,400 @@
                 domainContainer.appendChild(columnContainer);
             });
         });
-        
     },
+    
+    // Create the foreground grid for cert tiles
+    createForegroundGrid: function() {
+        const fgGrid = document.createElement('div');
+        fgGrid.className = 'certcontainer';
+        return fgGrid;
+    },
+    
+    // Helper to get the container class based on domain ID
+    getDomainContainerClass: function(domainId) {
+        const domainMap = {
+            'NET': 'networkcontainer',
+            'IAM': 'iamcontainer',
+            'ENG': 'engineercontainer',
+            'AST': 'assetcontainer',
+            'RSK': 'mgmtcontainer',
+            'TST': 'testingcontainer',
+            'DEV': 'softwarecontainer',
+            'OPS': 'operationscontainer'
+        };
         
-        // Create the foreground grid for cert tiles
-        createForegroundGrid: function() {
-            const fgGrid = document.createElement('div');
-            fgGrid.className = 'certcontainer';
+        return domainMap[domainId] || `${domainId.toLowerCase()}container`;
+    }
+};
+
+// Add a debugging function to help identify issues
+CertMap.debug = function() {
+    console.log('CertMap Debug Info:');
+    console.log('- Domains loaded:', this.data.domains ? this.data.domains.length : 0);
+    console.log('- Subdomains loaded:', this.data.subdomains ? this.data.subdomains.length : 0);
+    console.log('- Certs loaded:', this.data.certs ? this.data.certs.length : 0);
+    console.log('- Grid container exists:', !!document.getElementById('certmap-grid'));
+    
+    // Display debug info in the debug-info panel
+    const debugInfo = document.getElementById('debug-info');
+    if (debugInfo) {
+        debugInfo.style.display = 'block';
+        
+        // Create messages element if it doesn't exist
+        let debugMessages = document.getElementById('debug-messages');
+        if (!debugMessages) {
+            debugMessages = document.createElement('div');
+            debugMessages.id = 'debug-messages';
+            debugInfo.appendChild(debugMessages);
+        }
+        
+        debugMessages.innerHTML = `
+            <p><strong>Domains loaded:</strong> ${this.data.domains ? this.data.domains.length : 0}</p>
+            <p><strong>Subdomains loaded:</strong> ${this.data.subdomains ? this.data.subdomains.length : 0}</p>
+            <p><strong>Certs loaded:</strong> ${this.data.certs ? this.data.certs.length : 0}</p>
+            <p><strong>Grid container exists:</strong> ${!!document.getElementById('certmap-grid')}</p>
+            <p><strong>Current View Mode:</strong> ${this.data.state.currentView}</p>
+        `;
+        
+        // Add domain names if loaded
+        if (this.data.domains && this.data.domains.length > 0) {
+            debugMessages.innerHTML += `<p><strong>Domain IDs:</strong> ${this.data.domains.map(d => d.id).join(', ')}</p>`;
+        }
+    }
+};
+
+// Add a simple test function to display domain names
+CertMap.testDomainsDisplay = function() {
+    console.log('Testing domain display...');
+    
+    // Get a container to show our test output
+    const container = document.getElementById('certmap-grid');
+    if (!container) {
+        console.error('Grid container not found');
+        return;
+    }
+    
+    // Clear any existing content
+    container.innerHTML = '';
+    
+    // Create a simple list of domains
+    const list = document.createElement('ul');
+    list.style.listStyle = 'none';
+    list.style.padding = '1vmax';
+    
+    // Add each domain as a list item
+    CertMap.data.domains.forEach(domain => {
+        const item = document.createElement('li');
+        item.textContent = `${domain.id}: ${domain.name}`;
+        
+        // Check if teamRoles exists and has DefaultTeam
+        if (domain.teamRoles && domain.teamRoles.DefaultTeam) {
+            item.style.color = domain.teamRoles.DefaultTeam.tileColor;
+            item.style.borderLeft = `4px solid ${domain.teamRoles.DefaultTeam.tileColor}`;
+        } else {
+            item.style.color = '#444';
+            item.style.borderLeft = '4px solid #ccc';
+        }
+        
+        item.style.fontWeight = 'bold';
+        item.style.padding = '0.5vmax';
+        item.style.marginBottom = '0.5vmax';
+        list.appendChild(item);
+        
+        // Add subdomains for this domain
+        const subdomains = CertMap.data.subdomains.filter(
+            subdomain => subdomain.domainId === domain.id
+        );
+        
+        if (subdomains.length > 0) {
+            const subList = document.createElement('ul');
+            subList.style.listStyle = 'none';
+            subList.style.paddingLeft = '2vmax';
             
-            // This will later contain certification tiles
-            // For now, it's just an empty grid that overlays the background
+            subdomains.forEach(subdomain => {
+                const subItem = document.createElement('li');
+                subItem.textContent = subdomain.name;
+                subItem.style.color = '#444';
+                subItem.style.padding = '0.3vmax';
+                subList.appendChild(subItem);
+            });
             
-            return fgGrid;
+            list.appendChild(subList);
+        }
+    });
+    
+    // Add the list to the container
+    container.appendChild(list);
+    
+    // Update cert count in footer
+    const countElement = document.getElementById('cert-count');
+    if (countElement) {
+        countElement.textContent = `${CertMap.data.domains.length} domains, ${CertMap.data.subdomains.length} subdomains loaded | Test Mode`;
+    }
+};
+
+// UI Controller for handling user interactions
+CertMap.ui = {
+    // Initialize UI event handlers
+    init: function() {
+        console.log('Initializing UI handlers...');
+        
+        // Candidate view toggle
+        const candidateViewButton = document.getElementById('toggleCandidateView');
+        if (candidateViewButton) {
+            candidateViewButton.addEventListener('click', () => {
+                document.body.classList.toggle(CertMap.config.viewModes.candidate);
+                CertMap.data.state.currentView = document.body.classList.contains(CertMap.config.viewModes.candidate) 
+                    ? CertMap.config.viewModes.candidate 
+                    : CertMap.config.viewModes.default;
+                console.log('View mode toggled to:', CertMap.data.state.currentView);
+            });
+        }
+        
+        // Edit mode toggle
+        const editModeButton = document.getElementById('toggleEditMode');
+        if (editModeButton) {
+            editModeButton.addEventListener('click', () => {
+                document.body.classList.toggle('edit-mode');
+                CertMap.data.state.editMode = document.body.classList.contains('edit-mode');
+                console.log('Edit mode toggled to:', CertMap.data.state.editMode);
+            });
+        }
+        
+        // Opacity mode toggle
+        const opacityModeButton = document.getElementById('toggleOpacityMode');
+        if (opacityModeButton) {
+            opacityModeButton.addEventListener('click', () => {
+                document.body.classList.toggle('transparent-view');
+                localStorage.setItem(
+                    CertMap.config.storageKeys.transparentView, 
+                    document.body.classList.contains('transparent-view')
+                );
+                console.log('Opacity mode toggled');
+            });
+        }
+        
+        // Reset cert tracking
+        const resetButton = document.getElementById('resetCertTracking');
+        if (resetButton) {
+            resetButton.addEventListener('click', () => {
+                if (confirm('This will clear your achieved and planned certifications. Continue?')) {
+                    localStorage.removeItem(CertMap.config.storageKeys.achievedCerts);
+                    localStorage.removeItem(CertMap.config.storageKeys.plannedCerts);
+                    console.log('Certification tracking data cleared');
+                    
+                    // Reset visual indicators on cert tiles
+                    document.querySelectorAll('.certlink.achieved, .certlink.planned').forEach(tile => {
+                        tile.classList.remove('achieved', 'planned');
+                    });
+                }
+            });
+        }
+        
+        // Domain filter
+        const domainFilter = document.getElementById('domainGroupFilter');
+        if (domainFilter) {
+            // Populate domain filter options
+            this.populateDomainFilter(domainFilter);
+            
+            // Set up change event
+            domainFilter.addEventListener('change', () => {
+                CertMap.data.state.filters.domain = domainFilter.value;
+                this.applyFilters();
+                console.log('Domain filter set to:', domainFilter.value);
+            });
+        }
+            
+            // Vendor filter
+            const vendorFilter = document.getElementById('vendorFilter');
+            if (vendorFilter) {
+                // Populate vendor filter options
+                this.populateVendorFilter(vendorFilter);
+                
+                // Set up change event
+                vendorFilter.addEventListener('change', () => {
+                    CertMap.data.state.filters.vendor = vendorFilter.value;
+                    this.applyFilters();
+                    console.log('Vendor filter set to:', vendorFilter.value);
+                });
+            }
+            
+            // Set up cert tile click handlers in candidate view
+            document.addEventListener('click', (event) => {
+                // Only handle clicks in candidate + edit mode
+                if (!document.body.classList.contains(CertMap.config.viewModes.candidate) || 
+                    !CertMap.data.state.editMode) {
+                    return;
+                }
+                
+                // Check if clicked element is a cert tile
+                const certTile = event.target.closest('.certlink');
+                if (!certTile) return;
+                
+                // Prevent default link behavior in edit mode
+                event.preventDefault();
+                
+                // Toggle certification status
+                this.toggleCertStatus(certTile);
+            });
+            
+            console.log('UI event handlers initialized');
         },
         
-        // Helper to get the container class based on domain ID
-        getDomainContainerClass: function(domainId) {
-            const domainMap = {
-                'NET': 'networkcontainer',
-                'IAM': 'iamcontainer',
-                'ENG': 'engineercontainer',
-                'AST': 'assetcontainer',
-                'RSK': 'mgmtcontainer',
-                'TST': 'testingcontainer',
-                'DEV': 'softwarecontainer',
-                'OPS': 'operationscontainer'
-            };
+        // Populate domain filter dropdown with available domains
+        populateDomainFilter: function(selectElement) {
+            // Clear existing options except the "All" option
+            Array.from(selectElement.options)
+                .filter(option => option.value !== 'ALL')
+                .forEach(option => option.remove());
             
-            return domainMap[domainId] || `${domainId.toLowerCase()}container`;
-        }
-    };
-
-    // Add a debugging function to help identify issues
-    CertMap.debug = function() {
-        console.log('CertMap Debug Info:');
-        console.log('- Domains loaded:', this.data.domains ? this.data.domains.length : 0);
-        console.log('- Subdomains loaded:', this.data.subdomains ? this.data.subdomains.length : 0);
-        console.log('- Grid container exists:', !!document.getElementById('certmap-grid'));
-        
-        // Display debug info in the debug-info panel
-        const debugMessages = document.getElementById('debug-messages');
-        if (debugMessages) {
-            debugMessages.innerHTML = `
-                <p><strong>Domains loaded:</strong> ${this.data.domains ? this.data.domains.length : 0}</p>
-                <p><strong>Subdomains loaded:</strong> ${this.data.subdomains ? this.data.subdomains.length : 0}</p>
-                <p><strong>Grid container exists:</strong> ${!!document.getElementById('certmap-grid')}</p>
-                <p><strong>Current View Mode:</strong> ${this.data.state.currentView}</p>
-            `;
+            // Get unique domains sorted by display order
+            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
             
-            // Add domain names if loaded
-            if (this.data.domains && this.data.domains.length > 0) {
-                debugMessages.innerHTML += `<p><strong>Domain IDs:</strong> ${this.data.domains.map(d => d.id).join(', ')}</p>`;
-            }
-        }
-    };
-
-    // Add a simple test function to display domain names
-    CertMap.testDomainsDisplay = function() {
-        console.log('Testing domain display...');
+            // Add an option for each domain
+            sortedDomains.forEach(domain => {
+                const option = document.createElement('option');
+                option.value = domain.id;
+                option.textContent = domain.name;
+                selectElement.appendChild(option);
+            });
+        },
         
-        // Get a container to show our test output
-        const container = document.getElementById('certmap-grid');
-        if (!container) {
-            console.error('Grid container not found');
-            return;
-        }
-        
-        // Clear any existing content
-        container.innerHTML = '';
-        
-        // Create a simple list of domains
-        const list = document.createElement('ul');
-        list.style.listStyle = 'none';
-        list.style.padding = '1vmax';
-        
-        // Add each domain as a list item
-        CertMap.data.domains.forEach(domain => {
-            const item = document.createElement('li');
-            item.textContent = `${domain.id}: ${domain.name}`;
-            item.style.color = domain.teamRoles.DefaultTeam.tileColor;
-            item.style.fontWeight = 'bold';
-            item.style.padding = '0.5vmax';
-            item.style.marginBottom = '0.5vmax';
-            item.style.borderLeft = `4px solid ${domain.teamRoles.DefaultTeam.tileColor}`;
-            list.appendChild(item);
+        // Populate vendor filter dropdown with available vendors
+        populateVendorFilter: function(selectElement) {
+            // Clear existing options except the "All" option
+            Array.from(selectElement.options)
+                .filter(option => option.value !== 'ALL')
+                .forEach(option => option.remove());
             
-            // Add subdomains for this domain
-            const subdomains = CertMap.data.subdomains.filter(
-                subdomain => subdomain.domainId === domain.id
-            );
+            // Get unique vendors
+            const vendors = [...new Set(CertMap.data.certs
+                .filter(cert => cert.vendor)
+                .map(cert => cert.vendor))]
+                .sort();
             
-            if (subdomains.length > 0) {
-                const subList = document.createElement('ul');
-                subList.style.listStyle = 'none';
-                subList.style.paddingLeft = '2vmax';
+            // Add an option for each vendor
+            vendors.forEach(vendor => {
+                const option = document.createElement('option');
+                option.value = vendor;
+                option.textContent = vendor;
+                selectElement.appendChild(option);
+            });
+        },
+        
+        // Apply current filters to certification tiles
+        applyFilters: function() {
+            console.log('Applying filters...', CertMap.data.state.filters);
+            
+            // Get all cert tiles
+            const certTiles = document.querySelectorAll('.certlink');
+            
+            // Apply domain and vendor filters
+            certTiles.forEach(tile => {
+                const tileDomain = tile.getAttribute('data-domain');
+                const tileVendor = tile.getAttribute('data-vendor');
                 
-                subdomains.forEach(subdomain => {
-                    const subItem = document.createElement('li');
-                    subItem.textContent = subdomain.name;
-                    subItem.style.color = '#444';
-                    subItem.style.padding = '0.3vmax';
-                    subList.appendChild(subItem);
-                });
+                const domainMatches = CertMap.data.state.filters.domain === 'ALL' || 
+                                      tileDomain === CertMap.data.state.filters.domain;
+                                      
+                const vendorMatches = CertMap.data.state.filters.vendor === 'ALL' || 
+                                     tileVendor === CertMap.data.state.filters.vendor;
                 
-                list.appendChild(subList);
+                // Show or hide based on filter matches
+                if (domainMatches && vendorMatches) {
+                    tile.style.display = '';
+                } else {
+                    tile.style.display = 'none';
+                }
+            });
+        },
+        
+        // Toggle certification status (achieved/planned)
+        toggleCertStatus: function(certTile) {
+            const certId = certTile.getAttribute('data-cert-id');
+            if (!certId) return;
+            
+            // Get current status
+            const isAchieved = certTile.classList.contains('achieved');
+            const isPlanned = certTile.classList.contains('planned');
+            
+            // Update status
+            if (!isAchieved && !isPlanned) {
+                // Mark as achieved
+                certTile.classList.add('achieved');
+                this.updateCertStorage(certId, 'achieved');
+            } else if (isAchieved) {
+                // Change to planned
+                certTile.classList.remove('achieved');
+                certTile.classList.add('planned');
+                this.updateCertStorage(certId, 'planned');
+            } else {
+                // Remove all statuses
+                certTile.classList.remove('achieved', 'planned');
+                this.updateCertStorage(certId, null);
             }
-        });
+        },
         
-        // Add the list to the container
-        container.appendChild(list);
+        // Update certification status in local storage
+        updateCertStorage: function(certId, status) {
+            // Get current stored data
+            let achievedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.achievedCerts) || '[]');
+            let plannedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.plannedCerts) || '[]');
+            
+            // Remove cert ID from both arrays
+            achievedCerts = achievedCerts.filter(id => id !== certId);
+            plannedCerts = plannedCerts.filter(id => id !== certId);
+            
+            // Add to appropriate array based on status
+            if (status === 'achieved') {
+                achievedCerts.push(certId);
+            } else if (status === 'planned') {
+                plannedCerts.push(certId);
+            }
+            
+            // Save updated arrays
+            localStorage.setItem(CertMap.config.storageKeys.achievedCerts, JSON.stringify(achievedCerts));
+            localStorage.setItem(CertMap.config.storageKeys.plannedCerts, JSON.stringify(plannedCerts));
+            
+            console.log(`Certification ${certId} status updated to ${status || 'none'}`);
+        },
         
-        // Update cert count in footer
-        const countElement = document.getElementById('cert-count');
-        if (countElement) {
-            countElement.textContent = `${CertMap.data.domains.length} domains, ${CertMap.data.subdomains.length} subdomains loaded | Test Mode`;
+        // Restore certification statuses from local storage
+        restoreCertStatuses: function() {
+            // Get stored data
+            const achievedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.achievedCerts) || '[]');
+            const plannedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.plannedCerts) || '[]');
+            
+            // Apply achieved status
+            achievedCerts.forEach(certId => {
+                const tile = document.querySelector(`.certlink[data-cert-id="${certId}"]`);
+                if (tile) {
+                    tile.classList.add('achieved');
+                }
+            });
+            
+            // Apply planned status
+            plannedCerts.forEach(certId => {
+                const tile = document.querySelector(`.certlink[data-cert-id="${certId}"]`);
+                if (tile) {
+                    tile.classList.add('planned');
+                }
+            });
+            
+            console.log(`Restored ${achievedCerts.length} achieved and ${plannedCerts.length} planned certifications`);
         }
-
     };
-
+    
     // Improved initialization function with error handling
     CertMap.init = async function() {
         console.log('Initializing CertMap...');
         
         try {
+            // Add a CSS fix for the missing variable
+            const style = document.createElement('style');
+            style.textContent = ':root { --skybluelt: #b8e0ff; }';
+            document.head.appendChild(style);
+            
             // Load data first
             const dataLoaded = await this.loadData();
             if (!dataLoaded) {
@@ -1224,6 +1499,17 @@
                 return;
             }
             
+            // Initialize UI handlers
+            this.ui.init();
+            
+            // Restore user's certification statuses
+            this.ui.restoreCertStatuses();
+            
+            // Restore view settings
+            if (localStorage.getItem(this.config.storageKeys.transparentView) === 'true') {
+                document.body.classList.add('transparent-view');
+            }
+            
             console.log('CertMap initialization completed successfully');
         } catch (error) {
             console.error('Error during CertMap initialization:', error);
@@ -1233,13 +1519,14 @@
             }
         }
     };
-
+    
     // Properly attach event listeners AFTER defining all methods
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize the certification map
         CertMap.init();
-        
     });
+
+            
     </script>
 </body>
 </html>
