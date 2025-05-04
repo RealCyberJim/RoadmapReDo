@@ -607,15 +607,6 @@
             CertMap.data.certs = await certsResponse.json();
             console.log('Loaded certifications:', CertMap.data.certs.length);
             
-            //IS THIS NEEDED?
-            // Fix AUD name to TST for compatibility with CSS
-            CertMap.data.domains.forEach(domain => {
-                if (domain.id === 'AUD') {
-                    console.log('Fixing AUD domain to TST for CSS compatibility');
-                    domain.id = 'TST';
-                }
-            });
-            
             console.log('All data loaded successfully');
             return true;
         } catch (error) {
