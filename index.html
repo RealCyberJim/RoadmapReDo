@@ -597,7 +597,17 @@
             }
             CertMap.data.subdomains = await subdomainsResponse.json();
             console.log('Loaded subdomains:', CertMap.data.subdomains.length);
+
+            // Load certification data
+            console.log('Fetching certifications from:', CertMap.config.dataPath.certs);
+            const certsResponse = await fetch(CertMap.config.dataPath.certs);
+            if (!certsResponse.ok) {
+                throw new Error(`Failed to fetch certifications: ${certsResponse.status} ${certsResponse.statusText}`);
+            }
+            CertMap.data.certs = await certsResponse.json();
+            console.log('Loaded certifications:', CertMap.data.certs.length);
             
+            //IS THIS NEEDED?
             // Fix AUD name to TST for compatibility with CSS
             CertMap.data.domains.forEach(domain => {
                 if (domain.id === 'AUD') {
@@ -605,9 +615,6 @@
                     domain.id = 'TST';
                 }
             });
-            
-            // No certs for now
-            CertMap.data.certs = [];
             
             console.log('All data loaded successfully');
             return true;
@@ -619,12 +626,164 @@
 
     // Renderer module for the Certification Roadmap
     CertMap.renderer = {
+        // Add to the CertMap.renderer object
+            createCertificationTiles: function() {
+                console.log('Creating certification tiles...');
+                const container = document.querySelector('.certcontainer');
+                if (!container) {
+                    console.error('Certification container not found');
+                    return false;
+                }
+                
+                // Clear any existing certification tiles
+                container.innerHTML = '';
+                
+                // Get all certifications
+                const certs = CertMap.data.certs;
+                if (!certs || !certs.length) {
+                    console.warn('No certification data available');
+                    return false;
+                }
+                
+                console.log(`Creating ${certs.length} certification tiles`);
+                
+                // Create a tile for each certification
+                certs.forEach(cert => {
+                    // Create the certification tile
+                    const certTile = document.createElement('a');
+                    certTile.className = 'certlink';
+                    certTile.href = cert.certUrl || '#';
+                    certTile.target = '_blank';
+                    certTile.rel = 'noopener';
+                    certTile.setAttribute('data-cert-id', cert.id);
+                    
+                    // Position the tile using absolute positioning
+                    this.positionCertTile(certTile, cert);
+                    
+                    // Set the color based on domain and team role
+                    this.setTileColor(certTile, cert);
+                    
+                    // Set the content
+                    certTile.textContent = cert.label;
+                    
+                    // Add tooltip with detailed info
+                    certTile.setAttribute('tooltiptext', cert.tooltip);
+                    
+                    // Add the tile to the container
+                    container.appendChild(certTile);
+                });
+                
+                // Update cert count
+                const countElement = document.getElementById('cert-count');
+                if (countElement) {
+                    const date = new Date();
+                    const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                    countElement.textContent = `${certs.length} certifications loaded | ${monthYear}`;
+                }
+                
+                return true;
+            },
+
+            // Position each certification tile based on its domain and skill strata
+            positionCertTile: function(tileElement, cert) {
+                // Domain positioning - horizontal
+                // Find the corresponding domain
+                const domain = CertMap.data.domains.find(d => d.id === cert.domain);
+                if (!domain) {
+                    console.error(`Domain not found for certification: ${cert.id}`);
+                    return;
+                }
+                
+                // Calculate position based on the domain and skill strata
+                // The position is based on a grid system that matches the original design
+                
+                // Set width and height of the tile (in vmax units)
+                const tileWidth = 2.4;
+                const tileHeight = 1.0;
+                
+                // Dimensions of the certification container
+                const containerWidth = 97; // vmax - based on your CSS
+                const containerHeight = 42; // vmax - based on your CSS
+                
+                // Calculate horizontal position based on domain order
+                let left = 0.4; // Start after skill level column
+                
+                // Add up column widths for domains before this one
+                for (let i = 1; i < domain.order; i++) {
+                    const prevDomain = CertMap.data.domains.find(d => d.order === i);
+                    if (prevDomain) {
+                        // Add to the left position based on the column width in the grid
+                        // These values should match your grid-template-columns in CSS
+                        switch (prevDomain.id) {
+                            case 'NET': left += 7.5; break;
+                            case 'IAM': left += 2.65; break;
+                            case 'ENG': left += 17.2; break;
+                            case 'AST': left += 5.1; break;
+                            case 'RSK': left += 21.8; break;
+                            case 'TST': left += 7.5; break;
+                            case 'DEV': left += 2.7; break;
+                            case 'OPS': left += 31.5; break;
+                            default: left += 2; break;
+                        }
+                        left += 0.2; // column gap
+                    }
+                }
+                
+                // Now add a specific offset within this domain's column
+                // This is just an example, you may need to adjust this
+                switch (domain.id) {
+                    case 'NET': left += 2.5; break;
+                    case 'IAM': left += 0.5; break;
+                    case 'ENG': left += 1.0; break; 
+                    case 'AST': left += 1.5; break;
+                    case 'RSK': left += 1.0; break;
+                    case 'TST': left += 3.0; break;
+                    case 'DEV': left += 0.5; break;
+                    case 'OPS': left += 1.0; break;
+                }
+                
+                // Calculate vertical position based on skill strata
+                // In the original design, strata 1 is at the top (expert) and 27 at the bottom (beginner)
+                const top = 1.5 + ((cert.skillStrata - 1) * (tileHeight + 0.1));
+                
+                // Apply the calculated position
+                tileElement.style.position = 'absolute';
+                tileElement.style.left = `${left}vmax`;
+                tileElement.style.top = `${top}vmax`;
+                tileElement.style.width = `${tileWidth}vmax`;
+                tileElement.style.height = `${tileHeight}vmax`;
+            },
+
+            // Set the color of the certification tile based on domain and team role
+            setTileColor: function(tileElement, cert) {
+                // Find the corresponding domain
+                const domain = CertMap.data.domains.find(d => d.id === cert.domain);
+                if (!domain) {
+                    console.error(`Domain not found for certification: ${cert.id}`);
+                    return;
+                }
+                
+                // Determine the team role
+                const teamRole = cert.teamRole || 'DefaultTeam';
+                
+                // Set the background color based on domain and team role
+                if (domain.teamRoles && domain.teamRoles[teamRole]) {
+                    tileElement.style.backgroundColor = domain.teamRoles[teamRole].tileColor;
+                    tileElement.style.border = `1px solid ${domain.teamRoles[teamRole].borderColor}`;
+                } else {
+                    // Fallback to domain default color
+                    tileElement.style.backgroundColor = domain.teamRoles.DefaultTeam.tileColor;
+                    tileElement.style.border = `1px solid ${domain.teamRoles.DefaultTeam.borderColor}`;
+                }
+            },
+        
         // Main render function
         renderCertMap: function() {
             console.log('Rendering certification map...');
             const container = document.getElementById('certmap-grid');
             if (!container) {
                 console.error('Grid container not found');
+                this.createCertificationTiles();
                 return false;
             }
             
@@ -653,7 +812,7 @@
                 const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
                 countElement.textContent = `${CertMap.data.domains.length} domains loaded | ${monthYear}`;
             }
-            
+            this.createCertificationTiles();
             return true;
         },
         
@@ -966,6 +1125,7 @@
         if (countElement) {
             countElement.textContent = `${CertMap.data.domains.length} domains, ${CertMap.data.subdomains.length} subdomains loaded | Test Mode`;
         }
+
     };
 
     // Improved initialization function with error handling
