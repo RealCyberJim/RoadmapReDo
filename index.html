@@ -348,20 +348,23 @@
             height: 100%;
         }
 
-        /* Foreground grid for cert tiles - will be populated later */
+        /* Foreground grid for cert tiles - legacy grid specifications */
         .certcontainer {
             position: absolute;
-            top: 5vmax; /* Aligns with the start of chart row */
-            left: 0;
+            top: 4.8vmax; /* Adjusted to match legacy grid */
+            left: -0.31vmax; /* Adjusted to match legacy grid */
             width: 100%;
-            height: 42vmax;
+            height: 43.7vmax;
             display: grid;
+            grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
+            grid-template-rows: repeat(27, 1.5vmax);
+            column-gap: 0.1vmax;
+            row-gap: 0.1vmax;
             pointer-events: none; /* Allow clicks to pass through to background */
         }
 
-        /* Certification tiles will be added here later */
+        /* Update certification tiles for grid placement */
         .certlink {
-            pointer-events: auto; /* Re-enable clicks for cert tiles */
             background-color: var(--tileColor, #666);
             color: white;
             font-size: 0.7vmax;
@@ -373,7 +376,11 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
             cursor: pointer;
             z-index: 10;
+            /* No absolute positioning needed */
         }
+
+
+        
 
         /* Tooltip styles */
         [tooltiptext]:before {
@@ -714,7 +721,76 @@
         return groupedCerts;
     },
 
+        // Helper for grid positioning - calculates grid position for certification tiles
+        getGridPosition: function(cert, indexInGroup, totalInGroup) {
+            // Domain column mapping (where each domain starts in the grid)
+            const domainColumns = {
+                'NET': 2,
+                'IAM': 6,
+                'ENG': 8,
+                'AST': 16,
+                'RSK': 19,
+                'TST': 29,
+                'DEV': 33,
+                'OPS': 35
+            };
+            
+            // Domain column spans (how many columns each domain occupies)
+            const domainSpans = {
+                'NET': 3,
+                'IAM': 1,
+                'ENG': 7,
+                'AST': 2,
+                'RSK': 9,
+                'TST': 3,
+                'DEV': 1,
+                'OPS': 13
+            };
+            
+            // Skill level row ranges (where each skill level starts and ends)
+            const skillRows = {
+                3: { start: 3, end: 9 },   // Expert
+                2: { start: 12, end: 18 }, // Intermediate
+                1: { start: 21, end: 27 }  // Beginner
+            };
+            
+            // Get domain data
+            const colStart = domainColumns[cert.domain] || 2;
+            const colSpan = domainSpans[cert.domain] || 1;
+            
+            // Get skill level row range
+            const rowRange = skillRows[cert.skillStrata] || skillRows[1];
+            
+            // Calculate column position within domain area
+            let colPos;
+            if (totalInGroup <= colSpan) {
+                // If we have fewer certs than columns, space them evenly
+                colPos = colStart + Math.floor(indexInGroup * (colSpan / total));
+            } else {
+                // If we have more certs than columns, distribute them
+                const rowsNeeded = Math.ceil(totalInGroup / colSpan);
+                const rowIndex = Math.floor(indexInGroup / colSpan);
+                colPos = colStart + (indexInGroup % colSpan);
+                
+                // Adjust row based on distribution
+                const rowPos = rowRange.start + rowIndex;
+                return { 
+                    column: colPos, 
+                    row: rowPos < rowRange.end ? rowPos : rowRange.end - 1 
+                };
+            }
+            
+            // Return position with row distribution
+            return { 
+                column: colPos, 
+                row: rowRange.start + (indexInGroup % (rowRange.end - rowRange.start)) 
+            };
+        },
+
         positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
+        // Calculate grid position using our helper method
+        const position = this.getGridPosition(cert, indexInGroup, totalInGroup);
+        
         // Find the corresponding domain
         const domain = CertMap.data.domains.find(d => d.id === cert.domain);
         if (!domain) {
@@ -722,86 +798,28 @@
             return;
         }
         
-        // Set width and height of the tile
-        const tileWidth = 2.4;
-        const tileHeight = 1.0;
+        // Apply grid positioning
+        tileElement.style.gridColumn = position.column;
+        tileElement.style.gridRow = position.row;
         
-        // Calculate horizontal position based on domain
-        let left = 0.4; // Start after skill level column
-        
-        // Add up column widths for domains before this one
-        for (let i = 1; i < domain.order; i++) {
-            const prevDomain = CertMap.data.domains.find(d => d.order === i);
-            if (prevDomain) {
-                switch (prevDomain.id) {
-                    case 'NET': left += 7.5; break;
-                    case 'IAM': left += 2.65; break;
-                    case 'ENG': left += 17.2; break;
-                    case 'AST': left += 5.1; break;
-                    case 'RSK': left += 21.8; break;
-                    case 'TST': left += 7.5; break;
-                    case 'DEV': left += 2.7; break;
-                    case 'OPS': left += 31.5; break;
-                    default: left += 2; break;
-                }
-                left += 0.2; // column gap
-            }
-        }
-        
-        // Get base position within domain column
-        let basePosition;
-        switch (domain.id) {
-            case 'NET': basePosition = 2.5; break;
-            case 'IAM': basePosition = 0.5; break;
-            case 'ENG': basePosition = 1.0; break; 
-            case 'AST': basePosition = 1.5; break;
-            case 'RSK': basePosition = 1.0; break;
-            case 'TST': basePosition = 3.0; break;
-            case 'DEV': basePosition = 0.5; break;
-            case 'OPS': basePosition = 1.0; break;
-            default: basePosition = 1.0; break;
-        }
-        
-        // Calculate horizontal spacing for multiple tiles
-        let horizontalOffset = 0;
-        if (totalInGroup > 1) {
-            let domainWidth;
-            switch (domain.id) {
-                case 'NET': domainWidth = 7.5; break;
-                case 'IAM': domainWidth = 2.65; break;
-                case 'ENG': domainWidth = 17.2; break;
-                case 'AST': domainWidth = 5.1; break;
-                case 'RSK': domainWidth = 21.8; break;
-                case 'TST': domainWidth = 7.5; break;
-                case 'DEV': domainWidth = 2.7; break;
-                case 'OPS': domainWidth = 31.5; break;
-                default: domainWidth = 3.0; break;
-            }
-            const tileSpace = (domainWidth - 2) / totalInGroup;
-            horizontalOffset = indexInGroup * tileSpace;
-        }
-        
-        // Calculate final position
-        left += basePosition + horizontalOffset;
-        const top = 1.5 + ((cert.skillStrata - 1) * (tileHeight + 0.1));
-        
-        // Apply position to the tile
-        tileElement.style.position = 'absolute';
-        tileElement.style.left = `${left}vmax`;
-        tileElement.style.top = `${top}vmax`;
-        tileElement.style.width = `${tileWidth}vmax`;
-        tileElement.style.height = `${tileHeight}vmax`;
+        // Set standard dimensions for certification tiles
+        tileElement.style.width = "2.3vmax";
+        tileElement.style.height = "1.5vmax";
         
         // Add data attributes for filtering
         tileElement.setAttribute('data-domain', cert.domain);
         tileElement.setAttribute('data-skill-strata', cert.skillStrata);
         tileElement.setAttribute('data-vendor', cert.vendor);
+        tileElement.setAttribute('data-grid-col', position.column);
+        tileElement.setAttribute('data-grid-row', position.row);
+        
         if (cert.subdomain) {
             tileElement.setAttribute('data-subdomain', cert.subdomain);
         }
         if (cert.teamRole) {
             tileElement.setAttribute('data-team-role', cert.teamRole);
         }
+    },
     },
 
             // Set the color of the certification tile based on domain and team role
@@ -1061,6 +1079,7 @@
                 domainContainer.appendChild(columnContainer);
             });
         });
+        
     },
         
         // Create the foreground grid for cert tiles
