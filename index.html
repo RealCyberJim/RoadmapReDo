@@ -1,454 +1,130 @@
-<!DOCTYPE html>
+<style>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Certification Roadmap</title>
-    <style>
-        /*  note to force version change and update */
-        /* makes all elements include padding and borders in their width/height calculations */
-        * {
-            box-sizing: border-box;
-        }
-        
-        /* Domain color variables - revised to match original design */
-        :root {
-            /* Colors from the original design - carefully checked against visual reference */
-            --green: #70AD47;
-            --greendk: #548235;
-            --greenlt: #c3dbb8;  /* New light green for Network Security subdomains */
-            --teal: #008080;
-            --tealdk: #003F3E;
-            --teallt: #8fc6c6;  /* New light teal for IAM subdomains */
-            --orange: #fa8e36;
-            --orangedk: #c06216;
-            --orangelt: #fdeada;
-            --yellow: #e4ac03;
-            --yellowdk: #7F6000;
-            --yellowlt: #f7e69e;  /* New light yellow for Asset Security subdomains */
-            --black: #2a2a2a;
-            --blackdk: #000000; 
-            --blacklt: #d9d9d9;
-            --purple: #683e9b;
-            --purpledk: #352647;
-            --purplelt: #eddbff;
-            --skyblue: #6bb3f6;
-            --skybluedk: #2665a0;
-            --skybluelt: #b8e0ff;  /* New light sky blue for Software subdomains */
-            --blue: #2e5688;
-            --bluedk: #1f3147;
-            --bluelt: #dce6f2;
-            --red: #c0514d;
-            --reddk: #8c3736;
-            --redlt: #f2dcdb;
-            --magenta: #830083;
-            --magentadk: #490e49;
+    /*  === 
+      This project is provided freely under the terms of the Creative Commons Attribution-ShareAlike 4.0 International License.
+      While use is unrestricted under the license, I (@RealCyberJim) ask that if this work (or derivative works) are used in revenue-generating 
+      contexts, you consider reaching out to discuss appropriate attribution, support, or collaboration. Thank you. === */
+    
+    /*  === Cert Tracker Integration (added by @RealCyberJim) 
+    
+            On Desktop/iOS/android:
+            - In default view, click a tile to go to that vendor's page.
+            - Enter candidate view mode by clicking the "Candidate View" button.
+            - Click on the cert tile to toggle the popup menu.
+            - Click outside the popup to close it.
+            On Desktop:
+            - In default view, click a tile to go to that vendor's page.
+            - In default view: CTRL+Click on a cert tile to toggle the popup menu.
+            - Click outside the popup to close it.
+    
+            The  cert tiles have been updated to support tracking user progress.
+            Each <a> tag now includes:
+            - class="certlink" → enables JavaScript tracking and to present a popup menu with options to mark as achieved or planned.
+            - data-cert-id="GROUP__certname" → uniquely identifies the cert
+    
+            Naming Convention for data-cert-id:
+                - GROUP: 3-letter roadmap section code which corresponds to the established 9 color-coded grid areas on the roadmap. 
+                - certname: lowercase, normalized label (no spaces/symbols, + becomes 'plus')
+                - Example: OPS__ceh, OPS__pentestplus, 
             
-            /* Domain-specific variables */
-            --net: var(--green);
-            --netdk: var(--greendk);
-            --netlt: var(--greenlt);
-            --iam: var(--teal);
-            --iamdk: var(--tealdk);
-            --iamlt: var(--teallt);
-            --eng: var(--orange);
-            --engdk: var(--orangedk);
-            --englt: var(--orangelt);
-            --ast: var(--yellow);
-            --astdk: var(--yellowdk);
-            --astlt: var(--yellowlt);
-            --rsk: var(--black);
-            --rskdk: var(--blackdk);
-            --rsklt: var(--blacklt);
-            --tst: var(--purple);
-            --tstdk: var(--purpledk);
-            --tstlt: var(--purplelt);
-            --sof: var(--skyblue);
-            --sofdk: var(--skybluedk);
-            --soflt: var(--skybluelt);
-            --ops: var(--red);
-            --opsdk: var(--reddk);
-            --opslt: var(--redlt);
-            --opsblue: var(--blue);
-            --opsbluedk: var(--bluedk);
-            --opsbluelt: var(--bluelt);
-        }
-
-        body {
-            font-family: "Segoe UI", "Calibri", Tahoma, "Geneva", Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        #certmap-container {
-            width: 100%;
-            max-width: 100%;
-            padding: 0 1vmax;
-            box-sizing: border-box;
-        }
-
-        #certmap-container h1 {
-            font-size: 2vmax;
-            font-weight: 500;
-            margin-bottom: 0.5vmax;
-        }
-
-        /* Toolbar styles */
-        #certmap-toolbar {
-            margin-top: 1vmax;
-            margin-bottom: 1vmax;
-            text-align: center;
-        }
-
-        .toolbar-button {
+            This structure ensures uniqueness, enables filtering, and supports scaling to all certs across roadmap sections.
+              
+                    NET - (Green) - Communication & Network Security
+                    IAM - (Teal) - Identity & Access Management
+                    ENG - (Orange) - Security Architecture & Engineering
+                    AST - (Yellow) - Asset Security
+                    RSK - (Black) - Security & Risk Management
+                    TST - (Purple) - Security Assessment & Testing
+                    DEV - (SkyBlue) - Software Development Security
+                    OPS - (Blue/Red) - Security Operations             === */
+                    
+            /* === BEGIN: Cert Tracker Styles (added by @RealCyberJim) === */
+            body.candidate-view .certlink.achieved {
+            outline: 0.15vmax solid limegreen;
+            box-shadow: 0 0 0.4vmax limegreen;
+            }
+    
+            body.candidate-view .certlink.planned {
+            outline: 0.15vmax dashed darkgoldenrod;
+            box-shadow: 0 0 0.4vmax darkgoldenrod;
+            }
+            /* === END: Cert Tracker Styles === */
+            /* === BEGIN: Opaque Mode Styles (added by @RealCyberJim) === */
+            body.candidate-view.transparent-view .certlink {
+            opacity: 0.4;
+            }
+    
+            body.candidate-view.transparent-view .certlink.achieved,
+            body.candidate-view.transparent-view .certlink.planned {
+            opacity: 1;
+            }
+            /* === END: Opaque Mode Styles === */
+            /* === BEGIN: Opaque Mode Hover Enhancement (added by @RealCyberJim) === */
+    
+            /* Smooth transition when opacity changes (hover in/out) */
+            body.candidate-view.transparent-view .certlink {
+            transition: opacity 0.2s ease;
+            opacity: 0.4;
+            }
+    
+            /* Fully reveal dimmed certs and their contents on hover */
+            body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover,
+            body.candidate-view.transparent-view .certlink:not(.achieved):not(.planned):hover * {
+            opacity: 1 !important;
+            cursor: pointer;
+            }
+            /* === END: Opaque Mode Hover Enhancement === */
+    
+            /* === BEGIN: Temporary Session Visuals in Default View (added by @RealCyberJim) === */
+            .certlink.session-visible.achieved,
+            .certlink.session-visible.planned {
+            box-shadow: 0 0 0.4vmax currentColor;
+            }
+    
+            .certlink.session-visible.achieved {
+            outline: 0.15vmax solid limegreen;
+            color: limegreen;
+            }
+    
+            .certlink.session-visible.planned {
+            outline: 0.15vmax dashed darkgoldenrod;
+            color: darkgoldenrod;
+            }
+            /* === END: Temporary Session Visuals in Default View === */
+            /* === BEGIN: Candidate View Visibility Rules (added by @RealCyberJim) === */
+            /* All candidate-only buttons are hidden by default */
+            .candidate-only {
+            display: none;
+            }
+    
+            /* Show them when Candidate View is active */
+            body.candidate-view .candidate-only {
+            display: inline-block;
+            }
+    
+            /* Hide Opaque Mode button by default */
+            #toggleOpacityMode {
+            display: none;
+            }
+    
+            /* Show it ONLY when both candidate-view AND edit-mode are active */
+            body.candidate-view.edit-mode #toggleOpacityMode {
+            display: inline-block;
+            }
+            /* === END: Candidate View Visibility Rules === */
+            /* === BEGIN: Cert Toolbar Button Style (added by @RealCyberJim) === */
+            .toolbar-button {
             padding: 0.5vmax 1vmax;
             font-size: 1vmax;
             margin-right: 1vmax;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-        }
-
-        .toolbar-button:last-child {
-            margin-right: 0;
-        }
-
-        .toolbar-button:hover {
-            background-color: #eaeaea;
-        }
-
-        /* Filter container */
-        .filter-container {
-            margin-top: 1vmax;
-            display: flex;
-            justify-content: center;
-            gap: 2vmax;
-        }
-
-        /* Hide candidate-only elements by default */
-        .candidate-only {
-            display: none;
-        }
-
-        /* Show them when in candidate view */
-        body.candidate-view .candidate-only {
-            display: inline-block;
-        }
-
-        /* Hide opacity mode button by default */
-        #toggleOpacityMode {
-            display: none;
-        }
-
-        /* Show it only when both candidate-view AND edit-mode are active */
-        body.candidate-view.edit-mode #toggleOpacityMode {
-            display: inline-block;
-        }
-
-        /* Certification grid styles - maintaining precise dimensions from original */
-        .certchart {
-            background: white;
-            color: #323232;
-            font-weight: 300;
-            margin-top: 1vmax;
-            display: block;
-            width: 100%;
-            position: relative;
-            min-height: 47vmax; /* Increased to ensure full visibility */
-        }
-
-        /* Background grid with precise column specifications from original design */
-        .certbg {
-            background: #ffffff;
-            display: grid;
-            position: relative;
-            /* Exact column measurements from original design */
-            grid-template-columns: [skilllevel] 0.4vmax 
-                                    [net] 7.5vmax 
-                                    [iam] 2.65vmax
-                                    [eng] 17.2vmax
-                                    [ast] 5.1vmax
-                                    [rsk] 21.8vmax
-                                    [tst] 7.5vmax
-                                    [sof] 2.7vmax
-                                    [ops] 31.5vmax;
-            grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
-            column-gap: 0.2vmax;
-            white-space: pre-wrap;
-            line-height: 130%;
-            width: 100%;
-        }
-
-        /* Style for the domain titles */
-        .domaintitle {
-            font-weight: 450;
-            font-size: 0.8vmax;
-            text-align: center;
-            align-self: center;
-            width: 100%;
-            margin-bottom: 0.5vmax;
-            padding: 0 0.5vmax;
-            grid-row: domain;
-        }
-
-        .subdomain-title {
-            font-weight: 400;
-            font-size: 0.5vmax;
-            text-align: center;
-            padding: 0.2vmax 0;
-        }
-
-        /* Skill level section styling - vertical labels */
-        .skilllevelcontainer {
-            grid-column: skilllevel;
-            grid-row: chart;
-            position: relative;
-            height: 100%;
-        }
-
-        .skilllevelitem {
-            transform: rotate(270deg);
-            position: absolute;
-            font-weight: 600;
-            font-size: 0.9vmax;
-            white-space: nowrap;
-            transform-origin: left center;
-        }
-
-        /* Positioned skill level labels */
-        .skilllevel-expert {
-            top: 15%;
-            left: 50%;
-            color: var(--reddk);
-        }
-
-        .skilllevel-intermediate {
-            top: 55%;
-            left: 50%;
-            color: var(--orangedk);
-        }
-
-        .skilllevel-beginner {
-            top: 90%;
-            left: 50%;
-            color: var(--greendk);
-        }
-
-        /* Domain containers - specific styling for each domain */
-        .networkcontainer, .iamcontainer, .engineercontainer, 
-        .assetcontainer, .mgmtcontainer, .testingcontainer, 
-        .softwarecontainer, .operationscontainer {
-            display: grid;
-            border-radius: 0.25vmax;
-            grid-row: chart;
-            height: 100%;
-        }
-
-        .networkcontainer { 
-            border: 2px solid var(--green); 
-            grid-column: net;
-        }
-
-        .iamcontainer { 
-            border: 2px solid var(--teal); 
-            grid-column: iam;
-        }
-
-        .engineercontainer { 
-            border: 2px solid var(--orange);
-            grid-column: eng;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            grid-template-rows: auto;
-            column-gap: 0.2vmax;
-}
-
-        .assetcontainer { 
-            border: 2px solid var(--yellow); 
-            grid-column: ast;
-        }
-
-        .mgmtcontainer { 
-            border: 2px solid var(--black);
-            grid-column: rsk;
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            grid-template-rows: auto;
-            column-gap: 0.2vmax;
-        }
-
-        .testingcontainer { 
-            border: 2px solid var(--purple); 
-            grid-column: tst;
-        }
-
-        .softwarecontainer { 
-            border: 2px solid var(--skyblue); 
-            grid-column: sof;
-        }
-
-        .operationscontainer { 
-            border: 2px solid var(--red);
-            grid-column: ops;
-            display: grid;
-            grid-template-columns: repeat(13, 1fr);
-            grid-template-rows: auto;
-            column-gap: 0.2vmax;
-        }
-
-            /* Subdomain styling */
-            .subtitle1, .subtitle2, .subtitle3, .subtitle4, .subtitle5 {
-                font-weight: 400;
-                font-size: 0.7vmax;
-                text-align: center;
-                padding: 0.2vmax 0;
-                grid-row: 1;
             }
-
-            .subtitle1 {
-                grid-column: span 1;
+    
+            .toolbar-button:last-child {
+            margin-right: 0; /* Remove right margin from final button for balance */
             }
-
-            .subtitle2 {
-                grid-column: span 2;
-            }
-
-            .subtitle3 {
-                grid-column: span 3;
-            }
-
-            .subtitle4 {
-                grid-column: span 4;
-            }
-
-            .subtitle5 {
-                grid-column: span 5;
-            }
-
-        /* Engineer subdomain backgrounds */
-        .subdomain-eng { 
-            background: var(--orangelt);
-            height: 100%;
-        }
-
-        /* Operations subdomain backgrounds */
-        .subdomain-ops-blue { 
-            background: var(--bluelt);
-            height: 100%;
-        }
-
-        .subdomain-ops-red { 
-            background: var(--redlt);
-            height: 100%;
-        }
-
-        /* GRC subdomain background */
-        .subdomain-rsk { 
-            background: var(--blacklt);
-            height: 100%;
-        }
-
-        /* Foreground grid for cert tiles - legacy grid specifications */
-        .certcontainer {
-            position: absolute;
-            top: 4.8vmax; /* Adjusted to match legacy grid */
-            left: -0.31vmax; /* Adjusted to match legacy grid */
-            width: 100%;
-            height: 43.7vmax;
-            display: grid;
-            grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
-            grid-template-rows: repeat(27, 1.5vmax);
-            column-gap: 0.1vmax;
-            row-gap: 0.1vmax;
-            pointer-events: none; /* Allow clicks to pass through to background */
-        }
-
-        /* Update certification tiles for grid placement */
-        .certlink {
-            background-color: var(--tileColor, #666);
-            color: white;
-            font-size: 0.7vmax;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.25vmax;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 10;
-            /* No absolute positioning needed */
-        }
-
-
-        
-
-        /* Tooltip styles */
-        [tooltiptext]:before {
-            position: absolute;
-            content: attr(tooltiptext);
-            width: max-content;
-            height: max-content;
-            padding: 0.4vmax;
-            background: inherit;
-            border: inherit;
-            border-radius: 0.2vmax;
-            color: inherit;
-            text-align: left;
-            display: none;
-            font-size: 125%;
-        }
-        
-        [tooltiptext]:hover:before {
-            display: block;    
-        }
-        
-        [tooltiptexttitle]:before {
-            position: absolute;
-            content: attr(tooltiptexttitle);
-            width: 25vmax;
-            height: max-content;
-            padding: 0.4vmax;
-            background: var(--black);
-            border: var(--blackdk);
-            border-radius: 0.2vmax;
-            color: white;
-            text-align: left;
-            display: none;
-            font-size: 100%;
-            z-index: 1;
-            top: 4.5%;
-        }
-        
-        [tooltiptexttitle]:hover:before {
-            display: block;    
-        }
-        
-        [tooltiptexttitleleft]:before {
-            position: absolute;
-            content: attr(tooltiptexttitleleft);
-            width: 25vmax;
-            height: max-content;
-            padding: 0.4vmax;
-            background: var(--black);
-            border: var(--blackdk);
-            border-radius: 0.2vmax;
-            color: white;
-            text-align: left;
-            display: none;
-            font-size: 100%;
-            z-index: 1;
-            top: 4.5%;
-            left: 0%;
-        }
-        
-        [tooltiptexttitleleft]:hover:before {
-            display: block;    
-        }
-
-        /* Cert popup styles */
-        .cert-popup-menu {
+            /* === END: Cert Toolbar Button Style === */
+            /* === BEGIN: Cert Popup Style (added by @RealCyberJim) === */
+            .cert-popup-menu {
             position: absolute;
             background-color: white;
             border: 1px solid #888;
@@ -457,9 +133,9 @@
             z-index: 9999;
             font-size: 16px;
             border-radius: 5px;
-        }
-
-        .cert-popup-menu button {
+            }
+    
+            .cert-popup-menu button {
             display: block;
             width: 100%;
             margin: 0.2vmax 0;
@@ -467,1070 +143,1432 @@
             border: none;
             cursor: pointer;
             text-align: left;
-            padding: 5px;
-        }
-
-        .cert-popup-menu button:hover {
+            }
+    
+            .cert-popup-menu button:hover {
             background-color: #f0f0f0;
-        }
-
-        /* Footer styles */
-        .certmap-footer {
-            text-align: right;
-            color: #000000;
-            padding: 0.2vmax;
-            font-size: 1vmax;
-            margin-top: 1vmax;
-        }
-
-        /* Responsive adjustments */
-        @media screen and (max-width: 897px) {
-            #interactive {display: none;}
-            #static {display: block;}
-        }
-
-        /* Debug info panel */
-        #debug-info {
-            background: #f8f8f8;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-        <div id="certmap-container">
-        <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap</div>
-
-        <!-- The main grid that will hold domains and certs -->
-        <div id="certmap-grid">
-            <!-- Empty placeholder - will be populated by JavaScript -->
-        </div>
-        
-        <!-- Footer with info -->
-        <div class="certmap-footer">
-            <span id="cert-count">Loading certification data...</span>
-        </div>
-        <!-- Toolbar with filters and controls -->
-                                <!-- TOOLBAR SECTION DISABLED
-                                 
-                                <div id="certmap-toolbar" class="cert-toolbar">
-                                    <!-- Will be populated dynamically -->
-                                    <button class="toolbar-button" id="toggleCandidateView">🎯 Candidate View</button>
-                                    <button class="toolbar-button candidate-only" id="toggleEditMode">✏️ Edit My Certs</button>
-                                    <button class="toolbar-button candidate-only" id="toggleOpacityMode">🌫 Transparent View</button>
-                                    <button class="toolbar-button candidate-only" id="resetCertTracking">♻️ Clear Achieved & Planned</button>
-                                    <br>
-                                    
-                                    <!-- Domain and Vendor filters -->
-                                    <div class="filter-container candidate-only">
-                                        <label for="domainGroupFilter" style="font-size: 1vmax;">
-                                            🔍 Domain:
-                                            <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                                                <option value="ALL">All Domains</option>
-                                                <!-- Will be populated from domains.json -->
-                                            </select>
-                                        </label>
-                                        
-                                        <label for="vendorFilter" style="font-size: 1vmax;">
-                                            🏷️ Vendor:
-                                            <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
-                                                <option value="ALL">All Vendors</option>
-                                                <!-- Will be populated from certs.json -->
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
-                                TOOLBAR SECTION DISABLED -->
+            }
+            
+            .cert-toolbar {
+            text-align: center;
+            margin-top: 1vmax; /* reduced from 4vmax */
+            }
+            /* === END: Cert Popup Style === */
+    /*  === END Cert Tracker Integration === */
+                        /* Set fill and line colors for certification boxes. dk suffix means "dark" for the line color. */
+                        :root {
+                                --green: #70AD47;
+                                --greendk: #548235;
+                                --teal: #008080;
+                                --tealdk: #003F3E;
+                                --orange: #fa8e36;
+                                --orangedk: #c06216;
+                                --orangelt: #fdeada;
+                                --yellow: #e4ac03;
+                                --yellowdk: #7F6000;
+                                --black: #2a2a2a;
+                                --blackdk: #000000; 
+                                --blacklt: #d9d9d9;
+                                --purple: #683e9b;
+                                --purpledk: #352647;
+                                --purplelt: #eddbff;
+                                --skyblue: #6bb3f6;
+                                --skybluedk: #2665a0;
+                                --blue: #2e5688;
+                                --bluedk: #1f3147;
+                                --bluelt: #dce6f2;
+                                --red: #c0514d;
+                                --reddk: #8c3736;
+                                --redlt: #f2dcdb;
+                                --magenta: #830083;
+                                --magentadk: #490e49;
+                        }
+                    
+                        /* I think this is vestigial April 2022
+                        .cert-body {
+                               margin-left: 6vmax;
+                                margin-right: 6vmax;
+                        }
+                        .cert-list {
+                                margin-left: 8vmax;
+                                margin-right: 6vmax;
+                        }
+                        */
+                    
+                        /* Style for the text at the bottom right of the chart */
+                        .key {
+                                color: #000000;
+                                padding: 0.2vmax;
+                                font-size: 1vmax;
+                                text-align: right;
+                                display: grid;
+                                grid-template-rows: 1.68vmax;
+                                grid-column-gap: 0.2vmax;
+                                grid-gap: 0.1vmax;
+                        }
+                    
+                        /* Primary style for the chart, which is the parent container for everything else. */
+                        .certchart {
+                                background: white;
+                                color: #323232;
+                                font-weight: 300;
+                                margin-top: 1vmax;
+                                margin-left: 1vmax;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                text-align: center;
+                                font-family: "Segoe UI", "Calibri", Tahoma, "Geneva", Verdana, sans-serif;
+                                float: left;
+                        }
+                        
+                        /* Background grid for domain titles and borders */
+                        .certbg {
+                                background: #ffffff;
+                                justify-content: left;
+                                display: grid;
+                                position: relative;
+                                grid-template-columns: [silllevel] 0.8vmax [network] 7.5vmax [iam] 2.65vmax [engineer] 17.2vmax [asset] 5.1vmax [mgmt] 21.8vmax [testing] 7.5vmax [software] 2.7vmax [operations] 31.5vmax;
+                                grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
+                                column-gap: 0.2vmax;
+                                /* row-gap: 0.2vmax; */
+                                white-space: pre-wrap;
+                                line-height: 130%;
+                                left: -0.7vmax;
+                        }
+                        
+                        /* Style for the title text of each domain */
+                        .domaintitle {
+                                font-weight: 450;
+                                font-size: 0.8vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                margin-bottom: 0.1vmax;
+                        }
+                        
+                        /* Styles for each certification domain box. This also allows for the placement of sub-domain shaded boxes. */
+                        .skilllevelcontainer {
+                                display: grid;
+                        }
+                    
+                        .networkcontainer {
+                                display: grid;
+                                border: 2px solid var(--green);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .iamcontainer {
+                                display: grid;
+                                border: 2px solid var(--teal);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .engineercontainer {
+                                display: grid;
+                                border: 2px solid var(--orange);
+                                border-radius: 0.25vmax;
+                                grid-template-columns: 2.3vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
+                                grid-template-rows: 1vmax auto;
+                                column-gap: 0.2vmax;
+                        }
+                        
+                        .assetcontainer {
+                                display: grid;
+                                border: 2px solid var(--yellow);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .mgmtcontainer {
+                                display: grid;
+                                border: 2px solid var(--black);
+                                border-radius: 0.25vmax;
+                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
+                                grid-template-rows: 1vmax auto;
+                                column-gap: 0.2vmax;
+                        }
+                        
+                        .testingcontainer {
+                                display: grid;
+                                border: 2px solid var(--magenta);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .softwarecontainer {
+                                display: grid;
+                                border: 2px solid var(--skyblue);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .operationscontainer {
+                                display: grid;
+                                border: 2px solid var(--red);
+                                border-radius: 0.25vmax;
+                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.1vmax;
+                                grid-template-rows: 1vmax auto;
+                                column-gap: 0.2vmax;
+                        }
+                        
+                        /* Style for sub-domain titles. Mostly to allow for proper spanning. */
+                        .subtitle1 {
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                        }
+                        
+                        .subtitle2 {
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                grid-column: span 2;
+                        }
+                        
+                        .subtitle3 {
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                grid-column: span 3;
+                        }
+                    
+                        .subtitle4 {
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                grid-column: span 4;
+                        } 
+                        .subtitle5 {
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                grid-column: span 5;
+                        }
+                        
+                        /* Style for certification boxes, separated by domain for proper coloring. Also used to indicate how many boxes to span the certs. */
+                        .engsubdomain1 {
+                                display: flex;
+                                background: var(--orangelt);
+                                column-gap: 1vmax;
+                        }
+                        
+                        .engsubdomain4 {
+                                display: flex;
+                                background: var(--orangelt);
+                                grid-column: span 4;
+                                column-gap: 1vmax;
+                                margin-left: 0.3vmax;
+                        }
+                        
+                        .mgmtsubdomain4 {
+                                display: flex;
+                                background: var(--blacklt);
+                                grid-column: span 4;
+                                column-gap: 1vmax;
+                                            margin-left: 0.3vmax;
+                        }
+                        
+                        .bluesubdomain2 {
+                                display: flex;
+                                background: var(--bluelt);
+                                grid-column: span 2;
+                                margin-left: 0.1vmax;
+                        }
+                        
+                        .redsubdomain2 {
+                                display: flex;
+                                background: var(--redlt);
+                                grid-column: span 2;
+                                column-gap: 1vmax;
+                        }
+                        
+                        .redsubdomain5 {
+                                display: flex;
+                                background: var(--redlt);
+                                grid-column: span 5;
+                                column-gap: 1vmax;
+                        }
+                    
+                        /* Foreground grid for certification squares */
+                        .certcontainer {
+                                justify-content: center;
+                                text-align: center;
+                                align-content: center;
+                                line-height: 120%;
+                                display: grid;
+                                position: absolute;
+                                font-size:0.6vmax;
+                                top: 4.8vmax;
+                                left: -0.31vmax;
+                                grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
+                                grid-template-rows: repeat(27, 1.5vmax);
+                                column-gap: 0.1vmax;
+                                row-gap: 0.1vmax;
+                                white-space: pre-wrap;
+                        }
+                        
+                        /* Skill level grid overlayed on top of .certcontainer to show
+                        .skilllevel {
+                            justify-content: center;
+                            text-align: center;
+                            align-content: center;
+                            line-height: 120%;
+                            display: grid;
+                            position: absolute;
+                            font-size:0.6vmax;
+                            top: 3.5vmax;
+                            left: 2.6vmax;
+                            grid-template-columns: max-content;
+                            grid-template-rows: 13.5vmax 22.5vmax 7.5vmax;
+                            column-gap: 0.1vmax;
+                            row-gap: 0.1vmax;
+                            white-space: pre-wrap;        
+                        } */
+                    
+                        .spacer {
+                                background: none;
+                        }
+                        
+                        .spacer5 {
+                                background: none;
+                                grid-column: span 5;
+                        }
+                        
+                        .spacer10 {
+                                background: none;
+                                grid-column: span 10;
+                        }
+                        
+                        .skilllevelitem {
+                                transform: rotate(270deg);
+                                justify-items: right;
+                                align-items: flex-end;
+                                font-weight: 600;
+                                font-size: 0.8vmax;
+                                display: grid;
+                        }
+                    
+                        .networkitem1 {
+                                background: var(--green);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--greendk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .networkitem2 {
+                                background: var(--green);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--greendk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                        
+                        .iamitem1 {
+                                background: var(--teal);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--tealdk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .engineeritem1 {
+                                background: var(--orange);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--orangedk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .engineeritem2 {
+                                background: var(--orange);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--orangedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                        
+                        .engineeritem3 {
+                                background: var(--orange);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--orangedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 5;
+                        }
+                        
+                        .engineeritem4 {
+                                background: var(--orange);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--orangedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 6;
+                        }
+                        
+                        .assetitem1 {
+                                background: var(--yellow);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--yellowdk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .assetitem2 {
+                                background: var(--yellow);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--yellowdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                        
+                        .mgmtitem1 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .mgmtitem2 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                    
+                        .mgmtitem4x {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 4;
+                        }
+                    
+                        .mgmtitem3 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 5;
+                        }
+                        
+                        .mgmtitem4 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 6;
+                        }
+                        
+                        .mgmtitem5 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 6;
+                        }
+                        
+                        .mgmtitem15 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 19;
+                        }
+                        
+                        .mgmtitem17 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 22;
+                        }
+                        .mgmtitemCASP {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 22;
+                        }   
+                        .mgmtitem25 {
+                                background: var(--black);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--blackdk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 32;
+                        }
+                        
+                        .testitem1 {
+                                background: var(--purple);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--purpledk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .testitem2 {
+                                background: var(--purple);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--purpledk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                        
+                        .softwareitem1 {
+                                background: var(--skyblue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--skybluedk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .softwareitem2 {
+                                background: var(--skyblue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--skybluedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                        
+                        .softwareitem6 {
+                                background: var(--skyblue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--skybluedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 9;
+                        }
+                        
+                        .blueopsitem1 {
+                                background: var(--blue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--bluedk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .blueopsitem2 {
+                                background: var(--blue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--bluedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 2;
+                        }
+                        
+                        .blueopsitem3 {
+                                background: var(--blue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--bluedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 5;
+                        }
+                    
+                        .blueopsitem9 {
+                                background: var(--blue);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--bluedk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 11;
+                        }
+                        
+                        .redopsitem1 {
+                                background: var(--red);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--reddk);
+                                border-radius: 0.25vmax;
+                        }
+                        
+                        .redopsitem2 {
+                                background: var(--red);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--reddk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 2;
+                        }
+                        
+                        .redopsitem3 {
+                                background: var(--red);
+                                color: #ffffff;
+                                font-weight: 400;
+                                align-items: center;
+                                justify-items: center;
+                                text-decoration: none;
+                                display: grid;
+                                border: 0.05vmax solid var(--reddk);
+                                border-radius: 0.25vmax;
+                                grid-column: span 3;
+                        }
+                    
+                        /* Draft of different tooltip
+                        .tooltiptext {
+                            visibility: hidden;
+                            background: inherit;
+                            color: inherit;
+                            text-align: left;
+                            padding: 0.3vmax;
+                            border-radius: 0.2vmax;
+                            
+                            position:absolute;
+                            bottom: 97%;
+                            left: 50%;
+                            margin-left: -17.8%;
+                        }
+                        
+                        .mgmtitem25:hover .tooltiptext {
+                            visibility: visible;
+                        }
+                    
+                        .tooltiptext::after {
+                            content: " ";
+                            position: absolute;
+                            top: 100%;
+                            left: 50%;
+                            margin-left: -5px;
+                            border-width: 5px;
+                            border-style: solid;
+                            border-color: black transparent transparent transparent;
+                        } */
+                        
+                        /* Certification tooltip hover text format */
+                        [tooltiptext]:before {
+                            position: absolute;
+                            content: attr(tooltiptext);
+                            width: max-content;
+                            height: max-content;
+                            padding: 0.4vmax;
+                            background: inherit;
+                            border: inherit;
+                            border-radius: 0.2vmax;
+                            color: inherit;
+                            text-align: left;
+                            display: none;
+                            font-size: 125%;
+                        }
+                        
+                        [tooltiptext]:hover:before {
+                            display: block;    
+                        }
+                        
+                        [tooltiptexttitle]:before {
+                            position: absolute;
+                            content: attr(tooltiptexttitle);
+                            width: 25vmax;
+                            height: max-content;
+                            padding: 0.4vmax;
+                            background: var(--black);
+                            border: var(--blackdk);
+                            border-radius: 0.2vmax;
+                            color: white;
+                            text-align: left;
+                            display: none;
+                            font-size: 100%;
+                            z-index: 1;
+                    
+                            top: 4.5%;
+                        }
+                        
+                        [tooltiptexttitle]:hover:before {
+                            display: block;    
+                        }
+                        
+                        [tooltiptexttitleleft]:before {
+                            position: absolute;
+                            content: attr(tooltiptexttitleleft);
+                            width: 25vmax;
+                            height: max-content;
+                            padding: 0.4vmax;
+                            background: var(--black);
+                            border: var(--blackdk);
+                            border-radius: 0.2vmax;
+                            color: white;
+                            text-align: left;
+                            display: none;
+                            font-size: 100%;
+                            z-index: 1;
+                    
+                            top: 4.5%;
+                            left: 0%;
+                        }
+                    
+                        [tooltiptexttitleleft]:hover:before {
+                            display: block;    
+                        }
+                    
+                        [tooltipleft]:before {
+                            position: absolute;
+                            content: attr(tooltipleft);
+                            width: max-content;
+                            height: max-content;
+                            padding: 0.4vmax;
+                            background: inherit;
+                            border: inherit;
+                            border-radius: 0.2vmax;
+                            color: inherit;
+                            text-align: left;
+                            display: none;
+                            font-size: 125%;
+                            line-height: 125%;
+                    
+                            left: 1%;
+                        }
+                    
+                        [tooltipleft]:hover:before {
+                            display: block;    
+                        }
+                    
+                        [tooltipright]:before {
+                            position: absolute;
+                            content: attr(tooltipright);
+                            width: max-content;
+                            height: max-content;
+                            padding: 0.4vmax;
+                            background: inherit;
+                            border: inherit;
+                            border-radius: 0.2vmax;
+                            color: inherit;
+                            text-align: left;
+                            display: none;
+                            font-size: 125%;
+                            line-height: 125%;
+                    
+                            right: 0%;
+                        }
+                    
+                        [tooltipright]:hover:before {
+                            display: block;    
+                        }
+                    
+                        /* Make a static image if horizontal screen is smaller than 898px (iPhone size is 898)*/
+                        #interactive {display: block;}
+                        #static {display: none;}
+                        
+                        @media screen and (max-width: 897px) {
+                        
+                          #interactive {display: none;}
+                          #static {display: block;}
+                        
+                        }
+                        </style>
+    <div id="static">
+    <img alt="Static Security Certification Chart (April 2022)" class="wp-image-309" src="https://pauljerimy.com/wp-content/uploads/2022/03/SCRApril2022.png"/>
     </div>
+    <div class="certchart" id="interactive">
+    <div style="text-align:left;font-size:200%;font-weight:500;padding-bottom:0.2vmax;">Security Certification Roadmap
+                    
+                            </div>
+    <!-- Begin Background Grid -->
+    <div class="certbg"> <!-- Domain Title Row-->
+    <div class="domaintitle"></div>
+    <div class="domaintitle" style="color:var(--green);" tooltiptexttitleleft="     The communication and network security domain covers the ability to secure communication channels and networks. Topics include secure and converged protocols, wireless networks, cellular networks, hardware operation (warranty and redundant power) and third-party connectivity.  IP networking (IPSec, IPv4 and IPv6) are also included in this domain.">Communication and Network Security</div>
+    <div class="domaintitle" style="color:var(--teal);" tooltiptexttitleleft="     The identity and access management domain covers the attacks that target the human gateway to gain access to data. Other topics include ways to identify users with rights to access the information and servers. Identify and access management covers the topics of applications, Single sign-on authentication, privilege escalation, Kerberos, rule-based or risk-based access control, proofing and establishment of identity.">IAM</div>
+    <div class="domaintitle" style="color:var(--orange);" tooltiptexttitle="     The security architecture and engineering domain covers important topics concering security engineering plans, designs, and principles. Topics include assessing and mitigating information system vulnerabilities, fundamental concepts of security models and security architectures in critical areas like access control. Cloud systems, cryptography, system infiltrations (ransomware, fault-injection and more) and virtualized systems are also covered in this domain.">Security Architecture and Engineering</div>
+    <div class="domaintitle" style="color:var(--yellow);" tooltiptexttitle="     The Asset Security domain deals with the issues related to the collection, storage, maintenance, retention and destruction of data. It also covers knowledge of different roles regarding data handling (owner, controller and custodian) as well as data protection methods and data states. Other topics include resource provision, asset classification and data lifecycle management.">Asset Security</div>
+    <div class="domaintitle" style="color:var(--black);" tooltiptexttitle="     The security and risk management domain covers general on skills related to the implementation of user awareness programs as well as security procedures. Emphasis is also placed on risk management concerning the acquisition of new services, hardware and software (supply chain). Other skills include social engineering defense mechanisms.">Security and Risk Management</div>
+    <div class="domaintitle" style="color:var(--purple);" tooltiptexttitle="     The security assessment and testing domain deals with all the techniques and tools used to find system vulnerabilities, weaknesses and potential areas of concern not addressed by security procedures and policies. Attack simulations, vulnerability assessment, compliance checks, and ethical disclosure also fall under this domain.">Security Assessment and Testing</div>
+    <div class="domaintitle" style="color:var(--skyblue);" tooltiptexttitle="     The software development security domain deals with implementing software-based security protocols within environments for which the IT professional is responsible. Risk analysis, vulnerability identification and auditing of source codes are all covered in this subset. Additional topics include software-designed security, maturity models, development methodologies, open-source and third-party development security.">Software Security</div>
+    <div class="domaintitle" style="color:var(--red);" tooltiptexttitle="     The security operations domain covers topics ranging from investigations and digital forensic to detection and intrusion prevention tools, sandboxing and firewalls. Topics include user and entity behavior analytics, threat intelligence (threat hunting and threat feeds) log management, artifacts (mobile, computer and network), machine learning and AI-based tools, penetration testing, and exploitation development.">Security Operations</div>
+    <div class="skilllevel"></div>
+    <div class="networkcontainer"></div>
+    <div class="iamcontainer"></div>
+    <div class="engineercontainer">
+    <div class="subtitle4">Cloud/SysOps</div>
+    <div class="subtitle1">*nix</div>
+    <div class="subtitle1">ICS/IoT</div>
+    <div class="spacer"></div>
+    <div class="engsubdomain4"></div>
+    <div class="engsubdomain1"></div>
+    <div class="engsubdomain1"></div>
+    <div class="spacer"></div>
+    </div>
+    <div class="assetcontainer"></div>
+    <div class="mgmtcontainer">
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="subtitle4">GRC</div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="mgmtsubdomain4"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    </div>
+    <div class="testingcontainer"></div>
+    <div class="softwarecontainer"></div>
+    <div class="operationscontainer">
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="subtitle2">Forensics</div>
+    <div class="subtitle2">Incident Handling</div>
+    <div class="subtitle5">Penetration Testing</div>
+    <div class="subtitle2">Exploitation</div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="bluesubdomain2"></div>
+    <div class="bluesubdomain2"></div>
+    <div class="redsubdomain5"></div>
+    <div class="redsubdomain2"></div>
+    </div>
+    </div>
+    <!-- Begin Foreground Grid -->
+    <div class="certcontainer">
+    Message shown if no certs are visible (added by @RealCyberJim)
+    <div id="noCertsMessage" class="candidate-only" style="display:none; text-align: center; font-size: 1.2vmax; margin-top: 2vmax;">
+            🚫 No certifications are available for this domain.
+        </div>
+    <!-- Row 1 (intentionally blank to make room for sub-domain titles)-->
+    
+    <!-- cert <a>records</a> went here-->
 
-    <!-- Script to load and initialize the certification map -->
+    <!-- Find # of certs by searching for _bl@nk replacing the @ for a -->
+    <div class="key">481 certifications listed | July 2024</div>
+    <div class="key"> <br/></div>
+    <!-- === BEGIN: Candidate View & Reset Buttons (added by @RealCyberJim) === -->
+    <div class="cert-toolbar">
+    <!-- Always visible -->
+                    <button class="toolbar-button" id="toggleCandidateView">
+                            🎯 Candidate View
+                    </button>
+    <!-- Only visible inside Candidate View -->
+                    <button class="toolbar-button candidate-only" id="toggleEditMode">
+                            ✏️ Edit My Certs
+                    </button>
+    <!-- Only visible inside Candidate View AND While Editing Certs -->
+                    <button class="toolbar-button candidate-only" id="toggleOpacityMode">
+                            🌫 Transparent View
+                    </button>
+    <!-- Only visible inside Candidate View -->
+                    <button class="toolbar-button candidate-only" id="resetCertTracking">
+                            ♻️ Clear Achieved &amp; Planned
+                    </button>
+                    <br>
+    <!-- === BEGIN: Domain Group Filter (added by @RealCyberJim) === -->
+            <label class="candidate-only" for="domainGroupFilter" style="font-size: 1vmax;">
+                    🔍 Domain:
+                    <select id="domainGroupFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                            <option value="ALL">All Domains</option>
+                            <option value="NET">Communication &amp; Network Security</option>
+                            <option value="IAM">Identity &amp; Access Management</option>
+                            <option value="ENG">Security Architecture &amp; Engineering</option>
+                            <option value="AST">Asset Security</option>
+                            <option value="RSK">Security &amp; Risk Management</option>
+                            <option value="TST">Security Assessment &amp; Testing</option>
+                            <option value="DEV">Software Development Security</option>
+                            <option value="OPS">Security Operations (Blue/Red)</option>
+                    </select>
+            </label>
+    <!-- === BEGIN: Vendor Filter (added by @RealCyberJim) === -->
+            <label class="candidate-only" for="vendorFilter" style="font-size: 1vmax;">
+            🏷️ Vendor:
+                    <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
+                            <option value="ALL">All Vendors</option>
+                            <option value="accessdata">AccessData</option>
+                            <option value="apmg">Accredited Project Manager Group (APMG)</option>
+                            <option value="amazon">Amazon</option>
+                            <option value="asis">American Society for Industrial Security (ASIS)</option>
+                            <option value="apple">Apple</option>
+                            <option value="bcs">British Computer Society (BCS)</option>
+                            <option value="ciisec">CIISec</option>
+                            <option value="certnexus">CertNexus</option>
+                            <option value="cwnp">Certified Wireless Network Professionals (CWNP)</option>
+                            <option value="certiport">Certiport</option>
+                            <option value="checkpoint">Checkpoint</option>
+                            <option value="cisco">Cisco</option>
+                            <option value="cncf">Cloud Native Computing Foundation (CNCF)</option>
+                            <option value="comptia">CompTIA</option>
+                            <option value="crest">Council for Registered Ethical Security Testers (CREST)</option>
+                            <option value="cyberscheme">Cyber Scheme</option>
+                            <option value="cyberstruggle">Cyber Struggle</option>
+                            <option value="cyberdefenders">CyberDefenders</option>
+                            <option value="csi">CyberSecurity Institute</option>
+                            <option value="darkvortex">Dark Vortex</option>
+                            <option value="dsci">Data Security Council of India (DSCI)</option>
+                            <option value="dri">Disaster Recovery Institute (DRI)</option>
+                            <option value="eccouncil">EC Council</option>
+                            <option value="ecfirst">Enterprise Compliance First (EC First)</option>
+                            <option value="eitca">European IT Certification Academy (EITCA)</option>
+                            <option value="exin">Exameninstituut voor Informatica (EXIN)</option>
+                            <option value="excida">Excida</option>
+                            <option value="f5">F5</option>
+                            <option value="fairinstitute">Fair Institute</option>
+                            <option value="fortinet">Fortinet</option>
+                            <option value="gaqm">Global Association for Quality Management (GAQM)</option>
+                            <option value="giac">Global Information Assurance Certification (GIAC)</option>
+                            <option value="google">Google</option>
+                            <option value="hlayer">H Layer</option>
+                            <option value="hackthebox">Hack the Box</option>
+                            <option value="idpro">IDPro</option>
+                            <option value="imi">Identity Management Institute (IMI)</option>
+                            <option value="ine">Information Network Engineering Security (INE)</option>
+                            <option value="ismi">Information Security Management Institute (ISMI)</option>
+                            <option value="isaca">Information Systems Audit and Control Association (ISACA)</option>
+                            <option value="itil">Information Technology Infrastructure Library (ITIL)</option>
+                            <option value="infosecinstitute">Infosec Institute</option>
+                            <option value="isecom">Institute for Security and Open Methodologies (ISECOM)</option>
+                            <option value="iia">Institute of Internal Auditors (IIA)</option>
+                            <option value="inteltechniques">IntelTechniques</option>
+                            <option value="iacis">International Association for Computer Information Systems (IACIS)</option>
+                            <option value="ibitgq">International Board for IT Governance Qualifications (IBITGQ)</option>
+                            <option value="isc2">International Information System Security Certification Consortium (ISC2)</option>
+                            <option value="iiba">International Institute of Business Analysis (IIBA)</option>
+                            <option value="isa">International Society of Automation (ISA)</option>
+                            <option value="isfce">International Society of Forensic Computer Examiners (ISFCE)</option>
+                            <option value="juniper">Juniper</option>
+                            <option value="linuxfoundation">Linux Foundation</option>
+                            <option value="lpi">Linux Professional Institute (LPI)</option>
+                            <option value="microsoft">Microsoft</option>
+                            <option value="mile2">Mile2</option>
+                            <option value="mirantis">Mirantis</option>
+                            <option value="mitre">Mitre</option>
+                            <option value="mosse">Mosse Institute</option>
+                            <option value="ncsc">National Cyber Security Centre (NCSC)</option>
+                            <option value="offsec">Offensive Security (OffSec)</option>
+                            <option value="oceg">Open Compliance and Ethics Group (OCEG)</option>
+                            <option value="opentext">OpenText</option>
+                            <option value="paloalto">Palo Alto</option>
+                            <option value="pcissc">Payment Card Industry Security Standards Council (PCI SSC)</option>
+                            <option value="peoplecert">PeopleCert</option>
+                            <option value="portswigger">Portswigger</option>
+                            <option value="pdso">Practical DevSecOps (PDSO)</option>
+                            <option value="pecb">Professional Evaluation and Certification Board (PECB)</option>
+                            <option value="pmi">Project Management Institute (PMI)</option>
+                            <option value="pai">Protocol Analysis Institute</option>
+                            <option value="redhat">Red Hat</option>
+                            <option value="sans">SANS</option>
+                            <option value="salesforce">SalesForce</option>
+                            <option value="scrumorg">Scrum.org</option>
+                            <option value="secopsgroup">SecOps Group</option>
+                            <option value="seco">Security & Continuity Institute (SECO)</option>
+                            <option value="securityblue">Security Blue</option>
+                            <option value="sharedassessments">Shared Assessments</option>
+                            <option value="sabsa">Sherwood Applied Business Security Architecture (SABSA)</option>
+                            <option value="suse">Software und System-Entwicklung (SUSE)</option>
+                            <option value="splunk">Splunk</option>
+                            <option value="tuv">Technischer Überwachungsverein Rheinland (TÜV)</option>
+                            <option value="tcm">The Cyber Mentor (TCM) Security</option>
+                            <option value="theopengroup">The Open Group</option>
+                            <option value="thesecopsgroup">The SecOps Group</option>
+                            <option value="various">Various</option>
+                            <option value="vmware">Vmware</option>
+                            <option value="zachman">Zachman</option>
+                            <option value="zeropoint">Zero Point Security</option>
+                    </select>
+            </label>
+    <!-- === END: Vendor Filter === -->
+    
+    <!-- === END: Domain Group Filter === -->
+    </div>
+    <!-- === END: Candidate View & Reset Buttons === -->
+    
+    <!-- === BEGIN: Domain & Vendor Filter Row (organized by @RealCyberJim) === -->
+    <div class="candidate-only" style="display: flex; align-items: center; gap: 1vmax; margin-top: 1vmax; justify-content: center;">
+    
+    </div>
+    <!-- === END: Domain & Vendor Filter Row === -->
+    
+    </div>
+    <!-- === BEGIN: Cert Tracker Config (added by @RealCyberJim) === -->
     <script>
-
-    // Initialize CertMap object FIRST before any event handlers are set up
-    window.CertMap = {};
-
-    // Configuration module for the Certification Roadmap
-    CertMap.config = {
-        dataPath: {
-            domains: 'data/domains.json',
-            subdomains: 'data/subdomains.json',
-            certs: 'data/certs.json'
-        },
-        viewModes: {
-            default: 'default',
-            candidate: 'candidate-view'
-        },
-        storageKeys: {
-            achievedCerts: 'achievedCerts',
-            plannedCerts: 'plannedCerts',
-            transparentView: 'transparentView'
-        }
-    };
-
-    // Data storage
-    CertMap.data = {
-        domains: [],
-        subdomains: [],
-        certs: [],
-        // State management
-        state: {
-            currentView: CertMap.config.viewModes.default,
-            editMode: false,
-            filters: {
-                domain: 'ALL',
-                vendor: 'ALL'
-            }
-        }
-    };
-
-    // Function to load domain data from JSON files
-    CertMap.loadData = async function() {
-        try {
-            // Load domains data
-            console.log('Fetching domains from:', CertMap.config.dataPath.domains);
-            const domainsResponse = await fetch(CertMap.config.dataPath.domains);
-            if (!domainsResponse.ok) {
-                throw new Error(`Failed to fetch domains: ${domainsResponse.status} ${domainsResponse.statusText}`);
-            }
-            CertMap.data.domains = await domainsResponse.json();
-            console.log('Loaded domains:', CertMap.data.domains.length);
-            
-            // Debug domain details
-            CertMap.data.domains.forEach(domain => {
-                console.log(`Domain: ${domain.id}, Name: ${domain.name}, Order: ${domain.order}`);
-            });
-            
-            // Load subdomains data
-            console.log('Fetching subdomains from:', CertMap.config.dataPath.subdomains);
-            const subdomainsResponse = await fetch(CertMap.config.dataPath.subdomains);
-            if (!subdomainsResponse.ok) {
-                throw new Error(`Failed to fetch subdomains: ${subdomainsResponse.status} ${subdomainsResponse.statusText}`);
-            }
-            CertMap.data.subdomains = await subdomainsResponse.json();
-            console.log('Loaded subdomains:', CertMap.data.subdomains.length);
-
-            // Load certification data
-            console.log('Fetching certifications from:', CertMap.config.dataPath.certs);
-            const certsResponse = await fetch(CertMap.config.dataPath.certs);
-            if (!certsResponse.ok) {
-                throw new Error(`Failed to fetch certifications: ${certsResponse.status} ${certsResponse.statusText}`);
-            }
-            CertMap.data.certs = await certsResponse.json();
-            console.log('Loaded certifications:', CertMap.data.certs.length);
-            
-            console.log('All data loaded successfully');
-            return true;
-        } catch (error) {
-            console.error('Error loading data:', error);
-            return false;
-        }
-    };
-
-    // Renderer module for the Certification Roadmap
-    CertMap.renderer = {
-        // Create certification tiles
-        createCertificationTiles: function() {
-            console.log('Creating certification tiles...');
-            const container = document.querySelector('.certcontainer');
-            if (!container) {
-                console.error('Certification container not found');
-                return false;
-            }
-            
-            // Clear any existing certification tiles
-            container.innerHTML = '';
-            
-            // Get all certifications
-            const certs = CertMap.data.certs;
-            if (!certs || !certs.length) {
-                console.warn('No certification data available');
-                return false;
-            }
-            
-            console.log(`Processing ${certs.length} certification tiles`);
-            
-            // Group certifications by domain and skill strata
-            const groupedCerts = this.groupCertificationsByDomainAndStrata(certs);
-            
-            // Create a tile for each certification in the sorted order
-            for (const domainId in groupedCerts) {
-                for (const strata in groupedCerts[domainId]) {
-                    // Sort certifications within the same domain and strata alphabetically by ID
-                    const domainStrataCerts = groupedCerts[domainId][strata];
-                    domainStrataCerts.sort((a, b) => a.id.localeCompare(b.id));
-                    
-                    // Position each certification in the group
-                    domainStrataCerts.forEach((cert, index) => {
-                        // Create the certification tile
-                        const certTile = document.createElement('a');
-                        certTile.className = 'certlink';
-                        certTile.href = cert.certUrl || '#';
-                        certTile.target = '_blank';
-                        certTile.rel = 'noopener';
-                        certTile.setAttribute('data-cert-id', cert.id);
-                        
-                        // Position the tile using the calculated position
-                        this.positionCertTile(certTile, cert, index, domainStrataCerts.length);
-                        
-                        // Set the color based on domain and team role
-                        this.setTileColor(certTile, cert);
-                        
-                        // Set the content
-                        certTile.textContent = cert.label;
-                        
-                        // Add tooltip with detailed info
-                        certTile.setAttribute('tooltiptext', cert.tooltip || cert.label);
-                        
-                        // Add the tile to the container
-                        container.appendChild(certTile);
-                    });
-                }
-            }
-            
-            // Update cert count
-            const countElement = document.getElementById('cert-count');
-            if (countElement) {
-                const date = new Date();
-                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                countElement.textContent = `${certs.length} certifications loaded | ${monthYear}`;
-            }
-            
-            return true;
-        },
-
-        groupCertificationsByDomainAndStrata: function(certs) {
-            console.log('Grouping certifications by domain and skill strata');
-            const groupedCerts = {};
-            
-            // First, group by domain and skill strata
-            certs.forEach(cert => {
-                const domain = cert.domain;
-                const strata = cert.skillStrata;
-                
-                // Initialize domain object if it doesn't exist
-                if (!groupedCerts[domain]) {
-                    groupedCerts[domain] = {};
-                }
-                
-                // Initialize strata array if it doesn't exist
-                if (!groupedCerts[domain][strata]) {
-                    groupedCerts[domain][strata] = [];
-                }
-                
-                // Add cert to its domain and strata group
-                groupedCerts[domain][strata].push(cert);
-            });
-            
-            console.log('Certification grouping complete');
-            return groupedCerts;
-        },
-
-        // Helper for grid positioning - calculates grid position for certification tiles
-        getGridPosition: function(cert, indexInGroup, totalInGroup) {
-            // Domain column mapping (where each domain starts in the grid)
-            const domainColumns = {
-                'NET': 2,
-                'IAM': 6,
-                'ENG': 8,
-                'AST': 16,
-                'RSK': 19,
-                'TST': 29,
-                'SOF': 33,
-                'OPS': 35
-            };
-            
-            // Domain column spans (how many columns each domain occupies)
-            const domainSpans = {
-                'NET': 3,
-                'IAM': 1,
-                'ENG': 7,
-                'AST': 2,
-                'RSK': 9,
-                'TST': 3,
-                'SOF': 1,
-                'OPS': 13
-            };
-            
-            // Skill level row ranges (where each skill level starts and ends)
-            const skillRows = {
-                3: { start: 3, end: 9 },   // Expert
-                2: { start: 12, end: 18 }, // Intermediate
-                1: { start: 21, end: 27 }  // Beginner
-            };
-            
-            // Get domain data
-            const colStart = domainColumns[cert.domain] || 2;
-            const colSpan = domainSpans[cert.domain] || 1;
-            
-            // Get skill level row range
-            const rowRange = skillRows[cert.skillStrata] || skillRows[1];
-            
-            // Calculate column position within domain area
-            let colPos;
-            if (totalInGroup <= colSpan) {
-                // If we have fewer certs than columns, space them evenly
-                colPos = colStart + Math.floor(indexInGroup * (colSpan / totalInGroup));
-            } else {
-                // If we have more certs than columns, distribute them
-                const rowsNeeded = Math.ceil(totalInGroup / colSpan);
-                const rowIndex = Math.floor(indexInGroup / colSpan);
-                colPos = colStart + (indexInGroup % colSpan);
-                
-                // Adjust row based on distribution
-                const rowPos = rowRange.start + rowIndex;
-                return { 
-                    column: colPos, 
-                    row: rowPos < rowRange.end ? rowPos : rowRange.end - 1 
-                };
-            }
-            
-            // Return position with row distribution
-            return { 
-                column: colPos, 
-                row: rowRange.start + (indexInGroup % (rowRange.end - rowRange.start)) 
-            };
-        },
-
-        positionCertTile: function(tileElement, cert, indexInGroup, totalInGroup) {
-            // Calculate grid position using our helper method
-            const position = this.getGridPosition(cert, indexInGroup, totalInGroup);
-            
-            // Find the corresponding domain
-            const domain = CertMap.data.domains.find(d => d.id === cert.domain);
-            if (!domain) {
-                console.error(`Domain not found for certification: ${cert.id}`);
-                return;
-            }
-            
-            // Apply grid positioning
-            tileElement.style.gridColumn = position.column;
-            tileElement.style.gridRow = position.row;
-            
-            // Set standard dimensions for certification tiles
-            tileElement.style.width = "2.3vmax";
-            tileElement.style.height = "1.5vmax";
-            
-            // Add data attributes for filtering
-            tileElement.setAttribute('data-domain', cert.domain);
-            tileElement.setAttribute('data-skill-strata', cert.skillStrata);
-            tileElement.setAttribute('data-vendor', cert.vendor || '');
-            tileElement.setAttribute('data-grid-col', position.column);
-            tileElement.setAttribute('data-grid-row', position.row);
-            
-            if (cert.subdomain) {
-                tileElement.setAttribute('data-subdomain', cert.subdomain);
-            }
-            if (cert.teamRole) {
-                tileElement.setAttribute('data-team-role', cert.teamRole);
-            }
-        },
-
-        // Set the color of the certification tile based on domain and team role
-        setTileColor: function(tileElement, cert) {
-            // Find the corresponding domain
-            const domain = CertMap.data.domains.find(d => d.id === cert.domain);
-            if (!domain) {
-                console.error(`Domain not found for certification: ${cert.id}`);
-                return;
-            }
-            
-            // Determine the team role
-            const teamRole = cert.teamRole || 'DefaultTeam';
-            
-            // Set the background color based on domain and team role
-            if (domain.teamRoles && domain.teamRoles[teamRole]) {
-                tileElement.style.backgroundColor = domain.teamRoles[teamRole].tileColor;
-                tileElement.style.border = `1px solid ${domain.teamRoles[teamRole].borderColor}`;
-            } else {
-                // Fallback to domain default color
-                if (domain.teamRoles && domain.teamRoles.DefaultTeam) {
-                    tileElement.style.backgroundColor = domain.teamRoles.DefaultTeam.tileColor;
-                    tileElement.style.border = `1px solid ${domain.teamRoles.DefaultTeam.borderColor}`;
-                } else {
-                    // Final fallback
-                    tileElement.style.backgroundColor = '#666';
-                    tileElement.style.border = '1px solid #444';
-                }
-            }
-        },
-        
-        // Main render function
-        renderCertMap: function() {
-            console.log('Rendering certification map...');
-            const container = document.getElementById('certmap-grid');
-            if (!container) {
-                console.error('Grid container not found');
-                return false;
-            }
-            
-            // Clear previous content
-            container.innerHTML = '';
-            
-            // Add main chart container
-            const chartContainer = document.createElement('div');
-            chartContainer.className = 'certchart';
-            
-            // Create background grid (domains and subdomains)
-            const bgGrid = this.createBackgroundGrid();
-            chartContainer.appendChild(bgGrid);
-            
-            // Create foreground grid (cert tiles will go here)
-            const fgGrid = this.createForegroundGrid();
-            chartContainer.appendChild(fgGrid);
-            
-            // Add the completed grid to the container
-            container.appendChild(chartContainer);
-            
-            // Update cert count
-            const countElement = document.getElementById('cert-count');
-            if (countElement) {
-                const date = new Date();
-                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                countElement.textContent = `${CertMap.data.domains.length} domains loaded | ${monthYear}`;
-            }
-            
-            // Create certification tiles
-            this.createCertificationTiles();
-            return true;
-        },
-        
-        // Create the background grid with domains and subdomains
-        createBackgroundGrid: function() {
-            const bgGrid = document.createElement('div');
-            bgGrid.className = 'certbg';
-            
-            // Create domain header row
-            this.createDomainHeaders(bgGrid);
-            
-            // Create skill level indicators
-            this.createSkillLevels(bgGrid);
-            
-            // Create domain containers
-            this.createDomainContainers(bgGrid);
-            
-            return bgGrid;
-        },
-        
-        // Create skill level indicators
-        createSkillLevels: function(bgGrid) {
-            const skillLevelContainer = document.createElement('div');
-            skillLevelContainer.className = 'skilllevelcontainer';
-            
-            // Define skill levels
-            const skillLevels = [
-                { name: 'Expert', class: 'skilllevel-expert' },
-                { name: 'Intermediate', class: 'skilllevel-intermediate' },
-                { name: 'Beginner', class: 'skilllevel-beginner' }
-            ];
-            
-            // Create skill level labels
-            skillLevels.forEach(level => {
-                const levelLabel = document.createElement('div');
-                levelLabel.className = `skilllevelitem ${level.class}`;
-                levelLabel.textContent = level.name;
-                skillLevelContainer.appendChild(levelLabel);
-            });
-            
-            bgGrid.appendChild(skillLevelContainer);
-        },
-        
-        // Create domain header titles
-        createDomainHeaders: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create a header for each domain
-            sortedDomains.forEach(domain => {
-                const domainTitle = document.createElement('div');
-                domainTitle.className = 'domaintitle';
-                domainTitle.style.color = `var(--${domain.id.toLowerCase()})`;
-                domainTitle.style.gridColumn = domain.id.toLowerCase();
-                domainTitle.textContent = domain.name;
-                domainTitle.style.width = '100%'; 
-                domainTitle.style.textAlign = 'center';
-                domainTitle.style.display = 'block'; // Removes flexbox
-                
-                // Add tooltip with domain description
-                if (domain.description) {
-                    // Determine tooltip positioning (left-aligned for domains on the left side)
-                    const tooltipAttr = domain.order <= 4 ? 'tooltiptexttitleleft' : 'tooltiptexttitle';
-                    domainTitle.setAttribute(tooltipAttr, domain.description);
-                }
-                
-                bgGrid.appendChild(domainTitle);
-            });
-        },
-        
-        // Create containers for each domain
-        createDomainContainers: function(bgGrid) {
-            // Sort domains by order
-            const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-            
-            // Create a container for each domain
-            sortedDomains.forEach(domain => {
-                // Determine container class based on domain ID
-                const containerClass = this.getDomainContainerClass(domain.id);
-                
-                const domainContainer = document.createElement('div');
-                domainContainer.className = containerClass;
-                domainContainer.setAttribute('data-domain-id', domain.id);
-                
-                // Get subdomains for this domain
-                const domainSubdomains = CertMap.data.subdomains.filter(
-                    subdomain => subdomain.domainId === domain.id
-                );
-                
-                // Create subdomain sections if any exist
-                if (domainSubdomains.length > 0) {
-                    // Group subdomains by teamRole for columnar layout
-                    const groupedSubdomains = this.groupSubdomainsByTeamRole(domainSubdomains);
-                    
-                    // Create subdomain columns
-                    this.createSubdomainColumns(domainContainer, groupedSubdomains, domain);
-                }
-                
-                bgGrid.appendChild(domainContainer);
-                console.log(`Created container for domain ${domain.id} with class ${containerClass}`);
-            });
-        },
-        
-        // Group subdomains by teamRole for columnar display
-        groupSubdomainsByTeamRole: function(subdomains) {
-            const groups = {};
-            
-            subdomains.forEach(subdomain => {
-                const role = subdomain.teamRole || 'DefaultTeam';
-                if (!groups[role]) {
-                    groups[role] = [];
-                }
-                groups[role].push(subdomain);
-            });
-            
-            return groups;
-        },
-        
-        // Create columns for each subdomain group
-        createSubdomainColumns: function(domainContainer, groupedSubdomains, domain) {
-            const domainId = domain.id;
-            
-            // Set up CSS grid for layout
-            domainContainer.style.display = 'grid';
-            
-            // Define how many columns each domain has for subdomains
-            const domainColumnCounts = {
-                'ENG': 7,
-                'RSK': 9,
-                'OPS': 13
-            };
-            
-            // Set up grid columns if this domain has a defined count
-            if (domainColumnCounts[domainId]) {
-                domainContainer.style.gridTemplateColumns = `repeat(${domainColumnCounts[domainId]}, 1fr)`;
-                domainContainer.style.gridTemplateRows = 'auto 1fr'; // Header row and content
-            }
-            
-            // Define subdomain spans
-            const subdomainSpans = {
-                'ENG': {
-                    'ENG_cloudSysOps': { start: 1, span: 4 },
-                    'ENG_nix': { start: 5, span: 1 },
-                    'ENG_icsiot': { start: 6, span: 1 }
-                },
-                'RSK': {
-                    'RSK_grc': { start: 4, span: 4 }
-                },
-                'OPS': {
-                    'OPS_forensics': { start: 3, span: 2 },
-                    'OPS_incidentHandling': { start: 5, span: 2 },
-                    'OPS_penTesting': { start: 7, span: 5 },
-                    'OPS_exploitation': { start: 12, span: 2 }
-                }
-            };
-            
-            // Handle each subdomain separately to create columns
-            Object.entries(groupedSubdomains).forEach(([teamRole, subdomains]) => {
-                subdomains.forEach(subdomain => {
-                    const position = subdomainSpans[domainId]?.[subdomain.id];
-                    if (!position) return;
-                    
-                    // Create subdomain column container
-                    const columnContainer = document.createElement('div');
-                    
-                    // Determine background class based on team role and domain
-                    let backgroundClass = '';
-                    
-                    if (teamRole === 'RedTeam' && domainId === 'OPS') {
-                        backgroundClass = 'subdomain-ops-red';
-                        columnContainer.style.backgroundColor = 'var(--redlt)';
-                    } else if (teamRole === 'BlueTeam' && domainId === 'OPS') {
-                        backgroundClass = 'subdomain-ops-blue';
-                        columnContainer.style.backgroundColor = 'var(--bluelt)';
-                    } else if (domainId === 'ENG') {
-                        backgroundClass = 'subdomain-eng';
-                        columnContainer.style.backgroundColor = 'var(--orangelt)';
-                    } else if (domainId === 'RSK') {
-                        backgroundClass = 'subdomain-rsk';
-                        columnContainer.style.backgroundColor = 'var(--blacklt)';
-                    }
-                    
-                    columnContainer.className = backgroundClass;
-                    columnContainer.setAttribute('data-subdomain-id', subdomain.id);
-                    columnContainer.style.gridRow = '2'; // Place in the content row
-                    columnContainer.style.gridColumn = `${position.start} / span ${position.span}`;
-                    columnContainer.style.height = '100%';
-                    
-                    // Add subdomain header
-                    const titleElement = document.createElement('div');
-                    titleElement.className = 'subdomain-title';
-                    titleElement.textContent = subdomain.name;
-                    columnContainer.appendChild(titleElement);
-                    
-                    // Add to domain container
-                    domainContainer.appendChild(columnContainer);
-                });
-            });
-        },
-        
-        // Create the foreground grid for cert tiles
-        createForegroundGrid: function() {
-            const fgGrid = document.createElement('div');
-            fgGrid.className = 'certcontainer';
-            return fgGrid;
-        },
-        
-        // Helper to get the container class based on domain ID
-        getDomainContainerClass: function(domainId) {
-            const domainMap = {
-                'NET': 'networkcontainer',
-                'IAM': 'iamcontainer',
-                'ENG': 'engineercontainer',
-                'AST': 'assetcontainer',
-                'RSK': 'mgmtcontainer',
-                'TST': 'testingcontainer',
-                'SOF': 'softwarecontainer',
-                'OPS': 'operationscontainer'
-            };
-            
-            return domainMap[domainId] || `${domainId.toLowerCase()}container`;
-        }
-    };
-
-    // Add a debugging function to help identify issues
-    CertMap.debug = function() {
-        console.log('CertMap Debug Info:');
-        console.log('- Domains loaded:', this.data.domains ? this.data.domains.length : 0);
-        console.log('- Subdomains loaded:', this.data.subdomains ? this.data.subdomains.length : 0);
-        console.log('- Certs loaded:', this.data.certs ? this.data.certs.length : 0);
-        console.log('- Grid container exists:', !!document.getElementById('certmap-grid'));
-        
-        // Display debug info in the debug-info panel
-        const debugInfo = document.getElementById('debug-info');
-        if (debugInfo) {
-            debugInfo.style.display = 'block';
-            
-            // Create messages element if it doesn't exist
-            let debugMessages = document.getElementById('debug-messages');
-            if (!debugMessages) {
-                debugMessages = document.createElement('div');
-                debugMessages.id = 'debug-messages';
-                debugInfo.appendChild(debugMessages);
-            }
-            
-            debugMessages.innerHTML = `
-                <p><strong>Domains loaded:</strong> ${this.data.domains ? this.data.domains.length : 0}</p>
-                <p><strong>Subdomains loaded:</strong> ${this.data.subdomains ? this.data.subdomains.length : 0}</p>
-                <p><strong>Certs loaded:</strong> ${this.data.certs ? this.data.certs.length : 0}</p>
-                <p><strong>Grid container exists:</strong> ${!!document.getElementById('certmap-grid')}</p>
-                <p><strong>Current View Mode:</strong> ${this.data.state.currentView}</p>
-            `;
-            
-            // Add domain names if loaded
-            if (this.data.domains && this.data.domains.length > 0) {
-                debugMessages.innerHTML += `<p><strong>Domain IDs:</strong> ${this.data.domains.map(d => d.id).join(', ')}</p>`;
-            }
-        }
-    };
-
-    // Add a simple test function to display domain names
-    CertMap.testDomainsDisplay = function() {
-        console.log('Testing domain display...');
-        
-        // Get a container to show our test output
-        const container = document.getElementById('certmap-grid');
-        if (!container) {
-            console.error('Grid container not found');
-            return;
-        }
-        
-        // Clear any existing content
-        container.innerHTML = '';
-        
-        // Create a simple list of domains
-        const list = document.createElement('ul');
-        list.style.listStyle = 'none';
-        list.style.padding = '1vmax';
-        
-        // Add each domain as a list item
-        CertMap.data.domains.forEach(domain => {
-            const item = document.createElement('li');
-            item.textContent = `${domain.id}: ${domain.name}`;
-            
-            // Check if teamRoles exists and has DefaultTeam
-            if (domain.teamRoles && domain.teamRoles.DefaultTeam) {
-                item.style.color = domain.teamRoles.DefaultTeam.tileColor;
-                item.style.borderLeft = `4px solid ${domain.teamRoles.DefaultTeam.tileColor}`;
-            } else {
-                item.style.color = '#444';
-                item.style.borderLeft = '4px solid #ccc';
-            }
-            
-            item.style.fontWeight = 'bold';
-            item.style.padding = '0.5vmax';
-            item.style.marginBottom = '0.5vmax';
-            list.appendChild(item);
-            
-            // Add subdomains for this domain
-            const subdomains = CertMap.data.subdomains.filter(
-                subdomain => subdomain.domainId === domain.id
-            );
-            
-            if (subdomains.length > 0) {
-                const subList = document.createElement('ul');
-                subList.style.listStyle = 'none';
-                subList.style.paddingLeft = '2vmax';
-                
-                subdomains.forEach(subdomain => {
-                    const subItem = document.createElement('li');
-                    subItem.textContent = subdomain.name;
-                    subItem.style.color = '#444';
-                    subItem.style.padding = '0.3vmax';
-                    subList.appendChild(subItem);
-                });
-                
-                list.appendChild(subList);
-            }
-        });
-        
-        // Add the list to the container
-        container.appendChild(list);
-        
-        // Update cert count in footer
-        const countElement = document.getElementById('cert-count');
-        if (countElement) {
-            countElement.textContent = `${CertMap.data.domains.length} domains, ${CertMap.data.subdomains.length} subdomains loaded | Test Mode`;
-        }
-    };
-
-    // UI Controller for handling user interactions
-    CertMap.ui = {
-        // Initialize UI event handlers
-        init: function() {
-            console.log('Initializing UI handlers...');
-            
-            // Candidate view toggle
-            const candidateViewButton = document.getElementById('toggleCandidateView');
-            if (candidateViewButton) {
-                candidateViewButton.addEventListener('click', () => {
-                    document.body.classList.toggle(CertMap.config.viewModes.candidate);
-                    CertMap.data.state.currentView = document.body.classList.contains(CertMap.config.viewModes.candidate) 
-                        ? CertMap.config.viewModes.candidate 
-                        : CertMap.config.viewModes.default;
-                    console.log('View mode toggled to:', CertMap.data.state.currentView);
-                });
-            }
-            
-            // Edit mode toggle
-            const editModeButton = document.getElementById('toggleEditMode');
-            if (editModeButton) {
-                editModeButton.addEventListener('click', () => {
-                    document.body.classList.toggle('edit-mode');
-                    CertMap.data.state.editMode = document.body.classList.contains('edit-mode');
-                    console.log('Edit mode toggled to:', CertMap.data.state.editMode);
-                });
-            }
-            
-            // Opacity mode toggle
-            const opacityModeButton = document.getElementById('toggleOpacityMode');
-            if (opacityModeButton) {
-                opacityModeButton.addEventListener('click', () => {
-                    document.body.classList.toggle('transparent-view');
-                    localStorage.setItem(
-                        CertMap.config.storageKeys.transparentView, 
-                        document.body.classList.contains('transparent-view')
-                    );
-                    console.log('Opacity mode toggled');
-                });
-            }
-            
-            // Reset cert tracking
-            const resetButton = document.getElementById('resetCertTracking');
-            if (resetButton) {
-                resetButton.addEventListener('click', () => {
-                    if (confirm('This will clear your achieved and planned certifications. Continue?')) {
-                        localStorage.removeItem(CertMap.config.storageKeys.achievedCerts);
-                        localStorage.removeItem(CertMap.config.storageKeys.plannedCerts);
-                        console.log('Certification tracking data cleared');
-                        
-                        // Reset visual indicators on cert tiles
-                        document.querySelectorAll('.certlink.achieved, .certlink.planned').forEach(tile => {
-                            tile.classList.remove('achieved', 'planned');
-                        });
-                    }
-                });
-            }
-            
-            // Domain filter
-            const domainFilter = document.getElementById('domainGroupFilter');
-            if (domainFilter) {
-                // Populate domain filter options
-                this.populateDomainFilter(domainFilter);
-                
-                // Set up change event
-                domainFilter.addEventListener('change', () => {
-                    CertMap.data.state.filters.domain = domainFilter.value;
-                    this.applyFilters();
-                    console.log('Domain filter set to:', domainFilter.value);
-                });
-            }
-                
-                // Vendor filter
-                const vendorFilter = document.getElementById('vendorFilter');
-                if (vendorFilter) {
-                    // Populate vendor filter options
-                    this.populateVendorFilter(vendorFilter);
-                    
-                    // Set up change event
-                    vendorFilter.addEventListener('change', () => {
-                        CertMap.data.state.filters.vendor = vendorFilter.value;
-                        this.applyFilters();
-                        console.log('Vendor filter set to:', vendorFilter.value);
-                    });
-                }
-                
-                // Set up cert tile click handlers in candidate view
-                document.addEventListener('click', (event) => {
-                    // Only handle clicks in candidate + edit mode
-                    if (!document.body.classList.contains(CertMap.config.viewModes.candidate) || 
-                        !CertMap.data.state.editMode) {
-                        return;
-                    }
-                    
-                    // Check if clicked element is a cert tile
-                    const certTile = event.target.closest('.certlink');
-                    if (!certTile) return;
-                    
-                    // Prevent default link behavior in edit mode
-                    event.preventDefault();
-                    
-                    // Toggle certification status
-                    this.toggleCertStatus(certTile);
-                });
-                
-                console.log('UI event handlers initialized');
+            const CERT_TRACKER_CONFIG = {
+                    debug: false,
+                    localStorageKeys: {
+                            achieved: 'achievedCerts',
+                            planned: 'plannedCerts',
+                            transparentView: 'transparentView',
             },
-            
-            // Populate domain filter dropdown with available domains
-            populateDomainFilter: function(selectElement) {
-                // Clear existing options except the "All" option
-                Array.from(selectElement.options)
-                    .filter(option => option.value !== 'ALL')
-                    .forEach(option => option.remove());
-                
-                // Get unique domains sorted by display order
-                const sortedDomains = [...CertMap.data.domains].sort((a, b) => a.order - b.order);
-                
-                // Add an option for each domain
-                sortedDomains.forEach(domain => {
-                    const option = document.createElement('option');
-                    option.value = domain.id;
-                    option.textContent = domain.name;
-                    selectElement.appendChild(option);
-                });
+            classNames: {
+                    cert: 'certlink',
+                    achieved: 'achieved',
+                    planned: 'planned',
+                    sessionVisible: 'session-visible',
             },
-            
-            // Populate vendor filter dropdown with available vendors
-            populateVendorFilter: function(selectElement) {
-                // Clear existing options except the "All" option
-                Array.from(selectElement.options)
-                    .filter(option => option.value !== 'ALL')
-                    .forEach(option => option.remove());
-                
-                // Get unique vendors
-                const vendors = [...new Set(CertMap.data.certs
-                    .filter(cert => cert.vendor)
-                    .map(cert => cert.vendor))]
-                    .sort();
-                
-                // Add an option for each vendor
-                vendors.forEach(vendor => {
-                    const option = document.createElement('option');
-                    option.value = vendor;
-                    option.textContent = vendor;
-                    selectElement.appendChild(option);
-                });
+            buttonIds: {
+                    candidateView: 'toggleCandidateView',
+                    editMode: 'toggleEditMode',
+                    opacityMode: 'toggleOpacityMode',
+                    reset: 'resetCertTracking',
             },
-            
-            // Apply current filters to certification tiles
-            applyFilters: function() {
-                console.log('Applying filters...', CertMap.data.state.filters);
-                
-                // Get all cert tiles
-                const certTiles = document.querySelectorAll('.certlink');
-                
-                // Apply domain and vendor filters
-                certTiles.forEach(tile => {
-                    const tileDomain = tile.getAttribute('data-domain');
-                    const tileVendor = tile.getAttribute('data-vendor');
-                    
-                    const domainMatches = CertMap.data.state.filters.domain === 'ALL' || 
-                                        tileDomain === CertMap.data.state.filters.domain;
-                                        
-                    const vendorMatches = CertMap.data.state.filters.vendor === 'ALL' || 
-                                        tileVendor === CertMap.data.state.filters.vendor;
-                    
-                    // Show or hide based on filter matches
-                    if (domainMatches && vendorMatches) {
-                        tile.style.display = '';
-                    } else {
-                        tile.style.display = 'none';
-                    }
-                });
-            },
-            
-            // Toggle certification status (achieved/planned)
-            toggleCertStatus: function(certTile) {
-                const certId = certTile.getAttribute('data-cert-id');
-                if (!certId) return;
-                
-                // Get current status
-                const isAchieved = certTile.classList.contains('achieved');
-                const isPlanned = certTile.classList.contains('planned');
-                
-                // Update status
-                if (!isAchieved && !isPlanned) {
-                    // Mark as achieved
-                    certTile.classList.add('achieved');
-                    this.updateCertStorage(certId, 'achieved');
-                } else if (isAchieved) {
-                    // Change to planned
-                    certTile.classList.remove('achieved');
-                    certTile.classList.add('planned');
-                    this.updateCertStorage(certId, 'planned');
-                } else {
-                    // Remove all statuses
-                    certTile.classList.remove('achieved', 'planned');
-                    this.updateCertStorage(certId, null);
-                }
-            },
-            
-            // Update certification status in local storage
-            updateCertStorage: function(certId, status) {
-                // Get current stored data
-                let achievedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.achievedCerts) || '[]');
-                let plannedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.plannedCerts) || '[]');
-                
-                // Remove cert ID from both arrays
-                achievedCerts = achievedCerts.filter(id => id !== certId);
-                plannedCerts = plannedCerts.filter(id => id !== certId);
-                
-                // Add to appropriate array based on status
-                if (status === 'achieved') {
-                    achievedCerts.push(certId);
-                } else if (status === 'planned') {
-                    plannedCerts.push(certId);
-                }
-                
-                // Save updated arrays
-                localStorage.setItem(CertMap.config.storageKeys.achievedCerts, JSON.stringify(achievedCerts));
-                localStorage.setItem(CertMap.config.storageKeys.plannedCerts, JSON.stringify(plannedCerts));
-                
-                console.log(`Certification ${certId} status updated to ${status || 'none'}`);
-            },
-            
-            // Restore certification statuses from local storage
-            restoreCertStatuses: function() {
-                // Get stored data
-                const achievedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.achievedCerts) || '[]');
-                const plannedCerts = JSON.parse(localStorage.getItem(CertMap.config.storageKeys.plannedCerts) || '[]');
-                
-                // Apply achieved status
-                achievedCerts.forEach(certId => {
-                    const tile = document.querySelector(`.certlink[data-cert-id="${certId}"]`);
-                    if (tile) {
-                        tile.classList.add('achieved');
-                    }
-                });
-                
-                // Apply planned status
-                plannedCerts.forEach(certId => {
-                    const tile = document.querySelector(`.certlink[data-cert-id="${certId}"]`);
-                    if (tile) {
-                        tile.classList.add('planned');
-                    }
-                });
-                
-                console.log(`Restored ${achievedCerts.length} achieved and ${plannedCerts.length} planned certifications`);
+            labels: {
+                    candidateOn: '🏠 Exit Candidate View',
+                    candidateOff: '🎯 Candidate View',
+                    editOn: '✅ Done Editing',
+                    editOff: '✏️ Edit My Certs',
+                    opaqueOn: '🌫 Opaque View',
+                    opaqueOff: '🌫 Transparent View',
             }
         };
-        
-        // Improved initialization function with error handling
-        CertMap.init = async function() {
-            console.log('Initializing CertMap...');
-            
-            try {
-                // Add a CSS fix for the missing variable
-                const style = document.createElement('style');
-                style.textContent = ':root { --skybluelt: #b8e0ff; }';
-                document.head.appendChild(style);
-                
-                // Load data first
-                const dataLoaded = await this.loadData();
-                if (!dataLoaded) {
-                    console.error('Failed to load certification data');
-                    document.getElementById('certmap-grid').innerHTML = '<div style="color:red;padding:20px;">Failed to load certification data. Please check console for errors.</div>';
-                    return;
-                }
-                
-                console.log('Data loaded successfully');
-                
-                // Render the certification map
-                const renderSuccess = this.renderer.renderCertMap();
-                if (!renderSuccess) {
-                    console.error('Failed to render certification map');
-                    document.getElementById('certmap-grid').innerHTML = '<div style="color:red;padding:20px;">Failed to render certification map. Check console for errors.</div>';
-                    return;
-                }
-                
-                // Initialize UI handlers
-                this.ui.init();
-                
-                // Restore user's certification statuses
-                this.ui.restoreCertStatuses();
-                
-                // Restore view settings
-                if (localStorage.getItem(this.config.storageKeys.transparentView) === 'true') {
-                    document.body.classList.add('transparent-view');
-                }
-                
-                console.log('CertMap initialization completed successfully');
-            } catch (error) {
-                console.error('Error during CertMap initialization:', error);
-                const gridContainer = document.getElementById('certmap-grid');
-                if (gridContainer) {
-                    gridContainer.innerHTML = `<div style="color:red;padding:20px;">Error: ${error.message}</div>`;
-                }
-            }
-        };
-        
-        // Properly attach event listeners AFTER defining all methods
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the certification map
-            CertMap.init();
-        });
-
-                
     </script>
-</body>
-</html>
+    <!-- === END: Cert Tracker Config === -->
+    <!-- === BEGIN: Cert Popup Menu Script (refactored by @RealCyberJim) === -->
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                    const config = CERT_TRACKER_CONFIG;
+                    const debug = config.debug;
+            
+                    if (debug) console.log("✅ Cert tracker script loaded.");
+            
+                    const achievedCerts = JSON.parse(localStorage.getItem(config.localStorageKeys.achieved) || '[]');
+                    const plannedCerts = JSON.parse(localStorage.getItem(config.localStorageKeys.planned) || '[]');
+            
+                    const links = document.querySelectorAll(`.${config.classNames.cert}`);
+            
+                    links.forEach(link => {
+                            const certId = link.dataset.certId;
+                    
+                            // Restore visual state from saved data
+                            if (achievedCerts.includes(certId)) link.classList.add(config.classNames.achieved);
+                            if (plannedCerts.includes(certId)) link.classList.add(config.classNames.planned);
+                    
+                            link.addEventListener('click', function (e) {
+                                    const isCandidateView = document.body.classList.contains("candidate-view");
+                                    const isCtrl = e.ctrlKey;
+                            
+                                    if (debug) console.log("🔍 Clicked cert:", certId, "Ctrl key:", isCtrl, "Candidate View:", isCandidateView);
+                            
+                                    if (isCtrl || isCandidateView) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            showCertPopup(e, link, certId);
+                            }
+                    });
+            });
+    
+            function showCertPopup(event, link, certId) {
+                    if (debug) console.log("📦 Creating popup for:", certId);
+            
+                    const oldMenu = document.querySelector('.cert-popup-menu');
+                    if (oldMenu) oldMenu.remove();
+            
+                    const menu = document.createElement('div');
+                    menu.className = 'cert-popup-menu';
+            
+                    // Clear existing states
+                    function clearStates() {
+                            link.classList.remove(
+                                    config.classNames.achieved,
+                                    config.classNames.planned,
+                                    config.classNames.sessionVisible
+                            );
+                            updateStorage(config.localStorageKeys.achieved, certId, false);
+                            updateStorage(config.localStorageKeys.planned, certId, false);
+            }
+    
+            const btnAchieved = document.createElement('button');
+            btnAchieved.textContent = '✔ Mark as Achieved';
+            btnAchieved.onclick = () => {
+                    clearStates();
+                    link.classList.add(config.classNames.achieved, config.classNames.sessionVisible);
+                    updateStorage(config.localStorageKeys.achieved, certId, true);
+                    menu.remove();
+            };
+            menu.appendChild(btnAchieved);
+    
+            const btnPlanned = document.createElement('button');
+            btnPlanned.textContent = '🌟 Mark as Planned';
+            btnPlanned.onclick = () => {
+                    clearStates();
+                    link.classList.add(config.classNames.planned, config.classNames.sessionVisible);
+                    updateStorage(config.localStorageKeys.planned, certId, true);
+                    menu.remove();
+            };
+            menu.appendChild(btnPlanned);
+    
+            const btnClear = document.createElement('button');
+            btnClear.textContent = '❌ Clear Status';
+            btnClear.onclick = () => {
+                    clearStates();
+                    menu.remove();
+            };
+            menu.appendChild(btnClear);
+    
+            // Position popup safely
+            const menuWidth = 180;
+            const menuHeight = 100;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+    
+            let left = event.pageX;
+            let top = event.pageY;
+    
+            if (left + menuWidth > viewportWidth) {
+            left = viewportWidth - menuWidth - 20;
+            }
+            if (top + menuHeight > viewportHeight) {
+            top = viewportHeight - menuHeight - 20;
+            }
+    
+            // === BEGIN: Smart Popup Positioning (added by @RealCyberJim) ===
+            const popupWidth = 200;    // Estimate width of popup in px
+            const popupHeight = 120;   // Estimate height of popup in px
+            const buffer = 12;         // Minimum distance from screen edges in px
+
+            let x = event.pageX;
+            let y = event.pageY;
+
+                    // Prevent right edge overflow
+                    if (x + popupWidth > window.innerWidth) {
+                    x = window.innerWidth - popupWidth - buffer;
+                    }
+
+                    // Prevent bottom edge overflow
+                    if (y + popupHeight > window.innerHeight) {
+                    y = window.innerHeight - popupHeight - buffer;
+                    }
+
+                    // Prevent left/top edge clipping
+                    if (x < buffer) x = buffer;
+                    if (y < buffer) y = buffer;
+
+            menu.style.left = `${x}px`;
+            menu.style.top = `${y}px`;
+            document.body.appendChild(menu);
+            // === END: Smart Popup Positioning ===
+    
+            if (debug) {
+                    console.log("✅ Popup element exists:", document.querySelector('.cert-popup-menu'));
+            }
+            }
+    
+            function updateStorage(listName, certId, add) {
+                    const list = JSON.parse(localStorage.getItem(listName) || '[]');
+                    const idx = list.indexOf(certId);
+                    if (add && idx === -1) {
+                            list.push(certId);
+                    } else if (!add && idx > -1) {
+                            list.splice(idx, 1);
+                    }
+                    localStorage.setItem(listName, JSON.stringify(list));
+            }
+    
+            // Remove popup if clicking outside
+            document.addEventListener('click', (e) => {
+                    const menu = document.querySelector('.cert-popup-menu');
+                    if (menu && !menu.contains(e.target)) {
+                            menu.remove();
+                            }
+                    });
+            });
+    </script>
+    <!-- === END: Cert Popup Menu Script === -->
+    <!-- === BEGIN: Candidate View & Edit Mode Toggle Logic (refactored by @RealCyberJim) === -->
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+            const btnIds = CERT_TRACKER_CONFIG.buttonIds;
+            const classNames = CERT_TRACKER_CONFIG.classNames;
+            const labels = CERT_TRACKER_CONFIG.labels;
+
+            const toggleCandidateViewButton = document.getElementById(btnIds.candidateView);
+            const toggleEditModeButton = document.getElementById(btnIds.editMode);
+            const toggleOpacityModeButton = document.getElementById(btnIds.opacityMode);
+
+            // 🔄 Candidate View Toggle
+            toggleCandidateViewButton.addEventListener("click", () => {
+            const showing = document.body.classList.toggle("candidate-view");
+            document.body.classList.remove("edit-mode"); // Always reset edit mode
+
+            toggleCandidateViewButton.textContent = showing ? labels.candidateOn : labels.candidateOff;
+            toggleEditModeButton.textContent = labels.editOff;
+
+            updateCertVisibility();
+            });
+
+            // ✏️ Edit Mode Toggle
+            toggleEditModeButton.addEventListener("click", () => {
+            const editing = document.body.classList.toggle("edit-mode");
+            toggleEditModeButton.textContent = editing ? labels.editOn : labels.editOff;
+
+            if (editing) {
+            // Restore previous transparent view state
+            const transparentPref = localStorage.getItem(CERT_TRACKER_CONFIG.localStorageKeys.transparentView) === "true";
+            if (transparentPref) {
+            document.body.classList.add("transparent-view");
+            toggleOpacityModeButton.textContent = labels.opaqueOn;
+            } else {
+            document.body.classList.remove("transparent-view");
+            toggleOpacityModeButton.textContent = labels.opaqueOff;
+            }
+            } else {
+            document.body.classList.remove("opaque-mode");
+            localStorage.setItem(CERT_TRACKER_CONFIG.localStorageKeys.opaqueMode, "false");
+            }
+
+            updateCertVisibility();
+            });
+
+            // 🌫 Transparent View Toggle
+            toggleOpacityModeButton.addEventListener("click", () => {
+            const transparent = document.body.classList.toggle("transparent-view"); // UPDATED
+            toggleOpacityModeButton.textContent = transparent ? labels.opaqueOn : labels.opaqueOff;
+            localStorage.setItem(CERT_TRACKER_CONFIG.localStorageKeys.transparentView, transparent ? "true" : "false");
+            });
+
+            // 🔁 Visibility Logic
+            function updateCertVisibility() {
+            const inCandidateView = document.body.classList.contains("candidate-view");
+            const inEditMode = document.body.classList.contains("edit-mode");
+
+            document.querySelectorAll(`.${classNames.cert}`).forEach(link => {
+            const isAchieved = link.classList.contains(classNames.achieved);
+            const isPlanned = link.classList.contains(classNames.planned);
+
+            if (!inCandidateView) {
+                    link.style.visibility = "visible";
+            } else if (inEditMode) {
+                    link.style.visibility = "visible";
+            } else {
+                    link.style.visibility = (isAchieved || isPlanned) ? "visible" : "hidden";
+            }
+            });
+            }
+            });
+        </script>
+    <!-- === END: Candidate View & Edit Mode Toggle Logic === -->
+    <!-- === BEGIN: Combined Domain + Vendor Filter Logic (added by @RealCyberJim) === -->
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+            const domainFilter = document.getElementById("domainGroupFilter");
+            const vendorFilter = document.getElementById("vendorFilter");
+    
+            function applyCertFilters() {
+            const selectedGroup = domainFilter?.value || "ALL";
+            const selectedVendor = vendorFilter?.value || "ALL";
+            const inCandidate = document.body.classList.contains("candidate-view");
+            const inEditMode = document.body.classList.contains("edit-mode");
+    
+            document.querySelectorAll(".certlink").forEach(link => {
+            const certId = link.dataset.certId || "";
+            const [group] = certId.split("_");
+            const vendor = (link.dataset.vendor || "").toLowerCase().replace(/\W+/g, "");
+    
+            const isAchieved = link.classList.contains("achieved");
+            const isPlanned = link.classList.contains("planned");
+    
+            const showInView =
+                    (inCandidate && (isAchieved || isPlanned)) ||
+                    (inCandidate && inEditMode);
+    
+            const matchesGroup =
+                    selectedGroup === "ALL" || group === selectedGroup;
+    
+            const matchesVendor =
+                    selectedVendor === "ALL" || vendor === selectedVendor;
+    
+            link.style.visibility = (showInView && matchesGroup && matchesVendor)
+                    ? "visible" : "hidden";
+            });
+            }
+    
+            if (domainFilter) domainFilter.addEventListener("change", applyCertFilters);
+            if (vendorFilter) vendorFilter.addEventListener("change", applyCertFilters);
+    
+            if (document.body.classList.contains("candidate-view")) {
+            applyCertFilters();
+            }
+            });
+    </script>
+    <!-- === END: Combined Domain + Vendor Filter Logic === -->
+       
+    <!-- === BEGIN: Clear My Tracking Script (added by @RealCyberJim) === -->
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+            const resetButton = document.getElementById(CERT_TRACKER_CONFIG.buttonIds.reset);
+    
+            resetButton.addEventListener("click", () => {
+            const confirmed = confirm("🧹 This will clear your Achieved and Planned certs. Are you sure?");
+    
+            if (confirmed) {
+            // 1. Clear stored data
+            localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.achieved);
+            localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.planned);
+            localStorage.removeItem(CERT_TRACKER_CONFIG.localStorageKeys.transparentView);
+    
+            // 2. Remove tracking classes from all certs
+            const links = document.querySelectorAll(`.${CERT_TRACKER_CONFIG.classNames.cert}`);
+            links.forEach(link => {
+                    link.classList.remove(
+                    CERT_TRACKER_CONFIG.classNames.achieved,
+                    CERT_TRACKER_CONFIG.classNames.planned,
+                    CERT_TRACKER_CONFIG.classNames.sessionVisible
+                    );
+                    link.style.visibility = "visible"; // Reset visibility if candidate view was active
+            });
+    
+            // 3. Reset view state
+            document.body.classList.remove("candidate-view", "edit-mode", "opaque-mode");
+    
+            // 4. Update Candidate View button label
+            const toggleBtn = document.getElementById(CERT_TRACKER_CONFIG.buttonIds.candidateView);
+            if (toggleBtn) {
+                    toggleBtn.textContent = CERT_TRACKER_CONFIG.labels.candidateOff;
+            }
+    
+            alert("✅ Your cert selections have been cleared.");
+            }
+            });
+            });
+        </script>
+    <!-- === END: Clear My Tracking Script === -->
+    
