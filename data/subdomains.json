@@ -6,8 +6,10 @@
       "tooltip": "Security for cloud infrastructure, virtualization, cloud platforms, and systems operations including deployment pipelines and infrastructure-as-code.",
       "domainId": "ENG",
       "teamRole": "DefaultTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 4
     },
     {
       "id": "ENG_nix",
@@ -16,8 +18,10 @@
       "tooltip": "Security topics related to Unix, Linux, and other *nix-based operating systems, including hardening, access controls, and secure configurations.",
       "domainId": "ENG",
       "teamRole": "DefaultTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 5,
+      "gridColumnSpan": 1
     },
     {
       "id": "ENG_icsiot",
@@ -26,8 +30,10 @@
       "tooltip": "Focuses on securing industrial control systems (ICS), SCADA networks, and connected IoT devices against cyber threats and vulnerabilities.",
       "domainId": "ENG",
       "teamRole": "DefaultTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 6,
+      "gridColumnSpan": 1
     },
     {
       "id": "RSK_grc",
@@ -36,8 +42,10 @@
       "tooltip": "Covers GRC frameworks, compliance requirements, security policy design, and risk management methodologies.",
       "domainId": "RSK",
       "teamRole": "DefaultTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 4,
+      "gridColumnSpan": 4
     },
     {
       "id": "OPS_forensics",
@@ -46,8 +54,10 @@
       "tooltip": "Techniques and tools for collecting, preserving, and analyzing digital evidence from systems and networks.",
       "domainId": "OPS",
       "teamRole": "BlueTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 3,
+      "gridColumnSpan": 2
     },
     {
       "id": "OPS_incidentHandling",
@@ -56,8 +66,10 @@
       "tooltip": "Processes, tools, and methodologies for identifying, analyzing, and responding to cybersecurity incidents.",
       "domainId": "OPS",
       "teamRole": "BlueTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 5,
+      "gridColumnSpan": 2
     },
     {
       "id": "OPS_penTesting",
@@ -66,8 +78,10 @@
       "tooltip": "Offensive security testing to identify vulnerabilities through simulated cyberattacks and red team exercises.",
       "domainId": "OPS",
       "teamRole": "RedTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 7,
+      "gridColumnSpan": 5
     },
     {
       "id": "OPS_exploitation",
@@ -76,8 +90,10 @@
       "tooltip": "Developing and using exploits to test the resilience and security of applications and systems.",
       "domainId": "OPS",
       "teamRole": "RedTeam",
-      "gridRowStart": null,
-      "gridRowSpan": null
+      "gridRowStart": 2,
+      "gridRowSpan": 26,
+      "gridColumnStart": 12,
+      "gridColumnSpan": 2
     }
   ]
   
