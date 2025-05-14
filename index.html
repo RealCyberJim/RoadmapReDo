@@ -215,6 +215,7 @@
             }
 
             /* Style for the text at the bottom right of the chart */
+                        /*
                         .key {
                                 color: #000000;
                                 padding: 0.2vmax;
@@ -225,6 +226,7 @@
                                 grid-column-gap: 0.2vmax;
                                 grid-gap: 0.1vmax;
                         }
+                        */
                     
                         /* Primary style for the chart, which is the parent container for everything else. */
                         .certchart {
@@ -247,7 +249,7 @@
                                 justify-content: left;
                                 display: grid;
                                 position: relative;
-                                grid-template-columns: [silllevel] 0.8vmax [network] 7.5vmax [iam] 2.65vmax [engineer] 17.2vmax [asset] 5.1vmax [mgmt] 21.8vmax [testing] 7.5vmax [software] 2.7vmax [operations] 31.5vmax;
+                                grid-template-columns: [skilllevel] 0.8vmax [net] 7.5vmax [iam] 2.65vmax [eng] 17.2vmax [ast] 5.1vmax [rsk] 21.8vmax [tst] 7.5vmax [sof] 2.7vmax [ops] 31.5vmax;
                                 grid-template-rows: [domain] 2vmax [chart] 43.7vmax;
                                 column-gap: 0.2vmax;
                                 /* row-gap: 0.2vmax; */
@@ -275,63 +277,64 @@
                     
                         .netcontainer {
                                 display: grid;
-                                border: 2px solid var(--green);
+                                border: 2px solid var(--net);
                                 border-radius: 0.25vmax;
                         }
                         
                         .iamcontainer {
                                 display: grid;
-                                border: 2px solid var(--teal);
+                                border: 2px solid var(--iam);
                                 border-radius: 0.25vmax;
                         }
                         
                         .engcontainer {
                                 display: grid;
-                                border: 2px solid var(--orange);
+                                border: 2px solid var(--eng);
                                 border-radius: 0.25vmax;
-                                grid-template-columns: 2.3vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
+                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
                                 grid-template-rows: 1vmax auto;
                                 column-gap: 0.2vmax;
                         }
                         
                         .astcontainer {
                                 display: grid;
-                                border: 2px solid var(--yellow);
+                                border: 2px solid var(--ast);
                                 border-radius: 0.25vmax;
                         }
                         
                         .rskcontainer {
                                 display: grid;
-                                border: 2px solid var(--black);
+                                border: 2px solid var(--rsk);
                                 border-radius: 0.25vmax;
-                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
+                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
                                 grid-template-rows: 1vmax auto;
                                 column-gap: 0.2vmax;
                         }
                         
                         .tstcontainer {
                                 display: grid;
-                                border: 2px solid var(--magenta);
+                                border: 2px solid var(--tst);
                                 border-radius: 0.25vmax;
                         }
                         
                         .sofcontainer {
                                 display: grid;
-                                border: 2px solid var(--skyblue);
+                                border: 2px solid var(--sof);
                                 border-radius: 0.25vmax;
                         }
                         
                         .opscontainer {
                                 display: grid;
-                                border: 2px solid var(--red);
+                                border: 2px solid var(--ops);
                                 border-radius: 0.25vmax;
-                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.3vmax 2.2vmax 2.3vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.1vmax;
+                                grid-template-columns: 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.1vmax;
                                 grid-template-rows: 1vmax auto;
                                 column-gap: 0.2vmax;
                         }
                         
-                        /* Style for sub-domain titles. Mostly to allow for proper spanning. */
+                        /* Style for sub-domain titles. Mostly to allow for title to properly span columns. */
                         .subtitle1 {
+                                grid-column: span 1;
                                 font-weight: 400;
                                 font-size: 0.5vmax;
                                 text-align: center;
@@ -340,30 +343,19 @@
                                 align-self: flex-end;
                                 display: flex;
                         }
-                        
                         .subtitle2 {
-                                font-weight: 400;
-                                font-size: 0.5vmax;
-                                text-align: center;
-                                align-content: bottom;
-                                justify-content: center;
-                                align-self: flex-end;
-                                display: flex;
                                 grid-column: span 2;
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+                                
                         }
-                        
                         .subtitle3 {
-                                font-weight: 400;
-                                font-size: 0.5vmax;
-                                text-align: center;
-                                align-content: bottom;
-                                justify-content: center;
-                                align-self: flex-end;
-                                display: flex;
                                 grid-column: span 3;
-                        }
-                    
-                        .subtitle4 {
                                 font-weight: 400;
                                 font-size: 0.5vmax;
                                 text-align: center;
@@ -371,7 +363,18 @@
                                 justify-content: center;
                                 align-self: flex-end;
                                 display: flex;
+
+                        }
+                        .subtitle4 {
                                 grid-column: span 4;
+                                font-weight: 400;
+                                font-size: 0.5vmax;
+                                text-align: center;
+                                align-content: bottom;
+                                justify-content: center;
+                                align-self: flex-end;
+                                display: flex;
+
                         } 
                         .subtitle5 {
                                 font-weight: 400;
@@ -380,6 +383,7 @@
                                 align-content: bottom;
                                 justify-content: center;
                         }
+
                         .certcontainer {
                                 justify-content: center;
                                 text-align: center;
@@ -390,7 +394,7 @@
                                 font-size:0.6vmax;
                                 top: 4.8vmax;
                                 left: -0.31vmax;
-                                grid-template-columns: [skilllevel] 1.7vmax [network] 2.3vmax 2.3vmax 2.3vmax .4vmax [iam] 2.3vmax .4vmax [engineer] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [asset] 2.3vmax 2.3vmax 0.4vmax [mgmt] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 0.4vmax [testing] 2.3vmax 2.3vmax 2.3vmax 0.4vmax [software] 2.3vmax 0.4vmax [ops] 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax 2.3vmax;
+                                grid-template-columns: [skilllevel] 1.7vmax [network] 2.2vmax 2.2vmax 2.2vmax .4vmax [iam] 2.2vmax .4vmax [engineer] 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 0.4vmax [asset] 2.2vmax 2.2vmax 0.4vmax [mgmt] 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 0.4vmax [testing] 2.2vmax 2.2vmax 2.2vmax 0.4vmax [software] 2.2vmax 0.4vmax [ops] 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax 2.2vmax;
                                 grid-template-rows: repeat(27, 1.5vmax);
                                 column-gap: 0.1vmax;
                                 row-gap: 0.1vmax;
@@ -500,72 +504,6 @@
                             display: block;    
                         }
                         
-                        [tooltiptexttitleleft]:before {
-                            position: absolute;
-                            content: attr(tooltiptexttitleleft);
-                            width: 25vmax;
-                            height: max-content;
-                            padding: 0.4vmax;
-                            background: var(--black);
-                            border: var(--blackdk);
-                            border-radius: 0.2vmax;
-                            color: white;
-                            text-align: left;
-                            display: none;
-                            font-size: 100%;
-                            z-index: 1;
-                    
-                            top: 4.5%;
-                            left: 0%;
-                        }
-                    
-                        [tooltiptexttitleleft]:hover:before {
-                            display: block;    
-                        }
-                    
-                        [tooltipleft]:before {
-                            position: absolute;
-                            content: attr(tooltipleft);
-                            width: max-content;
-                            height: max-content;
-                            padding: 0.4vmax;
-                            background: inherit;
-                            border: inherit;
-                            border-radius: 0.2vmax;
-                            color: inherit;
-                            text-align: left;
-                            display: none;
-                            font-size: 125%;
-                            line-height: 125%;
-                    
-                            left: 1%;
-                        }
-                    
-                        [tooltipleft]:hover:before {
-                            display: block;    
-                        }
-                    
-                        [tooltipright]:before {
-                            position: absolute;
-                            content: attr(tooltipright);
-                            width: max-content;
-                            height: max-content;
-                            padding: 0.4vmax;
-                            background: inherit;
-                            border: inherit;
-                            border-radius: 0.2vmax;
-                            color: inherit;
-                            text-align: left;
-                            display: none;
-                            font-size: 125%;
-                            line-height: 125%;
-                    
-                            right: 0%;
-                        }
-                    
-                        [tooltipright]:hover:before {
-                            display: block;    
-                        }
                     
                         /* Make a static image if horizontal screen is smaller than 898px (iPhone size is 898)*/
                         #interactive {display: block;}
@@ -614,8 +552,7 @@
                     </label>
             <!-- === END: Domain Group Filter === -->
             <!-- === BEGIN: Vendor Filter === -->
-                        <label class="candidate-only" for="vendorFilter" style="font-size: 1vmax;">
-                        🏷️ Vendor:
+                        <label class="candidate-only" for="vendorFilter" style="font-size: 1vmax;">🏷️ Vendor:
                                 <select id="vendorFilter" style="font-size: 1vmax; margin-left: 0.5vmax;">
                                         <option value="ALL">All Vendors</option>
                                         <option value="accessdata">AccessData</option>

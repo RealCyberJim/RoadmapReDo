@@ -1,0 +1,75 @@
+[
+    {
+      "unSpecializedId": "unspec_NET",
+      "domainId": "NET",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "unSpecializedId": "unspec_IAM",
+      "domainId": "IAM",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
+    {
+      "unSpecializedId": "unspec_ENG",
+      "domainId": "ENG",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 7,
+      "gridColumnSpan": 1
+    },
+    {
+      "unSpecializedId": "unspec_AST",
+      "domainId": "AST",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 2
+    },
+    {
+      "unSpecializedId": "unspec_RSK_L",
+      "domainId": "RSK",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "unSpecializedId": "unspec_RSK_R",
+      "domainId": "RSK",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 8,
+      "gridColumnSpan": 2
+    },
+    {
+      "unSpecializedId": "unspec_TST",
+      "domainId": "TST",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "unSpecializedId": "unspec_SOF",
+      "domainId": "SOF",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
+    {
+      "unSpecializedId": "unspec_OPS",
+      "domainId": "OPS",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 2
+    }
+  ]
+  
