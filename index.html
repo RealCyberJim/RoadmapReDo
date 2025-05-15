@@ -87,6 +87,7 @@
       margin-bottom: 1vmax;
       padding: 0.3vmax;
       display: grid;
+      grid-template-rows: repeat(27, 1.5vmax);  /* 27 fixed rows for skill strata */
       grid-auto-rows: 1.5vmax;
       gap: 0.1vmax;
     }
@@ -100,6 +101,7 @@
     .unspecialized-container {
       padding: 0.3vmax;
       display: grid;
+      grid-template-rows: repeat(27, 1.5vmax);  /* 27 fixed rows for skill strata */
       grid-auto-rows: 1.5vmax;
       gap: 0.1vmax;
     }
@@ -264,7 +266,7 @@
         tile.setAttribute('data-subdomain-id', cert.subdomainId);
       }
 
-
+      tile.style.gridRowStart = cert.certSkillStrata;
 
       return tile;
     }
