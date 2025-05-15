@@ -1372,7 +1372,7 @@
     "certVendor": "f5",
     "certUrl": "https://view.ceros.com/f5/certification-roadmap/p/9?heightOverride=740",
     "certTooltip": "F5 Big-IP Certified Solution Expert - Security $135 exam",
-    "certTileLabel": "F5 CSE\nSec"
+    "certTileLabel": "F5CSE Sec"
   },
   {
     "certId": "NET_ccnpent",
@@ -2965,7 +2965,7 @@
     "certVendor": "f5",
     "certUrl": "https://view.ceros.com/f5/certification-roadmap/p/9?heightOverride=740",
     "certTooltip": "F5 Big-IP Certified Technical Specialist - Access Policy Manager $135 exam",
-    "certTileLabel": "F5 CTS\nAPM"
+    "certTileLabel": "F5CTS APM"
   },
   {
     "certId": "NET_fcpns",
@@ -3362,7 +3362,7 @@
     "certVendor": "f5",
     "certUrl": "https://view.ceros.com/f5/certification-roadmap/p/9?heightOverride=740",
     "certTooltip": "F5 Big-IP Certified Technical Specialist - Domain Name Services $135 exam",
-    "certTileLabel": "F5 CTS\nDNS"
+    "certTileLabel": "F5CTS DNS"
   },
   {
     "certId": "NET_pcdra",
