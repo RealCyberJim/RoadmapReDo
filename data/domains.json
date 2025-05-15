@@ -77,14 +77,13 @@
       "domainDescription": "The security operations domain covers topics ranging from investigations and digital forensic to detection and intrusion prevention tools, sandboxing and firewalls. Topics include user and entity behavior analytics, threat intelligence (threat hunting and threat feeds) log management, artifacts (mobile, computer and network), machine learning and AI-based tools, penetration testing, and exploitation development.",
       "teamRoles": {
         "RedTeam": {
-          "tileColor": "--ops",
-          "borderColor": "--opsdk"
+          "tileColor": "--color-red",
+          "borderColor": "--color-red-dark"
         },
         "BlueTeam": {
-          "tileColor": "--opsblue",
-          "borderColor": "--opsbluedk"
+          "tileColor": "--color-blue",
+          "borderColor": "--color-blue-dark"
         }
       }
     }
   ]
-  

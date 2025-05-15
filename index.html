@@ -11,7 +11,8 @@
       --color-blue: #2e5688;
       --color-red: #c0514d;
       --color-magenta: #830083;
-
+      
+      /* Dark and Light variants */
       --color-green-dark: #548235;
       --color-green-light: #c3dbb8;
       --color-teal-dark: #003F3E;
@@ -31,25 +32,20 @@
       --color-red-dark: #8c3736;
       --color-red-light: #f2dcdb;
       --color-magenta-dark: #490e49;
+      --color-magenta-light: #f1d4e0;
 
+
+      /* Domain-specific colors */
       --domain-net: var(--color-green);
       --domain-net-light: var(--color-green-light);
       --domain-iam: var(--color-teal);
-      --domain-iam-light: var(--color-teal-light);
       --domain-eng: var(--color-orange);
-      --domain-eng-light: var(--color-orange-light);
-      --domain-ast: var(--color-yellow);
-      --domain-ast-light: var(--color-yellow-light);
       --domain-rsk: var(--color-black);
-      --domain-rsk-light: var(--color-black-light);
       --domain-tst: var(--color-purple);
-      --domain-tst-light: var(--color-purple-light);
       --domain-sof: var(--color-skyblue);
       --domain-sof-light: var(--color-skyblue-light);
       --domain-ops: var(--color-red);
-      --domain-ops-light: var(--color-red-light);
-      --domain-ops-blue: var(--color-blue);
-      --domain-ops-blue-light: var(--color-blue-light);
+      --domain-ops: var(--color-red);
     }
 
     body {
@@ -115,13 +111,14 @@
         text-align: center;
         font-size: 0.65vmax;
         border-radius: 0.25vmax;
-        background: #eee;
-        border: 1px solid #aaa;
+        background-color: white;
+        border-width: 1px;
+        border-style: solid;
+        color: inherit; /* Inherit from parent */
         padding: 0.2vmax;
         box-sizing: border-box;
         margin: 0;
         text-decoration: none;
-        color: black;
 
     }
 
@@ -134,7 +131,6 @@
     .domain-TST     { border-color: var(--domain-tst); }
     .domain-SOF     { border-color: var(--domain-sof); }
     .domain-OPS     { border-color: var(--domain-ops); }
-    .domain-OPS_BLUE { border-color: var(--domain-ops-blue); }
 
     .domain-NET     .domain-title { color: var(--domain-net); }
     .domain-IAM     .domain-title { color: var(--domain-iam); }
@@ -144,27 +140,26 @@
     .domain-TST     .domain-title { color: var(--domain-tst); }
     .domain-SOF     .domain-title { color: var(--domain-sof); }
     .domain-OPS     .domain-title { color: var(--domain-ops); }
-    .domain-OPS_BLUE .domain-title { color: var(--domain-ops-blue); }
 
     /* Subdomain-specific accent coloring */
     .subdomain-OPS_penTesting,
     .subdomain-OPS_exploitation {
-      border-color: var(--domain-ops-light);
+      background-color: var(--domain-ops-light);
     }
 
     .subdomain-OPS_forensics,
     .subdomain-OPS_incidentHandling {
-      border-color: var(--domain-ops-blue-light);
+      background-color: var(--domain-ops-blue-light);
     }
 
     .subdomain-RSK_grc {
-      border-color: var(--domain-rsk-light);
+      background-color: var(--domain-rsk-light);
     }
 
     .subdomain-ENG_cloudSysOps,
     .subdomain-ENG_nix,
     .subdomain-ENG_icsiot {
-      border-color: var(--domain-eng-light);
+      background-color: var(--domain-eng-light);
     }
   </style>
 </head>
@@ -225,7 +220,7 @@
 
           const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
           subCerts.forEach(cert => {
-            subDiv.appendChild(makeCertTile(cert));
+            subDiv.appendChild(makeCertTile(cert, domains));
           });
 
           domainDiv.appendChild(subDiv);
@@ -243,7 +238,7 @@
           );
 
           unspecCerts.forEach(cert => {
-            unspecDiv.appendChild(makeCertTile(cert));
+            unspecDiv.appendChild(makeCertTile(cert, domains));
           });
 
           domainDiv.appendChild(unspecDiv);
@@ -253,7 +248,7 @@
       });
     }
 
-    function makeCertTile(cert) {
+    function makeCertTile(cert, domains) {
       const tile = document.createElement('a');
       tile.href = cert.certUrl;
       tile.target = '_blank';
@@ -268,8 +263,23 @@
 
       tile.style.gridRowStart = cert.certSkillStrata;
 
+      // 🧠 Apply color logic from domain and optional teamRole
+      const domain = domains.find(d => d.domainId === cert.domainId);
+      const teamRoles = domain.teamRoles || {};
+      const role = cert.teamRole || "DefaultTeam";
+
+      if (teamRoles[role] && teamRoles[role].tileColor && teamRoles[role].borderColor) {
+        tile.style.color = `var(${teamRoles[role].tileColor})`;
+        tile.style.borderColor = `var(${teamRoles[role].borderColor})`;
+      } else {
+        const domainIdLower = cert.domainId.toLowerCase();
+        tile.style.color = `var(--domain-${domainIdLower})`;
+        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+      }
+
       return tile;
     }
+
 
     drawRoadmap();
   </script>
