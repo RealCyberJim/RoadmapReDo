@@ -2477,7 +2477,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.tuv.com/landingpage/en/lp-certified-operational-technology-cybersecurity-professional-program/",
     "certTooltip": "TUV Rheinland Certified Operational Technology Cybersecurity Professional (GERMAN) $415 exam",
-    "certTileLabel": "T\ufffdV COTCP"
+    "certTileLabel": "TüV COTCP"
   },
   {
     "certId": "ENG_sabsascf",
@@ -3512,7 +3512,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.certipedia.com/quality_marks/0000063483?locale=en",
     "certTooltip": "TUV IT Security Manager (GERMAN) $415 exam Course required",
-    "certTileLabel": "T\ufffdV ITSM"
+    "certTileLabel": "TüV ITSM"
   },
   {
     "certId": "RSK_ccrmp",
@@ -3575,7 +3575,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.certipedia.com/quality_marks/0000046324?locale=en",
     "certTooltip": "TUV Rheinland Mobile Security Analyst (GERMAN) $415 exam Course required",
-    "certTileLabel": "T\ufffdV MSA"
+    "certTileLabel": "TüV MSA"
   },
   {
     "certId": "SOF_devneta",
@@ -3948,7 +3948,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.certipedia.com/quality_marks/0000063484?locale=en",
     "certTooltip": "TUV Rheinland IT Security Auditor (GERMAN) $415 exam Course required",
-    "certTileLabel": "T\ufffdV Auditor"
+    "certTileLabel": "TüV Auditor"
   },
   {
     "certId": "TST_ctprp",
@@ -4233,7 +4233,7 @@
     "certVendor": "tuv",
     "certUrl": "https://limessecurity.com/en/academy/ics-211/",
     "certTooltip": "TUV Certified OT Security Manager $3,070 Course",
-    "certTileLabel": "T\ufffdV COSM"
+    "certTileLabel": "TüV COSM"
   },
   {
     "certId": "RSK_zacheaa",
@@ -5308,7 +5308,7 @@
     "certVendor": "tuv",
     "certUrl": "https://limessecurity.com/en/academy/ics-211/",
     "certTooltip": "TUV Certified OT Security Technical Expert $3,070 course",
-    "certTileLabel": "T\ufffdV COSTE"
+    "certTileLabel": "TüV COSTE"
   },
   {
     "certId": "AST_epdpf",
@@ -5460,7 +5460,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.tuv.com/landingpage/en/training-functional-safety-cyber-security/detail-pages/zertifikate/cs-specialist.html",
     "certTooltip": "TUV Rheinland Cybersecurity Specialist (GERMAN) $415 exam Course required",
-    "certTileLabel": "T\ufffdV CySec"
+    "certTileLabel": "TüV CySec"
   },
   {
     "certId": "SOF_csst",
@@ -5646,7 +5646,7 @@
     "certVendor": "tuv",
     "certUrl": "https://limessecurity.com/en/academy/ics-201/",
     "certTooltip": "TUV Certified OT Security Practitioner $2725 course",
-    "certTileLabel": "T\ufffdV COSP"
+    "certTileLabel": "TüV COSP"
   },
   {
     "certId": "AST_epdpe",
@@ -5785,7 +5785,7 @@
     "certVendor": "tuv",
     "certUrl": "https://www.is-its.org/seminare/isits-seminarangebot/cybersecurity-awareness-beauftragter",
     "certTooltip": "TUV Rheinland Cybersecurity Awareness (GERMAN) $415 exam Course required",
-    "certTileLabel": "T\ufffdV CyAware"
+    "certTileLabel": "TüV CyAware"
   },
   {
     "certId": "SOF_mase",
