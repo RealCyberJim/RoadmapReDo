@@ -103,23 +103,21 @@
     }
 
     .cert-tile {
-        width: 2.3vmax;
-        height: 1.5vmax;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: white
-        font-size: 0.6vmax;
-        border-radius: 0.25vmax;
-        border-width: 1px;
-        border-style: solid;
-        background-color: inherit; /* Inherit from parent */
-        padding: 0.2vmax;
-        box-sizing: border-box;
-        margin: 0;
-        text-decoration: none;
-
+      width: 2.3vmax;
+      height: 1.5vmax;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.65vmax;
+      border-radius: 0.25vmax;
+      background-color: inherit;  /* ✅ Inherit from parent */
+      border: 1px solid;          /* ✅ Use inherited border-color */
+      color: white;               /* ✅ Set text color explicitly */
+      padding: 0.2vmax;
+      box-sizing: border-box;
+      margin: 0;
+      text-decoration: none;
     }
 
     /* Domain-specific border and title coloring */
