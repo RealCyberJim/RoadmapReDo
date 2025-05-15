@@ -85,9 +85,8 @@
     .subdomain-container {
       border: 2px solid;
       margin-bottom: 1vmax;
-      padding: 0.4vmax;
+      padding: 0.3vmax;
       display: grid;
-      grid-template-columns: repeat(30, 1.5vmax);
       grid-auto-rows: 1.5vmax;
       gap: 0.1vmax;
     }
@@ -99,13 +98,8 @@
     }
 
     .unspecialized-container {
-      border-style: dashed;
-      border-width: 2px;
-      border-color: #ccc;
-      margin-top: 1vmax;
-      padding: 0.4vmax;
+      padding: 0.3vmax;
       display: grid;
-      grid-template-columns: repeat(30, 1.5vmax);
       grid-auto-rows: 1.5vmax;
       gap: 0.1vmax;
     }
@@ -220,6 +214,7 @@
         domainSubdomains.forEach(sub => {
           const subDiv = document.createElement('div');
           subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+          subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
 
           const subTitle = document.createElement('div');
           subTitle.className = 'subdomain-title';
@@ -238,6 +233,7 @@
         unspecs.forEach(u => {
           const unspecDiv = document.createElement('div');
           unspecDiv.classList.add('unspecialized-container', `domain-${u.domainId}`);
+          unspecDiv.style.gridTemplateColumns = `repeat(${u.gridColumnSpan}, 2.3vmax)`;
 
           const unspecCerts = certs.filter(cert =>
             cert.domainId === u.domainId &&
@@ -268,8 +264,7 @@
         tile.setAttribute('data-subdomain-id', cert.subdomainId);
       }
 
-      // ✅ Assign vertical position in the container grid
-      tile.style.gridRowStart = cert.certSkillStrata;
+
 
       return tile;
     }
