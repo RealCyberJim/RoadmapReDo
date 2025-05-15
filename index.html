@@ -267,13 +267,15 @@
       const role = cert.teamRole || "DefaultTeam";
 
       if (teamRoles[role] && teamRoles[role].tileColor && teamRoles[role].borderColor) {
-        tile.style.color = `var(${teamRoles[role].tileColor})`;
-        tile.style.borderColor = `var(${teamRoles[role].borderColor})`;
-      } else {
-        const domainIdLower = cert.domainId.toLowerCase();
-        tile.style.color = `var(--domain-${domainIdLower})`;
-        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
-      }
+      tile.style.backgroundColor = `var(${teamRoles[role].tileColor})`;
+      tile.style.borderColor = `var(${teamRoles[role].borderColor})`;
+    } else {
+      const domainIdLower = cert.domainId.toLowerCase();
+      tile.style.backgroundColor = `var(--domain-${domainIdLower})`;
+      tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+    }
+
+    tile.style.color = 'white'; // ✅ force white font
 
       return tile;
     }
