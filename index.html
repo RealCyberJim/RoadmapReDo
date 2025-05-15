@@ -69,6 +69,11 @@
       border: 2px solid;
       border-radius: 0.4vmax;
       padding: 0.6vmax;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 2.3vmax);
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax;
+
     }
 
     .domain-title {
@@ -82,6 +87,10 @@
       border-left: 4px solid;
       margin-bottom: 1vmax;
       padding-left: 0.6vmax;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 2.3vmax);
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax;
     }
 
     .subdomain-title {
@@ -96,18 +105,29 @@
       border-color: #ccc;
       margin-top: 1vmax;
       padding: 0.4vmax;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 2.3vmax);
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax;
     }
 
     .cert-tile {
-      display: inline-block;
-      background: #eee;
-      border-radius: 0.25vmax;
-      padding: 0.3vmax 0.6vmax;
-      margin: 0.2vmax;
-      font-size: 0.8vmax;
-      text-decoration: none;
-      color: black;
-      border: 1px solid #bbb;
+        width: 2.3vmax;
+        height: 1.5vmax;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.65vmax;
+        border-radius: 0.25vmax;
+        background: #eee;
+        border: 1px solid #aaa;
+        padding: 0.2vmax;
+        box-sizing: border-box;
+        margin: 0;
+        text-decoration: none;
+        color: black;
+
     }
 
     /* Domain-specific border and title coloring */
