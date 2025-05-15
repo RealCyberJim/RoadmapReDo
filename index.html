@@ -65,14 +65,14 @@
     }
 
     .domain-container {
-      background: white;
-      border: 2px solid;
-      border-radius: 0.4vmax;
-      padding: 0.4vmax;
-      display: flex;
-      flex-direction: column;
-      gap: 0.1vmax;
-
+        display: grid;
+        grid-template-columns: repeat(14, 2.3vmax);
+        grid-template-rows: repeat(30, 1.5vmax);
+        gap: 0.1vmax;
+        padding: 0.5vmax;
+        background: white;
+        border: 2px solid;
+        border-radius: 0.4vmax;
     }
 
     .domain-title {
@@ -202,40 +202,49 @@
         title.textContent = domain.domainShortName;
         domainDiv.appendChild(title);
 
-        const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
         domainSubdomains.forEach(sub => {
-          const subDiv = document.createElement('div');
-          subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+        const subDiv = document.createElement('div');
+        subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
-          const subTitle = document.createElement('div');
-          subTitle.className = 'subdomain-title';
-          subTitle.textContent = sub.subdomainShortName;
-          subDiv.appendChild(subTitle);
+        // ✅ Use grid placement from subdomains.json
+        subDiv.style.gridColumn = `${sub.gridColumnStart} / span ${sub.gridColumnSpan}`;
+        subDiv.style.gridRow = `${sub.gridRowStart} / span ${sub.gridRowSpan}`;
 
-          const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
-          subCerts.forEach(cert => {
-            subDiv.appendChild(makeCertTile(cert));
-          });
+        const subTitle = document.createElement('div');
+        subTitle.className = 'subdomain-title';
+        subTitle.textContent = sub.subdomainShortName;
+        subDiv.appendChild(subTitle);
 
-          domainDiv.appendChild(subDiv);
+        const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+        subCerts.forEach(cert => {
+        subDiv.appendChild(makeCertTile(cert));
         });
+
+        domainDiv.appendChild(subDiv);
+        });
+
 
         const unspecs = unspecialized.filter(u => u.domainId === domain.domainId);
         unspecs.forEach(u => {
-          const unspecDiv = document.createElement('div');
-          unspecDiv.classList.add('unspecialized-container', `domain-${u.domainId}`);
+        const unspecDiv = document.createElement('div');
+        unspecDiv.classList.add('unspecialized-container', `domain-${u.domainId}`);
 
-          const unspecCerts = certs.filter(cert =>
-            cert.domainId === u.domainId &&
-            (!cert.subdomainId || cert.subdomainId === null)
-          );
+        // ✅ Use grid placement from unspecialized.json
+        unspecDiv.style.gridColumn = `${u.gridColumnStart} / span ${u.gridColumnSpan}`;
+        unspecDiv.style.gridRow = `${u.gridRowStart} / span ${u.gridRowSpan}`;
 
-          unspecCerts.forEach(cert => {
-            unspecDiv.appendChild(makeCertTile(cert));
-          });
+        const unspecCerts = certs.filter(cert =>
+        cert.domainId === u.domainId &&
+        (!cert.subdomainId || cert.subdomainId === null)
+        );
 
-          domainDiv.appendChild(unspecDiv);
+        unspecCerts.forEach(cert => {
+        unspecDiv.appendChild(makeCertTile(cert));
         });
+
+        domainDiv.appendChild(unspecDiv);
+        });
+
 
         roadmapEl.appendChild(domainDiv);
       });
