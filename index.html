@@ -282,24 +282,6 @@
         domainDiv.appendChild(subDiv);
       });
 
-        const unspecs = unspecialized.filter(u => u.domainId === domain.domainId);
-        unspecs.forEach(u => {
-          const unspecDiv = document.createElement('div');
-          unspecDiv.classList.add('unspecialized-container', `domain-${u.domainId}`);
-          unspecDiv.style.gridTemplateColumns = `repeat(${u.gridColumnSpan}, 2.3vmax)`;
-
-          const unspecCerts = certs.filter(cert =>
-            cert.domainId === u.domainId &&
-            (!cert.subdomainId || cert.subdomainId === null)
-          );
-
-          unspecCerts.forEach(cert => {
-            unspecDiv.appendChild(makeCertTile(cert, domains));
-          });
-
-          domainDiv.appendChild(unspecDiv);
-        });
-
         roadmapEl.appendChild(domainDiv);
       });
     }
