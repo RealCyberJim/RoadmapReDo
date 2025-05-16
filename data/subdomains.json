@@ -95,5 +95,113 @@
       "gridColumnStart": 12,
       "gridColumnSpan": 2
     }
+    {
+      "subdomainId": "NET_unspec",
+      "subdomainShortName": "NET unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Communication and Network Security domain",
+      "tooltip": null,
+      "domainId": "NET",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "subdomainId": "IAM_unspec",
+      "subdomainShortName": "IAM unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Identity and Access Management domain",
+      "tooltip": null,
+      "domainId": "IAM",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
+    {
+      "subdomainId": "ENG_unspec",
+      "subdomainShortName": "ENG unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Security Architecture and Engineering domain",
+      "tooltip": null,
+      "domainId": "ENG",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 7,
+      "gridColumnSpan": 1
+    },
+    {
+      "subdomainId": "AST_unspec",
+      "subdomainShortName": "AST unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Asset Security domain",
+      "tooltip": null,
+      "domainId": "AST",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 2
+    },
+    {
+      "subdomainId": "RSK_left_unspec",
+      "subdomainShortName": "RSK unspecialized certs (left)",
+      "subdomainLongName": "Unspecialized certifications in the Security and Risk Management domain (left side of the grid)",
+      "tooltip": null,
+      "domainId": "RSK",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "subdomainId": "RSK_right_unspec",
+      "subdomainShortName": "RSK unspecialized certs (right)",
+      "subdomainLongName": "Unspecialized certifications in the Security and Risk Management domain (right side of the grid)",
+      "tooltip": null,
+      "domainId": "RSK",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 8,
+      "gridColumnSpan": 2
+    },
+    {
+      "subdomainId": "TST_unspec",
+      "subdomainShortName": "TST unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Security and Assessment Testing domain",
+      "tooltip": null,
+      "domainId": "TST",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 3
+    },
+    {
+      "subdomainId": "SOF_unspec",
+      "subdomainShortName": "SOF unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Software Development security domain",
+      "tooltip": null,
+      "domainId": "SOF",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
+    {
+      "subdomainId": "OPS_unspec",
+      "subdomainShortName": "OPS unspecialized certs",
+      "subdomainLongName": "Unspecialized certifications in the Security Operations domain",
+      "tooltip": null,
+      "domainId": "OPS",
+      "subdomainColor": "--domain-default-white",
+      "gridRowStart": 2,
+      "gridRowSpan": 27,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 2
+    }
   ]
   

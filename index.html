@@ -101,7 +101,7 @@
       grid-column-start: var(--col-start);     /* We'll replace this dynamically */
       grid-column-end: span var(--col-span);   /* This too */
       text-align: center;
-      font-weight: bold;
+      font-weight: 400;
       font-size: 0.7vmax;
       padding: 0.2vmax 0;
       z-index: 1; /* Ensures title sits above tiles if they overlap */
@@ -230,32 +230,58 @@
         title.textContent = domain.domainShortName;
         domainDiv.appendChild(title);
 
-        const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
-        domainSubdomains.forEach(sub => {
+      const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
+      domainSubdomains.forEach(sub => {
+        // 🔹 Subdomain title
+        const subTitle = document.createElement('div');
+        subTitle.className = 'subdomain-title';
+        subTitle.textContent = sub.subdomainShortName;
+        subTitle.style.gridRowStart = 1;
+        subTitle.style.gridColumnStart = sub.gridColumnStart;
+        subTitle.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        domainDiv.appendChild(subTitle);
 
-          const subTitle = document.createElement('div');
-          subTitle.className = 'subdomain-title';
-          subTitle.textContent = sub.subdomainShortName;
+        // 🔹 Subdomain container
+        const subDiv = document.createElement('div');
+        subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
-          // ✅ Set grid position using attributes
-          subTitle.setAttribute('data-grid-column-start', sub.gridColumnStart);
-          subTitle.setAttribute('data-grid-column-span', sub.gridColumnSpan);
+        subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+        subDiv.style.gridTemplateRows = `repeat(27, 1.5vmax)`; // consistent vertical grid
 
-          domainDiv.appendChild(subTitle);
-          applyGridSpanStyles(subTitle);
+        subDiv.style.gridColumnStart = sub.gridColumnStart;
+        subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        subDiv.style.gridRowStart = sub.gridRowStart;
+        subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
-          const subDiv = document.createElement('div');
-          subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
-          subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+        // 🔹 Background color
+        if (sub.subdomainColor) {
           subDiv.style.backgroundColor = `var(${sub.subdomainColor})`;
+        } else {
+          subDiv.style.backgroundColor = `var(--domain-default-white)`;
+        }
 
-          const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
-          subCerts.forEach(cert => {
-            subDiv.appendChild(makeCertTile(cert, domains));
-          });
+        // 🔹 Add cert tiles (column tracking for tile stacking — coming next phase)
+        const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+        const tileRowMap = {};
 
-          domainDiv.appendChild(subDiv);
+        subCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains);
+          const skillRow = cert.certSkillStrata;
+
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 1;
+          } else {
+            tileRowMap[skillRow]++;
+          }
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = tileRowMap[skillRow];
+
+          subDiv.appendChild(tile);
         });
+
+        domainDiv.appendChild(subDiv);
+      });
 
         const unspecs = unspecialized.filter(u => u.domainId === domain.domainId);
         unspecs.forEach(u => {
