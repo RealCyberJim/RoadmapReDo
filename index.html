@@ -10,43 +10,50 @@
       --color-skyblue: #6bb3f6;
       --color-blue: #2e5688;
       --color-red: #c0514d;
-      --color-magenta: #830083;
+      --color-magenta: #a500a1;
       
-      /* Dark and Light variants */
+      /* Dark variants */      
       --color-green-dark: #548235;
-      --color-green-light: #c3dbb8;
       --color-teal-dark: #003F3E;
-      --color-teal-light: #8fc6c6;
       --color-orange-dark: #c06216;
-      --color-orange-light: #fdeada;
       --color-yellow-dark: #7F6000;
-      --color-yellow-light: #f4e7af;
       --color-black-dark: #000000;
-      --color-black-light: #d9d9d9;
       --color-purple-dark: #352647;
-      --color-purple-light: #eddbff;
       --color-skyblue-dark: #2665a0;
-      --color-skyblue-light: #b8e0ff;
       --color-blue-dark: #1f3147;
-      --color-blue-light: #dce6f2;
       --color-red-dark: #8c3736;
-      --color-red-light: #f2dcdb;
       --color-magenta-dark: #490e49;
+      
+      /* Light variants */
+      --color-green-light: #c3dbb8;
+      --color-teal-light: #8fc6c6;
+      --color-orange-light: #fdeada;
+      --color-yellow-light: #f4e7af;
+      --color-black-light: #d9d9d9;
+      --color-purple-light: #eddbff;
+      --color-skyblue-light: #b8e0ff;
+      --color-blue-light: #dce6f2;
+      --color-red-light: #f2dcdb;
       --color-magenta-light: #f1d4e0;
-
-
+      
       /* Domain-specific colors */
+      --domain-default-white: #ffffff;
       --domain-net: var(--color-green);
-      --domain-net-light: var(--color-green-light);
+      --domain-net-dark: var(--color-green-dark);
       --domain-iam: var(--color-teal);
+      --domain-iam-dark: var(--color-teal-dark);
       --domain-eng: var(--color-orange);
+      --domain-eng-dark: var(--color-orange-dark);
       --domain-ast: var(--color-yellow);
+      --domain-ast-dark: var(--color-yellow-dark);
       --domain-rsk: var(--color-black);
+      --domain-rsk-dark: var(--color-black-dark);
       --domain-tst: var(--color-purple);
+      --domain-tst-dark: var(--color-purple-dark);
       --domain-sof: var(--color-skyblue);
-      --domain-sof-light: var(--color-skyblue-light);
+      --domain-sof-dark: var(--color-skyblue-dark);
       --domain-ops: var(--color-red);
-      --domain-ops: var(--color-red);
+      --domain-ops-dark: var(--color-red-dark);
     }
 
     body {
@@ -96,6 +103,7 @@
     }
 
     .unspecialized-container {
+      background-color: var(--domain-default-white);
       padding: 0.3vmax;
       display: grid;
       grid-template-rows: repeat(27, 1.5vmax);  /* 27 fixed rows for skill strata */
@@ -113,7 +121,7 @@
       font-size: 0.65vmax;
       border-radius: 0.25vmax;
       background-color: inherit;  /* ✅ Inherit from parent */
-      border: 2px solid;          /* ✅ Use inherited border-color */
+      border: 0.05vmax solid;          /* ✅ Use inherited border-color */
       color: white;               /* ✅ Set text color explicitly */
       padding: 0.2vmax;
       box-sizing: border-box;
@@ -211,6 +219,7 @@
           const subDiv = document.createElement('div');
           subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
           subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+          subDiv.style.backgroundColor = `var(${sub.subdomainColor})`;
 
           const subTitle = document.createElement('div');
           subTitle.className = 'subdomain-title';
