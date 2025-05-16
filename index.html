@@ -201,7 +201,6 @@
       const [domains, subdomains, unspecialized, certs] = await Promise.all([
         loadJSON('./data/domains.json'),
         loadJSON('./data/subdomains.json'),
-        loadJSON('./data/unspecialized.json'),
         loadJSON('./data/certs.json'),
       ]);
 
