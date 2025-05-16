@@ -198,7 +198,7 @@
     }
 
     async function drawRoadmap() {
-      const [domains, subdomains, unspecialized, certs] = await Promise.all([
+      const [domains, subdomains, certs] = await Promise.all([
         loadJSON('./data/domains.json'),
         loadJSON('./data/subdomains.json'),
         loadJSON('./data/certs.json'),
@@ -211,10 +211,7 @@
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
 
         // 🔧 Dynamically set how wide the domain container should be
-        const allContainers = [
-          ...subdomains.filter(sd => sd.domainId === domain.domainId),
-          ...unspecialized.filter(u => u.domainId === domain.domainId)
-        ];
+        const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
 
         let maxColumn = 0;
         allContainers.forEach(c => {
