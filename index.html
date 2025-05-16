@@ -97,10 +97,16 @@
     }
 
     .subdomain-title {
-      font-size: 0.9vmax;
-      font-weight: 500;
-      margin-bottom: 0.3vmax;
+      grid-row: 1;                              /* Place in row 1 */
+      grid-column-start: var(--col-start);     /* We'll replace this dynamically */
+      grid-column-end: span var(--col-span);   /* This too */
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.7vmax;
+      padding: 0.2vmax 0;
+      z-index: 1; /* Ensures title sits above tiles if they overlap */
     }
+
 
     .unspecialized-container {
       background-color: var(--domain-default-white);
@@ -181,6 +187,16 @@
       return res.json();
     }
 
+    function applyGridSpanStyles(element) {
+      const colStart = element.getAttribute('data-grid-column-start');
+      const colSpan = element.getAttribute('data-grid-column-span');
+
+      if (colStart && colSpan) {
+        element.style.setProperty('--col-start', colStart);
+        element.style.setProperty('--col-span', colSpan);
+      }
+    }
+
     async function drawRoadmap() {
       const [domains, subdomains, unspecialized, certs] = await Promise.all([
         loadJSON('./data/domains.json'),
@@ -216,15 +232,22 @@
 
         const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
         domainSubdomains.forEach(sub => {
-          const subDiv = document.createElement('div');
-          subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
-          subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
-          subDiv.style.backgroundColor = `var(${sub.subdomainColor})`;
 
           const subTitle = document.createElement('div');
           subTitle.className = 'subdomain-title';
           subTitle.textContent = sub.subdomainShortName;
-          subDiv.appendChild(subTitle);
+
+          // ✅ Set grid position using attributes
+          subTitle.setAttribute('data-grid-column-start', sub.gridColumnStart);
+          subTitle.setAttribute('data-grid-column-span', sub.gridColumnSpan);
+
+          domainDiv.appendChild(subTitle);
+          applyGridSpanStyles(subTitle);
+
+          const subDiv = document.createElement('div');
+          subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+          subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+          subDiv.style.backgroundColor = `var(${sub.subdomainColor})`;
 
           const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
           subCerts.forEach(cert => {
