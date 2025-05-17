@@ -87,6 +87,7 @@
     }
 
     .subdomain-container {
+      position: relative;
       border: 1px solid;
       padding: 0.1vmax; /* Equal to tile gutter for clean alignment */
       display: grid;
@@ -100,7 +101,7 @@
       border-radius: 0.25vmax;
       z-index: 0;
       pointer-events: none;
-      position: relative;
+      position: absolute;
     }
 
 
@@ -251,7 +252,12 @@
         canvas.style.gridRowStart = sub.gridRowStart;
         canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
-        canvas.style.backgroundColor = `var(${sub.subdomainColor || '--domain-default-white'})`;
+        if (sub.subdomainId.endsWith('_unspec')) {
+          canvas.style.backgroundColor = 'transparent';
+        } else {
+          canvas.style.backgroundColor = `var(${sub.subdomainColor || '--domain-default-white'})`;
+        }
+
 
         domainDiv.appendChild(canvas);
 
