@@ -233,12 +233,7 @@
         subDiv.style.gridRowStart = sub.gridRowStart;
         subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
-        // 🔹 Background color
-        if (sub.subdomainColor) {
-          subDiv.style.backgroundColor = `var(${sub.subdomainColor})`;
-        } else {
-          subDiv.style.backgroundColor = `var(--domain-default-white)`;
-        }
+
 
         // 🔹 Add cert tiles (column tracking for tile stacking — coming next phase)
         const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
