@@ -96,6 +96,14 @@
       border-radius: 0.25vmax;
     }
 
+    .subdomain-canvas {
+      border-radius: 0.25vmax;
+      z-index: 0;
+      pointer-events: none;
+      position: relative;
+    }
+
+
     .subdomain-title {
       grid-row: 1;                              /* Place in row 1 */
       grid-column-start: var(--col-start);     /* We'll replace this dynamically */
@@ -233,7 +241,19 @@
         subDiv.style.gridRowStart = sub.gridRowStart;
         subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
+        // 🔹 Subdomain canvas
+        const canvas = document.createElement('div');
+        canvas.classList.add('subdomain-canvas');
+        canvas.setAttribute('data-subdomain-id', sub.subdomainId);
 
+        canvas.style.gridColumnStart = sub.gridColumnStart;
+        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        canvas.style.gridRowStart = sub.gridRowStart;
+        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+
+        canvas.style.backgroundColor = `var(${sub.subdomainColor || '--domain-default-white'})`;
+
+        domainDiv.appendChild(canvas);
 
         // 🔹 Add cert tiles (column tracking for tile stacking — coming next phase)
         const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
