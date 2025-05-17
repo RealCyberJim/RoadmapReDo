@@ -72,11 +72,11 @@
       background: white;
       border: 2px solid;
       border-radius: 0.4vmax;
-      padding: 0.4vmax;
+      padding: 0.4vmax; /* Padding inside domain matches external spacing */
       display: grid;
-      grid-template-rows: repeat(30, 1.5vmax);
-      gap: 0.1vmax;
-
+      grid-template-rows: repeat(30, 1.5vmax); /* 1 reserved + 27 skill rows + 2 buffer rows */
+      gap: 0.1vmax; /* Matches tile and container gutter */
+      width: max-content; /* Prevent full-width stretching */
     }
 
     .domain-title {
@@ -87,13 +87,13 @@
     }
 
     .subdomain-container {
-      border: 2px solid;
-      margin-bottom: 1vmax;
-      padding: 0.3vmax;
+      border: 1px solid;
+      padding: 0.1vmax; /* Equal to tile gutter for clean alignment */
       display: grid;
-      grid-template-rows: repeat(27, 1.5vmax);  /* 27 fixed rows for skill strata */
+      grid-template-rows: repeat(27, 1.5vmax);
       grid-auto-rows: 1.5vmax;
-      gap: 0.1vmax;
+      gap: 0.1vmax; /* Matches tile gap */
+      border-radius: 0.25vmax;
     }
 
     .subdomain-title {
@@ -128,7 +128,7 @@
       font-weight: 500;
       border-radius: 0.25vmax;
       background-color: inherit;  /* ✅ Inherit from parent */
-      border: 0.05vmax solid;          /* ✅ Use inherited border-color */
+      border: 1px solid;          /* ✅ Use inherited border-color */
       color: white;               /* ✅ Set text color explicitly */
       padding: 0.2vmax;
       box-sizing: border-box;
