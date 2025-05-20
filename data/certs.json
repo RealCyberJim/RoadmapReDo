@@ -4977,7 +4977,7 @@
     "certVendor": "comptia",
     "certUrl": "https://www.comptia.org/certifications/security",
     "certTooltip": "CompTIA Security+ $404 exam",
-    "certTileLabel": "Security+"
+    "certTileLabel": "Security +"
   },
   {
     "certId": "OPS_ecss",
