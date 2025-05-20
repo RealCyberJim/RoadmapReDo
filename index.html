@@ -148,15 +148,6 @@
       text-decoration: none;
     }
 
-    .tile-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: start;
-      height: 100%;
-      gap: 0.1vmax;
-    }
-
     /* Domain-specific border and title coloring */
     .domain-NET     { border-color: var(--domain-net); }
     .domain-IAM     { border-color: var(--domain-iam); }
@@ -272,19 +263,24 @@
         domainDiv.appendChild(canvas);
 
         // 🔹 Add cert tiles
-      const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+        const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+        const tileRowMap = {};
 
-      // Create tile wrapper inside the subdomain container
-      const tileWrapper = document.createElement('div');
-      tileWrapper.className = 'tile-wrapper';
+        subCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains);
+          const skillRow = cert.certSkillStrata;
 
-      subCerts.forEach(cert => {
-        const tile = makeCertTile(cert, domains);
-        tileWrapper.appendChild(tile);
-      });
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 1;
+          } else {
+            tileRowMap[skillRow]++;
+          }
 
-      // Add wrapper into subdomain container
-      subDiv.appendChild(tileWrapper);
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = tileRowMap[skillRow];
+
+          subDiv.appendChild(tile);
+        });
 
         domainDiv.appendChild(subDiv);
       });
