@@ -126,16 +126,17 @@
       width: 2.3vmax;
       height: 1.5vmax;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      justify-self: center;
+      align-items: center;        /* vertically center content *inside* the tile */
+      justify-content: center;    /* horizontally center content *inside* the tile */
+      justify-self: center;    /* horizontally center the tile in its column */
+      align-self: center;        /* center tile vertically in its grid row */
       text-align: center;
       font-size: 0.65vmax;
       font-weight: 400;
       border-radius: 0.25vmax;
-      background-color: inherit;  /* ✅ Inherit from parent */
-      border: 1px solid;          /* ✅ Use inherited border-color */
-      color: white;               /* ✅ Set text color explicitly */
+      background-color: inherit;  /* Inherit from parent */
+      border: 1px solid;          /* Use inherited border-color */
+      color: white;               /* Set text color explicitly */
       padding: 0.2vmax;
       box-sizing: border-box;
       margin: 0;
@@ -285,7 +286,7 @@
       domainTitle.style.gridColumnStart = domainColumnStart;
       domainTitle.style.gridColumnEnd = `span ${domain.gridColumnSpan}`;
       */
-     
+
       roadmapEl.appendChild(domainDiv);
       });
     }
