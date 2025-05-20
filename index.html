@@ -79,6 +79,24 @@
       width: max-content; /* Prevent full-width stretching */
     }
 
+    .domain-title-layer {
+      display: grid;
+      grid-template-columns: repeat(40, 2.3vmax); /* Match roadmap layout */
+      gap: 0;
+      margin-bottom: -1vmax; /* Pulls visual layer up to overlap correctly */
+      padding-left: 0.2vmax;
+      position: relative;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .domain-title-outside {
+      text-align: center;
+      font-size: 1vmax;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
     .domain-title {
       font-size: .8vmax;
       font-weight: 450;
@@ -174,6 +192,7 @@
 <body>
 
   <h1>Security Certification Roadmap</h1>
+  <div id="domainTitleLayer" class="domain-title-layer"></div>
   <div id="roadmap"></div>
 
   <script>
@@ -200,6 +219,8 @@
       ]);
 
       const roadmapEl = document.getElementById('roadmap');
+      const domainTitleLayer = document.getElementById('domainTitleLayer');
+        domainTitleLayer.innerHTML = ""; // Clear titles if redrawing
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
@@ -215,6 +236,17 @@
         });
 
         domainDiv.style.gridTemplateColumns = `repeat(${maxColumn}, 2.3vmax)`;
+        // Draw domain title ABOVE the domain container, centered
+        const domainTitle = document.createElement('div');
+        domainTitle.className = 'domain-title-outside';
+        domainTitle.textContent = domain.domainShortName;
+
+        // Same grid alignment as domain container
+        const domainColumnStart = Math.min(...allContainers.map(c => c.gridColumnStart));
+        domainTitle.style.gridColumnStart = domainColumnStart;
+        domainTitle.style.gridColumnEnd = `span ${domain.gridColumnSpan}`;
+
+        domainTitleLayer.appendChild(domainTitle);
 
         const title = document.createElement('div');
         title.className = 'domain-title';
