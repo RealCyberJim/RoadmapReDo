@@ -79,13 +79,6 @@
       width: max-content; /* Prevent full-width stretching */
     }
 
-    .domain-title {
-      font-size: 1vmax;
-      font-weight: 600;
-      text-align: center;
-      margin: 0.5vmax 0 0.2vmax;
-    }
-
     .subdomain-container {
       position: relative;
       justify-content: center;
@@ -281,6 +274,7 @@
         domainDiv.appendChild(subDiv);
       });
 
+      /*
       // 🔹 External domain title aligned to container span
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
@@ -290,9 +284,8 @@
       const domainColumnStart = Math.min(...allContainers.map(c => c.gridColumnStart));
       domainTitle.style.gridColumnStart = domainColumnStart;
       domainTitle.style.gridColumnEnd = `span ${domain.gridColumnSpan}`;
-
-      // Insert title directly before the domain container
-      roadmapEl.appendChild(domainTitle);  
+      */
+     
       roadmapEl.appendChild(domainDiv);
       });
     }
@@ -312,7 +305,7 @@
 
       tile.style.gridRowStart = cert.certSkillStrata;
 
-      // 🧠 Apply color logic from domain and optional teamRole
+      // Apply color logic from domain and optional teamRole
       const domain = domains.find(d => d.domainId === cert.domainId);
       const teamRoles = domain.teamRoles || {};
       const role = cert.teamRole || "DefaultTeam";
@@ -326,7 +319,7 @@
       tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
     }
 
-    tile.style.color = 'white'; // ✅ force white font
+    tile.style.color = 'white'; // force white font
 
       return tile;
     }
