@@ -80,10 +80,10 @@
     }
 
     .domain-title {
-      font-size: .8vmax;
-      font-weight: 450;
+      font-size: 1vmax;
+      font-weight: 600;
       text-align: center;
-      margin-bottom: 0.6vmax;
+      margin: 0.5vmax 0 0.2vmax;
     }
 
     .subdomain-container {
@@ -216,11 +216,6 @@
 
         domainDiv.style.gridTemplateColumns = `repeat(${maxColumn}, 2.3vmax)`;
 
-        const title = document.createElement('div');
-        title.className = 'domain-title';
-        title.textContent = domain.domainShortName;
-        domainDiv.appendChild(title);
-
       const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
       domainSubdomains.forEach(sub => {
         // 🔹 Subdomain title
@@ -286,7 +281,19 @@
         domainDiv.appendChild(subDiv);
       });
 
-        roadmapEl.appendChild(domainDiv);
+      // 🔹 External domain title aligned to container span
+      const domainTitle = document.createElement('div');
+      domainTitle.className = 'domain-title';
+      domainTitle.textContent = domain.domainShortName;
+
+      // Use same alignment as container
+      const domainColumnStart = Math.min(...allContainers.map(c => c.gridColumnStart));
+      domainTitle.style.gridColumnStart = domainColumnStart;
+      domainTitle.style.gridColumnEnd = `span ${domain.gridColumnSpan}`;
+
+      // Insert title directly before the domain container
+      roadmapEl.appendChild(domainTitle);  
+      roadmapEl.appendChild(domainDiv);
       });
     }
 
