@@ -157,25 +157,60 @@
 
 
     /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body> [literally: <body class="debug-mode">]) = */
-      body.debug-mode .domain-container,
-      body.debug-mode .subdomain-container,
-      body.debug-mode .cert-tile {
-        outline: 1px dashed rgba(0, 0, 0, 0.25); /* Light grid outline */
-      }
+    body.debug-mode .domain-container,
+    body.debug-mode .subdomain-container,
+    body.debug-mode .cert-tile {
+      outline: 1px dashed rgba(0, 0, 0, 0.25); /* Light grid outline */
+    }
 
-      body.debug-mode .subdomain-canvas {
-        outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
-      }
+    body.debug-mode .subdomain-canvas {
+      outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
+    }
 
-      body.debug-mode .subdomain-title {
-        background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
-      }
+    body.debug-mode .subdomain-title {
+      background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
+    }
+
+    /* ✅ Visual aid for the new roadmap grid layout */
+    body.debug-mode #roadmap-wrapper {
+      outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
+      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint to reveal layout */
+    }
+
+    body.debug-mode #roadmap {
+      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Distinct roadmap container box */
+    }
+
+    /* Optional: Placeholder debug style for future left-hand skill label */
+    body.debug-mode .skill-labels {
+      background-color: rgba(0, 255, 128, 0.05);
+      outline: 1px dashed rgba(0, 255, 128, 0.4);
+    }
+
+
+    /* = ROADMAP GRID STRUCTURE (used always) = */
+    #roadmap-wrapper {
+      display: grid;
+      grid-template-columns: auto 1fr; /* Left: skill labels | Right: dynamic roadmap */
+      grid-template-rows: auto 1fr;    /* Top: domain titles | Bottom: roadmap tiles */
+      width: 100%;
+      position: relative;
+      gap: 1vmax;
+    }
+
+    /* Make sure roadmap fills its intended cell */
+    #roadmap {
+      grid-column: 2;
+      grid-row: 2;
+    }
   </style>
 </head>
 <body class="debug-mode">
 
   <h1>Security Certification Roadmap</h1>
-  <div id="roadmap"></div>
+  <div id="roadmap-wrapper">
+    <div id="roadmap"></div>
+  </div>
 
   <script>
     async function loadJSON(path) {
