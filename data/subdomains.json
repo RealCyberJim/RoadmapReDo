@@ -177,7 +177,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
-      "gridColumnSpan": 3
+      "gridColumnSpan": 2
     },
     {
       "subdomainId": "SOF_unspec",
@@ -189,7 +189,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
-      "gridColumnSpan": 1
+      "gridColumnSpan": 2
     },
     {
       "subdomainId": "OPS_unspec",
