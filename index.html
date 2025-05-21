@@ -83,7 +83,7 @@
     .subdomain-container {
       position: relative;
       justify-content: center;
-      border: 1px solid;
+      border: none;
       padding: 0.1vmax; /* Equal to tile gutter for clean alignment */
       display: grid;
       grid-template-rows: repeat(28, 1.5vmax);
@@ -113,17 +113,6 @@
       margin: 0;
       align-self: end; /* Aligns the title to the bottom of its row */
       z-index: 1; /* Ensures title sits above tiles if they overlap */
-    }
-
-
-    .unspecialized-container {
-      background-color: var(--domain-default-white);
-      border: none;
-      padding: 0.3vmax;
-      display: grid;
-      grid-template-rows: repeat(27, 1.5vmax);  /* 27 fixed rows for skill strata */
-      grid-auto-rows: 1.5vmax;
-      gap: 0.1vmax;
     }
 
     .cert-tile {
