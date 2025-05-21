@@ -221,6 +221,17 @@
         subTitle.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
         domainDiv.appendChild(subTitle);
 
+        // 🔹 Subdomain canvas (background layer)
+        const canvas = document.createElement('div');
+        canvas.classList.add('subdomain-canvas');
+        canvas.style.gridRowStart = sub.gridRowStart;
+        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+        canvas.style.gridColumnStart = sub.gridColumnStart;
+        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        canvas.style.backgroundColor = `var(${sub.subdomainColor})`;
+
+        domainDiv.appendChild(canvas); // must come before the subdomain container
+
         // 🔹 Subdomain container
         const subDiv = document.createElement('div');
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
