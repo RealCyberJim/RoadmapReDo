@@ -2325,7 +2325,7 @@
     "certVendor": "thesecopsgroup",
     "certUrl": "https://secops.group/product/certified-cloud-pentesting-expert/",
     "certTooltip": "The SecurityOps Group Certified Cloud Pentesting eXpert-AWS $800 exam",
-    "certTileLabel": "CCPenX-AWS"
+    "certTileLabel": "ccPenX\nAWS"
   },
   {
     "certId": "NET_ccse",
@@ -2493,7 +2493,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/information-systems-risk-mangager-outline/",
     "certTooltip": "Mile2 Certified Information Systems Risk Manager $550 exam",
-    "certTileLabel": "C )\nISRM"
+    "certTileLabel": "Mile2\nISRM"
   },
   {
     "certId": "RSK_apmg27001p",
@@ -2541,7 +2541,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/information_systems_security_auditor_outline/",
     "certTooltip": "Mile2 Certified Information Systems Security Auditor $550 exam",
-    "certTileLabel": "C )\nISSA"
+    "certTileLabel": "Mile2\nISSA"
   },
   {
     "certId": "TST_apmg27001a",
@@ -2577,7 +2577,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cdre_outline/",
     "certTooltip": "Mile2 Certified Disaster Recovery Engineer $550 exam",
-    "certTileLabel": "C )\nDRE"
+    "certTileLabel": "Mile2\nDRE"
   },
   {
     "certId": "OPS_gsoc",
@@ -2781,7 +2781,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cihe_outline/",
     "certTooltip": "Mile2 Certified Incident Handling Engineer $550 exam",
-    "certTileLabel": "C )\nIHE"
+    "certTileLabel": "Mile2\nIHE"
   },
   {
     "certId": "OPS_cstl",
@@ -3009,7 +3009,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cisso_outline/",
     "certTooltip": "Mile2 Certified Information Systems Security Officer $550 exam",
-    "certTileLabel": "C )\nISSO"
+    "certTileLabel": "Mile2\nISSO"
   },
   {
     "certId": "RSK_cisrm",
@@ -3057,7 +3057,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/chissp_outline/",
     "certTooltip": "Mile2 Certified Healthcare Information Systems Security Practitioner $550 exam",
-    "certTileLabel": "C )\nHISSP"
+    "certTileLabel": "Mile2\nHISSP"
   },
   {
     "certId": "TST_apmg20000a",
@@ -3080,8 +3080,8 @@
     "certSkillStrata": 18,
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cisms-la-li-outline/",
-    "certTooltip": "Mile2 Certified Information security Management Systems Lead Auditor $550 exam",
-    "certTileLabel": "C )\nISMS-LA"
+    "certTooltip": "Mile2 Certified Information Security Management Systems Lead Auditor $550 exam",
+    "certTileLabel": "Mile2\nISMSLA"
   },
   {
     "certId": "TST_cisia",
@@ -3141,7 +3141,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/ccsa_outline/",
     "certTooltip": "Mile2 Certified Cybersecurity Analyst $550 exam",
-    "certTileLabel": "C )\nCSA"
+    "certTileLabel": "Mile2\nCSA"
   },
   {
     "certId": "OPS_chfi",
@@ -3189,7 +3189,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cpSH_outline/",
     "certTooltip": "Mile2 Certified Powershell Hacker $550 exam",
-    "certTileLabel": "C )\nPSH"
+    "certTileLabel": "Mile2\nPSH"
   },
   {
     "certId": "OPS_cmwapt",
@@ -3213,7 +3213,7 @@
     "certVendor": "mile2",
     "certUrl": "https://mile2.com/cptc_outline/",
     "certTooltip": "Mile2 Certified Penetration Testing Consultant $550 exam",
-    "certTileLabel": "C )\nPTC"
+    "certTileLabel": "Mile2\nPTC"
   },
   {
     "certId": "OPS_crtop",
@@ -3381,7 +3381,7 @@
     "certVendor": "mile2",
     "certUrl": "https://mile2.com/cissm_outline/",
     "certTooltip": "Mile2 Certified Information Systems Security Manager $550 exam",
-    "certTileLabel": "C )\nISSM"
+    "certTileLabel": "Mile2\nISSM"
   },
   {
     "certId": "RSK_tuvitsm",
@@ -3501,7 +3501,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/network-forensics-examiner-outline/",
     "certTooltip": "Mile2 Certified Network Forensics Examiner $550 exam Groups only",
-    "certTileLabel": "C )\nNFE"
+    "certTileLabel": "Mile2\nNFE"
   },
   {
     "certId": "OPS_gosi",
@@ -3525,7 +3525,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/threat-analyst/",
     "certTooltip": "Mile2 Certified Threat Intelligence Analyst $550 exam",
-    "certTileLabel": "C )\nTIA"
+    "certTileLabel": "Mile2\nTIA"
   },
   {
     "certId": "OPS_osda",
@@ -4185,7 +4185,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cslo_outline/",
     "certTooltip": "Mile2 Certified Security Leadership Officer $550 exam",
-    "certTileLabel": "C )\nSLO"
+    "certTileLabel": "Mile2\nSLO"
   },
   {
     "certId": "TST_dcbca",
@@ -4233,7 +4233,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cswae_outline/",
     "certTooltip": "Mile2 Secure Web Application Engineer $550 exam",
-    "certTileLabel": "C )\nSWAE"
+    "certTileLabel": "Mile2\nSWAE"
   },
   {
     "certId": "OPS_opsa",
@@ -4329,7 +4329,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/penetration-testing-engineer-outline/",
     "certTooltip": "Mile2 Certified Penetration Testing Engineer $550 exam",
-    "certTileLabel": "C )\nPTE"
+    "certTileLabel": "Mile2\nPTE"
   },
   {
     "certId": "OPS_sogcnpen",
@@ -4449,7 +4449,7 @@
     "certVendor": "mile2",
     "certUrl": "https://mile2.com/ccso_outline/",
     "certTooltip": "Mile2 Certified Cloud Security Officer $550 exam",
-    "certTileLabel": "C )\nCSO"
+    "certTileLabel": "Mile2\nCSO"
   },
   {
     "certId": "ENG_dca",
@@ -4833,7 +4833,7 @@
     "certVendor": "mile2",
     "certUrl": "https://mile2.com/professional-ethical-hacker/",
     "certTooltip": "Mile2 Certified Professional Ethical Hacker $550 exam",
-    "certTileLabel": "C )\nPEH"
+    "certTileLabel": "Mile2\nPEH"
   },
   {
     "certId": "OPS_gcpeh",
@@ -5001,7 +5001,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cdfe_outline/",
     "certTooltip": "Mile2 Certified Digital Forensics Examiner $550 exam",
-    "certTileLabel": "C )\nDFE"
+    "certTileLabel": "Mile2\nDFE"
   },
   {
     "certId": "OPS_ssa",
@@ -5205,7 +5205,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/iscap_outline/",
     "certTooltip": "Mile2 Information Systems Certification and Accredidation Professional $550 exam",
-    "certTileLabel": "C )\nISCAP"
+    "certTileLabel": "Mile2\nISCAP"
   },
   {
     "certId": "RSK_csap",
@@ -5613,7 +5613,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/csp_outline/",
     "certTooltip": "Mile2 Certified Security Principles $550 exam",
-    "certTileLabel": "C )\nSP"
+    "certTileLabel": "Mile2\nSP"
   },
   {
     "certId": "OPS_cnd",
@@ -5637,7 +5637,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/vulnerability-assessor-outline/",
     "certTooltip": "Mile2 Certified Vulnerability Assessor $550 exam",
-    "certTileLabel": "C )\nVA"
+    "certTileLabel": "Mile2\nVA"
   },
   {
     "certId": "OPS_klcp",
