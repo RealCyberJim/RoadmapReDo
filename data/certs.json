@@ -4421,7 +4421,7 @@
     "crossDomains": [],
     "subdomainId": "IAM_unspec",
     "teamRole": "DefaultTeam",
-    "certSkillStrata": 22,
+    "certSkillStrata": 21,
     "certVendor": "microsoft",
     "certUrl": "\"https://docs.microsoft.com/en-us/learn/certifications/identity-and-access-administrator/\"\"\"",
     "certTooltip": "Microsoft Certfied: Identity and Access Administrator Associate $165 exam",
