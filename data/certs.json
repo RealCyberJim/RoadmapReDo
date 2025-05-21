@@ -1473,7 +1473,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/master-certifications/",
     "certTooltip": "Mile2 Certified Master Information Systems Security Officer Complete C)SP, C)ISSO, C)ISSM and IS20 ($2200)",
-    "certTileLabel": "CM )\nISSO"
+    "certTileLabel": "Mile2\nCMISSO"
   },
   {
     "certId": "RSK_sisp",
@@ -2253,7 +2253,7 @@
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/master-certifications/",
     "certTooltip": "Mile2 Certified Master Digital Forensic Investigator Complete C)SP, C)DFE, C)NFE and C)CSA ($2200)",
-    "certTileLabel": "CM )\nDFI"
+    "certTileLabel": "Mile2\nCMDFI"
   },
   {
     "certId": "OPS_crestcria",
@@ -3069,7 +3069,7 @@
     "certVendor": "apmg",
     "certUrl": "https://apmg-international.com/product/iso-iec-20000",
     "certTooltip": "APMG ISO/IEC 20000 Auditor $308 Exam Possible Course Req",
-    "certTileLabel": "APMG 20000A"
+    "certTileLabel": "20000\nAudtr"
   },
   {
     "certId": "TST_cismsla",
