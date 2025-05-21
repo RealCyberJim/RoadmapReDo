@@ -44,7 +44,7 @@
       "subdomainColor": "--color-black-light",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 4,
+      "gridColumnStart": 3,
       "gridColumnSpan": 4
     },
     {
@@ -153,7 +153,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
-      "gridColumnSpan": 3
+      "gridColumnSpan": 2
     },
     {
       "subdomainId": "RSK_right_unspec",
@@ -164,7 +164,7 @@
       "subdomainColor": "--domain-default-white",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 8,
+      "gridColumnStart": 7,
       "gridColumnSpan": 2
     },
     {
