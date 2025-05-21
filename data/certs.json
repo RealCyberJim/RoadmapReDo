@@ -321,7 +321,7 @@
     "certVendor": "seco",
     "certUrl": "https://www.seco-institute.org/certifications/information-security-certification-track/",
     "certTooltip": "SECO Information Security Management Expert $850 exam",
-    "certTileLabel": "S-ISME"
+    "certTileLabel": "SECO\nISME"
   },
   {
     "certId": "RSK_ncscccpsp",
