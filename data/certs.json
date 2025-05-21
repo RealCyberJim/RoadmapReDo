@@ -5573,7 +5573,7 @@
     "crossDomains": ["TST"],
     "subdomainId": "RSK_right_unspec",
     "teamRole": "DefaultTeam",
-    "certSkillStrata": 25,
+    "certSkillStrata": 24,
     "certVendor": "giac",
     "certUrl": "https://www.giac.org/certification/information-security-fundamentals-gisf",
     "certTooltip": "GIAC Information Security Fundamentals $979 exam SANS course recommended",
