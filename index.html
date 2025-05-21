@@ -233,24 +233,22 @@
         subDiv.style.gridRowStart = sub.gridRowStart;
         subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
-        // 🔹 Subdomain canvas
+        // 🔹 Subdomain canvas (visual layer behind container)
         const canvas = document.createElement('div');
         canvas.classList.add('subdomain-canvas');
         canvas.setAttribute('data-subdomain-id', sub.subdomainId);
 
-        canvas.style.gridColumnStart = sub.gridColumnStart;
-        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
-        canvas.style.gridRowStart = sub.gridRowStart;
-        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+        // Absolute positioning based on grid math
+        canvas.style.top = `${(sub.gridRowStart - 1) * 1.5}vmax`;
+        canvas.style.left = `${(sub.gridColumnStart - 1) * 2.3}vmax`;
+        canvas.style.width = `${sub.gridColumnSpan * 2.3}vmax`;
+        canvas.style.height = `${sub.gridRowSpan * 1.5}vmax`;
 
-        if (sub.subdomainId.endsWith('_unspec')) {
-          canvas.style.backgroundColor = 'transparent';
-        } else {
-          canvas.style.backgroundColor = `var(${sub.subdomainColor || '--domain-default-white'})`;
-        }
+        canvas.style.backgroundColor = sub.subdomainId.endsWith('_unspec')
+          ? 'transparent'
+          : `var(${sub.subdomainColor || '--domain-default-white'})`;
 
-
-        domainDiv.appendChild(canvas);
+        domainDiv.appendChild(canvas); // Must go before the subdomain container
 
         // 🔹 Add cert tiles
         const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
