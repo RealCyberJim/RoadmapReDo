@@ -156,9 +156,23 @@
     .domain-OPS     .domain-title { color: var(--domain-ops); }
 
 
+    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body> [literally: <body class="debug-mode">]) = */
+      body.debug-mode .domain-container,
+      body.debug-mode .subdomain-container,
+      body.debug-mode .cert-tile {
+        outline: 1px dashed rgba(0, 0, 0, 0.25); /* Light grid outline */
+      }
+
+      body.debug-mode .subdomain-canvas {
+        outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
+      }
+
+      body.debug-mode .subdomain-title {
+        background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
+      }
   </style>
 </head>
-<body>
+<body class="debug-mode">
 
   <h1>Security Certification Roadmap</h1>
   <div id="roadmap"></div>
