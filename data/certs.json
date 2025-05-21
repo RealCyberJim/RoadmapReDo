@@ -5681,7 +5681,7 @@
     "crossDomains": ["AST"],
     "subdomainId": "RSK_right_unspec",
     "teamRole": "DefaultTeam",
-    "certSkillStrata": 26,
+    "certSkillStrata": 25,
     "certVendor": "itil",
     "certUrl": "https://www.axelos.com/certifications/itil-certifications/itil-foundation",
     "certTooltip": "ITIL Foundation $383 exam",
