@@ -2481,7 +2481,7 @@
     "certVendor": "apmg",
     "certUrl": "https://apmg-international.com/product/iso-iec-20000",
     "certTooltip": "APMG ISO/IEC 20000 Practitioner $308 Exam Foundation or ITIL req'd",
-    "certTileLabel": "APMG 20000P"
+    "certTileLabel": "20000\nPrctnr"
   },
   {
     "certId": "RSK_cisrm",
@@ -5229,7 +5229,7 @@
     "certVendor": "pecb",
     "certUrl": "https://pecb.com/en/education-and-certification-for-individuals/iso-iec-27032/iso-iec-27032-foundation",
     "certTooltip": "PECB ISO/IEC 27032 Foundation $500-749 exam Course required",
-    "certTileLabel": "PECB 27032F"
+    "certTileLabel": "27032\nFdn"
   },
   {
     "certId": "RSK_mcl",
@@ -5517,7 +5517,7 @@
     "certVendor": "apmg",
     "certUrl": "https://apmg-international.com/product/iso-20000",
     "certTooltip": "APMG ISO/IEC 20000 Foundation $308 exam",
-    "certTileLabel": "APMG 20000F"
+    "certTileLabel": "20000\nFdn"
   },
   {
     "certId": "RSK_ismicsm",
@@ -5721,7 +5721,7 @@
     "certVendor": "exin",
     "certUrl": "https://www.exin.com/certifications/information-security-foundation-based-iso-iec-27001-exam?language_content_entity=en",
     "certTooltip": "EXIN Information Security Foundation $232 exam",
-    "certTileLabel": "EXIN\nIS Fdn"
+    "certTileLabel": "EXIN\nISFdn"
   },
   {
     "certId": "RSK_exin27001f",
@@ -5733,7 +5733,7 @@
     "certVendor": "exin",
     "certUrl": "https://www.exin.com/certifications/information-security-foundation-based-iso-iec-27001-exam",
     "certTooltip": "EXIN ISO/IEC 27001 Foundation $232 exam",
-    "certTileLabel": "EXIN\nFdn"
+    "certTileLabel": "27001\nFdn"
   },
   {
     "certId": "RSK_pecb27005f",
@@ -5745,7 +5745,7 @@
     "certVendor": "pecb",
     "certUrl": "https://pecb.com/en/education-and-certification-for-individuals/iso-iec-27005/iso-iec-27005-foundation",
     "certTooltip": "PECB ISO/IEC 27005 Foundation $500-749 exam Course required",
-    "certTileLabel": "PECB\nFdn"
+    "certTileLabel": "27005\nFdn"
   },
   {
     "certId": "RSK_ccsf",
