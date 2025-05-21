@@ -239,11 +239,16 @@
         canvas.classList.add('subdomain-canvas');
         canvas.setAttribute('data-subdomain-id', sub.subdomainId);
 
-        // Absolute positioning based on grid math
-        canvas.style.top = `${(sub.gridRowStart - 1) * 1.5}vmax`;
-        canvas.style.left = `${(sub.gridColumnStart - 1) * 2.3}vmax`;
-        canvas.style.width = `${sub.gridColumnSpan * 2.3}vmax`;
-        canvas.style.height = `${sub.gridRowSpan * 1.5}vmax`;
+        // positioning based on grid math
+        const TILE_WIDTH = 2.3;     // same as column width
+        const TILE_HEIGHT = 1.5;    // same as row height
+        const GRID_GAP = 0.1;       // matches .domain-container gap
+        const TILE_OFFSET = GRID_GAP / 2; // centers canvas with tile gutters
+
+        canvas.style.top = `${((sub.gridRowStart - 1) * (TILE_HEIGHT + GRID_GAP)) + TILE_OFFSET}vmax`;
+        canvas.style.left = `${((sub.gridColumnStart - 1) * (TILE_WIDTH + GRID_GAP)) + TILE_OFFSET}vmax`;
+        canvas.style.width = `${(sub.gridColumnSpan * TILE_WIDTH) + ((sub.gridColumnSpan - 1) * GRID_GAP)}vmax`;
+        canvas.style.height = `${(sub.gridRowSpan * TILE_HEIGHT) + ((sub.gridRowSpan - 1) * GRID_GAP)}vmax`;
 
         canvas.style.backgroundColor = sub.subdomainId.endsWith('_unspec')
           ? 'transparent'
