@@ -61,7 +61,7 @@
     },
     {
       "domainId": "SOF",
-      "domainShortName": "Software",
+      "domainShortName": "Software Security",
       "domainDisplayOrder": 7,
       "gridColumnSpan": 1,
       "domainDescription": "The software development security domain deals with implementing software-based security protocols within environments for which the IT professional is responsible. Risk analysis, vulnerability identification and auditing of source codes are all covered in this subset. Additional topics include software-designed security, maturity models, development methodologies, open-source and third-party development security.",

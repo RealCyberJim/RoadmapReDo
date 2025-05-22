@@ -105,6 +105,16 @@
       position: relative;
     }
 
+    .domain-title {
+      grid-row: 1;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.8vmax;
+      align-self: end; /* Align close to subdomain tiles */
+      padding: 0 0.3vmax 0.1vmax 0.3vmax;
+      white-space: nowrap;
+      pointer-events: none;
+    }
 
     .subdomain-title {
       grid-row: 1;                              /* Place in row 1 */
@@ -362,17 +372,22 @@
         domainDiv.appendChild(subDiv);
       });
 
-      /*
-      // 🔹 External domain title aligned to container span
-      const domainTitle = document.createElement('div');
-      domainTitle.className = 'domain-title';
-      domainTitle.textContent = domain.domainShortName;
+        // 🔹 Domain title aligned to subdomain columns
+        const domainTitle = document.createElement('div');
+        domainTitle.className = 'domain-title';
+        domainTitle.textContent = domain.domainShortName;
 
-      // Use same alignment as container
-      const domainColumnStart = Math.min(...allContainers.map(c => c.gridColumnStart));
-      domainTitle.style.gridColumnStart = domainColumnStart;
-      domainTitle.style.gridColumnEnd = `span ${domain.gridColumnSpan}`;
-      */
+        // Determine full horizontal span of this domain
+        const colStart = Math.min(...allContainers.map(c => c.gridColumnStart));
+        const colEnd = Math.max(...allContainers.map(c => c.gridColumnStart + c.gridColumnSpan - 1));
+        const colSpan = colEnd - colStart + 1;
+
+        domainTitle.style.gridRow = 1;
+        domainTitle.style.gridColumnStart = colStart;
+        domainTitle.style.gridColumnEnd = `span ${colSpan}`;
+        domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
+
+        roadmapEl.appendChild(domainTitle);
 
       roadmapEl.appendChild(domainDiv);
       });
