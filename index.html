@@ -112,15 +112,16 @@
     }
 
     .domain-title {
-      grid-row: 1;
-      text-align: end;
-      font-size: 0.85vmax;
-      font-weight: 600;
-      padding: 0.2vmax 0;
-      white-space: nowrap;
+      text-align: center;             /* Center title above the domain */
+      font-weight: 600;               /* Bold for emphasis */
+      font-size: 0.85vmax;            /* Responsive scaling */
+      padding: 0.2vmax 0.3vmax;       /* Breathing room */
+      white-space: normal;            /* Allow multi-line if needed */
+      word-break: normal;             /* Never break mid-word */
+      overflow-wrap: break-word;      /* Wrap only at spaces */
+      max-width: 100%;                /* Constrain to domain box */
       pointer-events: none;
-      position: relative;
-      z-index: 2;
+      line-height: 1.1;               /* Tighter line spacing */
     }
 
     .subdomain-title {
