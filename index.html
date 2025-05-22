@@ -305,18 +305,33 @@
 
         // 🔹 Add cert tiles
         const subCerts = certs.filter(cert => {
-          // Direct match: cert is assigned to this subdomain
-          if (cert.subdomainId === sub.subdomainId) return true;
+        // Normal case: tile belongs to this subdomain
+        if (cert.subdomainId === sub.subdomainId) return true;
 
-          // Guest tile logic
-          const isGuest = cert.crossDomains?.includes(domain.domainId);
+        // Guest case: tile is cross-listed in this domain
+        const isGuest = cert.crossDomains?.includes(domain.domainId);
+        if (!isGuest) return false;
 
-          const isTargetUnspec =
-            sub.subdomainId === `${domain.domainId}_unspec` ||
-            (domain.domainId === "RSK" && sub.subdomainId === "RSK_right_unspec");
+        // For all non-RSK domains, place in their *_unspec
+        if (domain.domainId !== "RSK") {
+          return sub.subdomainId === `${domain.domainId}_unspec`;
+        }
 
-          return isGuest && isTargetUnspec;
-        });
+        // Special case: decide RSK side based on domainDisplayOrder
+        const originDomain = domains.find(d => d.domainId === cert.domainId);
+        const rskDomain = domains.find(d => d.domainId === "RSK");
+
+        if (!originDomain || !rskDomain) return false;
+
+        const originOrder = originDomain.domainDisplayOrder;
+        const rskOrder = rskDomain.domainDisplayOrder;
+
+        const expectedSubdomain =
+          originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
+
+        return sub.subdomainId === expectedSubdomain;
+      });
+
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
