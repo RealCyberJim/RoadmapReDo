@@ -1877,7 +1877,7 @@
     "crossDomains": [],
     "subdomainId": "OPS_unspec",
     "teamRole": "BlueTeam",
-    "certSkillStrata": 14,
+    "certSkillStrata": 13,
     "certVendor": "giac",
     "certUrl": "https://www.giac.org/certification/python-coder-gpyc",
     "certTooltip": "GIAC Python Coder $979 exam SANS course recommended",
