@@ -80,7 +80,7 @@
       border-radius: 0.4vmax;
       padding: 0.2vmax; /* Padding inside domain matches external spacing */
       display: grid;
-      grid-template-rows: repeat(29, 1.5vmax); /* 1 top buffer for subdomain title + 27 skill rows + 1 bottom buffer */
+      grid-template-rows: repeat(28, 1.5vmax); /* 1 top buffer for subdomain title + 27 skill rows + 1 bottom buffer */
       gap: 0.1vmax; /* Matches tile and container gutter */
       width: max-content; /* Prevent full-width stretching */
     }
@@ -96,8 +96,9 @@
       justify-content: center;
       border: none;
       padding: 0.1vmax; /* Equal to tile gutter for clean alignment */
+      padding-bottom: 0.1vmax; /* Optional visual buffer for the bottom tile*/
       display: grid;
-      grid-template-rows: repeat(28, 1.5vmax);
+      grid-template-rows: repeat(27, 1.5vmax);
       grid-auto-rows: 1.5vmax;
       gap: 0.1vmax; /* Matches tile gap */
       border-radius: 0.25vmax;
