@@ -279,7 +279,7 @@
     "certId": "RSK_zacheapro",
     "domainId": "RSK",
     "crossDomains": [],
-    "subdomainId": "RSK_left_unspec",
+    "subdomainId": "RSK_right_unspec",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 6,
     "certVendor": "zachman",
