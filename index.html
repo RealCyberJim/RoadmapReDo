@@ -63,9 +63,14 @@
     }
 
     #roadmap {
-      display: flex;
-      flex-direction: column;
-      gap: 2vmax;
+      display: flex;              /* Enables horizontal layout */
+      flex-direction: row;        /* Align children (domains) left to right */
+      flex-wrap: nowrap;          /* Prevents wrapping to a second row */
+      justify-content: start;     /* Aligns all domains to the left edge */
+      align-items: start;         /* Aligns domain tops to match */
+      gap: 2vmax;                 /* ✅ Adds space (gutter) between domains */
+      grid-column: 2;
+      grid-row: 2;
     }
 
     .domain-container {
