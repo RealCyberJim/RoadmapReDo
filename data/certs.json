@@ -182,7 +182,7 @@
   {
     "certId": "RSK_issap",
     "domainId": "RSK",
-    "crossDomains": ["ENG","AST"],
+    "crossDomains": [],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 5,
@@ -194,7 +194,7 @@
   {
     "certId": "RSK_issep",
     "domainId": "RSK",
-    "crossDomains": ["ENG","AST"],
+    "crossDomains": [],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 5,
@@ -206,7 +206,7 @@
   {
     "certId": "RSK_issmp",
     "domainId": "RSK",
-    "crossDomains": ["ENG","AST"],
+    "crossDomains": [],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 5,
