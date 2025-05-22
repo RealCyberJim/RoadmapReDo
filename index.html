@@ -85,6 +85,12 @@
       width: max-content; /* Prevent full-width stretching */
     }
 
+    .domain-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title row on top, domain container below */
+      width: max-content;           /* Shrinks to fit the domain */
+    }
+
     .subdomain-container {
       position: relative;
       justify-content: center;
@@ -373,24 +379,24 @@
         domainDiv.appendChild(subDiv);
       });
 
-        // 🔹 Domain title aligned to subdomain columns
-        const domainTitle = document.createElement('div');
-        domainTitle.className = 'domain-title';
-        domainTitle.textContent = domain.domainShortName;
+      // 🔹 Wrap domain and title together in a domain-wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'domain-wrapper';
 
-        // Determine full horizontal span of this domain
-        const colStart = Math.min(...allContainers.map(c => c.gridColumnStart));
-        const colEnd = Math.max(...allContainers.map(c => c.gridColumnStart + c.gridColumnSpan - 1));
-        const colSpan = colEnd - colStart + 1;
+      // 🔹 Domain title (top row of wrapper)
+      const domainTitle = document.createElement('div');
+      domainTitle.className = 'domain-title';
+      domainTitle.textContent = domain.domainShortName;
+      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
+      domainTitle.style.textAlign = 'center';
 
-        domainTitle.style.gridRow = 1;
-        domainTitle.style.gridColumnStart = colStart;
-        domainTitle.style.gridColumnEnd = `span ${colSpan}`;
-        domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
+      // 🔹 Add title and domain box to wrapper
+      wrapper.appendChild(domainTitle);
+      wrapper.appendChild(domainDiv);
 
-        document.getElementById('roadmap-wrapper').appendChild(domainTitle);
+      // 🔹 Add the wrapper to the roadmap
+      roadmapEl.appendChild(wrapper);
 
-      roadmapEl.appendChild(domainDiv);
       });
     }
 
