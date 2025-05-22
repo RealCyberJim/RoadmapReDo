@@ -304,7 +304,19 @@
         domainDiv.appendChild(canvas); // Must go before the subdomain container
 
         // 🔹 Add cert tiles
-        const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+        const subCerts = certs.filter(cert => {
+          // Direct match: cert is assigned to this subdomain
+          if (cert.subdomainId === sub.subdomainId) return true;
+
+          // Guest tile logic
+          const isGuest = cert.crossDomains?.includes(domain.domainId);
+
+          const isTargetUnspec =
+            sub.subdomainId === `${domain.domainId}_unspec` ||
+            (domain.domainId === "RSK" && sub.subdomainId === "RSK_right_unspec");
+
+          return isGuest && isTargetUnspec;
+        });
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
