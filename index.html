@@ -68,7 +68,7 @@
       flex-wrap: nowrap;          /* Prevents wrapping to a second row */
       justify-content: start;     /* Aligns all domains to the left edge */
       align-items: start;         /* Aligns domain tops to match */
-      gap: .2vmax;                 /* ✅ Adds space (gutter) between domains */
+      gap: .2vmax;                 /* Adds space (gutter) between domains */
       grid-column: 2;
       grid-row: 2;
     }
@@ -199,6 +199,10 @@
       grid-template-columns: auto 1fr; /* Left: skill labels | Right: dynamic roadmap */
       grid-template-rows: auto 1fr;    /* Top: domain titles | Bottom: roadmap tiles */
       width: 100%;
+      max-width: 100vw; /*  Prevent scrollbars */
+      overflow-x: hidden; /*  No horizontal scroll */
+      padding: 0 1vmax; /*  Balanced side padding */
+      box-sizing: border-box; /*  Padding included in width */
       position: relative;
       gap: 1vmax;
     }
@@ -207,6 +211,7 @@
     #roadmap {
       grid-column: 2;
       grid-row: 2;
+      min-width: 0; /*  Prevent flex children from overflowing */
     }
   </style>
 </head>
