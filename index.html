@@ -196,22 +196,26 @@
     /* = ROADMAP GRID STRUCTURE (used always) = */
     #roadmap-wrapper {
       display: grid;
-      grid-template-columns: auto 1fr; /* Left: skill labels | Right: dynamic roadmap */
-      grid-template-rows: auto 1fr;    /* Top: domain titles | Bottom: roadmap tiles */
-      width: 100%;
-      max-width: 100vw; /*  Prevent scrollbars */
-      overflow-x: hidden; /*  No horizontal scroll */
-      padding: 0 1vmax; /*  Balanced side padding */
-      box-sizing: border-box; /*  Padding included in width */
+      grid-template-columns: 3vmax 1fr;     /* LEFT: room for vertical skill labels */
+      grid-template-rows: auto 1fr;         /* TOP: domain titles, BOTTOM: roadmap */
+      width: 100vw;                         /* Flush against browser edge */
+      overflow-x: hidden;                   /* No horizontal scroll */
+      box-sizing: border-box;
       position: relative;
-      gap: 1vmax;
     }
 
     /* Make sure roadmap fills its intended cell */
     #roadmap {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: start;
+      gap: 0.2vmax;                         /* Spacing between domains */
       grid-column: 2;
       grid-row: 2;
-      min-width: 0; /*  Prevent flex children from overflowing */
+      padding-right: 0.2vmax;              /* Right buffer for visual clarity */
+      min-width: 0;
     }
   </style>
 </head>
