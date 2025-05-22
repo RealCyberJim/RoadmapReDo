@@ -110,7 +110,7 @@
   {
     "certId": "RSK_gse",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 4,
@@ -122,7 +122,7 @@
   {
     "certId": "OPS_grem",
     "domainId": "OPS",
-    "crossDomains": ["TST","DEV"],
+    "crossDomains": ["TST","SOF"],
     "subdomainId": "OPS_unspec",
     "teamRole": "BlueTeam",
     "certSkillStrata": 4,
@@ -374,7 +374,7 @@
   {
     "certId": "RSK_cissp",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 7,
@@ -710,7 +710,7 @@
   {
     "certId": "RSK_gsp",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 9,
@@ -1010,7 +1010,7 @@
   {
     "certId": "RSK_securityx",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 11,
@@ -2702,7 +2702,7 @@
   {
     "certId": "RSK_programminglanguage",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 17,
@@ -4490,7 +4490,7 @@
   {
     "certId": "RSK_gsec",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 22,
@@ -4742,7 +4742,7 @@
   {
     "certId": "RSK_sscp",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 23,
@@ -4970,7 +4970,7 @@
   {
     "certId": "RSK_securityplus",
     "domainId": "RSK",
-    "crossDomains": ["NET","IAM","ENG","AST","TST","DEV","OPS"],
+    "crossDomains": ["NET","IAM","ENG","AST","TST","SOF","OPS"],
     "subdomainId": "RSK_grc",
     "teamRole": "DefaultTeam",
     "certSkillStrata": 24,
