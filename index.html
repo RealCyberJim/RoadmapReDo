@@ -107,13 +107,14 @@
 
     .domain-title {
       grid-row: 1;
-      text-align: center;
-      font-weight: bold;
-      font-size: 0.8vmax;
-      align-self: end; /* Align close to subdomain tiles */
-      padding: 0 0.3vmax 0.1vmax 0.3vmax;
+      text-align: end;
+      font-size: 0.85vmax;
+      font-weight: 600;
+      padding: 0.2vmax 0;
       white-space: nowrap;
       pointer-events: none;
+      position: relative;
+      z-index: 2;
     }
 
     .subdomain-title {
@@ -387,7 +388,7 @@
         domainTitle.style.gridColumnEnd = `span ${colSpan}`;
         domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
 
-        roadmapEl.appendChild(domainTitle);
+        document.getElementById('roadmap-wrapper').appendChild(domainTitle);
 
       roadmapEl.appendChild(domainDiv);
       });
