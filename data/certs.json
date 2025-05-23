@@ -33,7 +33,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/examination/technical-security-architecture/index.html",
     "certTooltip": "CREST Registered Technical Security Architect $2,300 two exams In person in the UK",
-    "certTileLabel": "CREST CRTSA"
+    "certTileLabel": "CREST RTSA"
   },
   {
     "certId": "RSK_itilmaster",
@@ -633,7 +633,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-simulated-attack-specialist",
     "certTooltip": "CREST Certified Simulated Attack Specialist $2,520 2 exams &amp; lab",
-    "certTileLabel": "CREST CCSAS"
+    "certTileLabel": "CREST CSAS"
   },
   {
     "certId": "NET_fcx",
@@ -789,7 +789,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-infrastructure-tester",
     "certTooltip": "CREST Certified Infrastructure Tester $2,520 exam &amp; lab",
-    "certTileLabel": "CREST CCTINF"
+    "certTileLabel": "CREST CTINF"
   },
   {
     "certId": "OPS_htbcwee",
@@ -957,7 +957,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-registered-penetration-tester",
     "certTooltip": "CREST Registered Penetration Tester $612 exam",
-    "certTileLabel": "CREST CRT"
+    "certTileLabel": "CREST RPT"
   },
   {
     "certId": "OPS_crtoii",
@@ -1305,7 +1305,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-threat-intelligence-manager",
     "certTooltip": "CREST Certified Threat Intelligence Manager $2,480 3 exams",
-    "certTileLabel": "CREST CCTIM"
+    "certTileLabel": "CREST CTIM"
   },
   {
     "certId": "OPS_oscp",
@@ -2265,7 +2265,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-registered-intrusion-analyst",
     "certTooltip": "CREST Registered Intrusion Analyst $612 exam &amp; lab",
-    "certTileLabel": "CREST CRIA"
+    "certTileLabel": "CREST RIA"
   },
   {
     "certId": "OPS_crestcrtia",
@@ -2277,7 +2277,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-registered-threat-intelligence-analyst",
     "certTooltip": "CREST Registered Threat Intelligence Analyst $615 2 exams",
-    "certTileLabel": "CREST CRTIA"
+    "certTileLabel": "CREST RTIA"
   },
   {
     "certId": "OPS_gwapt",
@@ -2661,7 +2661,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-web-application-tester/",
     "certTooltip": "CREST Certified Web Application Tester $2,520 exam &amp; lab",
-    "certTileLabel": "CREST CCTAPP"
+    "certTileLabel": "CREST CTAPP"
   },
   {
     "certId": "OPS_htbcpts",
@@ -2733,7 +2733,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-host-intrusion-analyst",
     "certTooltip": "CREST Certified Host intrustion Analyst $2,481 exam &amp; essay Hands on exam in UK",
-    "certTileLabel": "CREST CCHIA"
+    "certTileLabel": "CREST CHIA"
   },
   {
     "certId": "OPS_ence",
@@ -3201,7 +3201,7 @@
     "certVendor": "infosecinstitute",
     "certUrl": "\"https://app.infosecinstitute.com/portal/courses/a0tC0000000Fow6IAC style=\"\"font-size: 0.5vmax\"\"\"",
     "certTooltip": "Infosec Institute Certified Mobile and Web App Penetration Tester $4,599 exam Course required",
-    "certTileLabel": "CMWAPT"
+    "certTileLabel": "MWAPT"
   },
   {
     "certId": "OPS_cptc",
@@ -3621,7 +3621,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-certified-network-intrusion-analyst",
     "certTooltip": "CREST Certified Network Intrusion Analyst $2,481 exam &amp; essay Hands on exam in UK",
-    "certTileLabel": "CREST CCNIA"
+    "certTileLabel": "CREST CNIA"
   },
   {
     "certId": "IAM_cige",
@@ -3981,7 +3981,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-practitioner-security-analyst",
     "certTooltip": "CREST Practitioner Security Analyst $425 exam",
-    "certTileLabel": "CREST CPSA"
+    "certTileLabel": "CREST PSA"
   },
   {
     "certId": "NET_f5ca",
@@ -4785,7 +4785,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-practitioner-intrusion-analyst",
     "certTooltip": "CREST Practitioner Intrusion Analyst $425 exam",
-    "certTileLabel": "CREST CPIA"
+    "certTileLabel": "CREST PIA"
   },
   {
     "certId": "OPS_mese",
@@ -4809,7 +4809,7 @@
     "certVendor": "crest",
     "certUrl": "https://www.crest-approved.org/certification-careers/crest-certifications/crest-practitioner-threat-intelligence-analyst/",
     "certTooltip": "CREST Practitioner Threat Intelligence Analyst $425 exam",
-    "certTileLabel": "CREST CPTIA"
+    "certTileLabel": "CREST PTIA"
   },
   {
     "certId": "OPS_mcpt",

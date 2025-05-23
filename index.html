@@ -219,12 +219,46 @@
     /* = ROADMAP GRID STRUCTURE (used always) = */
     #roadmap-wrapper {
       display: grid;
-      grid-template-columns: 3vmax 1fr;     /* LEFT: room for vertical skill labels */
+      grid-template-columns: 1vmax 1fr;     /* LEFT: room for vertical skill labels */
       grid-template-rows: auto 1fr;         /* TOP: domain titles, BOTTOM: roadmap */
       width: 100vw;                         /* Flush against browser edge */
       overflow-x: hidden;                   /* No horizontal scroll */
       box-sizing: border-box;
       position: relative;
+    }
+
+    #skill-labels {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Even vertical spacing */
+      align-items: flex-end;          /* Right-align inside left gutter */
+      padding-right: 0.3vmax;
+      height: 100%;                   /* Stretch to full roadmap height */
+    }
+
+    .skill-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);     /* Make vertical text upright */
+      font-size: 0.65vmax;
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .skill-label.expert {
+      color: var(--color-red);       /* Red tone */
+    }
+
+    .skill-label.intermediate {
+      color: var(--color-yellow);       /* Orange tone */
+    }
+
+    .skill-label.beginner {
+      color: var(--color-green);       /* Green tone */
     }
 
     /* Make sure roadmap fills its intended cell */
@@ -246,6 +280,11 @@
 
   <h1>Security Certification Roadmap</h1>
   <div id="roadmap-wrapper">
+    <div id="skill-labels">
+      <div class="skill-label expert">Expert</div>
+      <div class="skill-label intermediate">Intermediate</div>
+      <div class="skill-label beginner">Beginner</div>
+    </div>
     <div id="roadmap"></div>
   </div>
 
