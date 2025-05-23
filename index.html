@@ -234,7 +234,7 @@
       flex-direction: column;
       justify-content: space-between; /* Even vertical spacing */
       align-items: flex-end;          /* Right-align inside left gutter */
-      padding-right: 0.3vmax;
+      padding: 1vmax 0.2vmax 1.5vmax 0; /* Top, right, bottom, left */;
       height: 100%;                   /* Stretch to full roadmap height */
     }
 
@@ -251,6 +251,7 @@
 
     .skill-label.expert {
       color: var(--color-red);       /* Red tone */
+      margin-top: 4vmax
     }
 
     .skill-label.intermediate {
@@ -259,6 +260,7 @@
 
     .skill-label.beginner {
       color: var(--color-green);       /* Green tone */
+      margin-bottom: 5.2vmax
     }
 
     /* Make sure roadmap fills its intended cell */
