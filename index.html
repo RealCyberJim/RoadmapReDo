@@ -220,9 +220,10 @@
     #roadmap-wrapper {
       display: grid;
       grid-template-columns: 1vmax 1fr;     /* LEFT: room for vertical skill labels */
-      grid-template-rows: auto 1fr;         /* TOP: domain titles, BOTTOM: roadmap */
+      grid-template-rows: auto auto;         /* TOP: domain titles, BOTTOM: roadmap */
       width: 100vw;                         /* Flush against browser edge */
       overflow-x: hidden;                   /* No horizontal scroll */
+      overflow-y: visible;                   /* allow vertical scroll */
       box-sizing: border-box;
       position: relative;
     }
