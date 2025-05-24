@@ -95,13 +95,12 @@
       width: max-content; /* Prevent full-width stretching */
     }
 
-    .domain-labels-container {
-      grid-column: 2;              /* Skip skill labels column */
-      grid-row: 1;                 /* Top row of the grid */
-      display: flex;               /* Layout all domain titles horizontally */
-      justify-content: start;     /* Left-align them */
-      gap: 0.2vmax;                /* Match domain spacing */
-      padding-left: 0.1vmax;       /* Visual buffer */
+    .domain-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
     }
 
     .domain-wrapper {
@@ -320,8 +319,6 @@
       <div class="skill-label beginner">Beginner</div>
     </div>
 
-    <div class="domain-labels-container"></div>  <!-- This holds all domain titles -->
-
     <div id="roadmap"></div>
   </div>
 <div>SPACE</div>
@@ -469,9 +466,7 @@
       const wrapper = document.createElement('div');
       wrapper.className = 'domain-wrapper';
       wrapper.appendChild(domainDiv);                     // Add the domain container
-      roadmapEl.appendChild(wrapper);                     // Add to the roadmap
-
-      // 🔹 Create the domain title (separate row)
+      // 🔹 Create the domain title
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
@@ -490,8 +485,14 @@
       domainTitle.style.textOverflow = 'unset';
       domainTitle.style.overflow = 'visible';
 
-      // 🔹 Add title to the domain-labels row (if domain is rendered, title appears)
-      document.querySelector('.domain-labels-container').appendChild(domainTitle);
+      // ✅ Group title and wrapper into one vertical stack
+      const domainUnit = document.createElement('div');
+      domainUnit.className = 'domain-unit';
+
+      domainUnit.appendChild(domainTitle);
+      domainUnit.appendChild(wrapper);
+
+      roadmapEl.appendChild(domainUnit);
 
       });
     }
