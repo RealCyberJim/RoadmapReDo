@@ -136,7 +136,7 @@
       text-align: center;             /* Center title above the domain */
       font-weight: 450;               /* Bold for emphasis */
       font-size: 0.8vmax;            /* Responsive scaling */
-      padding: 0.2vmax 0.3vmax;       /* Breathing room */
+      padding: 0.1vmax 0.3vmax 0.3vmax; /* Top + Sides + Bottom: keeps descenders from touching */
       white-space: normal;           /* Allow multi-line if needed */
       word-break: normal;            /* Never break mid-word */
       overflow-wrap: break-word;     /* Wrap only at spaces */
@@ -144,7 +144,7 @@
       pointer-events: none;
       line-height: 1;              /* Tighter line spacing */
       margin: 0;
-      height: 2.8vmax;               /* Fixed height to prevent shifting */
+      height: auto;               /* Fixed height to prevent shifting */
       display: block;
       align-items: end;             /* Align text to bottom of title box */
       justify-content: center;      /* Horizontally center text */
