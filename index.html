@@ -108,6 +108,8 @@
       display: grid;
       grid-template-rows: auto 1fr; /* Title row on top, domain container below */
       width: max-content;           /* Shrinks to fit the domain */
+      margin: 0;
+      padding: 0;
     }
 
     .subdomain-container {
@@ -142,14 +144,15 @@
       max-width: 100%;               /* Constrain to domain box */
       pointer-events: none;
       line-height: 1;              /* Tighter line spacing */
+      margin: 0;
       height: 2.8vmax;               /* Fixed height to prevent shifting */
-      display: flex;                 /* Flex container for alignment */
+      display: block;
       align-items: end;             /* Align text to bottom of title box */
       justify-content: center;      /* Horizontally center text */
     }
 
     .subdomain-title {
-      grid-row: 1;                              /* Place in row 1 */
+      grid-row: 1; /* Place in row 1 */
       grid-column-start: var(--col-start);     /* We'll replace this dynamically */
       grid-column-end: span var(--col-span);   /* This too */
       text-align: center;
