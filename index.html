@@ -90,6 +90,15 @@
       width: max-content; /* Prevent full-width stretching */
     }
 
+    .domain-labels-container {
+      grid-column: 2;              /* Skip skill labels column */
+      grid-row: 1;                 /* Top row of the grid */
+      display: flex;               /* Layout all domain titles horizontally */
+      justify-content: start;     /* Left-align them */
+      gap: 0.2vmax;                /* Match domain spacing */
+      padding-left: 0.1vmax;       /* Visual buffer */
+    }
+
     .domain-wrapper {
       display: grid;
       grid-template-rows: auto 1fr; /* Title row on top, domain container below */
@@ -296,6 +305,9 @@
       <div class="skill-label intermediate">Intermediate</div>
       <div class="skill-label beginner">Beginner</div>
     </div>
+
+    <div class="domain-labels-container"></div>  <!-- This holds all domain titles -->
+
     <div id="roadmap"></div>
   </div>
 
@@ -447,11 +459,12 @@
       domainTitle.style.textAlign = 'center';
 
       // 🔹 Add title and domain box to wrapper
-      wrapper.appendChild(domainTitle);
       wrapper.appendChild(domainDiv);
 
       // 🔹 Add the wrapper to the roadmap
       roadmapEl.appendChild(wrapper);
+
+      document.querySelector('.domain-labels-container').appendChild(domainTitle);
 
       });
     }
