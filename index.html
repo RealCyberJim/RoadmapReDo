@@ -447,23 +447,32 @@
         domainDiv.appendChild(subDiv);
       });
 
-      // 🔹 Wrap domain and title together in a domain-wrapper
+      // 🔹 Wrap domain content in a domain-wrapper
       const wrapper = document.createElement('div');
       wrapper.className = 'domain-wrapper';
+      wrapper.appendChild(domainDiv);                     // Add the domain container
+      roadmapEl.appendChild(wrapper);                     // Add to the roadmap
 
-      // 🔹 Domain title (top row of wrapper)
+      // 🔹 Create the domain title (separate row)
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
+
+      // ✅ Apply color and alignment
       domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
       domainTitle.style.textAlign = 'center';
 
-      // 🔹 Add title and domain box to wrapper
-      wrapper.appendChild(domainDiv);
+      // ✅ Set width based on tile + gutter logic
+      domainTitle.style.width = `calc(${maxColumn} * 2.3vmax + ${(maxColumn - 1) * 0.2}vmax)`;
 
-      // 🔹 Add the wrapper to the roadmap
-      roadmapEl.appendChild(wrapper);
+      // ✅ Allow full wrapping and prevent clipping or breaking
+      domainTitle.style.whiteSpace = 'normal';
+      domainTitle.style.wordBreak = 'normal';
+      domainTitle.style.overflowWrap = 'break-word';
+      domainTitle.style.textOverflow = 'unset';
+      domainTitle.style.overflow = 'visible';
 
+      // 🔹 Add title to the domain-labels row (if domain is rendered, title appears)
       document.querySelector('.domain-labels-container').appendChild(domainTitle);
 
       });
