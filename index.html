@@ -134,12 +134,13 @@
 
     .domain-title {
       text-align: center;             /* Center title above the domain */
-      font-weight: 450;               /* Bold for emphasis */
+      font-weight: 550;               /* Bold for emphasis */
       font-size: 0.8vmax;            /* Responsive scaling */
       padding: 0.1vmax 0 0.3vmax 0; /* Top + Bottom: keeps descenders from touching */
       white-space: normal;           /* Allow multi-line if needed */
       word-break: normal;            /* Never break mid-word */
       overflow-wrap: break-word;     /* Wrap only at spaces */
+      overflow: visible;             /* Allow overflow */
       max-width: 100%;               /* Constrain to domain box */
       pointer-events: none;
       line-height: 1;              /* Tighter line spacing */
