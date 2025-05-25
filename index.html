@@ -226,7 +226,7 @@
       background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
     }
 
-    /* ✅ Visual aid for the new roadmap grid layout */
+    /* Visual aid for the new roadmap grid layout */
     body.debug-mode #roadmap-wrapper {
       outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
       background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint to reveal layout */
@@ -234,6 +234,32 @@
 
     body.debug-mode #roadmap {
       outline: 2px dashed rgba(128, 0, 255, 0.2); /* Distinct roadmap container box */
+    }
+
+        /* 🔍 Domain-level layout visual tracing */
+    body.debug-mode .domain-unit {
+      outline: 2px dotted rgba(255, 0, 0, 0.3); /* Red = full unit (title + wrapper) */
+    }
+
+    body.debug-mode .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + container grid box */
+    }
+
+    body.debug-mode .domain-title {
+      outline: 2px solid rgba(0, 0, 255, 0.3);  /* Blue = domain title block */
+    }
+
+    /* Skill label column layout overlays */
+    body.debug-mode #skill-labels-wrapper {
+      outline: 2px dashed rgba(0, 255, 255, 0.3); /* Cyan = full left column */
+    }
+
+    body.debug-mode .skill-label-header-row {
+      background-color: rgba(255, 255, 0, 0.08); /* Soft yellow = domain title row */
+    }
+
+    body.debug-mode #skill-labels {
+      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label area */
     }
 
     /* Optional: Placeholder debug style for future left-hand skill label */
