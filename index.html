@@ -101,6 +101,10 @@
       align-items: center;
       gap: 0.1vmax;
       flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+      max-width: none;
     }
 
     .domain-wrapper {
@@ -139,6 +143,7 @@
       padding: 0.1vmax 0 0.3vmax 0; /* Top + Bottom: keeps descenders from touching */
       white-space: normal;           /* Allow multi-line if needed */
       word-break: normal;            /* Never break mid-word */
+      text-overflow: unset;      /* Prevent ellipsis */
       overflow-wrap: break-word;     /* Wrap only at spaces */
       overflow: visible;             /* Allow overflow */
       max-width: 100%;               /* Constrain to domain box */
