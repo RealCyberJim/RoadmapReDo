@@ -293,9 +293,10 @@
 
     #skill-labels-wrapper {
       grid-column: 1;
-      grid-row: 1 / span 2;         /* Occupies both top and bottom rows */
-      display: grid;
-      grid-template-rows: auto 1fr; /* Top: header spacer, Bottom: actual skill labels */
+      grid-row: 1 / span 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;              /* Stretch to full roadmap height */
     }
 
     .skill-label-header-row {
@@ -311,9 +312,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between; /* Even vertical spacing */
+      box-sizing: border-box;   /* Ensure internal padding doesn’t affect alignment */
       align-items: flex-end;          /* Right-align inside left gutter */
       padding: 1vmax 0.2vmax 1.5vmax 0; /* Top, right, bottom, left */;
-      height:auto%;                   /* Stretch to full roadmap height */
+      height: 100%;                   /* Stretch to full roadmap height */
     }
 
     .skill-label {
