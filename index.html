@@ -258,6 +258,18 @@
       position: relative;
     }
 
+    #skill-labels-wrapper {
+      grid-column: 1;
+      grid-row: 1 / span 2;         /* Occupies both top and bottom rows */
+      display: grid;
+      grid-template-rows: auto 1fr; /* Top: header spacer, Bottom: actual skill labels */
+    }
+
+    .skill-label-header-row {
+      height: 2.8vmax;              /* Match .domain-title height exactly */
+      width: 100%;
+    }
+
     #skill-labels {
       grid-column: 1;
       grid-row: 2;
@@ -320,10 +332,15 @@
 <div>SPACE</div>
   <h1>Security Certification Roadmap</h1>
   <div id="roadmap-wrapper">
-    <div id="skill-labels">
-      <div class="skill-label expert">Expert</div>
-      <div class="skill-label intermediate">Intermediate</div>
-      <div class="skill-label beginner">Beginner</div>
+
+    <!-- wrapper div that spans both rows of the grid -->
+    <div id="skill-labels-wrapper">
+      <div class="skill-label-header-row"></div> <!-- Placeholder for top row to manage layout anomalies (domain titles) -->
+      <div id="skill-labels">
+        <div class="skill-label expert">Expert</div>
+        <div class="skill-label intermediate">Intermediate</div>
+        <div class="skill-label beginner">Beginner</div>
+      </div>
     </div>
 
     <div id="roadmap"></div>
