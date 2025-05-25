@@ -54,6 +54,8 @@
       --domain-sof-dark: var(--color-skyblue-dark);
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
+
+      --domain-title-height: 2.8vmax;
     }
 
     html, body {
@@ -150,7 +152,7 @@
       pointer-events: none;
       line-height: 1;              /* Tighter line spacing */
       margin: 0;
-      height: 2.8vmax;               /* Fixed height to prevent shifting */
+      height: var(--domain-title-height); /* Fixed height to prevent shifting */
       display: flex;
       align-items: flex-end;             /* Align text to bottom of title box */
       justify-content: center;      /* Horizontally center text */
@@ -297,7 +299,7 @@
     }
 
     .skill-label-header-row {
-      height: 0;              /* Match .domain-title height exactly */
+      height: var(--domain-title-height); /* Match .domain-title height exactly */
       width: 100%;
       pointer-events: none;
       visibility: hidden;
