@@ -556,8 +556,15 @@
       tile.style.backgroundColor = `var(${teamRoles[role].tileColor})`;
       tile.style.borderColor = `var(${teamRoles[role].borderColor})`;
     } else {
+      // 🔹 Guest cert : use light variant when cert is rendered outside its home domain
       const domainIdLower = cert.domainId.toLowerCase();
-      tile.style.backgroundColor = `var(--domain-${domainIdLower})`;
+      const isGuestInThisDomain = tile.dataset.domainId !== cert.domainId;
+
+      const backgroundColorVar = isGuestInThisDomain
+        ? `--domain-${domainIdLower}-light`
+        : `--domain-${domainIdLower}`;
+
+      tile.style.backgroundColor = `var(${backgroundColorVar})`;
       tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
     }
 
