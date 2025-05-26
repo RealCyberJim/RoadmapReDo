@@ -1,5 +1,7 @@
   <style>
     :root {
+      --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
+
       /* Base color palette */
       --color-green: #70AD47;
       --color-teal: #008080;
@@ -331,24 +333,6 @@
       margin-bottom: 3vmax
     }
 
-    /* Make sure roadmap fills its intended cell */
-    #roadmap {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: start;
-      gap: 0.2vmax;
-      grid-column: 2;
-      grid-row: 2;
-      padding-right: 0.2vmax;
-      min-width: 0;
-      max-width: 100%;
-      width: 100%;
-      max-height: none;
-      overflow-x: hidden;
-      overflow-y: visible;
-    }
   </style>
 </head>
 <body class="debug-mode">
