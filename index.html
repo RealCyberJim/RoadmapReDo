@@ -72,17 +72,14 @@
     }
 
     #roadmap {
-      display: flex;              /* Enables horizontal layout */
-      flex-direction: row;        /* Align children (domains) left to right */
-      flex-wrap: nowrap;          /* Prevents wrapping to a second row */
-      overflow-x: hidden;     /* Prevent scrollbars */
+      display: grid;
+      grid-template-columns: auto repeat(var(--domain-count), min-content);
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax;
+      align-items: start;
       width: 100%;
+      overflow-x: hidden;
       box-sizing: border-box;
-      justify-content: start;     /* Aligns all domains to the left edge */
-      align-items: start;         /* Aligns domain tops to match */
-      gap: .2vmax;                 /* Adds space (gutter) between domains */
-      grid-column: 2;
-      grid-row: 2;
     }
 
     .domain-container {
@@ -294,42 +291,30 @@
       position: relative;
     }
 
-    #skill-labels-wrapper {
-      grid-column: 1;
-      grid-row: 1 / span 2;
-      display: flex;
-      flex-direction: column;
-      height: 100%;              /* Stretch to full roadmap height */
-    }
-
-    .skill-label-header-row {
-      height: var(--domain-title-height); /* Match .domain-title height exactly */
-      width: 100%;
-      pointer-events: none;
-      visibility:visible;
-    }
-
-    #skill-labels {
-      grid-column: 1;
-      grid-row: 2;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* Even vertical spacing */
-      box-sizing: border-box;   /* Ensure internal padding doesn’t affect alignment */
-      align-items: flex-end;          /* Right-align inside left gutter */
-      padding: 1vmax 0.2vmax 1.5vmax 0; /* Top, right, bottom, left */;
-      height: 100%;                   /* Stretch to full roadmap height */
+    .skill-column {
+      display: grid;
+      grid-template-rows: repeat(27, 1.5vmax); /* Match cert row heights */
+      grid-auto-rows: 1.5vmax;
+      justify-items: end;
+      align-items: start;
+      padding: 0.1vmax 0.3vmax 0 0; /* Add slight space between label and domain */
+      font-size: 0.5vmax;
+      text-align: right;
+      line-height: 1;
+      color: #333;
     }
 
     .skill-label {
       writing-mode: vertical-rl;
-      transform: rotate(180deg);     /* Make vertical text upright */
-      font-size: 0.7vmax;
-      font-weight: 600;
+      text-orientation: mixed;         /* Ensures upright readable letters */
+      transform: rotate(180deg);       /* Rotate to natural reading direction */
+      font-size: 0.6vmax;
+      font-weight: 500;
       text-align: right;
       white-space: nowrap;
       pointer-events: none;
       user-select: none;
+      color: #888;
     }
 
     .skill-label.expert {
@@ -414,6 +399,25 @@
       ]);
 
       const roadmapEl = document.getElementById('roadmap');
+      const skillCol = document.createElement('div');
+      skillCol.className = 'skill-column';
+      skillCol.style.gridColumn = '1'; // First column in the grid
+
+      const skillLevels = [
+        { label: 'Expert', rowStart: 2, rowEnd: 9 },
+        { label: 'Intermediate', rowStart: 10, rowEnd: 19 },
+        { label: 'Beginner', rowStart: 20, rowEnd: 27 }
+      ];
+
+      skillLevels.forEach(level => {
+        const label = document.createElement('div');
+        label.className = 'skill-label';
+        label.textContent = level.label;
+        label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        skillCol.appendChild(label);
+      });
+
+      roadmapEl.appendChild(skillCol);
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
@@ -534,25 +538,18 @@
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
-
-      // ✅ Apply color and alignment
       domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
       domainTitle.style.textAlign = 'center';
-
-      // ✅ Set width based on tile + gutter logic
       domainTitle.style.width = '100%';
-
-      // ✅ Allow full wrapping and prevent clipping or breaking
       domainTitle.style.whiteSpace = 'normal';
       domainTitle.style.wordBreak = 'normal';
       domainTitle.style.overflowWrap = 'break-word';
       domainTitle.style.textOverflow = 'unset';
       domainTitle.style.overflow = 'visible';
 
-      // ✅ Group title and wrapper into one vertical stack
       const domainUnit = document.createElement('div');
       domainUnit.className = 'domain-unit';
-
+      domainUnit.style.gridColumnStart = domain.domainDisplayOrder + 1;
       domainUnit.appendChild(domainTitle);
       domainUnit.appendChild(wrapper);
 
@@ -576,7 +573,6 @@
 
       tile.style.gridRowStart = cert.certSkillStrata;
 
-      // Apply color logic from domain and optional teamRole
       const domain = domains.find(d => d.domainId === cert.domainId);
       const teamRoles = domain.teamRoles || {};
       const role = cert.teamRole || "DefaultTeam";
