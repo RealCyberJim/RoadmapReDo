@@ -100,7 +100,7 @@
     .domain-unit {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       gap: 0.1vmax;
       flex: 0 0 auto;
       margin: 0;
@@ -140,6 +140,8 @@
 
     .domain-title {
       text-align: center;             /* Center title above the domain */
+      width: 100%;                  /* Full width of the domain box */
+      box-sizing: border-box;       /* Include padding in width */
       font-weight: 500;               /* Bold for emphasis */
       font-size: 0.6vmax;            /* Responsive scaling */
       padding: 0.1vmax 0 0.3vmax 0; /* Top + Bottom: keeps descenders from touching */
@@ -537,7 +539,7 @@
       domainTitle.style.textAlign = 'center';
 
       // ✅ Set width based on tile + gutter logic
-      domainTitle.style.width = `calc(${maxColumn} * 2.3vmax + ${(maxColumn - 1) * 0.2}vmax)`;
+      domainTitle.style.width = '100%';
 
       // ✅ Allow full wrapping and prevent clipping or breaking
       domainTitle.style.whiteSpace = 'normal';
