@@ -451,6 +451,25 @@
       skillColumn.style.gridTemplateRows = 'repeat(27, 1.5vmax)';
       skillColumn.style.gridAutoRows = '1.5vmax';
 
+      const strataLevels = [
+        { label: 'Expert', rowStart: 2, rowEnd: 9, className: 'expert' },
+        { label: 'Intermediate', rowStart: 10, rowEnd: 21, className: 'intermediate' },
+        { label: 'Beginner', rowStart: 22, rowEnd: 27, className: 'beginner' }
+      ];
+
+      strataLevels.forEach(level => {
+        const zone = document.createElement('div');
+        zone.className = `strata-zone ${level.className}`;
+        zone.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+
+        const label = document.createElement('div');
+        label.className = 'strata-label';
+        label.textContent = level.label;
+
+        zone.appendChild(label);
+        skillColumn.appendChild(zone);
+      });
+
       const skillLevels = [
         { label: 'Expert', rowStart: 2, rowEnd: 8 },
         { label: 'Intermediate', rowStart: 9, rowEnd: 21 },
