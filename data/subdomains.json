@@ -81,7 +81,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 7,
-      "gridColumnSpan": 4
+      "gridColumnSpan": 5
     },
     {
       "subdomainId": "OPS_exploitation",
@@ -92,7 +92,7 @@
       "subdomainColor": "--color-red-light",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 11,
+      "gridColumnStart": 12,
       "gridColumnSpan": 2
     },
     {
