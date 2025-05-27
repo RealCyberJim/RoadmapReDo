@@ -5172,6 +5172,18 @@
     "certTileLabel": "CSP"
   },
   {
+    "certId": "RSK_itilfdn",
+    "domainId": "RSK",
+    "crossDomains": ["AST"],
+    "subdomainId": "RSK_left_unspec",
+    "teamRole": "DefaultTeam",
+    "certSkillStrata": 25,
+    "certVendor": "itil",
+    "certUrl": "https://www.axelos.com/certifications/itil-certifications/itil-foundation",
+    "certTooltip": "ITIL Foundation $383 exam",
+    "certTileLabel": "ITIL Fdn"
+  },
+  {
     "certId": "RSK_iibacca",
     "domainId": "RSK",
     "crossDomains": [],
@@ -5674,18 +5686,6 @@
     "certUrl": "https://www.comptia.org/certifications/cloud-essentials",
     "certTooltip": "CompTIA Cloud Essentials $138 exam",
     "certTileLabel": "Cloud Essnt"
-  },
-  {
-    "certId": "RSK_itilfdn",
-    "domainId": "RSK",
-    "crossDomains": ["AST"],
-    "subdomainId": "RSK_left_unspec",
-    "teamRole": "DefaultTeam",
-    "certSkillStrata": 25,
-    "certVendor": "itil",
-    "certUrl": "https://www.axelos.com/certifications/itil-certifications/itil-foundation",
-    "certTooltip": "ITIL Foundation $383 exam",
-    "certTileLabel": "ITIL Fdn"
   },
   {
     "certId": "RSK_projectplus",
