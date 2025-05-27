@@ -9,7 +9,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
-      "gridColumnSpan": 4
+      "gridColumnSpan": 3
     },
     {
       "subdomainId": "ENG_nix",
@@ -20,7 +20,7 @@
       "subdomainColor": "--color-orange-light",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 5,
+      "gridColumnStart": 4,
       "gridColumnSpan": 1
     },
     {
@@ -32,7 +32,7 @@
       "subdomainColor": "--color-orange-light",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 6,
+      "gridColumnStart": 5,
       "gridColumnSpan": 1
     },
     {
@@ -81,7 +81,7 @@
       "gridRowStart": 2,
       "gridRowSpan": 28,
       "gridColumnStart": 7,
-      "gridColumnSpan": 5
+      "gridColumnSpan": 4
     },
     {
       "subdomainId": "OPS_exploitation",
@@ -92,7 +92,7 @@
       "subdomainColor": "--color-red-light",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 12,
+      "gridColumnStart": 11,
       "gridColumnSpan": 2
     },
     {
@@ -128,7 +128,7 @@
       "subdomainColor": "--domain-default-white",
       "gridRowStart": 2,
       "gridRowSpan": 28,
-      "gridColumnStart": 7,
+      "gridColumnStart": 6,
       "gridColumnSpan": 1
     },
     {
