@@ -250,14 +250,11 @@
 
     /* 🔹 Overall Roadmap Layout */
     body.debug-mode #roadmap-wrapper {
+      overflow-x: auto; /* Allow horizontal scroll only in debug mode */
       outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
       background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint */
       padding-left: 1vmax;
       padding-right: 1vmax;
-    }
-
-    body.debug-mode #roadmap-wrapper {
-      overflow-x: auto; /* Allow horizontal scroll only in debug mode */
     }
 
     body.debug-mode #roadmap {
