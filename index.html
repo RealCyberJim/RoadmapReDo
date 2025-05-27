@@ -310,6 +310,44 @@
       grid-column: 1;
     }
 
+    .strata-zone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      font-size: 0.6vmax;
+      font-weight: 500;
+      padding: 0.2vmax;
+      box-sizing: border-box;
+      color: #333;
+      pointer-events: none;
+      user-select: none;
+      border-radius: 0.25vmax;
+      z-index: 0;
+    }
+
+    .strata-zone .strata-label {
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .strata-zone.expert {
+      background-color: var(--color-red-light);
+      color: var(--color-red-dark);
+    }
+
+    .strata-zone.intermediate {
+      background-color: var(--color-yellow-light);
+      color: var(--color-yellow-dark);
+    }
+
+    .strata-zone.beginner {
+      background-color: var(--color-green-light);
+      color: var(--color-green-dark);
+    }
+
     .skill-column {
       display: grid;
       grid-template-rows: repeat(27, 1.5vmax); /* Match cert row heights */
