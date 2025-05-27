@@ -491,9 +491,16 @@
       // });
 
       // roadmapEl.appendChild(skillCol);
+
       // Create wrapper
       const skillWrapper = document.createElement('div');
       skillWrapper.className = 'domain-wrapper'; // reuse domain wrapper styling
+
+      const skillColumn = document.createElement('div');
+      skillColumn.className = 'skill-column';
+      skillColumn.style.display = 'grid';
+      skillColumn.style.gridTemplateRows = 'repeat(27, 1.5vmax)';
+      skillColumn.style.gridAutoRows = '1.5vmax';
 
       // Create the skill column (like domain-container)
       const strataLevels = [
@@ -502,7 +509,7 @@
         { label: 'Beginner', rowStart: 22, rowEnd: 27, className: 'beginner' }
       ];
 
-      // ⬇️ Create visual canvas blocks
+      // Create visual canvas blocks
       strataLevels.forEach(level => {
         const canvas = document.createElement('div');
         canvas.className = `skill-strata-canvas ${level.className}`;
@@ -510,7 +517,7 @@
         skillColumn.appendChild(canvas);
       });
 
-      // ⬇️ Create separate rotated labels
+      // Create separate rotated labels
       strataLevels.forEach(level => {
         const label = document.createElement('div');
         label.className = `skill-strata-label ${level.className}`;
@@ -534,14 +541,14 @@
       skillUnit.appendChild(skillTitle);
       skillUnit.appendChild(skillWrapper);
 
-      // ⬇️ Append at the top of the roadmap
+      // Append at the top of the roadmap
       roadmapEl.appendChild(skillUnit);
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
 
-        // 🔧 Dynamically set how wide the domain container should be
+        // Dynamically set how wide the domain container should be
         const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
 
         let maxColumn = 0;
@@ -555,7 +562,7 @@
       const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
       domainSubdomains.forEach(sub => {
         
-        // 🔹 Subdomain title
+        // Subdomain title
         if (!sub.subdomainId.endsWith('_unspec')) {
           const subTitle = document.createElement('div');
           subTitle.className = 'subdomain-title';
@@ -566,7 +573,7 @@
           domainDiv.appendChild(subTitle);
         }
 
-        // 🔹 Subdomain container
+        // Subdomain container
         const subDiv = document.createElement('div');
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
@@ -578,7 +585,7 @@
         subDiv.style.gridRowStart = sub.gridRowStart;
         subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
 
-        // 🔹 Subdomain canvas (visual layer behind container)
+        // Subdomain canvas (visual layer behind container)
         const canvas = document.createElement('div');
         canvas.classList.add('subdomain-canvas');
         canvas.setAttribute('data-subdomain-id', sub.subdomainId);
@@ -598,7 +605,7 @@
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
 
-        // 🔹 Add cert tiles
+        // Add cert tiles
         const subCerts = certs.filter(cert => {
         // Normal case: tile belongs to this subdomain
         if (cert.subdomainId === sub.subdomainId) return true;
@@ -649,11 +656,11 @@
         domainDiv.appendChild(subDiv);
       });
 
-      // 🔹 Wrap domain content in a domain-wrapper
+      // Wrap domain content in a domain-wrapper
       const wrapper = document.createElement('div');
       wrapper.className = 'domain-wrapper';
       wrapper.appendChild(domainDiv);                     // Add the domain container
-      // 🔹 Create the domain title
+      // Create the domain title
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
