@@ -496,29 +496,27 @@
       skillWrapper.className = 'domain-wrapper'; // reuse domain wrapper styling
 
       // Create the skill column (like domain-container)
-      const skillColumn = document.createElement('div');
-      skillColumn.className = 'skill-column';
-      skillColumn.style.display = 'grid';
-      skillColumn.style.gridTemplateRows = 'repeat(27, 1.5vmax)';
-      skillColumn.style.gridAutoRows = '1.5vmax';
-
       const strataLevels = [
         { label: 'Expert', rowStart: 2, rowEnd: 9, className: 'expert' },
         { label: 'Intermediate', rowStart: 10, rowEnd: 21, className: 'intermediate' },
         { label: 'Beginner', rowStart: 22, rowEnd: 27, className: 'beginner' }
       ];
 
+      // ⬇️ Create visual canvas blocks
       strataLevels.forEach(level => {
         const canvas = document.createElement('div');
         canvas.className = `skill-strata-canvas ${level.className}`;
         canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        skillColumn.appendChild(canvas);
+      });
 
+      // ⬇️ Create separate rotated labels
+      strataLevels.forEach(level => {
         const label = document.createElement('div');
         label.className = `skill-strata-label ${level.className}`;
         label.textContent = level.label;
-
-        canvas.appendChild(label);
-        skillColumn.appendChild(canvas);
+        label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        skillColumn.appendChild(label);
       });
 
       skillWrapper.appendChild(skillColumn);
