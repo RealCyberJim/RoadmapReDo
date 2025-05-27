@@ -467,6 +467,7 @@
         const subCerts = certs.filter(cert => {
         // Normal case: tile belongs to this subdomain
         if (cert.subdomainId === sub.subdomainId) return true;
+        if (cert.crossSubdomains?.includes(sub.subdomainId)) return true;
 
         // Guest case: tile is cross-listed in this domain
         const isGuest = cert.crossDomains?.includes(domain.domainId);
@@ -495,7 +496,7 @@
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
-          const tile = makeCertTile(cert, domains, domain.domainId);
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
 
           if (!tileRowMap[skillRow]) {
@@ -541,7 +542,7 @@
       });
     }
 
-    function makeCertTile(cert, domains, renderedDomainId) {
+    function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
       const tile = document.createElement('a');
       tile.href = cert.certUrl;
       tile.target = '_blank';
@@ -562,26 +563,28 @@
 
       const domainIdLower = cert.domainId.toLowerCase();
       const isGuestInThisDomain = renderedDomainId !== cert.domainId;
+      const isGuestInThisSubdomain = cert.crossSubdomains?.includes(renderedSubdomainId);
+      const isGuest = isGuestInThisDomain || isGuestInThisSubdomain;
 
       if (teamRoles[role] && teamRoles[role].tileColor) {
-        const colorVar = isGuestInThisDomain
+        const colorVar = isGuest
           ? teamRoles[role].tileColorLight || teamRoles[role].tileColor
           : teamRoles[role].tileColor;
         const borderVar = teamRoles[role].borderColor || `--domain-${domainIdLower}-dark`;
 
         tile.style.backgroundColor = `var(${colorVar})`;
         tile.style.borderColor = `var(${borderVar})`;
-        tile.style.color = isGuestInThisDomain
+        tile.style.color = isGuest
           ? `var(${borderVar})`
           : 'white';
       } else {
-        const fallbackBg = isGuestInThisDomain
+        const fallbackBg = isGuest
           ? `--domain-${domainIdLower}-light`
           : `--domain-${domainIdLower}`;
 
         tile.style.backgroundColor = `var(${fallbackBg})`;
         tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
-        tile.style.color = isGuestInThisDomain
+        tile.style.color = isGuest
           ? `var(--domain-${domainIdLower}-dark)`
           : 'white';
       }
