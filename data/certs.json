@@ -3198,7 +3198,7 @@
     "crossDomains": [],
     "subdomainId": "OPS_penTesting",
     "teamRole": "RedTeam",
-    "certSkillStrata": 18,
+    "certSkillStrata": 19,
     "certVendor": "mile2",
     "certUrl": "https://www.mile2.com/cpSH_outline/",
     "certTooltip": "Mile2 Certified Powershell Hacker $550 exam",
