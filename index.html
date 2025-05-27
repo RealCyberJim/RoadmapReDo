@@ -231,7 +231,9 @@
     .domain-OPS     .domain-title { color: var(--domain-ops); }
 
 
-    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body> [literally: <body class="debug-mode">]) = */
+    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
+
+    /* 🔹 Tile + Container Grid Boundaries */
     body.debug-mode .domain-container,
     body.debug-mode .subdomain-container,
     body.debug-mode .cert-tile {
@@ -246,53 +248,47 @@
       background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
     }
 
-    /* Visual aid for the new roadmap grid layout */
+    /* 🔹 Overall Roadmap Layout */
     body.debug-mode #roadmap-wrapper {
       outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
-      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint to reveal layout */
+      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint */
+      padding-left: 1vmax;
+      padding-right: 1vmax;
     }
 
     body.debug-mode #roadmap {
-      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Distinct roadmap container box */
+      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Container box */
     }
 
-        /* 🔍 Domain-level layout visual tracing */
+    /* 🔹 Domain Columns */
     body.debug-mode .domain-unit {
       outline: 2px dotted rgba(255, 0, 0, 0.3); /* Red = full unit (title + wrapper) */
     }
 
     body.debug-mode .domain-wrapper {
-      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + container grid box */
+      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + grid */
     }
 
     body.debug-mode .domain-title {
       outline: 2px solid rgba(0, 0, 255, 0.3);  /* Blue = domain title block */
     }
 
-    /* Skill label column layout overlays */
-    body.debug-mode #skill-labels-wrapper {
-      outline: 2px dashed rgba(0, 255, 255, 0.3); /* Cyan = full left column */
+    /* 🔹 Skill Label Column (mirrors domain structure) */
+    body.debug-mode .skill-unit {
+      outline: 2px dotted rgba(0, 128, 255, 0.3); /* Blue-tinted = full unit */
     }
 
-    body.debug-mode .skill-label-header-row {
-      background-color: rgba(255, 255, 0, 0.08); /* Soft yellow = domain title row */
+    body.debug-mode .skill-unit .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 128, 0.3); /* Greenish = skill wrapper */
     }
 
-    body.debug-mode #skill-labels {
-      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label area */
+    body.debug-mode .skill-unit .skill-column {
+      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label grid */
     }
 
-    /* Optional: Placeholder debug style for future left-hand skill label */
-    body.debug-mode .skill-labels {
-      background-color: rgba(0, 255, 128, 0.05);
-      outline: 1px dashed rgba(0, 255, 128, 0.4);
+    body.debug-mode .skill-unit .skill-label {
+      background-color: rgba(255, 255, 0, 0.08); /* Light yellow = each label */
     }
-
-    body.debug-mode #roadmap-wrapper {
-      padding-left: 1vmax;
-      padding-right: 1vmax;
-    }
-
 
     /* = ROADMAP GRID STRUCTURE (used always) = */
     #roadmap-wrapper {
@@ -307,6 +303,9 @@
       overflow-y: visible;                   /* allow vertical scroll */
       box-sizing: border-box;
       position: relative;
+    }
+    .skill-unit {
+      grid-column: 1;
     }
 
     .skill-column {
@@ -382,25 +381,67 @@
       ]);
 
       const roadmapEl = document.getElementById('roadmap');
-      const skillCol = document.createElement('div');
-      skillCol.className = 'skill-column';
-      skillCol.style.gridColumn = '1'; // First column in the grid
+      // const skillCol = document.createElement('div');
+      // skillCol.className = 'skill-column';
+      // skillCol.style.gridColumn = '1'; // First column in the grid
+
+      // const skillLevels = [
+      //   { label: 'Expert', rowStart: 2, rowEnd: 9 },
+      //   { label: 'Intermediate', rowStart: 10, rowEnd: 19 },
+      //   { label: 'Beginner', rowStart: 20, rowEnd: 27 }
+      // ];
+
+      // skillLevels.forEach(level => {
+      //   const label = document.createElement('div');
+      //   label.className = 'skill-label';
+      //   label.textContent = level.label;
+      //   label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+      //   skillCol.appendChild(label);
+      // });
+
+      // roadmapEl.appendChild(skillCol);
+      // Create wrapper
+      const skillWrapper = document.createElement('div');
+      skillWrapper.className = 'domain-wrapper'; // reuse domain wrapper styling
+
+      // Create the skill column (like domain-container)
+      const skillColumn = document.createElement('div');
+      skillColumn.className = 'skill-column';
+      skillColumn.style.display = 'grid';
+      skillColumn.style.gridTemplateRows = 'repeat(27, 1.5vmax)';
+      skillColumn.style.gridAutoRows = '1.5vmax';
 
       const skillLevels = [
-        { label: 'Expert', rowStart: 2, rowEnd: 9 },
-        { label: 'Intermediate', rowStart: 10, rowEnd: 19 },
-        { label: 'Beginner', rowStart: 20, rowEnd: 27 }
+        { label: 'Expert', rowStart: 2, rowEnd: 8 },
+        { label: 'Intermediate', rowStart: 9, rowEnd: 21 },
+        { label: 'Beginner', rowStart: 22, rowEnd: 27 }
       ];
 
       skillLevels.forEach(level => {
         const label = document.createElement('div');
-        label.className = 'skill-label';
+        label.className = `skill-label ${level.label.toLowerCase()}`;
         label.textContent = level.label;
         label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
-        skillCol.appendChild(label);
+        skillColumn.appendChild(label);
       });
 
-      roadmapEl.appendChild(skillCol);
+      skillWrapper.appendChild(skillColumn);
+
+      // Create a placeholder title for visual consistency
+      const skillTitle = document.createElement('div');
+      skillTitle.className = 'domain-title';
+      skillTitle.textContent = ''; // Blank title
+      skillTitle.style.height = 'var(--domain-title-height)';
+
+      const skillUnit = document.createElement('div');
+      skillUnit.className = 'domain-unit skill-unit';
+      skillUnit.style.gridColumnStart = 1;
+
+      skillUnit.appendChild(skillTitle);
+      skillUnit.appendChild(skillWrapper);
+
+      // ⬇️ Append at the top of the roadmap
+      roadmapEl.appendChild(skillUnit);
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
