@@ -42,20 +42,28 @@
       --domain-default-white: #ffffff;
       --domain-net: var(--color-green);
       --domain-net-dark: var(--color-green-dark);
+      --domain-net-light: var(--color-green-light);
       --domain-iam: var(--color-teal);
       --domain-iam-dark: var(--color-teal-dark);
+      --domain-iam-light: var(--color-teal-light);
       --domain-eng: var(--color-orange);
       --domain-eng-dark: var(--color-orange-dark);
+      --domain-eng-light: var(--color-orange-light);
       --domain-ast: var(--color-yellow);
       --domain-ast-dark: var(--color-yellow-dark);
+      --domain-ast-light: var(--color-yellow-light);
       --domain-rsk: var(--color-black);
       --domain-rsk-dark: var(--color-black-dark);
+      --domain-rsk-light: var(--color-black-light);
       --domain-tst: var(--color-purple);
       --domain-tst-dark: var(--color-purple-dark);
+      --domain-tst-light: var(--color-purple-light);
       --domain-sof: var(--color-skyblue);
       --domain-sof-dark: var(--color-skyblue-dark);
+      --domain-sof-light: var(--color-skyblue-light);
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
+      --domain-ops-light: var(--color-red-light);
 
       --domain-title-height: 2.8vmax;
     }
@@ -487,7 +495,7 @@
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
-          const tile = makeCertTile(cert, domains);
+          const tile = makeCertTile(cert, domains, domain.domainId);
           const skillRow = cert.certSkillStrata;
 
           if (!tileRowMap[skillRow]) {
@@ -533,7 +541,7 @@
       });
     }
 
-    function makeCertTile(cert, domains) {
+    function makeCertTile(cert, domains, renderedDomainId) {
       const tile = document.createElement('a');
       tile.href = cert.certUrl;
       tile.target = '_blank';
@@ -552,20 +560,23 @@
       const teamRoles = domain.teamRoles || {};
       const role = cert.teamRole || "DefaultTeam";
 
-      if (teamRoles[role] && teamRoles[role].tileColor && teamRoles[role].borderColor) {
-      tile.style.backgroundColor = `var(${teamRoles[role].tileColor})`;
-      tile.style.borderColor = `var(${teamRoles[role].borderColor})`;
-    } else {
-      // 🔹 Guest cert : use light variant when cert is rendered outside its home domain
       const domainIdLower = cert.domainId.toLowerCase();
-      const isGuestInThisDomain = tile.dataset.domainId !== cert.domainId;
+      const isGuestInThisDomain = renderedDomainId !== cert.domainId;
 
-      const backgroundColorVar = isGuestInThisDomain
-        ? `--domain-${domainIdLower}-light`
-        : `--domain-${domainIdLower}`;
+      if (teamRoles[role] && teamRoles[role].tileColor) {
+        const colorVar = isGuestInThisDomain
+          ? teamRoles[role].tileColorLight || teamRoles[role].tileColor
+          : teamRoles[role].tileColor;
+        const borderVar = teamRoles[role].borderColor || `--domain-${domainIdLower}-dark`;
 
-      tile.style.backgroundColor = `var(${backgroundColorVar})`;
-      tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+        tile.style.backgroundColor = `var(${colorVar})`;
+        tile.style.borderColor = `var(${borderVar})`;
+      } else {
+        const fallbackBg = isGuestInThisDomain
+          ? `--domain-${domainIdLower}-light`
+          : `--domain-${domainIdLower}`;
+        tile.style.backgroundColor = `var(${fallbackBg})`;
+        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
     }
 
     tile.style.color = 'white'; // force white font

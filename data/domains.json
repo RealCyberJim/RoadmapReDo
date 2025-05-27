@@ -6,7 +6,11 @@
       "gridColumnSpan": 3,
       "domainDescription": "The communication and network security domain covers the ability to secure communication channels and networks. Topics include secure and converged protocols, wireless networks, cellular networks, hardware operation (warranty and redundant power) and third-party connectivity. IP networking (IPSec, IPv4 and IPv6) are also included in this domain.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-net",
+          "tileColorLight": "--domain-net-light",
+          "borderColor": "--domain-net-dark"
+        }
       }
     },
     {
@@ -16,7 +20,11 @@
       "gridColumnSpan": 1,
       "domainDescription": "The identity and access management domain covers the attacks that target the human gateway to gain access to data. Other topics include ways to identify users with rights to access the information and servers. Identity and access management covers the topics of applications, Single sign-on authentication, privilege escalation, Kerberos, rule-based or risk-based access control, proofing and establishment of identity.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-iam",
+          "tileColorLight": "--domain-iam-light",
+          "borderColor": "--domain-iam-dark"
+        }
       }
     },
     {
@@ -26,7 +34,11 @@
       "gridColumnSpan": 7,
       "domainDescription": "The security architecture and engineering domain covers important topics concerning security engineering plans, designs, and principles. Topics include assessing and mitigating information system vulnerabilities, fundamental concepts of security models and security architectures in critical areas like access control. Cloud systems, cryptography, system infiltrations (ransomware, fault-injection and more) and virtualized systems are also covered in this domain.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-eng",
+          "tileColorLight": "--domain-eng-light",
+          "borderColor": "--domain-eng-dark"
+        }
       }
     },
     {
@@ -36,7 +48,11 @@
       "gridColumnSpan": 2,
       "domainDescription": "The Asset Security domain deals with the issues related to the collection, storage, maintenance, retention and destruction of data. It also covers knowledge of different roles regarding data handling (owner, controller and custodian) as well as data protection methods and data states. Other topics include resource provision, asset classification and data lifecycle management.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-ast",
+          "tileColorLight": "--domain-ast-light",
+          "borderColor": "--domain-ast-dark"
+        }
       }
     },
     {
@@ -46,7 +62,11 @@
       "gridColumnSpan": 9,
       "domainDescription": "The security and risk management domain covers general skills related to the implementation of user awareness programs as well as security procedures. Emphasis is also placed on risk management concerning the acquisition of new services, hardware and software (supply chain). Other skills include social engineering defense mechanisms.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-rsk",
+          "tileColorLight": "--domain-rsk-light",
+          "borderColor": "--domain-rsk-dark"
+        }
       }
     },
     {
@@ -56,7 +76,11 @@
       "gridColumnSpan": 3,
       "domainDescription": "The security assessment and testing domain deals with all the techniques and tools used to find system vulnerabilities, weaknesses and potential areas of concern not addressed by security procedures and policies. Attack simulations, vulnerability assessment, compliance checks, and ethical disclosure also fall under this domain.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-tst",
+          "tileColorLight": "--domain-tst-light",
+          "borderColor": "--domain-tst-dark"
+        }
       }
     },
     {
@@ -66,7 +90,11 @@
       "gridColumnSpan": 1,
       "domainDescription": "The software development security domain deals with implementing software-based security protocols within environments for which the IT professional is responsible. Risk analysis, vulnerability identification and auditing of source codes are all covered in this subset. Additional topics include software-designed security, maturity models, development methodologies, open-source and third-party development security.",
       "teamRoles": {
-        "DefaultTeam": {}
+        "DefaultTeam": {
+          "tileColor": "--domain-sof",
+          "tileColorLight": "--domain-sof-light",
+          "borderColor": "--domain-sof-dark"
+        }
       }
     },
     {
@@ -78,11 +106,18 @@
       "teamRoles": {
         "RedTeam": {
           "tileColor": "--color-red",
+          "tileColorLight": "--color-red-light",
           "borderColor": "--color-red-dark"
         },
         "BlueTeam": {
           "tileColor": "--color-blue",
+          "tileColorLight": "--color-blue-light",
           "borderColor": "--color-blue-dark"
+        },
+        "DefaultTeam": {
+          "tileColor": "--domain-ops",
+          "tileColorLight": "--domain-ops-light",
+          "borderColor": "--domain-ops-dark"
         }
       }
     }
