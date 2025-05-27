@@ -571,15 +571,20 @@
 
         tile.style.backgroundColor = `var(${colorVar})`;
         tile.style.borderColor = `var(${borderVar})`;
+        tile.style.color = isGuestInThisDomain
+          ? `var(${borderVar})`
+          : 'white';
       } else {
         const fallbackBg = isGuestInThisDomain
           ? `--domain-${domainIdLower}-light`
           : `--domain-${domainIdLower}`;
+
         tile.style.backgroundColor = `var(${fallbackBg})`;
         tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
-    }
-
-    tile.style.color = 'white'; // force white font
+        tile.style.color = isGuestInThisDomain
+          ? `var(--domain-${domainIdLower}-dark)`
+          : 'white';
+      }
 
       return tile;
     }
