@@ -504,30 +504,16 @@
       ];
 
       strataLevels.forEach(level => {
-        const zone = document.createElement('div');
-        zone.className = `strata-zone ${level.className}`;
-        zone.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        const canvas = document.createElement('div');
+        canvas.className = `skill-strata-canvas ${level.className}`;
+        canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
 
         const label = document.createElement('div');
-        label.className = 'strata-label';
+        label.className = `skill-strata-label ${level.className}`;
         label.textContent = level.label;
 
-        zone.appendChild(label);
-        skillColumn.appendChild(zone);
-      });
-
-      const skillLevels = [
-        { label: 'Expert', rowStart: 2, rowEnd: 8 },
-        { label: 'Intermediate', rowStart: 9, rowEnd: 21 },
-        { label: 'Beginner', rowStart: 22, rowEnd: 27 }
-      ];
-
-      skillLevels.forEach(level => {
-        const label = document.createElement('div');
-        label.className = `skill-label ${level.label.toLowerCase()}`;
-        label.textContent = level.label;
-        label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
-        skillColumn.appendChild(label);
+        canvas.appendChild(label);
+        skillColumn.appendChild(canvas);
       });
 
       skillWrapper.appendChild(skillColumn);
