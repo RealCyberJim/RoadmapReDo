@@ -69,6 +69,25 @@
       --domain-title-height: 2.8vmax;
     }
 
+    /* Domain-specific border and title coloring */
+    .domain-NET     { border-color: var(--domain-net); }
+    .domain-IAM     { border-color: var(--domain-iam); }
+    .domain-ENG     { border-color: var(--domain-eng); }
+    .domain-AST     { border-color: var(--domain-ast); }
+    .domain-RSK     { border-color: var(--domain-rsk); }
+    .domain-TST     { border-color: var(--domain-tst); }
+    .domain-SOF     { border-color: var(--domain-sof); }
+    .domain-OPS     { border-color: var(--domain-ops); }
+
+    .domain-NET     .domain-title { color: var(--domain-net); }
+    .domain-IAM     .domain-title { color: var(--domain-iam); }
+    .domain-ENG     .domain-title { color: var(--domain-eng); }
+    .domain-AST     .domain-title { color: var(--domain-ast); }
+    .domain-RSK     .domain-title { color: var(--domain-rsk); }
+    .domain-TST     .domain-title { color: var(--domain-tst); }
+    .domain-SOF     .domain-title { color: var(--domain-sof); }
+    .domain-OPS     .domain-title { color: var(--domain-ops); }
+
     html, body {
       overflow-x: hidden;
       overflow-y: auto;
@@ -212,25 +231,81 @@
       text-decoration: none;
     }
 
-    /* Domain-specific border and title coloring */
-    .domain-NET     { border-color: var(--domain-net); }
-    .domain-IAM     { border-color: var(--domain-iam); }
-    .domain-ENG     { border-color: var(--domain-eng); }
-    .domain-AST     { border-color: var(--domain-ast); }
-    .domain-RSK     { border-color: var(--domain-rsk); }
-    .domain-TST     { border-color: var(--domain-tst); }
-    .domain-SOF     { border-color: var(--domain-sof); }
-    .domain-OPS     { border-color: var(--domain-ops); }
+    /* = ROADMAP GRID STRUCTURE = */
+    #roadmap-wrapper {
+      display: grid;
+      grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
+      grid-template-rows: auto auto;
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      max-height: none !important;
+      overflow-x: hidden;
+      overflow-y: visible;
+      box-sizing: border-box;
+      position: relative;
+    }
 
-    .domain-NET     .domain-title { color: var(--domain-net); }
-    .domain-IAM     .domain-title { color: var(--domain-iam); }
-    .domain-ENG     .domain-title { color: var(--domain-eng); }
-    .domain-AST     .domain-title { color: var(--domain-ast); }
-    .domain-RSK     .domain-title { color: var(--domain-rsk); }
-    .domain-TST     .domain-title { color: var(--domain-tst); }
-    .domain-SOF     .domain-title { color: var(--domain-sof); }
-    .domain-OPS     .domain-title { color: var(--domain-ops); }
+    .skill-column {
+      display: grid;
+      grid-template-rows: repeat(27, 1.5vmax);
+      grid-auto-rows: 1.5vmax;
+      grid-column: 1;
+      justify-items: end;
+      align-items: start;
+      padding: 0.1vmax 0.3vmax 0 0;
+      font-size: 0.5vmax;
+      text-align: right;
+      line-height: 1;
+      position: relative;
+    }
 
+    .skill-strata-canvas {
+      width: 100%;
+      height: 100%;
+      grid-column: 1;
+      z-index: 0;
+      position: relative;
+      pointer-events: none;
+      border-radius: 0.25vmax;
+    }
+
+    .skill-strata-canvas.expert {
+      background-color: var(--color-red-light);
+    }
+
+    .skill-strata-canvas.intermediate {
+      background-color: var(--color-yellow-light);
+    }
+
+    .skill-strata-canvas.beginner {
+      background-color: var(--color-green-light);
+    }
+
+    .skill-strata-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 0.6vmax;
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+      user-select: none;
+      z-index: 1;
+      grid-column: 1;
+      color: inherit;
+    }
+
+    .skill-strata-label.expert {
+      color: var(--color-red-dark);
+    }
+
+    .skill-strata-label.intermediate {
+      color: var(--color-yellow-dark);
+    }
+
+    .skill-strata-label.beginner {
+      color: var(--color-green-dark);
+    }
 
     /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
 
@@ -295,148 +370,6 @@
     body.debug-mode .skill-strata-canvas {
       outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
       background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
-    }
-
-    /* = ROADMAP GRID STRUCTURE (used always) = */
-    #roadmap-wrapper {
-      display: grid;
-      grid-template-columns: 1vmax 1fr;     /* LEFT: room for vertical skill labels */
-      grid-template-rows: auto auto;         /* TOP: domain titles, BOTTOM: roadmap */
-      width: 100%;                         /* Flush against browser edge */
-      max-width: 100vw;                   /* Prevent overflow */
-      height: auto;
-      max-height: none !important;          /* Cancel any inherited max-height */
-      overflow-x: hidden;                   /* No horizontal scroll */
-      overflow-y: visible;                   /* allow vertical scroll */
-      box-sizing: border-box;
-      position: relative;
-    }
-    .skill-unit {
-      grid-column: 1;
-    }
-
-    .strata-zone {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      transform: rotate(180deg);
-      font-size: 0.6vmax;
-      font-weight: 500;
-      padding: 0.2vmax;
-      box-sizing: border-box;
-      color: #333;
-      pointer-events: none;
-      user-select: none;
-      border-radius: 0.25vmax;
-      z-index: 0;
-    }
-
-    .strata-zone .strata-label {
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .strata-zone.expert {
-      background-color: var(--color-red-light);
-      color: var(--color-red-dark);
-    }
-
-    .strata-zone.intermediate {
-      background-color: var(--color-yellow-light);
-      color: var(--color-yellow-dark);
-    }
-
-    .strata-zone.beginner {
-      background-color: var(--color-green-light);
-      color: var(--color-green-dark);
-    }
-
-    .skill-column {
-      display: grid;
-      grid-template-rows: repeat(27, 1.5vmax); /* Match cert row heights */
-      grid-auto-rows: 1.5vmax;
-      justify-items: end;
-      align-items: start;
-      padding: 0.1vmax 0.3vmax 0 0; /* Add slight space between label and domain */
-      font-size: 0.5vmax;
-      text-align: right;
-      line-height: 1;
-      color: #333;
-    }
-
-    .skill-label {
-      writing-mode: vertical-rl;
-      text-orientation: mixed;         /* Ensures upright readable letters */
-      transform: rotate(180deg);       /* Rotate to natural reading direction */
-      font-size: 0.6vmax;
-      font-weight: 500;
-      text-align: right;
-      white-space: nowrap;
-      pointer-events: none;
-      user-select: none;
-      color: #888;
-    }
-
-    /* Skill strata canvas visual fill */
-    .skill-strata-canvas.expert {
-      background-color: var(--color-red-light);
-    }
-
-    .skill-strata-canvas.intermediate {
-      background-color: var(--color-yellow-light);
-    }
-
-    .skill-strata-canvas.beginner {
-      background-color: var(--color-green-light);
-    }
-
-    /* Skill strata label text colors */
-    .skill-strata-label.expert {
-      color: var(--color-red-dark);
-    }
-
-    .skill-strata-label.intermediate {
-      color: var(--color-yellow-dark);
-    }
-
-    .skill-strata-label.beginner {
-      color: var(--color-green-dark);
-    }
-
-    .strata-zone {
-      position: relative;
-      z-index: 0;
-      pointer-events: none;
-      width: 100%;
-    }
-
-    .strata-label {
-      position: relative;
-      z-index: 1;
-      text-align: right;
-      font-size: 0.6vmax;
-      font-weight: 500;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      white-space: nowrap;
-      user-select: none;
-      padding-right: 0.2vmax;
-    }
-
-    .skill-label.expert {
-      color: var(--color-red);       /* Red tone */
-      margin-top: 4vmax
-    }
-
-    .skill-label.intermediate {
-      color: var(--color-yellow);       /* Orange tone */
-    }
-
-    .skill-label.beginner {
-      color: var(--color-green);       /* Green tone */
-      margin-bottom: 3vmax
     }
 
   </style>
