@@ -313,7 +313,7 @@
     .skill-placeholder {
       display: block;
       height: 1.5vmax;
-      width: 1.5vmax;
+      width: .5vmax;
       opacity: 0;
       pointer-events: none;
     }
@@ -506,15 +506,11 @@
         skillContainer.appendChild(label);
       });
 
-      // Add invisible row placeholders to enforce 27 grid rows
-      for (let i = 1; i <= 28; i++) {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'skill-placeholder';
-        placeholder.style.gridRowStart = i;
-        placeholder.style.height = '1.5vmax';
-        placeholder.style.pointerEvents = 'none';
-        placeholder.style.opacity = '0';
-        placeholder.style.width = '2.3vmax'; // match tile width
+      // Add invisible row placeholders to enforce 28 grid rows
+      for (let row = 2; row <= 28; row++) {
+        const placeholder = document.createElement("div");
+        placeholder.className = "skill-placeholder";
+        placeholder.style.gridRowStart = row;
         skillContainer.appendChild(placeholder);
       }
 
