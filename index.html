@@ -246,23 +246,51 @@
       position: relative;
     }
 
-    .skill-column {
-      display: grid;
-      grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container exactly */
-      grid-auto-rows: 1.5vmax;
-      grid-column: 1;
-      justify-items: end;
-      align-items: start;
+    .skill-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
+      margin: 0;
       padding: 0;
-      font-size: 0.5vmax;
-      text-align: right;
-      line-height: 1;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .skill-heading {
+      height: var(--domain-title-height);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      font-size: 0.8vmax;
+      font-weight: 500;
+      color: transparent; /* visually blank */
+      pointer-events: none;
+    }
+
+    .skill-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title + label rows */
+      width: max-content;
+      margin: 0;
+      padding: 0;
+    }
+
+    .skill-container {
       position: relative;
+      display: grid;
+      grid-template-rows: repeat(27, 1.5vmax); /* Matches domain-container */
+      gap: 0.1vmax;                            /* Matches tile vertical gutter */
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matches .domain-container exactly */
+      border-radius: 0.25vmax;                 /* Visual consistency */
+      width: max-content;
+      box-sizing: border-box;
     }
 
     .skill-strata-canvas {
       width: 100%;
-      height: 100%;
       grid-column: 1;
       z-index: 0;
       position: relative;
@@ -292,7 +320,8 @@
       user-select: none;
       z-index: 1;
       grid-column: 1;
-      color: inherit;
+      align-self: center;
+      justify-self: center;
     }
 
     .skill-strata-label.expert {
