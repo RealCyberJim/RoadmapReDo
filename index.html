@@ -392,13 +392,34 @@
       outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label grid */
     }
 
-    body.debug-mode .skill-unit .skill-label {
-      background-color: rgba(255, 255, 0, 0.08); /* Light yellow = each label */
+    body.debug-mode .skill-strata-label {
+      background-color: rgba(255, 255, 0, 0.08); /* Light yellow for each label */
+      outline: 1px dotted rgba(128, 128, 0, 0.5); /* Optional: visual border */
     }
 
     body.debug-mode .skill-strata-canvas {
       outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
       background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
+    }
+
+    /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
+    body.debug-mode .skill-container::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.5vmax
+      );
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
   </style>
