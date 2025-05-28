@@ -312,6 +312,7 @@
 
     .skill-placeholder {
       display: block;
+      grid-column: 1;
       height: 1.5vmax;
       width: .5vmax;
       opacity: 0;
@@ -514,6 +515,7 @@
         const placeholder = document.createElement("div");
         placeholder.className = "skill-placeholder";
         placeholder.style.gridRowStart = row;
+        placeholder.style.gridColumnStart = 1; // Lock to first column
         skillContainer.appendChild(placeholder);
       }
 
