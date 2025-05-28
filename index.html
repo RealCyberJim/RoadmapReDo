@@ -310,6 +310,14 @@
       background-color: var(--color-green-light);
     }
 
+    .skill-placeholder {
+      display: block;
+      height: 1.5vmax;
+      width: auto;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .skill-strata-label {
       writing-mode: vertical-rl;
       transform: rotate(180deg);
@@ -497,6 +505,18 @@
         label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
         skillContainer.appendChild(label);
       });
+
+      // Add invisible row placeholders to enforce 27 grid rows
+      for (let i = 1; i <= 27; i++) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'skill-placeholder';
+        placeholder.style.gridRowStart = i;
+        placeholder.style.height = '1.5vmax';
+        placeholder.style.pointerEvents = 'none';
+        placeholder.style.opacity = '0';
+        placeholder.style.width = '2.3vmax'; // match tile width
+        skillContainer.appendChild(placeholder);
+      }
 
       // Assemble full structure
       skillWrapper.appendChild(skillContainer);
