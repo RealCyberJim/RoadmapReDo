@@ -435,59 +435,58 @@
 
       const roadmapEl = document.getElementById('roadmap');
 
-      // Create wrapper for skill column
-      const skillWrapper = document.createElement('div');
-      skillWrapper.className = 'domain-wrapper'; // Reuse layout styles
+      // Build skill column just like a domain column
+      const roadmapEl = document.getElementById("roadmap");
 
-      // Create the skill column (acts like domain-container)
-      const skillColumn = document.createElement('div');
-      skillColumn.className = 'skill-column';
-      skillColumn.style.display = 'grid';
-      skillColumn.style.gridTemplateRows = 'repeat(27, 1.5vmax)';
-      skillColumn.style.gridAutoRows = '1.5vmax';
+      // Skill unit (outermost container)
+      const skillUnit = document.createElement("div");
+      skillUnit.className = "domain-unit skill-unit";
+      skillUnit.style.gridColumnStart = 1;
 
-      // Define strata zones and labels
+      // Skill heading — structurally identical to domain-title
+      const skillHeading = document.createElement("div");
+      skillHeading.className = "skill-heading";
+      skillHeading.textContent = ""; // Optionally use "Skill Level" or similar
+
+      // Skill wrapper — mirrors .domain-wrapper
+      const skillWrapper = document.createElement("div");
+      skillWrapper.className = "skill-wrapper";
+
+      // Skill container — mirrors .domain-container
+      const skillContainer = document.createElement("div");
+      skillContainer.className = "skill-container";
+
+      // Define strata levels with row ranges
       const strataLevels = [
-        { label: 'Expert', rowStart: 2, rowEnd: 9, className: 'expert' },
-        { label: 'Intermediate', rowStart: 10, rowEnd: 21, className: 'intermediate' },
-        { label: 'Beginner', rowStart: 22, rowEnd: 27, className: 'beginner' }
+        { label: "Expert", rowStart: 2, rowEnd: 9, className: "expert" },
+        { label: "Intermediate", rowStart: 10, rowEnd: 21, className: "intermediate" },
+        { label: "Beginner", rowStart: 22, rowEnd: 27, className: "beginner" }
       ];
 
-      // First add canvas zones (background layer)
+      // Add canvas layers
       strataLevels.forEach(level => {
-        const canvas = document.createElement('div');
+        const canvas = document.createElement("div");
         canvas.className = `skill-strata-canvas ${level.className}`;
         canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
-        skillColumn.appendChild(canvas);
+        skillContainer.appendChild(canvas);
       });
 
-      // Then add skill labels (text layer)
+      // Add label layers
       strataLevels.forEach(level => {
-        const label = document.createElement('div');
+        const label = document.createElement("div");
         label.className = `skill-strata-label ${level.className}`;
         label.textContent = level.label;
         label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
-        skillColumn.appendChild(label);
+        skillContainer.appendChild(label);
       });
 
-      skillWrapper.appendChild(skillColumn);
-
-      // Add placeholder title for vertical alignment
-      const skillTitle = document.createElement('div');
-      skillTitle.className = 'domain-title';
-      skillTitle.textContent = ''; // No label needed
-      skillTitle.style.height = 'var(--domain-title-height)';
-
-      // Wrap in domain-like container
-      const skillUnit = document.createElement('div');
-      skillUnit.className = 'domain-unit skill-unit';
-      skillUnit.style.gridColumnStart = 1;
-
-      skillUnit.appendChild(skillTitle);
+      // Assemble full structure
+      skillWrapper.appendChild(skillContainer);
+      skillUnit.appendChild(skillHeading);
       skillUnit.appendChild(skillWrapper);
 
-      // Attach to roadmap
-      roadmapEl.appendChild(skillUnit);
+      // Prepend skill unit before any domain units
+      roadmapEl.prepend(skillUnit);
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
