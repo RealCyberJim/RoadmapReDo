@@ -279,14 +279,15 @@
     }
 
     .skill-container {
+      background: white;
       position: relative;
+      border: 2px solid;
+      border-radius: 0.25vmax;                 /* Visual consistency */
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matches .domain-container exactly */
       display: grid;
       grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container */
       gap: 0.1vmax;                            /* Matches tile vertical gutter */
-      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matches .domain-container exactly */
-      border-radius: 0.25vmax;                 /* Visual consistency */
       width: max-content;
-      box-sizing: border-box;
     }
 
     .skill-strata-canvas {
@@ -311,15 +312,15 @@
     }
 
     .skill-placeholder {
-      display: block;
-      grid-column: 1;
-      height: 1.5vmax;
-      width: .5vmax;
+      grid-column-start: 1;
+      grid-row-end: span 1;
+      height: 1.5vmax;         /* Matches cert-tile and domain rows */
+      width: 0.1vmax;          /* Minimum width needed for alignment */
       opacity: 0;
       pointer-events: none;
-      margin: 0;                 /* Prevent vertical shift */
+      margin: 0;
       padding: 0;
-      box-sizing: border-box;    /* Match tile behavior */
+      box-sizing: border-box;
     }
 
     .skill-strata-label {
@@ -330,7 +331,9 @@
       text-align: right;
       white-space: nowrap;
       user-select: none;
+      position: relative;
       z-index: 1;
+      pointer-events: none;
       grid-column: 1;
       align-self: center;
       justify-self: center;
