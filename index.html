@@ -285,7 +285,7 @@
       border-radius: 0.25vmax;                 /* Visual consistency */
       padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matches .domain-container exactly */
       display: grid;
-      grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container */
+      grid-template-rows: repeat(29, 1.5vmax); /* Matches domain-container */
       gap: 0.1vmax;                            /* Matches tile vertical gutter */
       width: max-content;
     }
@@ -516,8 +516,8 @@
         skillContainer.appendChild(label);
       });
 
-      // Add invisible row placeholders to enforce 28 grid rows
-      for (let row = 2; row <= 28; row++) {
+      // Add invisible row placeholders to enforce 29 grid rows
+      for (let row = 2; row <= 29; row++) {
         const placeholder = document.createElement("div");
         placeholder.className = "skill-placeholder";
         placeholder.style.gridRowStart = row;
