@@ -475,16 +475,19 @@
 
       // Skill heading — structurally identical to domain-title
       const skillHeading = document.createElement("div");
-      skillHeading.className = "skill-heading";
+      skillHeading.className = "domain-title skill-heading";
       skillHeading.textContent = ""; // Optionally use "Skill Level" or similar
 
-      // Skill wrapper — mirrors .domain-wrapper
+      // Skill wrapper — structurally identical to .domain-wrapper
       const skillWrapper = document.createElement("div");
       skillWrapper.className = "skill-wrapper";
 
-      // Skill container — mirrors .domain-container
+      // Skill container — structurally identical to .domain-container
       const skillContainer = document.createElement("div");
       skillContainer.className = "skill-container";
+
+      // ⬅ Add the container inside the wrapper (same as domain logic)
+      skillWrapper.appendChild(skillContainer);
 
       // Define strata levels with row ranges
       const strataLevels = [
