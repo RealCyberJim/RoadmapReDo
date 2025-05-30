@@ -535,7 +535,8 @@
 
       domains.forEach(domain => {
         const domainDiv = document.createElement('div');
-        domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+        domainDiv.classList.add('domain-container');
+        domainDiv.classList.add(`domain-${domain.domainId.toUpperCase()}`);
 
         // Dynamically set how wide the domain container should be
         const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
