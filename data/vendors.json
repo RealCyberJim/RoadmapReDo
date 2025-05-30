@@ -1,0 +1,362 @@
+[
+  {
+    "id": "accessdata",
+    "name": "AccessData"
+  },
+  {
+    "id": "apmg",
+    "name": "Accredited Project Manager Group (APMG)"
+  },
+  {
+    "id": "amazon",
+    "name": "Amazon"
+  },
+  {
+    "id": "asis",
+    "name": "American Society for Industrial Security (ASIS)"
+  },
+  {
+    "id": "apple",
+    "name": "Apple"
+  },
+  {
+    "id": "bcs",
+    "name": "British Computer Society (BCS)"
+  },
+  {
+    "id": "ciisec",
+    "name": "CIISec"
+  },
+  {
+    "id": "certnexus",
+    "name": "CertNexus"
+  },
+  {
+    "id": "cwnp",
+    "name": "Certified Wireless Network Professionals (CWNP)"
+  },
+  {
+    "id": "certiport",
+    "name": "Certiport"
+  },
+  {
+    "id": "checkpoint",
+    "name": "Checkpoint"
+  },
+  {
+    "id": "cisco",
+    "name": "Cisco"
+  },
+  {
+    "id": "cncf",
+    "name": "Cloud Native Computing Foundation (CNCF)"
+  },
+  {
+    "id": "comptia",
+    "name": "CompTIA"
+  },
+  {
+    "id": "crest",
+    "name": "Council for Registered Ethical Security Testers (CREST)"
+  },
+  {
+    "id": "cyberscheme",
+    "name": "Cyber Scheme"
+  },
+  {
+    "id": "cyberstruggle",
+    "name": "Cyber Struggle"
+  },
+  {
+    "id": "cyberdefenders",
+    "name": "CyberDefenders"
+  },
+  {
+    "id": "csi",
+    "name": "CyberSecurity Institute"
+  },
+  {
+    "id": "darkvortex",
+    "name": "Dark Vortex"
+  },
+  {
+    "id": "dsci",
+    "name": "Data Security Council of India (DSCI)"
+  },
+  {
+    "id": "dri",
+    "name": "Disaster Recovery Institute (DRI)"
+  },
+  {
+    "id": "eccouncil",
+    "name": "EC Council"
+  },
+  {
+    "id": "ecfirst",
+    "name": "Enterprise Compliance First (EC First)"
+  },
+  {
+    "id": "eitca",
+    "name": "European IT Certification Academy (EITCA)"
+  },
+  {
+    "id": "exin",
+    "name": "Exameninstituut voor Informatica (EXIN)"
+  },
+  {
+    "id": "excida",
+    "name": "Excida"
+  },
+  {
+    "id": "f5",
+    "name": "F5"
+  },
+  {
+    "id": "fairinstitute",
+    "name": "Fair Institute"
+  },
+  {
+    "id": "fortinet",
+    "name": "Fortinet"
+  },
+  {
+    "id": "gaqm",
+    "name": "Global Association for Quality Management (GAQM)"
+  },
+  {
+    "id": "giac",
+    "name": "Global Information Assurance Certification (GIAC)"
+  },
+  {
+    "id": "google",
+    "name": "Google"
+  },
+  {
+    "id": "hlayer",
+    "name": "H Layer"
+  },
+  {
+    "id": "hackthebox",
+    "name": "Hack the Box"
+  },
+  {
+    "id": "idpro",
+    "name": "IDPro"
+  },
+  {
+    "id": "imi",
+    "name": "Identity Management Institute (IMI)"
+  },
+  {
+    "id": "ine",
+    "name": "Information Network Engineering Security (INE)"
+  },
+  {
+    "id": "ismi",
+    "name": "Information Security Management Institute (ISMI)"
+  },
+  {
+    "id": "isaca",
+    "name": "Information Systems Audit and Control Association (ISACA)"
+  },
+  {
+    "id": "itil",
+    "name": "Information Technology Infrastructure Library (ITIL)"
+  },
+  {
+    "id": "infosecinstitute",
+    "name": "Infosec Institute"
+  },
+  {
+    "id": "isecom",
+    "name": "Institute for Security and Open Methodologies (ISECOM)"
+  },
+  {
+    "id": "iia",
+    "name": "Institute of Internal Auditors (IIA)"
+  },
+  {
+    "id": "inteltechniques",
+    "name": "IntelTechniques"
+  },
+  {
+    "id": "iacis",
+    "name": "International Association for Computer Information Systems (IACIS)"
+  },
+  {
+    "id": "ibitgq",
+    "name": "International Board for IT Governance Qualifications (IBITGQ)"
+  },
+  {
+    "id": "isc2",
+    "name": "International Information System Security Certification Consortium (ISC2)"
+  },
+  {
+    "id": "iiba",
+    "name": "International Institute of Business Analysis (IIBA)"
+  },
+  {
+    "id": "isa",
+    "name": "International Society of Automation (ISA)"
+  },
+  {
+    "id": "isfce",
+    "name": "International Society of Forensic Computer Examiners (ISFCE)"
+  },
+  {
+    "id": "juniper",
+    "name": "Juniper"
+  },
+  {
+    "id": "linuxfoundation",
+    "name": "Linux Foundation"
+  },
+  {
+    "id": "lpi",
+    "name": "Linux Professional Institute (LPI)"
+  },
+  {
+    "id": "microsoft",
+    "name": "Microsoft"
+  },
+  {
+    "id": "mile2",
+    "name": "Mile2"
+  },
+  {
+    "id": "mirantis",
+    "name": "Mirantis"
+  },
+  {
+    "id": "mitre",
+    "name": "Mitre"
+  },
+  {
+    "id": "mosse",
+    "name": "Mosse Institute"
+  },
+  {
+    "id": "ncsc",
+    "name": "National Cyber Security Centre (NCSC)"
+  },
+  {
+    "id": "offsec",
+    "name": "Offensive Security (OffSec)"
+  },
+  {
+    "id": "oceg",
+    "name": "Open Compliance and Ethics Group (OCEG)"
+  },
+  {
+    "id": "opentext",
+    "name": "OpenText"
+  },
+  {
+    "id": "paloalto",
+    "name": "Palo Alto"
+  },
+  {
+    "id": "pcissc",
+    "name": "Payment Card Industry Security Standards Council (PCI SSC)"
+  },
+  {
+    "id": "peoplecert",
+    "name": "PeopleCert"
+  },
+  {
+    "id": "portswigger",
+    "name": "Portswigger"
+  },
+  {
+    "id": "pdso",
+    "name": "Practical DevSecOps (PDSO)"
+  },
+  {
+    "id": "pecb",
+    "name": "Professional Evaluation and Certification Board (PECB)"
+  },
+  {
+    "id": "pmi",
+    "name": "Project Management Institute (PMI)"
+  },
+  {
+    "id": "pai",
+    "name": "Protocol Analysis Institute"
+  },
+  {
+    "id": "redhat",
+    "name": "Red Hat"
+  },
+  {
+    "id": "sans",
+    "name": "SANS"
+  },
+  {
+    "id": "salesforce",
+    "name": "SalesForce"
+  },
+  {
+    "id": "scrumorg",
+    "name": "Scrum.org"
+  },
+  {
+    "id": "secopsgroup",
+    "name": "SecOps Group"
+  },
+  {
+    "id": "seco",
+    "name": "Security & Continuity Institute (SECO)"
+  },
+  {
+    "id": "securityblue",
+    "name": "Security Blue"
+  },
+  {
+    "id": "sharedassessments",
+    "name": "Shared Assessments"
+  },
+  {
+    "id": "sabsa",
+    "name": "Sherwood Applied Business Security Architecture (SABSA)"
+  },
+  {
+    "id": "suse",
+    "name": "Software und System-Entwicklung (SUSE)"
+  },
+  {
+    "id": "splunk",
+    "name": "Splunk"
+  },
+  {
+    "id": "tuv",
+    "name": "Technischer Überwachungsverein Rheinland (TÜV)"
+  },
+  {
+    "id": "tcm",
+    "name": "The Cyber Mentor (TCM) Security"
+  },
+  {
+    "id": "theopengroup",
+    "name": "The Open Group"
+  },
+  {
+    "id": "thesecopsgroup",
+    "name": "The SecOps Group"
+  },
+  {
+    "id": "various",
+    "name": "Various"
+  },
+  {
+    "id": "vmware",
+    "name": "Vmware"
+  },
+  {
+    "id": "zachman",
+    "name": "Zachman"
+  },
+  {
+    "id": "zeropoint",
+    "name": "Zero Point Security"
+  }
+]
