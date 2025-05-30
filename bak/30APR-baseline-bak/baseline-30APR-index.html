@@ -1,0 +1,729 @@
+
+  <style>
+    :root {
+      --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
+
+      /* Base color palette */
+      --color-green: #70AD47;
+      --color-teal: #008080;
+      --color-orange: #fa8e36;
+      --color-yellow: #e4ac03;
+      --color-black: #2a2a2a;
+      --color-purple: #683e9b;
+      --color-skyblue: #6bb3f6;
+      --color-blue: #2e5688;
+      --color-red: #c0514d;
+      --color-magenta: #a500a1;
+      
+      /* Dark variants */      
+      --color-green-dark: #548235;
+      --color-teal-dark: #003F3E;
+      --color-orange-dark: #c06216;
+      --color-yellow-dark: #7F6000;
+      --color-black-dark: #000000;
+      --color-purple-dark: #352647;
+      --color-skyblue-dark: #2665a0;
+      --color-blue-dark: #1f3147;
+      --color-red-dark: #8c3736;
+      --color-magenta-dark: #490e49;
+      
+      /* Light variants */
+      --color-green-light: #c3dbb8;
+      --color-teal-light: #8fc6c6;
+      --color-orange-light: #fdeada;
+      --color-yellow-light: #f4e7af;
+      --color-black-light: #d9d9d9;
+      --color-purple-light: #eddbff;
+      --color-skyblue-light: #b8e0ff;
+      --color-blue-light: #dce6f2;
+      --color-red-light: #f2dcdb;
+      --color-magenta-light: #f1d4e0;
+      
+      /* Domain-specific colors */
+      --domain-default-white: #ffffff;
+      --domain-net: var(--color-green);
+      --domain-net-dark: var(--color-green-dark);
+      --domain-net-light: var(--color-green-light);
+      --domain-iam: var(--color-teal);
+      --domain-iam-dark: var(--color-teal-dark);
+      --domain-iam-light: var(--color-teal-light);
+      --domain-eng: var(--color-orange);
+      --domain-eng-dark: var(--color-orange-dark);
+      --domain-eng-light: var(--color-orange-light);
+      --domain-ast: var(--color-yellow);
+      --domain-ast-dark: var(--color-yellow-dark);
+      --domain-ast-light: var(--color-yellow-light);
+      --domain-rsk: var(--color-black);
+      --domain-rsk-dark: var(--color-black-dark);
+      --domain-rsk-light: var(--color-black-light);
+      --domain-tst: var(--color-purple);
+      --domain-tst-dark: var(--color-purple-dark);
+      --domain-tst-light: var(--color-purple-light);
+      --domain-sof: var(--color-skyblue);
+      --domain-sof-dark: var(--color-skyblue-dark);
+      --domain-sof-light: var(--color-skyblue-light);
+      --domain-ops: var(--color-red);
+      --domain-ops-dark: var(--color-red-dark);
+      --domain-ops-light: var(--color-red-light);
+
+      --domain-title-height: 2.8vmax;
+    }
+
+    /* Domain-specific border and title coloring */
+    .domain-NET     { border-color: var(--domain-net); }
+    .domain-IAM     { border-color: var(--domain-iam); }
+    .domain-ENG     { border-color: var(--domain-eng); }
+    .domain-AST     { border-color: var(--domain-ast); }
+    .domain-RSK     { border-color: var(--domain-rsk); }
+    .domain-TST     { border-color: var(--domain-tst); }
+    .domain-SOF     { border-color: var(--domain-sof); }
+    .domain-OPS     { border-color: var(--domain-ops); }
+
+    .domain-NET     .domain-title { color: var(--domain-net); }
+    .domain-IAM     .domain-title { color: var(--domain-iam); }
+    .domain-ENG     .domain-title { color: var(--domain-eng); }
+    .domain-AST     .domain-title { color: var(--domain-ast); }
+    .domain-RSK     .domain-title { color: var(--domain-rsk); }
+    .domain-TST     .domain-title { color: var(--domain-tst); }
+    .domain-SOF     .domain-title { color: var(--domain-sof); }
+    .domain-OPS     .domain-title { color: var(--domain-ops); }
+
+    html, body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    body {
+      background: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #roadmap {
+      display: flex;
+      overflow-x: hidden;
+      width: 100%;
+      align-items: start;
+
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0.2vmax;
+      grid-column: 2;
+      grid-row: 2;
+      justify-content: flex-start;
+      max-height: none;
+      max-width: 100%;
+      min-width: 0;
+      overflow-y: visible;
+      padding-right: 0.2vmax;
+    }
+
+    .domain-container {
+      background: white;
+      position: relative;
+      border: 2px solid;
+      border-radius: 0.25vmax;
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax;
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax); /* 1 top buffer for subdomain title + 27 skill rows + 1 bottom buffer */
+      gap: 0.1vmax; /* Matches tile and container gutter */
+      width: max-content; /* Prevent full-width stretching */
+    }
+
+    .domain-unit {
+      display: flex;
+      flex-direction: column;
+      width: min-content; /* Shrink to fit content */
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .domain-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title row on top, domain container below */
+      width: max-content;           /* Shrinks to fit the domain */
+      margin: 0;
+      padding: 0;
+    }
+
+    .subdomain-container {
+      position: relative;
+      justify-content: center;
+      border: none;
+      padding: 0.1vmax; /* Equal to tile gutter for clean alignment */
+      padding-bottom: 0.1vmax; /* Optional visual buffer for the bottom tile*/
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax);
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax; /* Matches tile gap */
+      border-radius: 0.25vmax;
+      justify-content: center;
+    }
+
+    .subdomain-canvas {
+      border-radius: 0.25vmax;
+      z-index: 0;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .domain-title {
+      text-align: center;             /* Center title above the domain */
+      width: 100%;                  /* Full width of the domain box */
+      box-sizing: border-box;       /* Include padding in width */
+      font-weight: 500;               /* Bold for emphasis */
+      font-size: 0.8vmax;            /* Responsive scaling */
+      padding: 0.1vmax 0 0.3vmax 0; /* Top + Bottom: keeps descenders from touching */
+      white-space: normal;           /* Allow multi-line if needed */
+      word-break: normal;            /* Never break mid-word */
+      text-overflow: unset;      /* Prevent ellipsis */
+      overflow-wrap: break-word;     /* Wrap only at spaces */
+      overflow: visible;             /* Allow overflow */
+      max-width: 100%;               /* Constrain to domain box */
+      pointer-events: none;
+      line-height: 1;              /* Tighter line spacing */
+      margin: 0;
+      height: var(--domain-title-height); /* Fixed height to prevent shifting */
+      display: flex;
+      align-items: flex-end;             /* Align text to bottom of title box */
+      justify-content: center;      /* Horizontally center text */
+    }
+
+    .subdomain-title {
+      grid-row: 1; /* Place in row 1 */
+      grid-column-start: var(--col-start);     /* We'll replace this dynamically */
+      grid-column-end: span var(--col-span);   /* This too */
+      text-align: center;
+      font-weight: 400;
+      font-size: 0.5vmax;
+      line-height: 1;
+      padding: 0.05vmax 0 0 0;
+      margin: 0;
+      align-self: end; /* Aligns the title to the bottom of its row */
+      z-index: 1; /* Ensures title sits above tiles if they overlap */
+    }
+
+    .cert-tile {
+      width: 2.3vmax;
+      height: 1.5vmax;
+      display: flex;
+      align-items: center;        /* vertically center content *inside* the tile */
+      justify-content: center;    /* horizontally center content *inside* the tile */
+      justify-self: center;    /* horizontally center the tile in its column */
+      align-self: center;        /* center tile vertically in its grid row */
+      text-align: center;
+      font-size: 0.6vmax;
+      font-weight: 400;
+      border-radius: 0.25vmax;
+      background-color: inherit;  /* Inherit from parent */
+      border: 1px solid;          /* Use inherited border-color */
+      color: white;               /* Set text color explicitly */
+      padding: 0.2vmax;
+      box-sizing: border-box;
+      margin: 0;
+      text-decoration: none;
+    }
+
+    /* = ROADMAP GRID STRUCTURE = */
+    #roadmap-wrapper {
+      display: grid;
+      grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
+      grid-template-rows: auto auto;
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      max-height: none !important;
+      overflow-x: hidden;
+      overflow-y: visible;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .skill-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .skill-heading {
+      height: var(--domain-title-height);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      font-size: 0.8vmax;
+      font-weight: 500;
+      color: transparent; /* visually blank */
+      pointer-events: none;
+    }
+
+    .skill-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title + label rows */
+      width: max-content;
+      margin: 0;
+      padding: 0;
+    }
+
+    .skill-container {
+      background: white;
+      position: relative;
+      border: none;
+      border-radius: 0.25vmax;                 /* Visual consistency */
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matches .domain-container exactly */
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container */
+      gap: 0.1vmax;                            /* Matches tile vertical gutter */
+      width: max-content;
+    }
+
+    .skill-strata-canvas {
+      width: 100%;
+      grid-column: 1;
+      z-index: 0;
+      position: relative;
+      pointer-events: none;
+      border-radius: 0.25vmax;
+    }
+
+    .skill-strata-canvas.expert {
+      background-color: var(--color-red-light);
+    }
+
+    .skill-strata-canvas.intermediate {
+      background-color: var(--color-yellow-light);
+    }
+
+    .skill-strata-canvas.beginner {
+      background-color: var(--color-green-light);
+    }
+
+    .skill-placeholder {
+      grid-column-start: 1;
+      grid-row-end: span 1;
+      height: 1.5vmax;         /* Matches cert-tile and domain rows */
+      width: 0.5vmax;          /* Minimum width needed for alignment */
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .skill-strata-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 0.8vmax;
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+      grid-column: 1;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .skill-strata-label.expert {
+      color: var(--color-red-dark);
+    }
+
+    .skill-strata-label.intermediate {
+      color: var(--color-yellow-dark);
+    }
+
+    .skill-strata-label.beginner {
+      color: var(--color-green-dark);
+    }
+
+    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
+
+    /* 🔹 Tile + Container Grid Boundaries */
+    body.debug-mode .domain-container,
+    body.debug-mode .subdomain-container,
+    body.debug-mode .cert-tile {
+      outline: 1px dashed rgba(0, 0, 0, 0.25); /* Light grid outline */
+    }
+
+    body.debug-mode .subdomain-canvas {
+      outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
+    }
+
+    body.debug-mode .subdomain-title {
+      background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
+    }
+
+    /* 🔹 Overall Roadmap Layout */
+    body.debug-mode #roadmap-wrapper {
+      overflow-x: auto; /* Allow horizontal scroll only in debug mode */
+      outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
+      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint */
+      padding-left: 1vmax;
+      padding-right: 1vmax;
+    }
+
+    body.debug-mode #roadmap {
+      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Container box */
+    }
+
+    /* 🔹 Domain Columns */
+    body.debug-mode .domain-unit {
+      outline: 2px dotted rgba(255, 0, 0, 0.3); /* Red = full unit (title + wrapper) */
+    }
+
+    body.debug-mode .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + grid */
+    }
+
+    body.debug-mode .domain-title {
+      outline: 2px solid rgba(0, 0, 255, 0.3);  /* Blue = domain title block */
+    }
+
+    /* 🔹 Skill Label Column (mirrors domain structure) */
+    body.debug-mode .skill-unit {
+      outline: 2px dotted rgba(0, 128, 255, 0.3); /* Blue-tinted = full unit */
+    }
+
+    body.debug-mode .skill-unit .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 128, 0.3); /* Greenish = skill wrapper */
+    }
+
+    body.debug-mode .skill-unit .skill-column {
+      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label grid */
+    }
+
+    body.debug-mode .skill-strata-label {
+      background-color: rgba(255, 255, 0, 0.08); /* Light yellow for each label */
+      outline: 1px dotted rgba(128, 128, 0, 0.5); /* Optional: visual border */
+    }
+
+    body.debug-mode .skill-strata-canvas {
+      outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
+      background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
+    }
+
+    /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
+    body.debug-mode .skill-container::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.5vmax
+      );
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Security Certification Roadmap</h1>
+<div id="roadmap-wrapper">
+  <div id="roadmap">
+  </div>
+</div>
+
+  <script>
+    async function loadJSON(path) {
+      const res = await fetch(path);
+      return res.json();
+    }
+
+    function applyGridSpanStyles(element) {
+      const colStart = element.getAttribute('data-grid-column-start');
+      const colSpan = element.getAttribute('data-grid-column-span');
+
+      if (colStart && colSpan) {
+        element.style.setProperty('--col-start', colStart);
+        element.style.setProperty('--col-span', colSpan);
+      }
+    }
+
+    async function drawRoadmap() {
+      const [domains, subdomains, certs] = await Promise.all([
+        loadJSON('./data/domains.json'),
+        loadJSON('./data/subdomains.json'),
+        loadJSON('./data/certs.json'),
+      ]);
+
+      const roadmapEl = document.getElementById('roadmap');
+
+      // Skill unit (outermost container)
+      const skillUnit = document.createElement("div");
+      skillUnit.className = "domain-unit skill-unit";
+      skillUnit.style.gridColumnStart = 1;
+
+      // Skill heading — structurally identical to domain-title
+      const skillHeading = document.createElement("div");
+      skillHeading.className = "domain-title skill-heading";
+      skillHeading.textContent = ""; // Optionally use "Skill Level" or similar
+
+      // Skill wrapper — structurally identical to .domain-wrapper
+      const skillWrapper = document.createElement("div");
+      skillWrapper.className = "skill-wrapper";
+
+      // Skill container — structurally identical to .domain-container
+      const skillContainer = document.createElement("div");
+      skillContainer.className = "skill-container";
+
+      // ⬅ Add the container inside the wrapper (same as domain logic)
+      skillWrapper.appendChild(skillContainer);
+
+      // Define strata levels with row ranges
+      const strataLevels = [
+        { label: "Expert", rowStart: 2, rowEnd: 9, className: "expert" },
+        { label: "Intermediate", rowStart: 10, rowEnd: 21, className: "intermediate" },
+        { label: "Beginner", rowStart: 22, rowEnd: 28, className: "beginner" }
+      ];
+
+      // Add canvas layers
+      strataLevels.forEach(level => {
+        const canvas = document.createElement("div");
+        canvas.className = `skill-strata-canvas ${level.className}`;
+        canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        skillContainer.appendChild(canvas);
+      });
+
+      // Add label layers
+      strataLevels.forEach(level => {
+        const label = document.createElement("div");
+        label.className = `skill-strata-label ${level.className}`;
+        label.textContent = level.label;
+        label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        skillContainer.appendChild(label);
+      });
+
+      // Add invisible row placeholders to enforce 28 grid rows
+      for (let row = 2; row <= 27; row++) {
+        const placeholder = document.createElement("div");
+        placeholder.className = "skill-placeholder";
+        placeholder.style.gridRowStart = row;
+        placeholder.style.gridColumnStart = 1; // Lock to first column
+        skillContainer.appendChild(placeholder);
+      }
+
+      // Assemble full structure
+      skillWrapper.appendChild(skillContainer);
+      skillUnit.appendChild(skillHeading);
+      skillUnit.appendChild(skillWrapper);
+
+      // Prepend skill unit before any domain units
+      roadmapEl.prepend(skillUnit);
+
+      domains.forEach(domain => {
+        const domainDiv = document.createElement('div');
+        domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+        domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()})`;
+
+        // Dynamically set how wide the domain container should be
+        const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
+
+        let maxColumn = 0;
+        allContainers.forEach(c => {
+          const endCol = c.gridColumnStart + c.gridColumnSpan - 1;
+          if (endCol > maxColumn) maxColumn = endCol;
+        });
+
+        domainDiv.style.gridTemplateColumns = `repeat(${maxColumn}, 2.3vmax)`;
+
+      const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
+      domainSubdomains.forEach(sub => {
+        
+        // Subdomain title
+        if (!sub.subdomainId.endsWith('_unspec')) {
+          const subTitle = document.createElement('div');
+          subTitle.className = 'subdomain-title';
+          subTitle.textContent = sub.subdomainShortName;
+          subTitle.style.gridRowStart = 1;
+          subTitle.style.gridColumnStart = sub.gridColumnStart;
+          subTitle.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+          domainDiv.appendChild(subTitle);
+        }
+
+        // Subdomain container
+        const subDiv = document.createElement('div');
+        subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+
+        subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+        subDiv.style.gridTemplateRows = `repeat(27, 1.5vmax)`; // consistent vertical grid
+
+        subDiv.style.gridColumnStart = sub.gridColumnStart;
+        subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        subDiv.style.gridRowStart = sub.gridRowStart;
+        subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+
+        // Subdomain canvas (visual layer behind container)
+        const canvas = document.createElement('div');
+        canvas.classList.add('subdomain-canvas');
+        canvas.setAttribute('data-subdomain-id', sub.subdomainId);
+
+        // positioning based on grid math
+        canvas.style.gridRowStart = sub.gridRowStart;
+        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+        canvas.style.gridColumnStart = sub.gridColumnStart;
+        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+
+        canvas.style.position = 'relative';
+        canvas.style.zIndex = 0;
+        canvas.style.pointerEvents = 'none';
+        canvas.style.backgroundColor = sub.subdomainId.endsWith('_unspec')
+          ? 'transparent'
+          : `var(${sub.subdomainColor || '--domain-default-white'})`;
+
+        domainDiv.appendChild(canvas); // Must go before the subdomain container
+
+        // Add cert tiles
+        const subCerts = certs.filter(cert => {
+        // Normal case: tile belongs to this subdomain
+        if (cert.subdomainId === sub.subdomainId) return true;
+        if (cert.crossSubdomains?.includes(sub.subdomainId)) return true;
+
+        // Guest case: tile is cross-listed in this domain
+        const isGuest = cert.crossDomains?.includes(domain.domainId);
+        if (!isGuest) return false;
+
+        // For all non-RSK domains, place in their *_unspec
+        if (domain.domainId !== "RSK") {
+          return sub.subdomainId === `${domain.domainId}_unspec`;
+        }
+
+        // Special case: decide RSK side based on domainDisplayOrder
+        const originDomain = domains.find(d => d.domainId === cert.domainId);
+        const rskDomain = domains.find(d => d.domainId === "RSK");
+
+        if (!originDomain || !rskDomain) return false;
+
+        const originOrder = originDomain.domainDisplayOrder;
+        const rskOrder = rskDomain.domainDisplayOrder;
+
+        const expectedSubdomain =
+          originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
+
+        return sub.subdomainId === expectedSubdomain;
+      });
+
+        const tileRowMap = {};
+
+        subCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 1;
+          } else {
+            tileRowMap[skillRow]++;
+          }
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = tileRowMap[skillRow];
+
+          subDiv.appendChild(tile);
+        });
+
+        domainDiv.appendChild(subDiv);
+      });
+
+      // Wrap domain content in a domain-wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'domain-wrapper';
+      wrapper.appendChild(domainDiv);                     // Add the domain container
+      // Create the domain title
+      const domainTitle = document.createElement('div');
+      domainTitle.className = 'domain-title';
+      domainTitle.textContent = domain.domainShortName;
+      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
+      domainTitle.style.textAlign = 'center';
+      domainTitle.style.width = '100%';
+      domainTitle.style.whiteSpace = 'normal';
+      domainTitle.style.wordBreak = 'normal';
+      domainTitle.style.overflowWrap = 'break-word';
+      domainTitle.style.textOverflow = 'unset';
+      domainTitle.style.overflow = 'visible';
+
+      const domainUnit = document.createElement('div');
+      domainUnit.className = 'domain-unit';
+      domainUnit.style.gridColumnStart = domain.domainDisplayOrder + 1;
+      domainUnit.appendChild(domainTitle);
+      domainUnit.appendChild(wrapper);
+
+      roadmapEl.appendChild(domainUnit);
+
+      });
+    }
+
+    function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
+      const tile = document.createElement('a');
+      tile.href = cert.certUrl;
+      tile.target = '_blank';
+      tile.className = 'cert-tile';
+      tile.textContent = cert.certTileLabel;
+      tile.title = cert.certTooltip;
+      tile.setAttribute('data-cert-id', cert.certId);
+      tile.setAttribute('data-domain-id', cert.domainId);
+      if (cert.subdomainId) {
+        tile.setAttribute('data-subdomain-id', cert.subdomainId);
+      }
+
+      tile.style.gridRowStart = cert.certSkillStrata;
+
+      const domain = domains.find(d => d.domainId === cert.domainId);
+      const teamRoles = domain.teamRoles || {};
+      const role = cert.teamRole || "DefaultTeam";
+
+      const domainIdLower = cert.domainId.toLowerCase();
+      const isGuestInThisDomain = renderedDomainId !== cert.domainId;
+      const isGuestInThisSubdomain = cert.crossSubdomains?.includes(renderedSubdomainId);
+      const isGuest = isGuestInThisDomain || isGuestInThisSubdomain;
+
+      if (teamRoles[role] && teamRoles[role].tileColor) {
+        const colorVar = isGuest
+          ? teamRoles[role].tileColorLight || teamRoles[role].tileColor
+          : teamRoles[role].tileColor;
+        const borderVar = teamRoles[role].borderColor || `--domain-${domainIdLower}-dark`;
+
+        tile.style.backgroundColor = `var(${colorVar})`;
+        tile.style.borderColor = `var(${borderVar})`;
+        tile.style.color = isGuest
+          ? `var(${borderVar})`
+          : 'white';
+      } else {
+        const fallbackBg = isGuest
+          ? `--domain-${domainIdLower}-light`
+          : `--domain-${domainIdLower}`;
+
+        tile.style.backgroundColor = `var(${fallbackBg})`;
+        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+        tile.style.color = isGuest
+          ? `var(--domain-${domainIdLower}-dark)`
+          : 'white';
+      }
+
+      return tile;
+    }
+
+
+    drawRoadmap();
+  </script>
