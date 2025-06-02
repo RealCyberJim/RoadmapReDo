@@ -326,7 +326,7 @@
     .skill-strata-label {
       writing-mode: vertical-rl;
       transform: rotate(180deg);
-      font-size: 0.8vmax;
+      font-size: 0.7vmax;
       font-weight: 500;
       text-align: right;
       white-space: nowrap;
@@ -839,17 +839,18 @@
       // Clear old options (if any)
       vendorSelect.innerHTML = "";
 
-      // ➕ “None” option (shows no certs when selected)
-      const noneOption = document.createElement("option");
-      noneOption.value = "__NONE__";
-      noneOption.textContent = "None";
-      vendorSelect.appendChild(noneOption);
+      // “All Vendors” option — FIRST and selected by default
+        const allOption = document.createElement("option");
+        allOption.value = "__ALL__";
+        allOption.textContent = "All Vendors";
+        allOption.selected = true; // default on page load
+        vendorSelect.appendChild(allOption);
 
-      // “All Vendors” option (shows all certs when selected)
-      const allOption = document.createElement("option");
-      allOption.value = "__ALL__";
-      allOption.textContent = "All Vendors";
-      vendorSelect.appendChild(allOption);
+        // “None” option — SECOND
+        const noneOption = document.createElement("option");
+        noneOption.value = "__NONE__";
+        noneOption.textContent = "None";
+        vendorSelect.appendChild(noneOption);
 
       // Populate from normalizedVendors
       normalizedVendors.forEach(vendor => {
