@@ -440,6 +440,18 @@
   </style>
 </head>
 <body>
+<!-- 🔹 Filter Control Panel -->
+<div id="control-panel" style="padding: 0.5vmax; font-size: 0.8vmax;">
+  <label style="margin-right: 2vmax;">
+    <input type="checkbox" id="toggle-cross-domain" checked />
+    Show Cross-Domain Certs
+  </label>
+
+  <label>
+    <input type="checkbox" id="toggle-cross-subdomain" checked />
+    Show Cross-Subdomain Certs
+  </label>
+</div>
   <h1>Security Certification Roadmap</h1>
 <div id="roadmap-wrapper">
   <div id="roadmap">
@@ -447,6 +459,16 @@
 </div>
 
   <script>
+    // Centralized filter state — controls what gets shown on the roadmap
+    const filterState = {
+      showCrossDomainCerts: true,
+      showCrossSubdomainCerts: true,
+      visibleDomains: [], // filled after loading domains.json
+      visibleVendors: [], // filled after loading certs.json
+      showAchieved: true,
+      showPlanned: true,
+    };
+  
     async function loadJSON(path) {
       const res = await fetch(path);
       return res.json();
@@ -724,6 +746,42 @@
       return tile;
     }
 
+    // Master redraw function — uses current filterState to rebuild roadmap
+    function applyFiltersAndRedraw() {
+      console.log("🔄 Redrawing with current filters:", filterState);
 
-    drawRoadmap();
+      const roadmapEl = document.getElementById("roadmap");
+      roadmapEl.innerHTML = ""; // Clear all roadmap content
+
+      drawRoadmap(); // Re-render roadmap based on new filter state
+    }
+
+    Promise.all([
+      loadJSON('./data/domains.json'),
+      loadJSON('./data/subdomains.json'),
+      loadJSON('./data/certs.json'),
+    ]).then(([domains, subdomains, certs]) => {
+      // Seed the filter state with all available domains and vendors
+      filterState.visibleDomains = domains.map(d => d.domainId);
+      filterState.visibleVendors = [...new Set(certs.map(c => c.certVendor))];
+
+      // Store for later use (optional, for debugging or reuse)
+      window.loadedDomains = domains;
+      window.loadedSubdomains = subdomains;
+      window.loadedCerts = certs;
+
+      // Call the redraw function using current filters
+      applyFiltersAndRedraw();
+    });
+    
+    // Link checkbox inputs to filterState
+  document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
+    filterState.showCrossDomainCerts = e.target.checked;
+    applyFiltersAndRedraw();
+  });
+
+  document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
+    filterState.showCrossSubdomainCerts = e.target.checked;
+    applyFiltersAndRedraw();
+  });
   </script>
