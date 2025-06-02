@@ -824,6 +824,11 @@
       window.loadedSubdomains = subdomains;
       window.loadedCerts = certs;
       window.loadedVendors = vendors;
+      // 🔁 Normalize vendor keys for filtering and display
+      window.loadedVendors = vendors.map(v => ({
+        vendorId: v.id,
+        vendorLabel: v.name,
+      }));
 
       // Populate vendor dropdown
       const allVendors = [...new Set(certs.map(c => c.certVendor))];
