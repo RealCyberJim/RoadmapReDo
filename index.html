@@ -817,7 +817,15 @@
 
         domainCheckboxes.appendChild(label);
       });
-      filterState.visibleVendorIds = vendors.map(v => v.vendorId);
+      // Normalize vendors before doing anything else
+      const normalizedVendors = vendors.map(v => ({
+        vendorId: v.id,
+        vendorLabel: v.name
+      }));
+      window.loadedVendors = normalizedVendors;
+
+      // Seed visibleVendorIds with the correct values
+      filterState.visibleVendorIds = normalizedVendors.map(v => v.vendorId);
 
       // Store for later use (for debugging or reuse)
       window.loadedDomains = domains;
