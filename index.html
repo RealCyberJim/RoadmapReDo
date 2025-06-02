@@ -619,33 +619,45 @@
 
         // Add cert tiles
         const subCerts = certs.filter(cert => {
-        // Normal case: tile belongs to this subdomain
-        if (cert.subdomainId === sub.subdomainId) return true;
-        if (cert.crossSubdomains?.includes(sub.subdomainId)) return true;
+          // 🔸 Case 1: Cert belongs to this exact subdomain
+          const isDirectMatch = cert.subdomainId === sub.subdomainId;
 
-        // Guest case: tile is cross-listed in this domain
-        const isGuest = cert.crossDomains?.includes(domain.domainId);
-        if (!isGuest) return false;
+          // 🔸 Case 2: Cross-subdomain guest
+          const isCrossSub = cert.crossSubdomains?.includes(sub.subdomainId);
+          const showCrossSub = filterState.showCrossSubdomainCerts;
 
-        // For all non-RSK domains, place in their *_unspec
-        if (domain.domainId !== "RSK") {
-          return sub.subdomainId === `${domain.domainId}_unspec`;
-        }
+          // 🔸 Case 3: Cross-domain guest logic
+          const isCrossDomainGuest = cert.crossDomains?.includes(domain.domainId);
+          const showCrossDomain = filterState.showCrossDomainCerts;
 
-        // Special case: decide RSK side based on domainDisplayOrder
-        const originDomain = domains.find(d => d.domainId === cert.domainId);
-        const rskDomain = domains.find(d => d.domainId === "RSK");
+          // 🔸 Case 4: RSK guest logic
+          const isRSK = domain.domainId === "RSK";
+          let isValidRSKGuest = false;
 
-        if (!originDomain || !rskDomain) return false;
+          if (isCrossDomainGuest && isRSK) {
+            const originDomain = domains.find(d => d.domainId === cert.domainId);
+            const rskDomain = domains.find(d => d.domainId === "RSK");
 
-        const originOrder = originDomain.domainDisplayOrder;
-        const rskOrder = rskDomain.domainDisplayOrder;
+            if (originDomain && rskDomain) {
+              const originOrder = originDomain.domainDisplayOrder;
+              const rskOrder = rskDomain.domainDisplayOrder;
+              const expectedSubdomain =
+                originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
 
-        const expectedSubdomain =
-          originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
+              isValidRSKGuest = sub.subdomainId === expectedSubdomain;
+            }
+          }
 
-        return sub.subdomainId === expectedSubdomain;
-      });
+          // Final return condition
+          return (
+            isDirectMatch ||
+            (isCrossSub && showCrossSub) ||
+            ((isCrossDomainGuest && showCrossDomain) && (
+              (domain.domainId !== "RSK" && sub.subdomainId === `${domain.domainId}_unspec`) ||
+              isValidRSKGuest
+            ))
+          );
+        });
 
         const tileRowMap = {};
 
@@ -773,7 +785,7 @@
       // Call the redraw function using current filters
       applyFiltersAndRedraw();
     });
-    
+
     // Link checkbox inputs to filterState
   document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
     filterState.showCrossDomainCerts = e.target.checked;
