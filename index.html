@@ -822,7 +822,7 @@
         vendorId: v.id,
         vendorLabel: v.name
       }));
-      window.loadedVendors = normalizedVendors;
+      window.normalizedVendors = normalizedVendors;
 
       // Seed visibleVendorIds with the correct values
       filterState.visibleVendorIds = normalizedVendors.map(v => v.vendorId);
@@ -831,7 +831,8 @@
       window.loadedDomains = domains;
       window.loadedSubdomains = subdomains;
       window.loadedCerts = certs;
-      window.loadedVendors = vendors;
+      window.loadedVendors = vendors;          // Raw: [{ id, name }]
+      window.normalizedVendors = normalizedVendors;  // Normalized: [{ vendorId, vendorLabel }]
 
       const vendorSelect = document.getElementById("vendor-filter");
 
@@ -883,7 +884,7 @@
       filterState.visibleVendorIds = [];
     } else if (selected === "__ALL__") {
       // “All Vendors” was selected → reset to every vendorId
-      filterState.visibleVendorIds = normalizedVendors.map(v => v.vendorId);
+      filterState.visibleVendorIds = window.normalizedVendors.map(v => v.vendorId);
     } else {
       // A single vendorId was selected → filter to just that one
       filterState.visibleVendorIds = [selected];
@@ -891,5 +892,5 @@
 
     applyFiltersAndRedraw();
   });
-  
+
 </script>
