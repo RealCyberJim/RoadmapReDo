@@ -672,6 +672,8 @@
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+          
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
 
@@ -782,7 +784,9 @@
       loadJSON('./data/domains.json'),
       loadJSON('./data/subdomains.json'),
       loadJSON('./data/certs.json'),
-    ]).then(([domains, subdomains, certs]) => {
+      loadJSON('./data/vendors.json'),
+    ]).then(([domains, subdomains, certs, vendors]) => {
+
       // Seed the filter state with all available domains and vendors
       filterState.visibleDomains = domains.map(d => d.domainId);
       // Populate domain checkboxes
@@ -813,22 +817,33 @@
 
         domainCheckboxes.appendChild(label);
       });
-      filterState.visibleVendors = [...new Set(certs.map(c => c.certVendor))];
+      filterState.visibleVendorIds = vendors.map(v => v.vendorId);
 
-      // Store for later use (optional, for debugging or reuse)
+      // Store for later use (for debugging or reuse)
       window.loadedDomains = domains;
       window.loadedSubdomains = subdomains;
       window.loadedCerts = certs;
+      window.loadedVendors = vendors;
 
       // Populate vendor dropdown
       const allVendors = [...new Set(certs.map(c => c.certVendor))];
       filterState.visibleVendors = allVendors;
 
       const vendorSelect = document.getElementById("vendor-filter");
-      allVendors.forEach(vendor => {
+
+      // Clear old options (if any)
+      vendorSelect.innerHTML = "";
+
+      const allOption = document.createElement("option");
+      allOption.value = "__ALL__";
+      allOption.textContent = "All Vendors";
+      vendorSelect.appendChild(allOption);
+
+      // Populate from vendors.json
+      vendors.forEach(vendor => {
         const option = document.createElement("option");
-        option.value = vendor;
-        option.textContent = vendor;
+        option.value = vendor.vendorId;
+        option.textContent = vendor.vendorLabel || vendor.vendorId;
         vendorSelect.appendChild(option);
       });
 
@@ -852,9 +867,9 @@
     document.getElementById("vendor-filter").addEventListener("change", (e) => {
       const selected = e.target.value;
       if (selected === "__ALL__") {
-        filterState.visibleVendors = [...new Set(window.loadedCerts.map(c => c.certVendor))];
+        filterState.visibleVendorIds = window.loadedVendors.map(v => v.vendorId);
       } else {
-        filterState.visibleVendors = [selected];
+        filterState.visibleVendorIds = [selected];
       }
       applyFiltersAndRedraw();
     });
