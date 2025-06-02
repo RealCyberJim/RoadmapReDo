@@ -440,7 +440,7 @@
   </style>
 </head>
 <body>
-<!-- 🔹 Filter Control Panel -->
+<!-- Filter Control Panel -->
 <div id="control-panel" style="padding: 0.5vmax; font-size: 0.8vmax;">
   <label style="margin-right: 2vmax;">
     <input type="checkbox" id="toggle-cross-domain" checked />
@@ -451,7 +451,17 @@
     <input type="checkbox" id="toggle-cross-subdomain" checked />
     Show Cross-Subdomain Certs
   </label>
+
+  <label style="margin-left: 2vmax;">
+    Vendor Filter:
+    <select id="vendor-filter">
+      <option value="__ALL__">All Vendors</option>
+    </select>
+  </label>
 </div>
+
+<!-- Dynamic Domain Filter Checkboxes -->
+<div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
   <h1>Security Certification Roadmap</h1>
 <div id="roadmap-wrapper">
   <div id="roadmap">
@@ -775,6 +785,34 @@
     ]).then(([domains, subdomains, certs]) => {
       // Seed the filter state with all available domains and vendors
       filterState.visibleDomains = domains.map(d => d.domainId);
+      // Populate domain checkboxes
+      const domainCheckboxes = document.getElementById("domain-checkboxes");
+      domains.forEach(domain => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `domain-${domain.domainId}`;
+        checkbox.value = domain.domainId;
+        checkbox.checked = true;
+
+        const label = document.createElement("label");
+        label.htmlFor = checkbox.id;
+        label.style.marginRight = "1.5vmax";
+        label.appendChild(checkbox);
+        label.append(` ${domain.domainShortName}`);
+
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            if (!filterState.visibleDomains.includes(domain.domainId)) {
+              filterState.visibleDomains.push(domain.domainId);
+            }
+          } else {
+            filterState.visibleDomains = filterState.visibleDomains.filter(id => id !== domain.domainId);
+          }
+          applyFiltersAndRedraw();
+        });
+
+        domainCheckboxes.appendChild(label);
+      });
       filterState.visibleVendors = [...new Set(certs.map(c => c.certVendor))];
 
       // Store for later use (optional, for debugging or reuse)
@@ -782,18 +820,42 @@
       window.loadedSubdomains = subdomains;
       window.loadedCerts = certs;
 
-      // Call the redraw function using current filters
+      // Populate vendor dropdown
+      const allVendors = [...new Set(certs.map(c => c.certVendor))];
+      filterState.visibleVendors = allVendors;
+
+      const vendorSelect = document.getElementById("vendor-filter");
+      allVendors.forEach(vendor => {
+        const option = document.createElement("option");
+        option.value = vendor;
+        option.textContent = vendor;
+        vendorSelect.appendChild(option);
+      });
+
+      // Initial draw
       applyFiltersAndRedraw();
     });
 
-    // Link checkbox inputs to filterState
-  document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
-    filterState.showCrossDomainCerts = e.target.checked;
-    applyFiltersAndRedraw();
-  });
+    // Checkbox: Cross-domain certs
+    document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
+      filterState.showCrossDomainCerts = e.target.checked;
+      applyFiltersAndRedraw();
+    });
 
-  document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
-    filterState.showCrossSubdomainCerts = e.target.checked;
-    applyFiltersAndRedraw();
-  });
-  </script>
+    // Checkbox: Cross-subdomain certs
+    document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
+      filterState.showCrossSubdomainCerts = e.target.checked;
+      applyFiltersAndRedraw();
+    });
+
+    // Vendor dropdown
+    document.getElementById("vendor-filter").addEventListener("change", (e) => {
+      const selected = e.target.value;
+      if (selected === "__ALL__") {
+        filterState.visibleVendors = [...new Set(window.loadedCerts.map(c => c.certVendor))];
+      } else {
+        filterState.visibleVendors = [selected];
+      }
+      applyFiltersAndRedraw();
+    });
+</script>
