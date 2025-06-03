@@ -565,7 +565,9 @@
       // Prepend skill unit before any domain units
       roadmapEl.prepend(skillUnit);
 
-      domains.forEach(domain => {
+      domains
+        .filter(domain => filterState.visibleDomains.includes(domain.domainId))
+        .forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()})`;
