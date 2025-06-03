@@ -120,6 +120,16 @@
       padding-right: 0.2vmax;
     }
 
+    #roadmap-flex {
+      display: flex;
+      justify-content: flex-start; /* default: left-aligned */
+      width: 100%;
+    }
+
+    body.center-domains #roadmap-flex {
+      justify-content: center; /* center when this class is active */
+    }
+
     .domain-container {
       background: white;
       position: relative;
@@ -463,8 +473,10 @@
 <!-- Dynamic Domain Filter Checkboxes -->
 <div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
   <h1>Security Certification Roadmap</h1>
-<div id="roadmap-wrapper">
-  <div id="roadmap">
+<div id="roadmap-flex">
+  <div id="roadmap-wrapper">
+    <div id="roadmap">
+    </div>
   </div>
 </div>
 
@@ -772,6 +784,20 @@
       return tile;
     }
 
+    function updateDomainCenteringClass(domains) {
+      const body = document.body;
+      const allDomainIds = domains.map(d => d.domainId);
+      const visible = filterState.visibleDomains;
+
+      const isSubset = visible.length > 0 && visible.length < allDomainIds.length;
+
+      if (isSubset) {
+        body.classList.add("center-domains");
+      } else {
+        body.classList.remove("center-domains");
+      }
+    }
+
     // Master redraw function — uses current filterState to rebuild roadmap
     function applyFiltersAndRedraw() {
       console.log("🔄 Redrawing with current filters:", filterState);
@@ -779,6 +805,7 @@
       const roadmapEl = document.getElementById("roadmap");
       roadmapEl.innerHTML = ""; // Clear all roadmap content
 
+      updateDomainCenteringClass(window.loadedDomains); // ✅ Add this line
       drawRoadmap(); // Re-render roadmap based on new filter state
     }
 
