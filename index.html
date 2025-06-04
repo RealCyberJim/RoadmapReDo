@@ -190,9 +190,13 @@
     
     .subdomain-canvas {
       border-radius: 0.25vmax;
-      z-index: 0;
+      z-index: 0;              /* Keep behind tiles and labels */
       pointer-events: none;
-      position: relative;
+      position: absolute;      /* Better isolation from layout flow */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     .subdomain-container {
