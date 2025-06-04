@@ -558,6 +558,17 @@
 
       const roadmapEl = document.getElementById('roadmap');
 
+      // 🔹 Determine which skill rows are actually used (1–27) by any visible cert
+      const usedSkillRows = new Set();
+
+      certs.forEach(cert => {
+        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata);
+        if (!filterState.visibleSkillStrata[certLevel]) return;
+        if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+        usedSkillRows.add(cert.certSkillStrata);
+      });
+
       // Skill unit (outermost container)
       const skillUnit = document.createElement("div");
       skillUnit.className = "domain-unit skill-unit";
