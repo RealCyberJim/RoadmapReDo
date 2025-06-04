@@ -628,12 +628,14 @@
         skillContainer.appendChild(label);
       });
 
-      // Add invisible row placeholders to enforce 28 grid rows
-      for (let row = 2; row <= 27; row++) {
+      // 🔹 Add placeholders ONLY for rows that are actually used
+      for (let strata = 1; strata <= 27; strata++) {
+        if (!usedSkillRows.has(strata)) continue;
+
         const placeholder = document.createElement("div");
         placeholder.className = "skill-placeholder";
-        placeholder.style.gridRowStart = row;
-        placeholder.style.gridColumnStart = 1; // Lock to first column
+        placeholder.style.gridRowStart = strata + 1; // strata 1 = row 2
+        placeholder.style.gridColumnStart = 1;
         skillContainer.appendChild(placeholder);
       }
 
