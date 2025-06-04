@@ -558,7 +558,7 @@
 
       const roadmapEl = document.getElementById('roadmap');
 
-      // 🔹 Determine which skill rows are actually used (1–27) by any visible cert
+      // Determine which skill rows are actually used (1–27) by any visible cert
       const usedSkillRows = new Set();
 
       certs.forEach(cert => {
@@ -569,7 +569,7 @@
         usedSkillRows.add(cert.certSkillStrata);
       });
 
-      // 🔹 Build a dynamic grid-template-rows string for 27 skill rows
+      // Build a dynamic grid-template-rows string for 27 skill rows
       let prunedGridRows = '';
       for (let row = 1; row <= 27; row++) {
         prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
@@ -593,6 +593,9 @@
       // Skill container — structurally identical to .domain-container
       const skillContainer = document.createElement("div");
       skillContainer.className = "skill-container";
+      skillContainer.style.gridTemplateRows = prunedGridRows;
+
+
 
       // ⬅ Add the container inside the wrapper (same as domain logic)
       skillWrapper.appendChild(skillContainer);
@@ -647,6 +650,7 @@
         .forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+        domainDiv.style.gridTemplateRows = prunedGridRows;
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()})`;
 
         // Dynamically set how wide the domain container should be
