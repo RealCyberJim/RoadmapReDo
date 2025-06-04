@@ -685,7 +685,7 @@
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
         subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
-        subDiv.style.gridTemplateRows = `repeat(27, 1.5vmax)`; // consistent vertical grid
+        ssubDiv.style.gridTemplateRows = prunedGridRows;
 
         subDiv.style.gridColumnStart = sub.gridColumnStart;
         subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
@@ -886,7 +886,7 @@
       const roadmapEl = document.getElementById("roadmap");
       roadmapEl.innerHTML = ""; // Clear all roadmap content
 
-      updateDomainCenteringClass(window.loadedDomains); // ✅ Add this line
+      updateDomainCenteringClass(window.loadedDomains);
       drawRoadmap(); // Re-render roadmap based on new filter state
     }
 
