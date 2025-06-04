@@ -569,6 +569,13 @@
         usedSkillRows.add(cert.certSkillStrata);
       });
 
+      // 🔹 Build a dynamic grid-template-rows string for 27 skill rows
+      let prunedGridRows = '';
+      for (let row = 1; row <= 27; row++) {
+        prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
+      }
+      prunedGridRows = prunedGridRows.trim(); // Remove trailing space
+
       // Skill unit (outermost container)
       const skillUnit = document.createElement("div");
       skillUnit.className = "domain-unit skill-unit";
