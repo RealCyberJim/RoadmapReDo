@@ -685,7 +685,7 @@
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
         subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
-        ssubDiv.style.gridTemplateRows = prunedGridRows;
+        subDiv.style.gridTemplateRows = prunedGridRows;
 
         subDiv.style.gridColumnStart = sub.gridColumnStart;
         subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
@@ -714,18 +714,18 @@
 
         // Add cert tiles
         const subCerts = certs.filter(cert => {
-          // 🔸 Case 1: Cert belongs to this exact subdomain
+          // Case 1: Cert belongs to this exact subdomain
           const isDirectMatch = cert.subdomainId === sub.subdomainId;
 
-          // 🔸 Case 2: Cross-subdomain guest
+          // Case 2: Cross-subdomain guest
           const isCrossSub = cert.crossSubdomains?.includes(sub.subdomainId);
           const showCrossSub = filterState.showCrossSubdomainCerts;
 
-          // 🔸 Case 3: Cross-domain guest logic
+          // Case 3: Cross-domain guest logic
           const isCrossDomainGuest = cert.crossDomains?.includes(domain.domainId);
           const showCrossDomain = filterState.showCrossDomainCerts;
 
-          // 🔸 Case 4: RSK guest logic
+          // Case 4: RSK guest logic - to preserve left/right visual
           const isRSK = domain.domainId === "RSK";
           let isValidRSKGuest = false;
 
