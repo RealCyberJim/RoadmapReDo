@@ -517,10 +517,10 @@
     };
 
     function getSkillLevelFromStrata(strataNumber) {
-      if (strataNumber >= 1 && strataNumber <= 7) return "beginner";
-      if (strataNumber >= 8 && strataNumber <= 19) return "intermediate";
-      if (strataNumber >= 20 && strataNumber <= 27) return "expert";
-      return null; // invalid or undefined
+      if (strataNumber >= 1 && strataNumber <= 8) return "expert";
+      if (strataNumber >= 9 && strataNumber <= 20) return "intermediate";
+      if (strataNumber >= 21 && strataNumber <= 27) return "beginner";
+      return null;
     }
 
     // Skill level checkbox listeners
