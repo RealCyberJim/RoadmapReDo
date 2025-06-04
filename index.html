@@ -751,6 +751,14 @@
             ))
           );
         });
+        // ⛔ Skip rendering this subdomain if it has no visible certs
+        const visibleSubCerts = subCerts.filter(cert => {
+          const level = getSkillLevelFromStrata(cert.certSkillStrata);
+          return filterState.visibleSkillStrata[level] &&
+                filterState.visibleVendorIds.includes(cert.vendorId);
+        });
+
+        if (visibleSubCerts.length === 0) return;
 
         const tileRowMap = {};
 
