@@ -516,6 +516,13 @@
       }
     };
 
+    function getSkillLevelFromStrata(strataNumber) {
+      if (strataNumber >= 1 && strataNumber <= 7) return "beginner";
+      if (strataNumber >= 8 && strataNumber <= 19) return "intermediate";
+      if (strataNumber >= 20 && strataNumber <= 27) return "expert";
+      return null; // invalid or undefined
+    }
+
     // Skill level checkbox listeners
     ["beginner", "intermediate", "expert"].forEach(level => {
       const checkbox = document.getElementById(`skill-filter-${level}`);
@@ -722,8 +729,10 @@
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
-          
+
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
 
