@@ -579,25 +579,29 @@
       // ⬅ Add the container inside the wrapper (same as domain logic)
       skillWrapper.appendChild(skillContainer);
 
-      // Define strata levels with row ranges
+      // Define skill level zones using correct row mappings
       const strataLevels = [
-        { label: "Expert", rowStart: 2, rowEnd: 9, className: "expert" },
-        { label: "Intermediate", rowStart: 10, rowEnd: 21, className: "intermediate" },
-        { label: "Beginner", rowStart: 22, rowEnd: 28, className: "beginner" }
+        { key: "expert", label: "Expert", rowStart: 2, rowEnd: 9 },        // certSkillStrata 1–8
+        { key: "intermediate", label: "Intermediate", rowStart: 10, rowEnd: 21 }, // certSkillStrata 9–20
+        { key: "beginner", label: "Beginner", rowStart: 22, rowEnd: 28 }   // certSkillStrata 21–27
       ];
 
-      // Add canvas layers
+      // Add canvas background layers conditionally
       strataLevels.forEach(level => {
+        if (!filterState.visibleSkillStrata[level.key]) return;
+
         const canvas = document.createElement("div");
-        canvas.className = `skill-strata-canvas ${level.className}`;
+        canvas.className = `skill-strata-canvas ${level.key}`;
         canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
         skillContainer.appendChild(canvas);
       });
 
-      // Add label layers
+      // Add vertical text labels conditionally
       strataLevels.forEach(level => {
+        if (!filterState.visibleSkillStrata[level.key]) return;
+
         const label = document.createElement("div");
-        label.className = `skill-strata-label ${level.className}`;
+        label.className = `skill-strata-label ${level.key}`;
         label.textContent = level.label;
         label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
         skillContainer.appendChild(label);
