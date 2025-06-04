@@ -372,7 +372,7 @@
 
     /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
 
-    /* 🔹 Tile + Container Grid Boundaries */
+    /* Tile + Container Grid Boundaries */
     body.debug-mode .domain-container,
     body.debug-mode .subdomain-container,
     body.debug-mode .cert-tile {
@@ -387,7 +387,7 @@
       background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
     }
 
-    /* 🔹 Overall Roadmap Layout */
+    /* Overall Roadmap Layout */
     body.debug-mode #roadmap-wrapper {
       overflow-x: auto; /* Allow horizontal scroll only in debug mode */
       outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
@@ -603,7 +603,7 @@
 
 
 
-      // ⬅ Add the container inside the wrapper (same as domain logic)
+      // Add the container inside the wrapper (same as domain logic)
       skillWrapper.appendChild(skillContainer);
 
       // Define skill level zones using correct row mappings
@@ -634,7 +634,7 @@
         skillContainer.appendChild(label);
       });
 
-      // 🔹 Add placeholders ONLY for rows that are actually used
+      // Add placeholders ONLY for rows that are actually used
       for (let strata = 1; strata <= 27; strata++) {
         if (!usedSkillRows.has(strata)) continue;
 
@@ -706,11 +706,13 @@
           : `var(${sub.subdomainColor || '--domain-default-white'})`;
         
                 
-        // ⏫ Subdomain title overlay (absolute positioned inside subdomain container)
-        const titleOverlay = document.createElement('div');
-        titleOverlay.className = 'subdomain-title';
-        titleOverlay.textContent = sub.subdomainShortName;
-        subDiv.appendChild(titleOverlay);
+        // Subdomain title overlay (only if not an unspecialized container)
+        if (!sub.subdomainId.endsWith('_unspec')) {
+          const titleOverlay = document.createElement('div');
+          titleOverlay.className = 'subdomain-title';
+          titleOverlay.textContent = sub.subdomainShortName;
+          subDiv.appendChild(titleOverlay);
+        }
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
 
@@ -755,7 +757,7 @@
             ))
           );
         });
-        // ⛔ Skip rendering this subdomain if it has no visible certs
+        // Skip rendering this subdomain if it has no visible certs
         const visibleSubCerts = subCerts.filter(cert => {
           const level = getSkillLevelFromStrata(cert.certSkillStrata);
           return filterState.visibleSkillStrata[level] &&
@@ -883,7 +885,7 @@
 
     // Master redraw function — uses current filterState to rebuild roadmap
     function applyFiltersAndRedraw() {
-      console.log("🔄 Redrawing with current filters:", filterState);
+      console.log("Redrawing with current filters:", filterState);
 
       const roadmapEl = document.getElementById("roadmap");
       roadmapEl.innerHTML = ""; // Clear all roadmap content
