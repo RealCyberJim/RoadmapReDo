@@ -470,8 +470,23 @@
       <option value="__ALL__">All Vendors</option>
     </select>
   </label>
+  <!-- Skill Level Filter STARTS HERE, OUTSIDE the <select> -->
+  <span style="margin-left: 2vmax;">
+    Skill Level Filter:
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-beginner" checked />
+      Beginner
+    </label>
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-intermediate" checked />
+      Intermediate
+    </label>
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-expert" checked />
+      Expert
+    </label>
+  </span>
 </div>
-
 <!-- Dynamic Domain Filter Checkboxes -->
 <div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
   <h1>Security Certification Roadmap</h1>
@@ -481,6 +496,8 @@
     </div>
   </div>
 </div>
+<!-- Spacer below roadmap -->
+<div style="height: 2vmax;"></div>
 
   <script>
     // Centralized filter state — controls what gets shown on the roadmap
@@ -491,7 +508,23 @@
       visibleVendors: [], // filled after loading certs.json
       showAchieved: true,
       showPlanned: true,
+      visibleSkillStrata: {
+        beginner: true,
+        intermediate: true,
+        expert: true
+      }
     };
+
+    // Skill level checkbox listeners
+    ["beginner", "intermediate", "expert"].forEach(level => {
+      const checkbox = document.getElementById(`skill-filter-${level}`);
+      if (checkbox) {
+        checkbox.addEventListener("change", (e) => {
+          filterState.visibleSkillStrata[level] = e.target.checked;
+          applyFiltersAndRedraw();
+        });
+      }
+    });
   
     async function loadJSON(path) {
       const res = await fetch(path);
