@@ -669,16 +669,16 @@
       const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
       domainSubdomains.forEach(sub => {
         
-        // Subdomain title
-//        if (!sub.subdomainId.endsWith('_unspec')) {
-//          const subTitle = document.createElement('div');
-//          subTitle.className = 'subdomain-title';
-//          subTitle.textContent = sub.subdomainShortName;
-//          subTitle.style.gridRowStart = 1;
-//          subTitle.style.gridColumnStart = sub.gridColumnStart;
-/          subTitle.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
-//          domainDiv.appendChild(subTitle);
-//        }
+        /* // Subdomain title
+        if (!sub.subdomainId.endsWith('_unspec')) {
+          const subTitle = document.createElement('div');
+          subTitle.className = 'subdomain-title';
+          subTitle.textContent = sub.subdomainShortName;
+          subTitle.style.gridRowStart = 1;
+          subTitle.style.gridColumnStart = sub.gridColumnStart;
+          subTitle.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+          domainDiv.appendChild(subTitle);
+        } */
 
         // Subdomain container
         const subDiv = document.createElement('div');
