@@ -343,13 +343,14 @@
     .skill-placeholder {
       grid-column-start: 1;
       grid-row-end: span 1;
-      height: 1.5vmax;         /* Matches cert-tile and domain rows */
-      width: 0.5vmax;          /* Minimum width needed for alignment */
+      height: 1.5vmax;         /* Matches cert-tile */
+      width: 0.5vmax;          /* Minimal width needed */
       opacity: 0;
       pointer-events: none;
       margin: 0;
-      padding: 0;
+      padding: 0.2vmax;        /* Match cert-tile padding */
       box-sizing: border-box;
+      align-self: center;
     }
 
     .skill-strata-label {
