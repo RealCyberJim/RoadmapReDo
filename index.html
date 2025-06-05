@@ -309,6 +309,16 @@
       width: max-content;
     }
 
+    .skill-strata-wrapper {
+      position: relative;
+      display: grid;
+      padding: 0.1vmax;              /* Matches .subdomain-container */
+      gap: 0.1vmax;                  /* Matches tile gutter */
+      border-radius: 0.25vmax;       /* Same visual radius */
+      pointer-events: none;         /* Keep non-interactive */
+      z-index: 0;                    /* Behind content */
+    }
+
     .skill-strata-canvas {
       width: 100%;
       grid-column: 1;
@@ -634,16 +644,28 @@
         skillContainer.appendChild(label);
       });
 
-      // Add placeholders ONLY for rows that are actually used
-      for (let strata = 1; strata <= 27; strata++) {
-        if (!usedSkillRows.has(strata)) continue;
+      // Add structured skill strata wrappers for visible bands
+      strataLevels.forEach(level => {
+        if (!filterState.visibleSkillStrata[level.key]) return;
 
-        const placeholder = document.createElement("div");
-        placeholder.className = "skill-placeholder";
-        placeholder.style.gridRowStart = strata;
-        placeholder.style.gridColumnStart = 1;
-        skillContainer.appendChild(placeholder);
-      }
+        const wrapper = document.createElement("div");
+        wrapper.className = `skill-strata-wrapper ${level.key}`;
+        wrapper.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        wrapper.style.gridColumnStart = 1;
+
+        // Add placeholder rows ONLY within this band
+        for (let row = level.rowStart; row <= level.rowEnd; row++) {
+          if (!usedSkillRows.has(row)) continue;
+
+          const placeholder = document.createElement("div");
+          placeholder.className = "skill-placeholder";
+          placeholder.style.gridRowStart = row;
+          placeholder.style.gridColumnStart = 1;
+          wrapper.appendChild(placeholder);
+        }
+
+        skillContainer.appendChild(wrapper);
+      });
 
       // Assemble full structure
       skillWrapper.appendChild(skillContainer);
