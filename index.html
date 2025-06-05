@@ -567,10 +567,11 @@
     }
 
     async function drawRoadmap() {
-      const [domains, subdomains, certs] = await Promise.all([
+      const [domains, subdomains, certs, skillStrata] = await Promise.all([
         loadJSON('./data/domains.json'),
         loadJSON('./data/subdomains.json'),
         loadJSON('./data/certs.json'),
+        loadJSON('./data/skillstrata.json')
       ]);
 
       const roadmapEl = document.getElementById('roadmap');
@@ -617,45 +618,33 @@
       // Add the container inside the wrapper (same as domain logic)
       skillWrapper.appendChild(skillContainer);
 
-      // Define skill level zones using correct row mappings
-      const strataLevels = [
-        { key: "expert", label: "Expert", rowStart: 2, rowEnd: 9 },        // certSkillStrata 1–8
-        { key: "intermediate", label: "Intermediate", rowStart: 10, rowEnd: 21 }, // certSkillStrata 9–20
-        { key: "beginner", label: "Beginner", rowStart: 22, rowEnd: 28 }   // certSkillStrata 21–27
-      ];
+      skillStrata.forEach(level => {
+        const levelId = level.id;
 
-      // Add canvas background layers conditionally
-      strataLevels.forEach(level => {
-        if (!filterState.visibleSkillStrata[level.key]) return;
+        if (!filterState.visibleSkillStrata[levelId]) return;
 
+        // Canvas layer (e.g., light red background)
         const canvas = document.createElement("div");
-        canvas.className = `skill-strata-canvas ${level.key}`;
-        canvas.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        canvas.className = `skill-strata-canvas ${levelId}`;
+        canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
+        canvas.style.backgroundColor = `var(${level.color})`;
         skillContainer.appendChild(canvas);
-      });
 
-      // Add vertical text labels conditionally
-      strataLevels.forEach(level => {
-        if (!filterState.visibleSkillStrata[level.key]) return;
-
+        // Label overlay (e.g., "Beginner")
         const label = document.createElement("div");
-        label.className = `skill-strata-label ${level.key}`;
+        label.className = `skill-strata-label ${levelId}`;
         label.textContent = level.label;
-        label.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        label.style.gridRow = `${level.start} / ${level.end + 1}`;
+        label.style.color = `var(${level.labelColor})`;
         skillContainer.appendChild(label);
-      });
 
-      // Add structured skill strata wrappers for visible bands
-      strataLevels.forEach(level => {
-        if (!filterState.visibleSkillStrata[level.key]) return;
-
+        // Wrapper with skill-placeholder elements
         const wrapper = document.createElement("div");
-        wrapper.className = `skill-strata-wrapper ${level.key}`;
-        wrapper.style.gridRow = `${level.rowStart} / ${level.rowEnd + 1}`;
+        wrapper.className = `skill-strata-wrapper ${levelId}`;
+        wrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
         wrapper.style.gridColumnStart = 1;
 
-        // Add placeholder rows ONLY within this band
-        for (let row = level.rowStart; row <= level.rowEnd; row++) {
+        for (let row = level.start; row <= level.end; row++) {
           if (!usedSkillRows.has(row)) continue;
 
           const placeholder = document.createElement("div");
