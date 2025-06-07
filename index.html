@@ -535,10 +535,13 @@
       }
     };
 
-    function getSkillLevelFromStrata(strataNumber) {
-      if (strataNumber >= 1 && strataNumber <= 8) return "expert";
-      if (strataNumber >= 9 && strataNumber <= 20) return "intermediate";
-      if (strataNumber >= 21 && strataNumber <= 27) return "beginner";
+    function getSkillLevelFromStrata(strataNumber, skillStrataList) {
+      for (const level of skillStrataList) {
+        const [start, end] = level.range;
+        if (strataNumber >= start && strataNumber <= end) {
+          return level.id;
+        }
+      }
       return null;
     }
 
@@ -568,6 +571,13 @@
       }
     }
 
+    function usedSkillRowsHasRowsInRange(start, end, usedSkillRows) {
+      for (let i = start; i <= end; i++) {
+        if (usedSkillRows.has(i)) return true;
+      }
+      return false;
+    }
+
     async function drawRoadmap() {
       const [domains, subdomains, certs, skillStrata] = await Promise.all([
         loadJSON('./data/domains.json'),
@@ -582,18 +592,21 @@
       const usedSkillRows = new Set();
 
       certs.forEach(cert => {
-        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata);
+        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
         if (!filterState.visibleSkillStrata[certLevel]) return;
         if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
 
         usedSkillRows.add(cert.certSkillStrata);
       });
 
-      // Build a dynamic grid-template-rows string for 27 skill rows
+      // Build a dynamic grid-template-rows string using actual skillStrata ranges
       let prunedGridRows = '';
-      for (let row = 1; row <= 27; row++) {
-        prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
-      }
+      skillStrata.forEach(level => {
+        const [start, end] = level.range;
+        for (let row = start; row <= end; row++) {
+          prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
+        }
+      });
       prunedGridRows = prunedGridRows.trim(); // Remove trailing space
 
       // Skill unit (outermost container)
@@ -623,7 +636,11 @@
       skillStrata.forEach(level => {
         const levelId = level.id;
 
-        if (!filterState.visibleSkillStrata[levelId]) return;
+        const shouldRender =
+          filterState.visibleSkillStrata[levelId] &&
+          usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
+
+        if (!shouldRender) return;
 
         // Canvas layer (e.g., light red background)
         const canvas = document.createElement("div");
@@ -771,9 +788,10 @@
             ))
           );
         });
+
         // Skip rendering this subdomain if it has no visible certs
         const visibleSubCerts = subCerts.filter(cert => {
-          const level = getSkillLevelFromStrata(cert.certSkillStrata);
+          const level = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           return filterState.visibleSkillStrata[level] &&
                 filterState.visibleVendorIds.includes(cert.vendorId);
         });
@@ -783,7 +801,7 @@
         const tileRowMap = {};
 
         subCerts.forEach(cert => {
-          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata);
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
 
