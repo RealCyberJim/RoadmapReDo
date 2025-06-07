@@ -578,13 +578,7 @@
       return false;
     }
 
-    async function drawRoadmap() {
-      const [domains, subdomains, certs, skillStrata] = await Promise.all([
-        loadJSON('./data/domains.json'),
-        loadJSON('./data/subdomains.json'),
-        loadJSON('./data/certs.json'),
-        loadJSON('./data/skillstrata.json')
-      ]);
+    function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
 
@@ -923,7 +917,13 @@
       roadmapEl.innerHTML = ""; // Clear all roadmap content
 
       updateDomainCenteringClass(window.loadedDomains);
-      drawRoadmap(); // Re-render roadmap based on new filter state
+
+      drawRoadmap(
+        window.loadedDomains,
+        window.loadedSubdomains,
+        window.loadedCerts,
+        window.loadedSkillStrata
+      );
     }
 
     Promise.all([
@@ -931,7 +931,8 @@
       loadJSON('./data/subdomains.json'),
       loadJSON('./data/certs.json'),
       loadJSON('./data/vendors.json'),
-    ]).then(([domains, subdomains, certs, vendors]) => {
+      loadJSON('./data/skillstrata.json'),
+    ]).then(([domains, subdomains, certs, vendors, skillStrata]) => {
 
       // Seed the filter state with all available domains and vendors
       filterState.visibleDomains = domains.map(d => d.domainId);
@@ -976,6 +977,7 @@
       // Store for later use (for debugging or reuse)
       window.loadedDomains = domains;
       window.loadedSubdomains = subdomains;
+      window.loadedSkillStrata = skillStrata;
       window.loadedCerts = certs;
       window.loadedVendors = vendors;          // Raw: [{ id, name }]
       window.normalizedVendors = normalizedVendors;  // Normalized: [{ vendorId, vendorLabel }]
