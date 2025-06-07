@@ -310,6 +310,7 @@
     }
 
     .skill-strata-wrapper {
+      background: rgba(0, 0, 255, 0.05); /* TEMPORARY debug tool-Light blue canvas */
       position: relative;
       display: grid;
       padding: 0.1vmax;              /* Matches .subdomain-container */
@@ -341,6 +342,7 @@
     }
 
     .skill-placeholder {
+      outline: 1px dashed blue; /* TEMPORARY debug tool */
       grid-column-start: 1;
       grid-row-end: span 1;
       height: 1.5vmax;         /* Matches cert-tile */
@@ -445,10 +447,6 @@
     body.debug-mode .skill-strata-canvas {
       outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
       background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
-    }
-
-    body.debug-mode .skill-placeholder {
-      outline: 1px dashed blue; /* TEMPORARY debug tool */
     }
 
     /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
