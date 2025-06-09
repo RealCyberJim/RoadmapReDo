@@ -537,6 +537,7 @@
 
     function getSkillLevelFromStrata(strataNumber, skillStrataList) {
       for (const level of skillStrataList) {
+        console.log("DEBUG level object:", level); // Debugging output for skill levels
         const [start, end] = level.range;
         if (strataNumber >= start && strataNumber <= end) {
           return level.id;
