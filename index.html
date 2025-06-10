@@ -595,7 +595,8 @@
       // Build a dynamic grid-template-rows string using actual skillStrata ranges
       let prunedGridRows = '';
       skillStrata.forEach(level => {
-        const [start, end] = level.range;
+        const start = level.start;
+        const end = level.end;
         for (let row = start; row <= end; row++) {
           prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
         }
