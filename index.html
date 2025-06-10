@@ -391,8 +391,10 @@
       }
 
       body.debug-mode .skill-placeholder {
-        outline: 1px solid green;
-        background-color: rgba(0, 255, 0, 0.05);
+        position: relative; /* Enables z-index stacking */
+        z-index: 2;          /* Brings above canvas, below labels if needed */
+        outline: 1px dashed rgba(0, 0, 0, 0.2); /* Visual border */
+        background-color: rgba(0, 0, 0, 0.03);  /* Very faint fill */
       }
 
       body.debug-mode .subdomain-canvas {
