@@ -383,91 +383,35 @@
       color: var(--color-green-dark);
     }
 
-    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
+    /* DEBUG MODE (Toggle by adding .debug-mode to <body>) */
 
-    /* Tile + Container Grid Boundaries */
-    body.debug-mode .domain-container,
-    body.debug-mode .subdomain-container,
-    body.debug-mode .cert-tile {
-      outline: 1px dashed rgba(0, 0, 0, 0.25); /* Light grid outline */
-    }
+      body.debug-mode .cert-tile {
+        outline: 1px solid red;
+        background-color: rgba(255, 0, 0, 0.05);
+      }
 
-    body.debug-mode .subdomain-canvas {
-      outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
-    }
+      body.debug-mode .skill-placeholder {
+        outline: 1px solid green;
+        background-color: rgba(0, 255, 0, 0.05);
+      }
 
-    body.debug-mode .subdomain-title {
-      background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
-    }
+      body.debug-mode .subdomain-canvas {
+        outline: 1px dashed blue;
+        background-color: rgba(0, 0, 255, 0.05);
+      }
 
-    /* Overall Roadmap Layout */
-    body.debug-mode #roadmap-wrapper {
-      overflow-x: auto; /* Allow horizontal scroll only in debug mode */
-      outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
-      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint */
-      padding-left: 1vmax;
-      padding-right: 1vmax;
-    }
+      body.debug-mode .skill-strata-canvas {
+        outline: 1px dashed orange;
+        background-color: rgba(255, 165, 0, 0.05);
+      }
 
-    body.debug-mode #roadmap {
-      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Container box */
-    }
+      body.debug-mode .skill-strata-label {
+        outline: 1px dotted purple;
+        background-color: rgba(128, 0, 128, 0.05);
+      }
 
-    /* 🔹 Domain Columns */
-    body.debug-mode .domain-unit {
-      outline: 2px dotted rgba(255, 0, 0, 0.3); /* Red = full unit (title + wrapper) */
-    }
-
-    body.debug-mode .domain-wrapper {
-      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + grid */
-    }
-
-    body.debug-mode .domain-title {
-      outline: 2px solid rgba(0, 0, 255, 0.3);  /* Blue = domain title block */
-    }
-
-    /* 🔹 Skill Label Column (mirrors domain structure) */
-    body.debug-mode .skill-unit {
-      outline: 2px dotted rgba(0, 128, 255, 0.3); /* Blue-tinted = full unit */
-    }
-
-    body.debug-mode .skill-unit .domain-wrapper {
-      outline: 2px solid rgba(0, 255, 128, 0.3); /* Greenish = skill wrapper */
-    }
-
-    body.debug-mode .skill-unit .skill-column {
-      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label grid */
-    }
-
-    body.debug-mode .skill-strata-label {
-      background-color: rgba(255, 255, 0, 0.08); /* Light yellow for each label */
-      outline: 1px dotted rgba(128, 128, 0, 0.5); /* Optional: visual border */
-    }
-
-    body.debug-mode .skill-strata-canvas {
-      outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
-      background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
-    }
-
-    /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
-    body.debug-mode .skill-container::before {
-      content: '';
-      display: block;
-      height: 100%;
-      width: 100%;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        transparent,
-        transparent 1.4vmax,
-        rgba(0, 0, 0, 0.05) 1.4vmax,
-        rgba(0, 0, 0, 0.05) 1.5vmax
-      );
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+ 
+    
 
   </style>
 </head>
