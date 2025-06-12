@@ -91,7 +91,7 @@
     .domain-SOF     .domain-title { color: var(--domain-sof); }
     .domain-OPS     .domain-title { color: var(--domain-ops); }
 
-    /* 🌙 Dark Mode Styling */
+    /* BEGIN Dark Mode Styling */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
@@ -113,6 +113,13 @@
     body.dark-mode .skill-strata-canvas {
       opacity: 0.15; /* Subtle, but visible on dark bg */
     }
+
+    /* Exception: RSK title styling in dark mode */
+    body.dark-mode .domain-RSK .domain-title {
+      color: var(--domain-rsk-dark);
+      background-color: var(--domain-rsk-light);
+    }
+    /* END Dark Mode Styling */
 
     html, body {
       overflow-x: hidden;
@@ -195,7 +202,6 @@
       border: 2px solid; /* test */
       border-radius: 0.25vmax; /* test */
       z-index: 3;              /* Above canvas, below tiles */
-      background-color: none; /* Transparent by default */
 
       text-align: center;             /* Center text horizontally */
       width: 100%;                  /* Full width of the domain box */
