@@ -192,12 +192,17 @@
     }
     
     .domain-title {
-      text-align: center;             /* Center title above the domain */
+      border: 2px solid; /* test */
+      border-radius: 0.25vmax; /* test */
+      z-index: 3;              /* Above canvas, below tiles */
+      background-color: none; /* Transparent by default */
+
+      text-align: center;             /* Center text horizontally */
       width: 100%;                  /* Full width of the domain box */
       box-sizing: border-box;       /* Include padding in width */
       font-weight: 500;               /* Bold for emphasis */
       font-size: 0.8vmax;            /* Responsive scaling */
-      padding: 0.1vmax 0 0.3vmax 0; /* Top + Bottom: keeps descenders from touching */
+      padding: 0.2vmax 0 0.2vmax 0; /* Top + Bottom: keeps descenders from touching */
       white-space: normal;           /* Allow multi-line if needed */
       word-break: normal;            /* Never break mid-word */
       text-overflow: unset;      /* Prevent ellipsis */
@@ -209,7 +214,7 @@
       margin: 0;
       height: var(--domain-title-height); /* Fixed height to prevent shifting */
       display: flex;
-      align-items: flex-end;             /* Align text to bottom of title box */
+      align-items: center;             /* center text to vertically */
       justify-content: center;      /* Horizontally center text */
     }
     
