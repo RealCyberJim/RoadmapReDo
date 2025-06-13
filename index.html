@@ -231,7 +231,7 @@
       text-align: center;             /* Center text horizontally */
       width: 100%;                  /* Full width of the domain box */
       box-sizing: border-box;       /* Include padding in width */
-      font-weight: 550;               /* Bold for emphasis */
+      font-weight: 500;               /* Bold for emphasis */
       font-size: 0.8vmax;            /* Responsive scaling */
       padding: 0.2vmax 0 0.2vmax 0; /* Top + Bottom: keeps descenders from touching */
       white-space: normal;           /* Allow multi-line if needed */
@@ -910,18 +910,35 @@ body.dark-mode .domain-RSK .domain-title {
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
 
-          if (!tileRowMap[skillRow]) {
-            tileRowMap[skillRow] = 0;
-            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
-          }
+          const isGuestInThisDomain = cert.domainId !== domain.domainId;
+          const homeDomain = domains.find(d => d.domainId === cert.domainId);
+          const currentDomain = domains.find(d => d.domainId === domain.domainId);
 
-          const colIndex = tileRowMap[skillRow];
-          const colStart = columnOrders[skillRow][colIndex];
+          let colStart;
+
+          if (isGuestInThisDomain && homeDomain && currentDomain) {
+            // Step 2: Place guest certs closer to their home domain
+            const homeOrder = homeDomain.domainDisplayOrder;
+            const currentOrder = currentDomain.domainDisplayOrder;
+
+            colStart = (homeOrder < currentOrder)
+              ? sub.gridColumnSpan  // rightmost column
+              : 1;                  // leftmost column
+          } else {
+            // Default: center-outward fill
+            if (!tileRowMap[skillRow]) {
+              tileRowMap[skillRow] = 0;
+              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+            }
+
+            const colIndex = tileRowMap[skillRow];
+            colStart = columnOrders[skillRow][colIndex];
+            tileRowMap[skillRow]++;
+          }
 
           tile.style.gridRowStart = skillRow;
           tile.style.gridColumnStart = colStart;
 
-          tileRowMap[skillRow]++;
           subDiv.appendChild(tile);
         });
 
