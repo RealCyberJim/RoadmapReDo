@@ -921,6 +921,7 @@ body.dark-mode .domain-RSK .domain-title {
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
       domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
+      domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
       domainTitle.style.textAlign = 'center';
       domainTitle.style.width = '100%';
       domainTitle.style.whiteSpace = 'normal';
