@@ -627,7 +627,6 @@ body.dark-mode .domain-RSK .domain-title {
   <script>
     // Centralized filter state — controls what gets shown on the roadmap
     const filterState = {
-      showOnlyCrossCerts: false,
       showCrossDomainCerts: true,
       showCrossSubdomainCerts: true,
       visibleDomains: [], // filled after loading domains.json
@@ -961,13 +960,6 @@ body.dark-mode .domain-RSK .domain-title {
         // Skip rendering this subdomain if it has no visible certs
         const visibleSubCerts = subCerts.filter(cert => {
           const level = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          const isCrossDomain = cert.crossDomains?.length > 0;
-          const isCrossSub = cert.crossSubdomains?.length > 0;
-
-          if (filterState.showOnlyCrossCerts && !isCrossDomain && !isCrossSub) {
-            return false; // exclude normal certs
-          }
-
           return filterState.visibleSkillStrata[level] &&
                 filterState.visibleVendorIds.includes(cert.vendorId);
         });
@@ -1250,11 +1242,6 @@ body.dark-mode .domain-RSK .domain-title {
   const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
   darkModeCheckbox.addEventListener("change", () => {
     document.body.classList.toggle("dark-mode", darkModeCheckbox.checked);
-  });
-
-  document.getElementById("show-only-cross-certs").addEventListener("change", (e) => {
-    filterState.showOnlyCrossCerts = e.target.checked;
-    applyFiltersAndRedraw();
   });
 
 </script>
