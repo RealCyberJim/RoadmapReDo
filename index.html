@@ -684,6 +684,63 @@ body.dark-mode .domain-RSK .domain-title {
       return order;
     }
 
+    function getColumnOrderWithBias(cert, renderedDomain, sub, allDomains) {
+      const span = sub.gridColumnSpan;
+      const homeDomainId = cert.domainId;
+      const renderedDomainId = renderedDomain.domainId;
+
+      // Neutral center-out fallback
+      const center = Math.ceil(span / 2);
+      const order = [center];
+
+      // Determine bias direction:
+      let biasDirection = 0; // 0=centered, -1=left, +1=right
+
+      if (renderedDomainId !== homeDomainId) {
+        // Guest cert
+        const home = allDomains.find(d => d.domainId === homeDomainId);
+        const guest = allDomains.find(d => d.domainId === renderedDomainId);
+        if (home && guest) {
+          if (home.domainDisplayOrder < guest.domainDisplayOrder) {
+            biasDirection = -1; // home is left of guest → bias left
+          } else if (home.domainDisplayOrder > guest.domainDisplayOrder) {
+            biasDirection = 1; // home is right of guest → bias right
+          }
+        }
+      } else if (cert.crossDomains?.length) {
+        // Home cert with guests → find average guest position
+        const guestPositions = cert.crossDomains
+          .map(g => allDomains.find(d => d.domainId === g))
+          .filter(Boolean)
+          .map(d => d.domainDisplayOrder);
+        const homePos = renderedDomain.domainDisplayOrder;
+        if (guestPositions.length) {
+          const avgGuest = guestPositions.reduce((a, b) => a + b, 0) / guestPositions.length;
+          if (avgGuest < homePos) biasDirection = -1;
+          else if (avgGuest > homePos) biasDirection = 1;
+        }
+      }
+
+      // Build fill order based on bias direction
+      for (let offset = 1; order.length < span; offset++) {
+        const right = center + offset;
+        const left = center - offset;
+
+        if (biasDirection === -1) {
+          if (left >= 1) order.push(left);
+          if (right <= span) order.push(right);
+        } else if (biasDirection === 1) {
+          if (right <= span) order.push(right);
+          if (left >= 1) order.push(left);
+        } else {
+          if (left >= 1) order.push(left);
+          if (right <= span) order.push(right);
+        }
+      }
+
+      return order;
+    }
+
     function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
@@ -928,7 +985,7 @@ body.dark-mode .domain-RSK .domain-title {
             // Default: center-outward fill
             if (!tileRowMap[skillRow]) {
               tileRowMap[skillRow] = 0;
-              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+              columnOrders[skillRow] = getColumnOrderWithBias(cert, domain, sub, domains);
             }
 
             const colIndex = tileRowMap[skillRow];
