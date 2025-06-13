@@ -114,7 +114,7 @@
       opacity: 0.15; /* Subtle, but visible on dark bg */
     }
 
-    /* Exception: RSK title styling in dark mode */
+    /* TEST Exception: (not yet working) RSK title styling in dark mode */
     body.dark-mode .domain-RSK .domain-title {
       color: var(--domain-rsk-dark);
       background-color: var(--domain-rsk-light);
@@ -200,6 +200,7 @@
     
     .domain-title {
       border: 2px solid; /* test */
+      background-color: rgba(0, 255, 0, 0.2); /* light green */
       border-radius: 0.25vmax; /* test */
       z-index: 3;              /* Above canvas, below tiles */
 
