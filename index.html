@@ -82,14 +82,44 @@
     .domain-SOF     { border-color: var(--domain-sof); }
     .domain-OPS     { border-color: var(--domain-ops); }
 
-    .domain-NET     .domain-title { color: var(--domain-net); }
-    .domain-IAM     .domain-title { color: var(--domain-iam); }
-    .domain-ENG     .domain-title { color: var(--domain-eng); }
-    .domain-AST     .domain-title { color: var(--domain-ast); }
-    .domain-RSK     .domain-title { color: var(--domain-rsk); }
-    .domain-TST     .domain-title { color: var(--domain-tst); }
-    .domain-SOF     .domain-title { color: var(--domain-sof); }
-    .domain-OPS     .domain-title { color: var(--domain-ops); }
+    .domain-NET .domain-title {
+      background-color: var(--domain-net-light);
+      color: var(--domain-net-dark);
+    }
+    .domain-IAM .domain-title {
+      background-color: var(--domain-iam-light);
+      color: var(--domain-iam-dark);
+    }
+    .domain-ENG .domain-title {
+      background-color: var(--domain-eng-light);
+      color: var(--domain-eng-dark);
+    }
+    .domain-AST .domain-title {
+      background-color: var(--domain-ast-light);
+      color: var(--domain-ast-dark);
+    }
+    .domain-RSK .domain-title {
+      background-color: var(--domain-rsk-light);
+      color: var(--domain-rsk-dark);
+    }
+    .domain-TST .domain-title {
+      background-color: var(--domain-tst-light);
+      color: var(--domain-tst-dark);
+    }
+    .domain-SOF .domain-title {
+      background-color: var(--domain-sof-light);
+      color: var(--domain-sof-dark);
+    }
+    .domain-OPS .domain-title {
+      background-color: var(--domain-ops-light);
+      color: var(--domain-ops-dark);
+    }
+
+    .skill-unit .domain-title {
+      background-color: transparent !important;
+      color: transparent !important;
+      border-color: transparent !important;
+    }
 
     /* BEGIN Dark Mode Styling */
     body.dark-mode {
@@ -114,11 +144,6 @@
       opacity: 0.15; /* Subtle, but visible on dark bg */
     }
 
-    /* TEST Exception: (not yet working) RSK title styling in dark mode */
-    body.dark-mode .domain-RSK .domain-title {
-      color: var(--domain-rsk-dark);
-      background-color: var(--domain-rsk-light);
-    }
     /* END Dark Mode Styling */
 
     html, body {
@@ -199,11 +224,10 @@
     }
     
     .domain-title {
-      border: 2px solid; /* test */
-      background-color: rgba(0, 255, 0, 0.2); /* light green */
-      border-radius: 0.25vmax; /* test */
+      border: 2px solid; /* Matches domain border */
+      background-color: transparent; /* Transparent to show underlying canvas */
+      border-radius: 0.25vmax; /* Matches domain border radius */
       z-index: 3;              /* Above canvas, below tiles */
-
       text-align: center;             /* Center text horizontally */
       width: 100%;                  /* Full width of the domain box */
       box-sizing: border-box;       /* Include padding in width */
@@ -216,11 +240,11 @@
       overflow-wrap: break-word;     /* Wrap only at spaces */
       overflow: visible;             /* Allow overflow */
       max-width: 100%;               /* Constrain to domain box */
-      pointer-events: none;
+      pointer-events: none;     /* Disable pointer events */
       line-height: 1;              /* Tighter line spacing */
-      margin: 0;
+      margin: 0; /* No margin to prevent shifting */
       height: var(--domain-title-height); /* Fixed height to prevent shifting */
-      display: flex;
+      display: flex;           /* Use flexbox for centering */
       align-items: center;             /* center text to vertically */
       justify-content: center;      /* Horizontally center text */
     }
