@@ -111,8 +111,8 @@
       color: var(--domain-sof-dark);
     }
     .domain-OPS .domain-title {
-      background-color: #f2dcdb;
-      color: #8c3736;
+      background-color: var(--domain-ops-light);
+      color: var(--domain-ops-dark);
     }
 
     .skill-unit .domain-title {
@@ -532,6 +532,31 @@
       pointer-events: none;
     }
 
+
+
+
+
+
+/* 🔸 For all domain titles */
+.domain-title {
+  background-color: transparent; /* Fallback if no domain-specific color */
+}
+
+/* 🔹 For RSK specifically */
+.domain-RSK .domain-title {
+  background-color: var(--domain-rsk-light) !important;
+  color: var(--domain-rsk-dark) !important;
+}
+
+/* 🔹 Lock it down in dark mode as well */
+body.dark-mode .domain-RSK .domain-title {
+  background-color: var(--domain-rsk-light) !important;
+  color: var(--domain-rsk-dark) !important;
+}
+
+
+
+
   </style>
 </head>
 <body>
@@ -895,7 +920,7 @@
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
       domainTitle.textContent = domain.domainShortName;
-      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()})`;
+      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
       domainTitle.style.textAlign = 'center';
       domainTitle.style.width = '100%';
       domainTitle.style.whiteSpace = 'normal';
