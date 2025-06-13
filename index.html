@@ -572,11 +572,27 @@ body.dark-mode .domain-RSK .domain-title {
     Show Cross-Subdomain Certs
   </label>
 
+  <label style="margin-right: 1.5vmax;">
+    <input type="checkbox" id="show-only-cross-certs">
+    Show only cross-certs
+  </label>
+</div>
+<!-- Dark Mode Toggle -->
+<div id="dark-mode-toggle" style="padding: 0.5vmax; font-size: 0.75vmax;">
+  <label>
+    <input type="checkbox" id="dark-mode-checkbox" />
+    Enable Dark Mode
+  </label>
+</div>
+<div>
   <label style="margin-left: 2vmax;">
     Vendor Filter:
     <select id="vendor-filter">
       <option value="__ALL__">All Vendors</option>
     </select>
+</label>
+</div>
+<div>
   </label>
   <!-- Skill Level Filter STARTS HERE, OUTSIDE the <select> -->
   <span style="margin-left: 2vmax;">
@@ -597,13 +613,7 @@ body.dark-mode .domain-RSK .domain-title {
 </div>
 <!-- Dynamic Domain Filter Checkboxes -->
 <div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
-<!-- Dark Mode Toggle -->
-<div id="dark-mode-toggle" style="padding: 0.5vmax; font-size: 0.75vmax;">
-  <label>
-    <input type="checkbox" id="dark-mode-checkbox" />
-    Enable Dark Mode
-  </label>
-</div>
+
   <h1>Security Certification Roadmap</h1>
 <div id="roadmap-flex">
   <div id="roadmap-wrapper">
@@ -617,6 +627,7 @@ body.dark-mode .domain-RSK .domain-title {
   <script>
     // Centralized filter state — controls what gets shown on the roadmap
     const filterState = {
+      showOnlyCrossCerts: false,
       showCrossDomainCerts: true,
       showCrossSubdomainCerts: true,
       visibleDomains: [], // filled after loading domains.json
@@ -950,6 +961,13 @@ body.dark-mode .domain-RSK .domain-title {
         // Skip rendering this subdomain if it has no visible certs
         const visibleSubCerts = subCerts.filter(cert => {
           const level = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          const isCrossDomain = cert.crossDomains?.length > 0;
+          const isCrossSub = cert.crossSubdomains?.length > 0;
+
+          if (filterState.showOnlyCrossCerts && !isCrossDomain && !isCrossSub) {
+            return false; // exclude normal certs
+          }
+
           return filterState.visibleSkillStrata[level] &&
                 filterState.visibleVendorIds.includes(cert.vendorId);
         });
@@ -1232,6 +1250,11 @@ body.dark-mode .domain-RSK .domain-title {
   const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
   darkModeCheckbox.addEventListener("change", () => {
     document.body.classList.toggle("dark-mode", darkModeCheckbox.checked);
+  });
+
+  document.getElementById("show-only-cross-certs").addEventListener("change", (e) => {
+    filterState.showOnlyCrossCerts = e.target.checked;
+    applyFiltersAndRedraw();
   });
 
 </script>
