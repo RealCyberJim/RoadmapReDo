@@ -672,6 +672,18 @@ body.dark-mode .domain-RSK .domain-title {
       return false;
     }
 
+    function getCenterOutwardColumnOrder(span) {
+      const center = Math.ceil(span / 2);
+      const order = [center];
+
+      for (let offset = 1; order.length < span; offset++) {
+        if (center + offset <= span) order.push(center + offset);
+        if (center - offset >= 1) order.push(center - offset);
+      }
+
+      return order;
+    }
+
     function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
@@ -887,7 +899,8 @@ body.dark-mode .domain-RSK .domain-title {
 
         if (visibleSubCerts.length === 0) return;
 
-        const tileRowMap = {};
+        const tileRowMap = {}; // { skillRow: currentTileIndex }
+        const columnOrders = {}; // { skillRow: [orderedColumns] }
 
         subCerts.forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
@@ -898,14 +911,17 @@ body.dark-mode .domain-RSK .domain-title {
           const skillRow = cert.certSkillStrata;
 
           if (!tileRowMap[skillRow]) {
-            tileRowMap[skillRow] = 1;
-          } else {
-            tileRowMap[skillRow]++;
+            tileRowMap[skillRow] = 0;
+            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
           }
 
-          tile.style.gridRowStart = skillRow;
-          tile.style.gridColumnStart = tileRowMap[skillRow];
+          const colIndex = tileRowMap[skillRow];
+          const colStart = columnOrders[skillRow][colIndex];
 
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = colStart;
+
+          tileRowMap[skillRow]++;
           subDiv.appendChild(tile);
         });
 
