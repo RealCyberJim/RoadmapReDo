@@ -695,6 +695,75 @@ body.dark-mode .domain-RSK .domain-title {
       return order;
     }
 
+    function getBiasDirection(cert, renderedDomain, allDomains) {
+      const homeDomainId = cert.domainId;
+      const renderedDomainId = renderedDomain.domainId;
+
+      if (renderedDomainId === homeDomainId && !cert.crossDomains?.length) {
+        return 0; // No guests, neutral
+      }
+
+      const home = allDomains.find(d => d.domainId === homeDomainId);
+      const guest = allDomains.find(d => d.domainId === renderedDomainId);
+
+      if (!home || !guest) return 0;
+
+      const homePos = home.domainDisplayOrder;
+
+      if (renderedDomainId !== homeDomainId) {
+        // Guest tile
+        const guestPos = guest.domainDisplayOrder;
+        if (guestPos < homePos) return -1; // Guest is left of home
+        if (guestPos > homePos) return 1;  // Guest is right of home
+        return 0;
+      }
+
+      // Home tile with guests — check if guests are left, right, or both
+      const guestPositions = cert.crossDomains
+        .map(g => allDomains.find(d => d.domainId === g)?.domainDisplayOrder)
+        .filter(pos => pos !== undefined);
+
+      const hasLeft = guestPositions.some(pos => pos < homePos);
+      const hasRight = guestPositions.some(pos => pos > homePos);
+
+      if (hasLeft && hasRight) return 99;  // Guests on both sides
+      if (hasLeft) return -1;
+      if (hasRight) return 1;
+
+      return 0;
+    }
+
+    function getColumnOrderWithProximityBias(cert, renderedDomain, sub, allDomains) {
+      const span = sub.gridColumnSpan;
+      const center = Math.ceil(span / 2);
+      const order = [];
+      const direction = getBiasDirection(cert, renderedDomain, allDomains);
+
+      if (direction === -1) {
+        // Bias left
+        for (let col = span; col >= 1; col--) {
+          order.push(col);
+        }
+      } else if (direction === 1) {
+        // Bias right
+        for (let col = 1; col <= span; col++) {
+          order.push(col);
+        }
+      } else if (direction === 99) {
+        // Guests on both sides → center-first
+        order.push(center);
+        for (let offset = 1; order.length < span; offset++) {
+          if (center - offset >= 1) order.push(center - offset);
+          if (center + offset <= span) order.push(center + offset);
+        }
+      } else {
+        // Neutral fallback
+        return getCenterOutwardColumnOrder(span);
+      }
+
+      return order;
+    }
+
     function getColumnOrderWithBias(cert, renderedDomain, sub, allDomains) {
       const span = sub.gridColumnSpan;
       const homeDomainId = cert.domainId;
@@ -923,7 +992,7 @@ body.dark-mode .domain-RSK .domain-title {
             const isCrossSub = Array.isArray(cert.crossSubdomains) && cert.crossSubdomains.length > 0;
             if (!isCrossDomain && !isCrossSub) return false;
           }
-          
+
           // Case 1: Cert belongs to this exact subdomain
           const isDirectMatch = cert.subdomainId === sub.subdomainId;
 
@@ -1002,7 +1071,25 @@ body.dark-mode .domain-RSK .domain-title {
             // Default: center-outward fill
             if (!tileRowMap[skillRow]) {
               tileRowMap[skillRow] = 0;
-              columnOrders[skillRow] = getColumnOrderWithBias(cert, domain, sub, domains);
+
+              // 👇 Bias logic inserted here
+              if (isGuestInThisDomain && homeDomain && currentDomain) {
+                const homeOrder = homeDomain.domainDisplayOrder;
+                const currentOrder = currentDomain.domainDisplayOrder;
+
+                if (homeOrder < currentOrder) {
+                  // Guest is to the right of home → home goes right, guest goes left
+                  columnOrders[skillRow] = [1];
+                } else if (homeOrder > currentOrder) {
+                  // Guest is to the left of home → home goes left, guest goes right
+                  columnOrders[skillRow] = [sub.gridColumnSpan];
+                } else {
+                  // Same domain order — fallback
+                  columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+                }
+              } else {
+                columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+              }
             }
 
             const colIndex = tileRowMap[skillRow];
