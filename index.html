@@ -1044,6 +1044,7 @@ body.dark-mode .domain-RSK .domain-title {
 
         const tileRowMap = {}; // { skillRow: currentTileIndex or placement cache }
         const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
+        const columnOrders = {}; // { skillRow: [col1, col2, ...] }
 
         subCerts.forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
@@ -1108,7 +1109,6 @@ body.dark-mode .domain-RSK .domain-title {
             tile.style.gridColumnStart = colStart;
             subDiv.appendChild(tile);
             return;
-          }
           }
 
           // HOME TILE WITH CROSS-GUESTS
