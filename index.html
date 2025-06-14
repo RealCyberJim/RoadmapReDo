@@ -1059,37 +1059,39 @@ body.dark-mode .domain-RSK .domain-title {
 
           let colStart;
 
+          // GUEST TILE LOGIC
           if (isGuestInThisDomain && homeDomain && currentDomain) {
-            // Step 2: Place guest certs closer to their home domain
             const homeOrder = homeDomain.domainDisplayOrder;
-            const currentOrder = currentDomain.domainDisplayOrder;
+            const guestOrder = currentDomain.domainDisplayOrder;
+            colStart = (guestOrder < homeOrder)
+              ? sub.gridColumnSpan  // Guest is left of home → rightmost
+              : 1;                  // Guest is right of home → leftmost
+          }
 
-            colStart = (homeOrder < currentOrder)
-              ? sub.gridColumnSpan  // rightmost column
-              : 1;                  // leftmost column
-          } else {
-            // Default: center-outward fill
+          // HOME TILE WITH CROSS-GUESTS
+          else if (cert.crossDomains?.length && !isGuestInThisDomain) {
+            const guestOrders = cert.crossDomains
+              .map(gid => domains.find(d => d.domainId === gid)?.domainDisplayOrder)
+              .filter(pos => pos !== undefined);
+            const homeOrder = currentDomain.domainDisplayOrder;
+
+            const hasLeft = guestOrders.some(pos => pos < homeOrder);
+            const hasRight = guestOrders.some(pos => pos > homeOrder);
+
+            let preferred;
+            if (hasLeft && hasRight) preferred = Math.ceil(sub.gridColumnSpan / 2); // center
+            else if (hasLeft) preferred = 1;                      // guests to left → home left
+            else if (hasRight) preferred = sub.gridColumnSpan;    // guests to right → home right
+            else preferred = Math.ceil(sub.gridColumnSpan / 2);   // fallback center
+
+            colStart = preferred;
+          }
+
+          // DEFAULT: center-outward fill
+          else {
             if (!tileRowMap[skillRow]) {
               tileRowMap[skillRow] = 0;
-
-              // 👇 Bias logic inserted here
-              if (isGuestInThisDomain && homeDomain && currentDomain) {
-                const homeOrder = homeDomain.domainDisplayOrder;
-                const currentOrder = currentDomain.domainDisplayOrder;
-
-                if (homeOrder < currentOrder) {
-                  // Guest is to the right of home → home goes right, guest goes left
-                  columnOrders[skillRow] = [1];
-                } else if (homeOrder > currentOrder) {
-                  // Guest is to the left of home → home goes left, guest goes right
-                  columnOrders[skillRow] = [sub.gridColumnSpan];
-                } else {
-                  // Same domain order — fallback
-                  columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
-                }
-              } else {
-                columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
-              }
+              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
             }
 
             const colIndex = tileRowMap[skillRow];
