@@ -1042,9 +1042,6 @@ body.dark-mode .domain-RSK .domain-title {
 
         if (visibleSubCerts.length === 0) return;
 
-        const tileRowMap = {}; // { skillRow: currentTileIndex }
-        const columnOrders = {}; // { skillRow: [orderedColumns] }
-
         const tileRowMap = {}; // { skillRow: currentTileIndex or placement cache }
         const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
 
