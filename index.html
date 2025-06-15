@@ -1047,7 +1047,8 @@ body.dark-mode .domain-RSK .domain-title {
         const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
         const columnOrders = {}; // { skillRow: [col1, col2, ...] }
 
-        subCerts.forEach(cert => {
+        // 🔹 Home certs are rendered first to claim their preferred spots
+        [...subCerts.filter(c => c.domainId === domain.domainId)].forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
@@ -1055,89 +1056,27 @@ body.dark-mode .domain-RSK .domain-title {
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
 
-          const isGuestInThisDomain = cert.domainId !== domain.domainId;
-          const homeDomain = domains.find(d => d.domainId === cert.domainId);
-          const currentDomain = domains.find(d => d.domainId === domain.domainId);
-
           let colStart;
 
-          // CROSS-GUEST TILE LOGIC
-          // Guest tile bias placement with conflict resolution
-          if (isGuestInThisDomain && homeDomain && currentDomain) {
-            const homeOrder = homeDomain.domainDisplayOrder;
-            const guestOrder = currentDomain.domainDisplayOrder;
-
-            // Step 1: Determine bias direction based on proximity to home domain
-            const preferredColStart = (homeOrder < guestOrder)
-              ? 1                      // guest to right of home → align left
-              : sub.gridColumnSpan;    // guest to left of home → align right
-
-            const maxRowOffset = 2;
-            let foundSlot = false;
-
-            // Step 2: Try to find a deconflicted slot in ±2 rows of the desired row
-            for (let offset = 0; offset <= maxRowOffset; offset++) {
-              const candidateRows = [skillRow - offset, skillRow + offset];
-
-              for (const row of candidateRows) {
-                if (row < 1 || row > 27) continue; // Grid bounds check
-                const key = `${row}-${preferredColStart}`;
-
-                // Step 3: If unoccupied, assign and exit
-                if (!tileRowMap[key]) {
-                  tileRowMap[key] = true;
-                  tile.style.gridRowStart = row;
-                  tile.style.gridColumnStart = preferredColStart;
-                  subDiv.appendChild(tile);
-                  foundSlot = true;
-                  return; // Placement successful, exit early
-                }
-              }
-              if (foundSlot) break;
-            }
-
-            // Step 4: Fallback to default logic if no bias slot found
-            // Still ensures tile is drawn even if ideal position not found
-            if (!tileRowMap[skillRow]) {
-              tileRowMap[skillRow] = 0;
-              columnOrders[skillRow] = getColumnOrderWithBias(cert, domain, sub, domains);
-            }
-
-            const colIndex = tileRowMap[skillRow];
-            const colStart = columnOrders[skillRow][colIndex];
-            tileRowMap[skillRow]++;
-            tile.style.gridRowStart = skillRow;
-            tile.style.gridColumnStart = colStart;
-            subDiv.appendChild(tile);
-            return;
-          }
-
-          // HOME TILE WITH CROSS-GUESTS
-          else if (cert.crossDomains?.length && !isGuestInThisDomain) {
+          // 🔹 Determine preferred column based on guest proximity
+          if (cert.crossDomains?.length) {
             const guestOrders = cert.crossDomains
               .map(gid => domains.find(d => d.domainId === gid)?.domainDisplayOrder)
               .filter(pos => pos !== undefined);
-            const homeOrder = currentDomain.domainDisplayOrder;
+            const homeOrder = domain.domainDisplayOrder;
 
             const hasLeft = guestOrders.some(pos => pos < homeOrder);
             const hasRight = guestOrders.some(pos => pos > homeOrder);
 
-            let preferred;
-            if (hasLeft && hasRight) preferred = Math.ceil(sub.gridColumnSpan / 2); // center
-            else if (hasLeft) preferred = 1;                      // guests to left → home left
-            else if (hasRight) preferred = sub.gridColumnSpan;    // guests to right → home right
-            else preferred = Math.ceil(sub.gridColumnSpan / 2);   // fallback center
-
-            colStart = preferred;
-          }
-
-          // DEFAULT: center-outward fill
-          else {
+            if (hasLeft && hasRight) colStart = Math.ceil(sub.gridColumnSpan / 2);
+            else if (hasLeft) colStart = 1;
+            else if (hasRight) colStart = sub.gridColumnSpan;
+            else colStart = Math.ceil(sub.gridColumnSpan / 2); // fallback
+          } else {
             if (!tileRowMap[skillRow]) {
               tileRowMap[skillRow] = 0;
               columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
             }
-
             const colIndex = tileRowMap[skillRow];
             colStart = columnOrders[skillRow][colIndex];
             tileRowMap[skillRow]++;
@@ -1145,10 +1084,61 @@ body.dark-mode .domain-RSK .domain-title {
 
           tile.style.gridRowStart = skillRow;
           tile.style.gridColumnStart = colStart;
-
           const finalKey = `${skillRow}-${colStart}`;
           tileRowMap[finalKey] = true;
 
+          subDiv.appendChild(tile);
+        });
+
+        // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
+        [...subCerts.filter(c => c.domainId !== domain.domainId)].forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          const homeDomain = domains.find(d => d.domainId === cert.domainId);
+          const guestDomain = domains.find(d => d.domainId === domain.domainId);
+
+          if (homeDomain && guestDomain) {
+            const homeOrder = homeDomain.domainDisplayOrder;
+            const guestOrder = guestDomain.domainDisplayOrder;
+
+            const preferredCol = homeOrder < guestOrder ? 1 : sub.gridColumnSpan;
+            const maxRowOffset = 2;
+
+            // 🔹 Attempt deconflicted placement within ±2 rows of target row
+            for (let offset = 0; offset <= maxRowOffset; offset++) {
+              const candidateRows = [skillRow - offset, skillRow + offset];
+              for (const row of candidateRows) {
+                if (row < 1 || row > 27) continue;
+                const key = `${row}-${preferredCol}`;
+                if (!tileRowMap[key]) {
+                  tileRowMap[key] = true;
+                  tile.style.gridRowStart = row;
+                  tile.style.gridColumnStart = preferredCol;
+                  subDiv.appendChild(tile);
+                  return;
+                }
+              }
+            }
+          }
+
+          // 🔹 Fallback to center-outward placement
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 0;
+            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+          }
+          const colIndex = tileRowMap[skillRow];
+          const fallbackCol = columnOrders[skillRow][colIndex];
+          tileRowMap[skillRow]++;
+          const fallbackKey = `${skillRow}-${fallbackCol}`;
+          tileRowMap[fallbackKey] = true;
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = fallbackCol;
           subDiv.appendChild(tile);
         });
 
