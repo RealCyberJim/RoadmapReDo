@@ -1091,7 +1091,28 @@ body.dark-mode .domain-RSK .domain-title {
         });
 
         // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
-        subCerts.filter(c => c.domainId !== domain.domainId).forEach(cert => {
+        subCerts
+          .filter(c => c.domainId !== domain.domainId)
+          .sort((a, b) => {
+            // 1. Fewer cross-domain appearances gets priority
+            const aCross = a.crossDomains?.length || 0;
+            const bCross = b.crossDomains?.length || 0;
+            if (aCross !== bCross) return aCross - bCross;
+
+            // 2. Closer proximity to the current domain
+            const aHome = domains.find(d => d.domainId === a.domainId);
+            const bHome = domains.find(d => d.domainId === b.domainId);
+            const guestOrder = domain.domainDisplayOrder;
+
+            const aDist = aHome ? Math.abs(aHome.domainDisplayOrder - guestOrder) : Infinity;
+            const bDist = bHome ? Math.abs(bHome.domainDisplayOrder - guestOrder) : Infinity;
+            if (aDist !== bDist) return aDist - bDist;
+
+            // 3. Fallback: preserve original JSON order
+            return 0;
+          })
+          
+          .forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
