@@ -986,7 +986,14 @@ body.dark-mode .domain-RSK .domain-title {
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
 
-        // Add cert tiles with 3-stage rendering
+        // Implement 3-stage cert tile placement with proximity-based positioning
+        /*
+        - Add home-first rendering priority to prevent displacement
+        - Implement guest tile bias positioning based on domain relationships
+        - Add robust fallback placement logic with ±3 row flexibility
+        - Resolve guest vs guest conflicts using proximity and JSON order
+        - Ensure proper cell occupancy tracking to prevent tile overlap   */
+
         const subCerts = certs.filter(cert => {
         });
 
@@ -1106,7 +1113,12 @@ body.dark-mode .domain-RSK .domain-title {
         }
 
         // STAGE 1: HOME CERTS (First priority)
+        console.log("Starting cert placement for subdomain:", sub.subdomainId);
+        console.log("Total visible certs:", visibleSubCerts.length);
+
         const homeCerts = visibleSubCerts.filter(cert => cert.domainId === domain.domainId);
+        console.log("Home certs found:", homeCerts.length);
+
         homeCerts.forEach(cert => {
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
@@ -1124,6 +1136,8 @@ body.dark-mode .domain-RSK .domain-title {
         const crossSubCerts = visibleSubCerts.filter(cert => 
           cert.domainId === domain.domainId && cert.crossSubdomains?.includes(sub.subdomainId)
         );
+        console.log("Cross-subdomain certs found:", crossSubCerts.length);
+
         crossSubCerts.forEach(cert => {
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
           const skillRow = cert.certSkillStrata;
@@ -1142,6 +1156,7 @@ body.dark-mode .domain-RSK .domain-title {
         const crossDomainCerts = visibleSubCerts.filter(cert => 
           cert.domainId !== domain.domainId && cert.crossDomains?.includes(domain.domainId)
         );
+        console.log("Cross-domain certs found:", crossDomainCerts.length);
 
         // Sort by proximity to home domain, then by JSON order for tie-breaking
         crossDomainCerts.sort((a, b) => {
