@@ -986,52 +986,8 @@ body.dark-mode .domain-RSK .domain-title {
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
 
-        // Add cert tiles
+        // Add cert tiles with 3-stage rendering
         const subCerts = certs.filter(cert => {
-          if (filterState.showOnlyCrossCerts) {
-            const isCrossDomain = Array.isArray(cert.crossDomains) && cert.crossDomains.length > 0;
-            const isCrossSub = Array.isArray(cert.crossSubdomains) && cert.crossSubdomains.length > 0;
-            if (!isCrossDomain && !isCrossSub) return false;
-          }
-
-          // Case 1: Cert belongs to this exact subdomain
-          const isDirectMatch = cert.subdomainId === sub.subdomainId;
-
-          // Case 2: Cross-subdomain guest
-          const isCrossSub = cert.crossSubdomains?.includes(sub.subdomainId);
-          const showCrossSub = filterState.showCrossSubdomainCerts;
-
-          // Case 3: Cross-domain guest logic
-          const isCrossDomainGuest = cert.crossDomains?.includes(domain.domainId);
-          const showCrossDomain = filterState.showCrossDomainCerts;
-
-          // Case 4: RSK guest logic - to preserve left/right visual
-          const isRSK = domain.domainId === "RSK";
-          let isValidRSKGuest = false;
-
-          if (isCrossDomainGuest && isRSK) {
-            const originDomain = domains.find(d => d.domainId === cert.domainId);
-            const rskDomain = domains.find(d => d.domainId === "RSK");
-
-            if (originDomain && rskDomain) {
-              const originOrder = originDomain.domainDisplayOrder;
-              const rskOrder = rskDomain.domainDisplayOrder;
-              const expectedSubdomain =
-                originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
-
-              isValidRSKGuest = sub.subdomainId === expectedSubdomain;
-            }
-          }
-
-          // Final return condition
-          return (
-            isDirectMatch ||
-            (isCrossSub && showCrossSub) ||
-            ((isCrossDomainGuest && showCrossDomain) && (
-              (domain.domainId !== "RSK" && sub.subdomainId === `${domain.domainId}_unspec`) ||
-              isValidRSKGuest
-            ))
-          );
         });
 
         // Skip rendering this subdomain if it has no visible certs
@@ -1047,98 +1003,176 @@ body.dark-mode .domain-RSK .domain-title {
         const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
         const columnOrders = {}; // { skillRow: [col1, col2, ...] }
 
-        // 🔹 Home certs are rendered first to claim their preferred spots
-        [...subCerts.filter(c => c.domainId === domain.domainId)].forEach(cert => {
-          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          if (!filterState.visibleSkillStrata[certLevel]) return;
-          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+        // Helper function to check if a cell is occupied
+        function isCellOccupied(row, col) {
+          return occupiedCells[`${row}-${col}`] === true;
+        }
 
-          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
-          const skillRow = cert.certSkillStrata;
+        // Helper function to mark a cell as occupied
+        function occupyCell(row, col) {
+          occupiedCells[`${row}-${col}`] = true;
+        }
 
-          let colStart;
-
-          // 🔹 Determine preferred column based on guest proximity
-          if (cert.crossDomains?.length) {
-            const guestOrders = cert.crossDomains
-              .map(gid => domains.find(d => d.domainId === gid)?.domainDisplayOrder)
-              .filter(pos => pos !== undefined);
-            const homeOrder = domain.domainDisplayOrder;
-
-            const hasLeft = guestOrders.some(pos => pos < homeOrder);
-            const hasRight = guestOrders.some(pos => pos > homeOrder);
-
-            if (hasLeft && hasRight) colStart = Math.ceil(sub.gridColumnSpan / 2);
-            else if (hasLeft) colStart = 1;
-            else if (hasRight) colStart = sub.gridColumnSpan;
-            else colStart = Math.ceil(sub.gridColumnSpan / 2); // fallback
-          } else {
-            if (!tileRowMap[skillRow]) {
-              tileRowMap[skillRow] = 0;
-              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
-            }
-            const colIndex = tileRowMap[skillRow];
-            colStart = columnOrders[skillRow][colIndex];
-            tileRowMap[skillRow]++;
+        // Helper function to get home tile bias position
+        function getHomeTileBias(cert, domain, sub, domains) {
+          if (!cert.crossDomains?.length) {
+            return Math.ceil(sub.gridColumnSpan / 2); // center if no guests
           }
 
-          tile.style.gridRowStart = skillRow;
-          tile.style.gridColumnStart = colStart;
-          const finalKey = `${skillRow}-${colStart}`;
-          tileRowMap[finalKey] = true;
+          const homeOrder = domain.domainDisplayOrder;
+          const guestPositions = cert.crossDomains
+            .map(guestId => domains.find(d => d.domainId === guestId)?.domainDisplayOrder)
+            .filter(pos => pos !== undefined);
 
-          subDiv.appendChild(tile);
-        });
+          const hasLeft = guestPositions.some(pos => pos < homeOrder);
+          const hasRight = guestPositions.some(pos => pos > homeOrder);
 
-        // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
-        [...subCerts.filter(c => c.domainId !== domain.domainId)].forEach(cert => {
-          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          if (!filterState.visibleSkillStrata[certLevel]) return;
-          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+          if (hasLeft && hasRight) return Math.ceil(sub.gridColumnSpan / 2); // center
+          if (hasLeft) return 1; // leftmost
+          if (hasRight) return sub.gridColumnSpan; // rightmost
+          
+          return Math.ceil(sub.gridColumnSpan / 2); // fallback center
+        }
 
-          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
-          const skillRow = cert.certSkillStrata;
-
+        // Helper function to get guest tile bias position
+        function getGuestTileBias(cert, renderedDomain, sub, domains) {
           const homeDomain = domains.find(d => d.domainId === cert.domainId);
-          const guestDomain = domains.find(d => d.domainId === domain.domainId);
+          if (!homeDomain) return 1; // fallback
 
-          if (homeDomain && guestDomain) {
-            const homeOrder = homeDomain.domainDisplayOrder;
-            const guestOrder = guestDomain.domainDisplayOrder;
+          const homeOrder = homeDomain.domainDisplayOrder;
+          const guestOrder = renderedDomain.domainDisplayOrder;
 
-            const preferredCol = homeOrder < guestOrder ? 1 : sub.gridColumnSpan;
-            const maxRowOffset = 2;
+          // If guest domain is left of home → place guest in rightmost column
+          if (guestOrder < homeOrder) return sub.gridColumnSpan;
+          
+          // If guest domain is right of home → place guest in leftmost column
+          if (guestOrder > homeOrder) return 1;
+          
+          return Math.ceil(sub.gridColumnSpan / 2); // fallback center
+        }
 
-            // 🔹 Attempt deconflicted placement within ±2 rows of target row
-            for (let offset = 0; offset <= maxRowOffset; offset++) {
-              const candidateRows = [skillRow - offset, skillRow + offset];
-              for (const row of candidateRows) {
-                if (row < 1 || row > 27) continue;
-                const key = `${row}-${preferredCol}`;
-                if (!tileRowMap[key]) {
-                  tileRowMap[key] = true;
+        // Helper function to attempt guest placement with fallback
+        function attemptGuestPlacement(cert, tile, targetRow, preferredCol, sub, domains) {
+          const maxRowOffset = 3; // ±3 rows as specified
+          
+          // Try preferred position first
+          if (!isCellOccupied(targetRow, preferredCol)) {
+            tile.style.gridRowStart = targetRow;
+            tile.style.gridColumnStart = preferredCol;
+            occupyCell(targetRow, preferredCol);
+            return true;
+          }
+
+          // Try same row, different columns
+          for (let col = 1; col <= sub.gridColumnSpan; col++) {
+            if (col !== preferredCol && !isCellOccupied(targetRow, col)) {
+              tile.style.gridRowStart = targetRow;
+              tile.style.gridColumnStart = col;
+              occupyCell(targetRow, col);
+              return true;
+            }
+          }
+
+          // Try preferred column, different rows (±3)
+          for (let offset = 1; offset <= maxRowOffset; offset++) {
+            const candidateRows = [targetRow - offset, targetRow + offset];
+            for (const row of candidateRows) {
+              if (row >= 1 && row <= 27 && !isCellOccupied(row, preferredCol)) {
+                tile.style.gridRowStart = row;
+                tile.style.gridColumnStart = preferredCol;
+                occupyCell(row, preferredCol);
+                return true;
+              }
+            }
+          }
+
+          // Final fallback: any available cell within ±3 rows
+          for (let offset = 0; offset <= maxRowOffset; offset++) {
+            const candidateRows = offset === 0 ? [targetRow] : [targetRow - offset, targetRow + offset];
+            for (const row of candidateRows) {
+              if (row < 1 || row > 27) continue;
+              for (let col = 1; col <= sub.gridColumnSpan; col++) {
+                if (!isCellOccupied(row, col)) {
                   tile.style.gridRowStart = row;
-                  tile.style.gridColumnStart = preferredCol;
-                  subDiv.appendChild(tile);
-                  return;
+                  tile.style.gridColumnStart = col;
+                  occupyCell(row, col);
+                  return true;
                 }
               }
             }
           }
 
-          // 🔹 Fallback to center-outward placement
-          if (!tileRowMap[skillRow]) {
-            tileRowMap[skillRow] = 0;
-            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
-          }
-          const colIndex = tileRowMap[skillRow];
-          const fallbackCol = columnOrders[skillRow][colIndex];
-          tileRowMap[skillRow]++;
-          const fallbackKey = `${skillRow}-${fallbackCol}`;
-          tileRowMap[fallbackKey] = true;
+          return false; // No placement found
+        }
 
+        // STAGE 1: HOME CERTS (First priority)
+        const homeCerts = visibleSubCerts.filter(cert => cert.domainId === domain.domainId);
+        homeCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+          
+          const preferredCol = getHomeTileBias(cert, domain, sub, domains);
+          
           tile.style.gridRowStart = skillRow;
-          tile.style.gridColumnStart = fallbackCol;
+          tile.style.gridColumnStart = preferredCol;
+          occupyCell(skillRow, preferredCol);
+          
+          subDiv.appendChild(tile);
+        });
+
+        // STAGE 2: CROSS-SUBDOMAIN GUESTS (Second priority)
+        const crossSubCerts = visibleSubCerts.filter(cert => 
+          cert.domainId === domain.domainId && cert.crossSubdomains?.includes(sub.subdomainId)
+        );
+        crossSubCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+          
+          const preferredCol = getGuestTileBias(cert, domain, sub, domains);
+          
+          if (!attemptGuestPlacement(cert, tile, skillRow, preferredCol, sub, domains)) {
+            console.warn(`Could not place cross-subdomain cert ${cert.certId}`);
+            return; // Skip if no placement found
+          }
+          
+          subDiv.appendChild(tile);
+        });
+
+        // STAGE 3: CROSS-DOMAIN GUESTS (Last priority)
+        const crossDomainCerts = visibleSubCerts.filter(cert => 
+          cert.domainId !== domain.domainId && cert.crossDomains?.includes(domain.domainId)
+        );
+
+        // Sort by proximity to home domain, then by JSON order for tie-breaking
+        crossDomainCerts.sort((a, b) => {
+          const aDomain = domains.find(d => d.domainId === a.domainId);
+          const bDomain = domains.find(d => d.domainId === b.domainId);
+          const targetOrder = domain.domainDisplayOrder;
+          
+          if (aDomain && bDomain) {
+            const aDistance = Math.abs(aDomain.domainDisplayOrder - targetOrder);
+            const bDistance = Math.abs(bDomain.domainDisplayOrder - targetOrder);
+            
+            if (aDistance !== bDistance) {
+              return aDistance - bDistance; // Closer domains first
+            }
+          }
+          
+          // Tie-breaker: maintain JSON order (assuming certs maintain original order)
+          return 0;
+        });
+
+        crossDomainCerts.forEach(cert => {
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+          
+          const preferredCol = getGuestTileBias(cert, domain, sub, domains);
+          
+          if (!attemptGuestPlacement(cert, tile, skillRow, preferredCol, sub, domains)) {
+            console.warn(`Could not place cross-domain cert ${cert.certId}`);
+            return; // Skip if no placement found
+          }
+          
           subDiv.appendChild(tile);
         });
 
