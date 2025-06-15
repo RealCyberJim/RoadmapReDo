@@ -1048,7 +1048,7 @@ body.dark-mode .domain-RSK .domain-title {
         const columnOrders = {}; // { skillRow: [col1, col2, ...] }
 
         // 🔹 Home certs are rendered first to claim their preferred spots
-        [...subCerts.filter(c => c.domainId === domain.domainId)].forEach(cert => {
+        subCerts.filter(c => c.domainId === domain.domainId).forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
@@ -1091,7 +1091,7 @@ body.dark-mode .domain-RSK .domain-title {
         });
 
         // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
-        [...subCerts.filter(c => c.domainId !== domain.domainId)].forEach(cert => {
+        subCerts.filter(c => c.domainId !== domain.domainId).forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
           if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
@@ -1107,6 +1107,18 @@ body.dark-mode .domain-RSK .domain-title {
             const guestOrder = guestDomain.domainDisplayOrder;
 
             const preferredCol = homeOrder < guestOrder ? 1 : sub.gridColumnSpan;
+            // 🔹 Check for any open slot in the same skill row before trying other rows
+            const sameRowOrder = getColumnOrderWithProximityBias(cert, domain, sub, domains);
+            for (const col of sameRowOrder) {
+              const key = `${skillRow}-${col}`;
+              if (!tileRowMap[key]) {
+                tileRowMap[key] = true;
+                tile.style.gridRowStart = skillRow;
+                tile.style.gridColumnStart = col;
+                subDiv.appendChild(tile);
+                return;
+              }
+            }
             const maxRowOffset = 2;
 
             // 🔹 Attempt deconflicted placement within ±2 rows of target row
