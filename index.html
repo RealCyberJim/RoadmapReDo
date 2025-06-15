@@ -1108,7 +1108,16 @@ body.dark-mode .domain-RSK .domain-title {
             const bDist = bHome ? Math.abs(bHome.domainDisplayOrder - guestOrder) : Infinity;
             if (aDist !== bDist) return aDist - bDist;
 
-            // 3. Fallback: preserve original JSON order
+            // 3. Subdomain proximity tie-breaker when domain proximity is equal
+            const aSub = subdomains.find(s => s.subdomainId === a.subdomainId);
+            const bSub = subdomains.find(s => s.subdomainId === b.subdomainId);
+            if (aSub && bSub) {
+              const aSubDist = Math.abs(aSub.gridColumnStart - sub.gridColumnStart);
+              const bSubDist = Math.abs(bSub.gridColumnStart - sub.gridColumnStart);
+              if (aSubDist !== bSubDist) return aSubDist - bSubDist;
+            }
+
+            // 4. Fallback: preserve original JSON order
             return 0;
           })
           
