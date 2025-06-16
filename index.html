@@ -1123,7 +1123,7 @@ body.dark-mode .domain-RSK .domain-title {
           
           .forEach(cert => {
           const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          if (!filterState.visibleSkillStrata[certLevel]) return;e
+          if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
 
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
