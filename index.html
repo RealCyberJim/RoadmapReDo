@@ -930,7 +930,6 @@ body.dark-mode .domain-RSK .domain-title {
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
         domainDiv.style.gridTemplateRows = prunedGridRows;
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()})`;
-        domainDiv.style.border = `2px solid var(--domain-${domain.domainId.toLowerCase()}-dark)`;
 
         // Dynamically set how wide the domain container should be
         const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
