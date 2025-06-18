@@ -3347,7 +3347,7 @@
     "vendorId": "splunk",
     "certUrl": "https://www.splunk.com/en_us/training/certification-track/splunk-es-certified-admin.html",
     "certTooltip": "Splunk Enterprise Security Certified Administrator $130 exam Branded course recommended",
-    "certTileLabel": "Splunko ESCA"
+    "certTileLabel": "Splunk ESCA"
   },
   {
     "certId": "RSK_bcspciaa",
