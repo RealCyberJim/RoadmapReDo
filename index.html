@@ -316,7 +316,7 @@
     #roadmap-wrapper {
       display: grid;
       grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
-      grid-template-rows: auto auto;
+      grid-template-rows: auto max-content;
       width: 100%;
       max-width: 100vw;
       height: auto;
@@ -511,26 +511,6 @@
     body.debug-mode .skill-strata-canvas {
       outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
       background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
-    }
-
-    /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
-    body.debug-mode .skill-container::before {
-      content: '';
-      display: block;
-      height: 100%;
-      width: 100%;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        transparent,
-        transparent 1.4vmax,
-        rgba(0, 0, 0, 0.05) 1.4vmax,
-        rgba(0, 0, 0, 0.05) 1.5vmax
-      );
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
     }
 
 
