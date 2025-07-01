@@ -572,11 +572,6 @@ body.dark-mode .domain-RSK .domain-title {
       <input type="checkbox" id="toggle-cross-subdomain" />
       Show Cross-Subdomain Certs
     </label>
-
-    <label style="margin-right: 1.5vmax;">
-      <input type="checkbox" id="toggle-only-cross-certs" />
-      Show only cross-certs
-    </label>
   </div>
 </div>
 <!-- Dark Mode Toggle -->
@@ -631,7 +626,6 @@ body.dark-mode .domain-RSK .domain-title {
     const filterState = {
       showCrossDomainCerts: false,
       showCrossSubdomainCerts: false,
-      showOnlyCrossCerts: false,
       visibleDomains: [], // filled after loading domains.json
       visibleVendors: [], // filled after loading certs.json
       showAchieved: true,
@@ -988,10 +982,13 @@ body.dark-mode .domain-RSK .domain-title {
 
         // Add cert tiles
         const subCerts = certs.filter(cert => {
-          if (filterState.showOnlyCrossCerts) {
+          if (filterState.showCrossDomainCerts) {
             const isCrossDomain = Array.isArray(cert.crossDomains) && cert.crossDomains.length > 0;
             const isCrossSub = Array.isArray(cert.crossSubdomains) && cert.crossSubdomains.length > 0;
+            // In cross-cert view, skip certs that have no cross cert roles
             if (!isCrossDomain && !isCrossSub) return false;
+          }
+          return true;
           }
 
           // Case 1: Cert belongs to this exact subdomain
@@ -1390,20 +1387,15 @@ body.dark-mode .domain-RSK .domain-title {
 
       const subToggleContainer = document.getElementById("cross-cert-subtoggles");
       const toggleCrossSub = document.getElementById("toggle-cross-subdomain");
-      const toggleOnlyCross = document.getElementById("toggle-only-cross-certs");
 
       if (isChecked) {
         subToggleContainer.style.display = "inline-block";
         toggleCrossSub.checked = true;
-        toggleOnlyCross.checked = true;
         filterState.showCrossSubdomainCerts = true;
-        filterState.showOnlyCrossCerts = true;
       } else {
         subToggleContainer.style.display = "none";
         toggleCrossSub.checked = false;
-        toggleOnlyCross.checked = false;
         filterState.showCrossSubdomainCerts = false;
-        filterState.showOnlyCrossCerts = false;
       }
 
       applyFiltersAndRedraw();
@@ -1412,12 +1404,6 @@ body.dark-mode .domain-RSK .domain-title {
     // Checkbox: Cross-subdomain certs
     document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
       filterState.showCrossSubdomainCerts = e.target.checked;
-      applyFiltersAndRedraw();
-    });
-
-        // checkbox: Show only cross-certs
-    document.getElementById("toggle-only-cross-certs").addEventListener("change", (e) => {
-      filterState.showOnlyCrossCerts = e.target.checked;
       applyFiltersAndRedraw();
     });
 
