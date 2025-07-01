@@ -572,6 +572,11 @@ body.dark-mode .domain-RSK .domain-title {
       <input type="checkbox" id="toggle-cross-subdomain" />
       Show Cross-Subdomain Certs
     </label>
+
+    <label style="margin-right: 1.5vmax;">
+      <input type="checkbox" id="toggle-only-cross-certs" />
+      Show only cross-certs
+    </label>
   </div>
 </div>
 <!-- Dark Mode Toggle -->
@@ -626,6 +631,7 @@ body.dark-mode .domain-RSK .domain-title {
     const filterState = {
       showCrossDomainCerts: false,
       showCrossSubdomainCerts: false,
+      showOnlyCrossCerts: false,
       visibleDomains: [], // filled after loading domains.json
       visibleVendors: [], // filled after loading certs.json
       showAchieved: true,
