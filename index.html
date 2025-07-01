@@ -537,18 +537,18 @@
 
 
 
-/* 🔸 For all domain titles */
+/* For all domain titles */
 .domain-title {
   background-color: transparent; /* Fallback if no domain-specific color */
 }
 
-/* 🔹 For RSK specifically */
+/* For RSK specifically */
 .domain-RSK .domain-title {
   background-color: var(--domain-rsk-light) !important;
   color: var(--domain-rsk-dark) !important;
 }
 
-/* 🔹 Lock it down in dark mode as well */
+/* Lock it down in dark mode as well */
 body.dark-mode .domain-RSK .domain-title {
   background-color: var(--domain-rsk-light) !important;
   color: var(--domain-rsk-dark) !important;
@@ -567,16 +567,17 @@ body.dark-mode .domain-RSK .domain-title {
     <input type="checkbox" id="toggle-cross-domain" checked />
     Show Cross-Domain Certs
   </label>
+  <div id="cross-cert-subtoggles" style="display: none; margin-top: 0.5vmax;">
+    <label style="margin-right: 2vmax;">
+      <input type="checkbox" id="toggle-cross-subdomain" />
+      Show Cross-Subdomain Certs
+    </label>
 
-  <label>
-    <input type="checkbox" id="toggle-cross-subdomain" checked />
-    Show Cross-Subdomain Certs
-  </label>
-
-  <label style="margin-right: 1.5vmax;">
-    <input type="checkbox" id="toggle-only-cross-certs">
-    Show only cross-certs
-  </label>
+    <label style="margin-right: 1.5vmax;">
+      <input type="checkbox" id="toggle-only-cross-certs" />
+      Show only cross-certs
+    </label>
+  </div>
 </div>
 <!-- Dark Mode Toggle -->
 <div id="dark-mode-toggle" style="padding: 0.5vmax; font-size: 0.75vmax;">
@@ -1384,7 +1385,27 @@ body.dark-mode .domain-RSK .domain-title {
 
     // Checkbox: Cross-domain certs
     document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
-      filterState.showCrossDomainCerts = e.target.checked;
+      const isChecked = e.target.checked;
+      filterState.showCrossDomainCerts = isChecked;
+
+      const subToggleContainer = document.getElementById("cross-cert-subtoggles");
+      const toggleCrossSub = document.getElementById("toggle-cross-subdomain");
+      const toggleOnlyCross = document.getElementById("toggle-only-cross-certs");
+
+      if (isChecked) {
+        subToggleContainer.style.display = "inline-block";
+        toggleCrossSub.checked = true;
+        toggleOnlyCross.checked = true;
+        filterState.showCrossSubdomainCerts = true;
+        filterState.showOnlyCrossCerts = true;
+      } else {
+        subToggleContainer.style.display = "none";
+        toggleCrossSub.checked = false;
+        toggleOnlyCross.checked = false;
+        filterState.showCrossSubdomainCerts = false;
+        filterState.showOnlyCrossCerts = false;
+      }
+
       applyFiltersAndRedraw();
     });
 
