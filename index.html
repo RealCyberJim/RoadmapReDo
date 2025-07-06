@@ -575,8 +575,6 @@ body.dark-mode .domain-RSK .domain-title {
       <input type="checkbox" id="toggle-cross-subdomain" />
       Show Cross-Subdomain Certs
     </label>
-
-    <!-- underlying js code needs to be fixed or removed
     <label style="margin-right: 1.5vmax;">
       <input type="checkbox" id="toggle-only-cross-certs" />
       Show only cross-certs
@@ -633,7 +631,8 @@ body.dark-mode .domain-RSK .domain-title {
 <!-- Spacer below roadmap -->
 <div style="height: 2vmax;"></div>
 
-  <script>
+
+<script>
 
 
 // =============================================================================
@@ -684,7 +683,10 @@ function debugCertPlacement() {
 // =============================================================================
 
 
-    // Centralized filter state — controls what gets shown on the roadmap
+// Control flag for cross-cert functionality
+const CROSS_CERT_MODE_ENABLED = false;
+
+// Centralized filter state — controls what gets shown on the roadmap
     const filterState = {
       showCrossDomainCerts: false,
       showCrossSubdomainCerts: false,
