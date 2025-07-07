@@ -954,12 +954,15 @@ const CROSS_CERT_MODE_ENABLED = false;
 
         if (!shouldRender) return;
 
-        // Canvas layer (e.g., light red background)
-        const canvas = document.createElement("div");
-        canvas.className = `skill-strata-canvas ${levelId}`;
-        canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
-        canvas.style.backgroundColor = `var(${level.color})`;
-        skillContainer.appendChild(canvas);
+        // Conditionally draw skill canvas layer only if any rows in range are visible
+        const canvasHasVisibleRow = usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
+        if (canvasHasVisibleRow && filterState.visibleSkillStrata[levelId]) {
+          const canvas = document.createElement("div");
+          canvas.className = `skill-strata-canvas ${levelId}`;
+          canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
+          canvas.style.backgroundColor = `var(${level.color})`;
+          skillContainer.appendChild(canvas);
+        }
 
         // Label overlay (e.g., "Beginner")
         const label = document.createElement("div");
