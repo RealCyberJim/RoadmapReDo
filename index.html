@@ -702,6 +702,17 @@ const CROSS_CERT_MODE_ENABLED = false;
       }
     };
 
+    //
+    function getVisibleSkillRowCount(skillStrataList, filterState) {
+      let totalRows = 1; // row 1 is always the heading row
+      for (const level of skillStrataList) {
+        if (filterState.visibleSkillStrata[level.id]) {
+          totalRows += (level.end - level.start + 1);
+        }
+      }
+      return totalRows;
+    }
+
     function getSkillLevelFromStrata(strataNumber, skillStrataList) {
       for (const level of skillStrataList) {
         if (strataNumber >= level.start && strataNumber <= level.end) {
@@ -925,7 +936,9 @@ const CROSS_CERT_MODE_ENABLED = false;
       // Skill container — structurally identical to .domain-container
       const skillContainer = document.createElement("div");
       skillContainer.className = "skill-container";
-      skillContainer.style.gridTemplateRows = prunedGridRows;
+      skillContainer.style.display = 'grid'; // REQUIRED for gridTemplateRows to work
+            const rowCount = getVisibleSkillRowCount(skillStrata, filterState);
+      skillContainer.style.gridTemplateRows = `repeat(${rowCount}, 1.5vmax)`;
 
 
 
