@@ -381,7 +381,7 @@
       z-index: 0;                    /* Behind content */
     }
 
-    .skill-strata-canvas {
+    .subskill-canvas {
       width: 100%;
       grid-column: 1;
       z-index: 0;
@@ -390,15 +390,15 @@
       border-radius: 0.25vmax;
     }
 
-    .skill-strata-canvas.expert {
+    .subskill-canvas.expert {
       background-color: var(--color-red-light);
     }
 
-    .skill-strata-canvas.intermediate {
+    .subskill-canvas.intermediate {
       background-color: var(--color-yellow-light);
     }
 
-    .skill-strata-canvas.beginner {
+    .subskill-canvas.beginner {
       background-color: var(--color-green-light);
     }
 
@@ -957,7 +957,7 @@ const CROSS_CERT_MODE_ENABLED = false;
         const canvasHasVisibleRow = usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
         if (canvasHasVisibleRow && filterState.visibleSkillStrata[levelId]) {
           const canvas = document.createElement("div");
-          canvas.className = `skill-strata-canvas ${levelId}`;
+          canvas.className = `subskill-canvas ${levelId}`;
           canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
           canvas.style.backgroundColor = `var(${level.color})`;
           skillContainer.appendChild(canvas);
