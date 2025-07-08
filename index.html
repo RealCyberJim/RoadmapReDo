@@ -370,15 +370,14 @@
       width: max-content;
     }
 
-    .skill-strata-wrapper {
-      /* background: rgba(0, 0, 255, 0.05); /* TEMPORARY debug tool-Light blue canvas */
+    .subskill-container {
       position: relative;
       display: grid;
-      padding: 0.1vmax;              /* Matches .subdomain-container */
-      gap: 0.1vmax;                  /* Matches tile gutter */
-      border-radius: 0.25vmax;       /* Same visual radius */
-      pointer-events: none;         /* Keep non-interactive */
-      z-index: 0;                    /* Behind content */
+      padding: 0.1vmax;
+      gap: 0.1vmax;
+      border-radius: 0.25vmax;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .subskill-canvas {
@@ -973,7 +972,7 @@ const CROSS_CERT_MODE_ENABLED = false;
 
         // Wrapper with skill-placeholder elements
         const wrapper = document.createElement("div");
-        wrapper.className = `skill-strata-wrapper ${levelId}`;
+        wrapper.className = `subskill-container ${levelId}`;
         wrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
         wrapper.style.gridColumnStart = 1;
 
