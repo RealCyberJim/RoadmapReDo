@@ -938,7 +938,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       skillContainer.className = "skill-container";
       skillContainer.style.display = 'grid'; // REQUIRED for gridTemplateRows to work
       // Use the same prunedGridRows as domain-side to enforce parity
-      skillContainer.style.gridTemplateRows = prunedGridRows;
+      // TEMP: disable for debug: skillContainer.style.gridTemplateRows = prunedGridRows;
+      skillContainer.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
 
       // Add the container inside the wrapper (same as domain logic)
       skillWrapper.appendChild(skillContainer);
@@ -1001,7 +1002,9 @@ const CROSS_CERT_MODE_ENABLED = false;
         .forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
-        domainDiv.style.gridTemplateRows = prunedGridRows;
+        // TEMP: disable for debug: domainDiv.style.gridTemplateRows = prunedGridRows;
+        // TEMP: force full 28 visible rows for layout testing
+        domainDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
 
         // Dynamically set how wide the domain container should be
