@@ -361,7 +361,7 @@
     .skill-container {
       background: white;
       position: relative;
-      border: 2px solid;
+      border: none; /* No border here, handled by subskill-canvas */
       border-radius: 0.25vmax;                 /* Visual consistency */
       padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matchses .domain-container exactly */
       display: grid;
@@ -391,14 +391,17 @@
 
     .subskill-canvas.expert {
       background-color: var(--color-red-light);
+      border: 2px solid var(--color-red-dark);
     }
 
     .subskill-canvas.intermediate {
       background-color: var(--color-yellow-light);
+      border: 2px solid var(--color-yellow-dark);
     }
 
     .subskill-canvas.beginner {
       background-color: var(--color-green-light);
+      border: 2px solid var(--color-green-dark);
     }
 
     .skill-placeholder {
