@@ -380,11 +380,26 @@
       z-index: 0;
     }
 
-    .subskill-canvas {
+      /* saving for later, in case the changes are reverted
+      .subskill-canvas {
       width: 100%;
       grid-column: 1;
       z-index: 0;
       position: relative;
+      pointer-events: none;
+      border-radius: 0.25vmax;
+    }
+    */
+
+    .subskill-canvas {
+      grid-column: 1;
+      grid-row: 1 / 2; /* Temporary default, overridden dynamically */
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
       pointer-events: none;
       border-radius: 0.25vmax;
     }
@@ -405,7 +420,6 @@
     }
 
     .skill-placeholder {
-      /* outline: 1px dashed blue; /* TEMPORARY debug tool */
       grid-column-start: 1;
       grid-row-end: span 1;
       height: 1.5vmax;         /* Matches cert-tile */
