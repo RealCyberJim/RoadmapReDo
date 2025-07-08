@@ -897,7 +897,7 @@ const CROSS_CERT_MODE_ENABLED = false;
 
       const roadmapEl = document.getElementById('roadmap');
 
-      // Determine which skill rows are actually used (1–27) by any visible cert
+      // Determine which skill rows are actually used (1–28) by any visible cert
       const usedSkillRows = new Set();
 
       certs.forEach(cert => {
@@ -1228,7 +1228,7 @@ const CROSS_CERT_MODE_ENABLED = false;
             for (let offset = 0; offset <= maxRowOffset; offset++) {
               const candidateRows = [skillRow - offset, skillRow + offset];
               for (const row of candidateRows) {
-                if (row < 1 || row > 27) continue;
+                if (row < 1 || row > 28) continue;
                 const key = `${row}-${preferredCol}`;
                 if (!tileRowMap[key]) {
                   tileRowMap[key] = true;
