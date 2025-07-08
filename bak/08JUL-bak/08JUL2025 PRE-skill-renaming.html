@@ -1,0 +1,1523 @@
+
+  <style>
+    /* 03JUN2025 2316 - last commit prior to skill level refactor*/
+    :root {
+      --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
+
+      
+
+      /* Base color palette */
+      --color-green: #70AD47;
+      --color-teal: #008080;
+      --color-orange: #fa8e36;
+      --color-yellow: #e4ac03;
+      --color-black: #2a2a2a;
+      --color-purple: #683e9b;
+      --color-skyblue: #6bb3f6;
+      --color-blue: #2e5688;
+      --color-red: #c0514d;
+      --color-magenta: #a500a1;
+      
+      /* Dark variants */      
+      --color-green-dark: #548235;
+      --color-teal-dark: #003F3E;
+      --color-orange-dark: #c06216;
+      --color-yellow-dark: #7F6000;
+      --color-black-dark: #000000;
+      --color-purple-dark: #352647;
+      --color-skyblue-dark: #2665a0;
+      --color-blue-dark: #1f3147;
+      --color-red-dark: #8c3736;
+      --color-magenta-dark: #490e49;
+      
+      /* Light variants */
+      --color-green-light: #c3dbb8;
+      --color-teal-light: #8fc6c6;
+      --color-orange-light: #fdeada;
+      --color-yellow-light: #f4e7af;
+      --color-black-light: #d9d9d9;
+      --color-purple-light: #eddbff;
+      --color-skyblue-light: #b8e0ff;
+      --color-blue-light: #dce6f2;
+      --color-red-light: #f2dcdb;
+      --color-magenta-light: #f1d4e0;
+      
+      /* Domain-specific colors */
+      --domain-default-white: #ffffff;
+      --domain-net: var(--color-green);
+      --domain-net-dark: var(--color-green-dark);
+      --domain-net-light: var(--color-green-light);
+      --domain-iam: var(--color-teal);
+      --domain-iam-dark: var(--color-teal-dark);
+      --domain-iam-light: var(--color-teal-light);
+      --domain-eng: var(--color-orange);
+      --domain-eng-dark: var(--color-orange-dark);
+      --domain-eng-light: var(--color-orange-light);
+      --domain-ast: var(--color-yellow);
+      --domain-ast-dark: var(--color-yellow-dark);
+      --domain-ast-light: var(--color-yellow-light);
+      --domain-rsk: var(--color-black);
+      --domain-rsk-dark: var(--color-black-dark);
+      --domain-rsk-light: var(--color-black-light);
+      --domain-tst: var(--color-purple);
+      --domain-tst-dark: var(--color-purple-dark);
+      --domain-tst-light: var(--color-purple-light);
+      --domain-sof: var(--color-skyblue);
+      --domain-sof-dark: var(--color-skyblue-dark);
+      --domain-sof-light: var(--color-skyblue-light);
+      --domain-ops: var(--color-red);
+      --domain-ops-dark: var(--color-red-dark);
+      --domain-ops-light: var(--color-red-light);
+
+      --domain-title-height: 2.8vmax;
+    }
+
+    /* Domain-specific border and title coloring */
+    .domain-NET     { border-color: var(--domain-net); }
+    .domain-IAM     { border-color: var(--domain-iam); }
+    .domain-ENG     { border-color: var(--domain-eng); }
+    .domain-AST     { border-color: var(--domain-ast); }
+    .domain-RSK     { border-color: var(--domain-rsk); }
+    .domain-TST     { border-color: var(--domain-tst); }
+    .domain-SOF     { border-color: var(--domain-sof); }
+    .domain-OPS     { border-color: var(--domain-ops); }
+
+    .domain-NET .domain-title {
+      background-color: var(--domain-net-light);
+      color: var(--domain-net-dark);
+    }
+    .domain-IAM .domain-title {
+      background-color: var(--domain-iam-light);
+      color: var(--domain-iam-dark);
+    }
+    .domain-ENG .domain-title {
+      background-color: var(--domain-eng-light);
+      color: var(--domain-eng-dark);
+    }
+    .domain-AST .domain-title {
+      background-color: var(--domain-ast-light);
+      color: var(--domain-ast-dark);
+    }
+    .domain-RSK .domain-title {
+      background-color: var(--domain-rsk-light);
+      color: var(--domain-rsk-dark);
+    }
+    .domain-TST .domain-title {
+      background-color: var(--domain-tst-light);
+      color: var(--domain-tst-dark);
+    }
+    .domain-SOF .domain-title {
+      background-color: var(--domain-sof-light);
+      color: var(--domain-sof-dark);
+    }
+    .domain-OPS .domain-title {
+      background-color: var(--domain-ops-light);
+      color: var(--domain-ops-dark);
+    }
+
+    .skill-unit .domain-title {
+      background-color: transparent !important;
+      color: transparent !important;
+      border-color: transparent !important;
+    }
+
+    /* BEGIN Dark Mode Styling */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .domain-container,
+    body.dark-mode .skill-container {
+      background-color: #1e1e1e;
+      border-color: #444;
+    }
+
+    body.dark-mode .cert-tile {
+      background-color: inherit;
+      border-color: #555;
+      color: white;
+    }
+
+    body.dark-mode .subdomain-canvas,
+    body.dark-mode .skill-strata-canvas {
+      opacity: 0.15; /* Subtle, but visible on dark bg */
+    }
+
+    /* END Dark Mode Styling */
+
+    html, body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    body {
+      background: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #roadmap {
+      display: flex;
+      overflow-x: hidden;
+      width: 100%;
+      align-items: start;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0.2vmax;
+      grid-column: 2;
+      grid-row: 2;
+      max-height: none;
+      max-width: 100%;
+      min-width: 0;
+      overflow-y: visible;
+      padding-right: 0.2vmax;
+    }
+
+    body.center-domains #roadmap {
+      justify-content: center; /* Override to center */
+    }
+
+    #roadmap-flex {
+      display: flex;
+      justify-content: flex-start; /* default: left-aligned */
+      width: 100%;
+    }
+
+    body.center-domains #roadmap-flex {
+      justify-content: center; /* center when this class is active */
+    }
+
+    .domain-container {
+      background: white;
+      position: relative;
+      border: 2px solid;
+      border-radius: 0.25vmax;
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax;
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax); /* 1 top buffer for subdomain title + 27 skill rows + 1 bottom buffer */
+      gap: 0.1vmax; /* Matches tile and container gutter */
+      width: max-content; /* Prevent full-width stretching */
+    }
+
+    .domain-unit {
+      display: flex;
+      flex-direction: column;
+      width: min-content; /* Shrink to fit content */
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .domain-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title row on top, domain container below */
+      width: max-content;           /* Shrinks to fit the domain */
+      margin: 0;
+      padding: 0;
+    }
+    
+    .domain-title {
+      border: 2px solid; /* Matches domain border */
+      background-color: transparent; /* Transparent to show underlying canvas */
+      border-radius: 0.25vmax; /* Matches domain border radius */
+      z-index: 3;              /* Above canvas, below tiles */
+      text-align: center;             /* Center text horizontally */
+      width: 100%;                  /* Full width of the domain box */
+      box-sizing: border-box;       /* Include padding in width */
+      font-weight: 500;               /* Bold for emphasis */
+      font-size: 0.8vmax;            /* Responsive scaling */
+      padding: 0.2vmax 0 0.2vmax 0; /* Top + Bottom: keeps descenders from touching */
+      white-space: normal;           /* Allow multi-line if needed */
+      word-break: normal;            /* Never break mid-word */
+      text-overflow: unset;      /* Prevent ellipsis */
+      overflow-wrap: break-word;     /* Wrap only at spaces */
+      overflow: visible;             /* Allow overflow */
+      max-width: 100%;               /* Constrain to domain box */
+      pointer-events: none;     /* Disable pointer events */
+      line-height: 1;              /* Tighter line spacing */
+      margin: 0; /* No margin to prevent shifting */
+      height: var(--domain-title-height); /* Fixed height to prevent shifting */
+      display: flex;           /* Use flexbox for centering */
+      align-items: center;             /* center text to vertically */
+      justify-content: center;      /* Horizontally center text */
+    }
+    
+    .subdomain-canvas {
+      border-radius: 0.25vmax;
+      z-index: 0;              /* Keep behind tiles and labels */
+      pointer-events: none;
+      position: absolute;      /* Better isolation from layout flow */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .subdomain-container {
+      position: relative;             /* Enables absolute positioning for title */
+      padding-top: 1vmax;             /* Reserve space for overlay title */
+      padding: 0.1vmax 0.1vmax 0.1vmax 0.1vmax;
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax); /* Only rows for cert tiles */
+      grid-auto-rows: 1.5vmax;
+      gap: 0.1vmax;
+      border-radius: 0.25vmax;
+      justify-content: center;
+      border: none;
+    }
+
+    .subdomain-title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1vmax;
+      text-align: center;
+      font-size: 0.6vmax;
+      font-weight: 500;
+      padding-top: 0.1vmax;
+      pointer-events: none;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      z-index: 2;
+    }
+
+    .cert-tile {
+      width: 2.3vmax;
+      height: 1.5vmax;
+      display: flex;
+      align-items: center;        /* vertically center content *inside* the tile */
+      justify-content: center;    /* horizontally center content *inside* the tile */
+      justify-self: center;    /* horizontally center the tile in its column */
+      align-self: center;        /* center tile vertically in its grid row */
+      text-align: center;
+      font-size: 0.6vmax;
+      font-weight: 400;
+      border-radius: 0.25vmax;
+      background-color: inherit;  /* Inherit from parent */
+      border: 1px solid;          /* Use inherited border-color */
+      color: white;               /* Set text color explicitly */
+      padding: 0.2vmax;
+      box-sizing: border-box;
+      margin: 0;
+      text-decoration: none;
+    }
+
+    /* = ROADMAP GRID STRUCTURE = */
+    #roadmap-wrapper {
+      display: grid;
+      grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
+      grid-template-rows: auto auto;
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      max-height: none !important;
+      overflow-x: hidden;
+      overflow-y: visible;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .skill-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1vmax;
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .skill-heading {
+      height: var(--domain-title-height);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      font-size: 0.8vmax;
+      font-weight: 500;
+      color: transparent; /* visually blank */
+      pointer-events: none;
+    }
+
+    .skill-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title + label rows */
+      width: max-content;
+      margin: 0;
+      padding: 0;
+    }
+
+    .skill-container {
+      background: white;
+      position: relative;
+      border: 2px solid;
+      border-radius: 0.25vmax;                 /* Visual consistency */
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matchses .domain-container exactly */
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container */
+      gap: 0.1vmax;                            /* Matches tile vertical gutter */
+      width: max-content;
+    }
+
+    .subskill-container {
+        position: relative;
+        display: grid;
+        padding: 0.1vmax;
+        gap: 0.1vmax;
+        border-radius: 0.25vmax;
+        pointer-events: none;
+        z-index: 0;
+        }
+
+    .skill-strata-canvas {
+      width: 100%;
+      grid-column: 1;
+      z-index: 0;
+      position: relative;
+      pointer-events: none;
+      border-radius: 0.25vmax;
+    }
+
+    .skill-strata-canvas.expert {
+      background-color: var(--color-red-light);
+    }
+
+    .skill-strata-canvas.intermediate {
+      background-color: var(--color-yellow-light);
+    }
+
+    .skill-strata-canvas.beginner {
+      background-color: var(--color-green-light);
+    }
+
+    .skill-placeholder {
+      /* outline: 1px dashed blue; /* TEMPORARY debug tool */
+      grid-column-start: 1;
+      grid-row-end: span 1;
+      height: 1.5vmax;         /* Matches cert-tile */
+      width: 0.5vmax;          /* Minimal width needed */
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+      padding: 0.2vmax;        /* Match cert-tile padding */
+      box-sizing: border-box;
+      align-self: center;
+    }
+
+    .skill-strata-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 0.7vmax;
+      font-weight: 500;
+      text-align: right;
+      white-space: nowrap;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+      grid-column: 1;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .skill-strata-label.expert {
+      color: var(--color-red-dark);
+    }
+
+    .skill-strata-label.intermediate {
+      color: var(--color-yellow-dark);
+    }
+
+    .skill-strata-label.beginner {
+      color: var(--color-green-dark);
+    }
+
+    /* = GRID DEBUG MODE (Toggle by adding .debug-mode to <body>) = */
+
+    /* Tile + Container Grid Boundaries */
+    
+    body.debug-mode .domain-container,
+    body.debug-mode .subdomain-container,
+    body.debug-mode .cert-tile {
+      outline: 1px solid red;
+      background-color: rgba(255, 0, 0, 0.05);
+    }
+
+    body.debug-mode .subdomain-canvas {
+      outline: 1px dotted rgba(255, 0, 0, 0.2); /* Visualize canvas bounds */
+    }
+
+    body.debug-mode .subdomain-title {
+      background-color: rgba(255, 255, 0, 0.2); /* Highlight title zone */
+    }
+
+    /* Overall Roadmap Layout */
+    body.debug-mode #roadmap-wrapper {
+      overflow-x: auto; /* Allow horizontal scroll only in debug mode */
+      outline: 2px solid rgba(0, 128, 255, 0.25); /* Show wrapper edges */
+      background-color: rgba(0, 128, 255, 0.02);  /* Subtle tint */
+      padding-left: 1vmax;
+      padding-right: 1vmax;
+    }
+
+    body.debug-mode #roadmap {
+      outline: 2px dashed rgba(128, 0, 255, 0.2); /* Container box */
+    }
+
+    /* 🔹 Domain Columns */
+    body.debug-mode .domain-unit {
+      outline: 2px dotted rgba(255, 0, 0, 0.3); /* Red = full unit (title + wrapper) */
+    }
+
+    body.debug-mode .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 0, 0.3);  /* Green = title + grid */
+    }
+
+    body.debug-mode .domain-title {
+      outline: 2px solid rgba(0, 0, 255, 0.3);  /* Blue = domain title block */
+    }
+
+    /* 🔹 Skill Label Column (mirrors domain structure) */
+    body.debug-mode .skill-unit {
+      outline: 2px dotted rgba(0, 128, 255, 0.3); /* Blue-tinted = full unit */
+    }
+
+    body.debug-mode .skill-unit .domain-wrapper {
+      outline: 2px solid rgba(0, 255, 128, 0.3); /* Greenish = skill wrapper */
+    }
+
+    body.debug-mode .skill-unit .skill-column {
+      outline: 1px dashed rgba(255, 0, 255, 0.3); /* Magenta = label grid */
+    }
+
+    body.debug-mode .skill-strata-label {
+      background-color: rgba(255, 255, 0, 0.08); /* Light yellow for each label */
+      outline: 1px dotted rgba(128, 128, 0, 0.5); /* Optional: visual border */
+    }
+
+    body.debug-mode .skill-strata-canvas {
+      outline: 2px dotted rgba(255, 128, 0, 0.5); /* Orange dotted line */
+      background-color: rgba(255, 128, 0, 0.05); /* Very light orange fill */
+    }
+
+    /* ⚠️ Only enable THIS ONE temporarily — it's a full overlay. */
+    body.debug-mode .skill-container::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 100%;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.4vmax,
+        rgba(0, 0, 0, 0.05) 1.5vmax
+      );
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+
+
+
+
+
+/* For all domain titles */
+.domain-title {
+  background-color: transparent; /* Fallback if no domain-specific color */
+}
+
+/* For RSK specifically */
+.domain-RSK .domain-title {
+  background-color: var(--domain-rsk-light) !important;
+  color: var(--domain-rsk-dark) !important;
+}
+
+/* Lock it down in dark mode as well */
+body.dark-mode .domain-RSK .domain-title {
+  background-color: var(--domain-rsk-light) !important;
+  color: var(--domain-rsk-dark) !important;
+}
+
+
+
+
+  </style>
+</head>
+<link rel="icon" href="data:,"> <!-- Prevents favicon request -->
+<body>
+<!-- Filter Control Panel -->
+
+<!-- Cross-Domain Toggle -->
+<div id="control-panel" style="padding: 0.5vmax; font-size: 0.8vmax;">
+  <!-- CROSS-CERT TOGGLES DISABLED - Step 1
+  <label style="margin-right: 2vmax;">
+    <input type="checkbox" id="toggle-cross-domain" />
+    Show Cross-Domain Certs
+  </label>
+  <div id="cross-cert-subtoggles" style="display: none; margin-top: 0.5vmax;">
+    <label style="margin-right: 2vmax;">
+      <input type="checkbox" id="toggle-cross-subdomain" />
+      Show Cross-Subdomain Certs
+    </label>
+    <label style="margin-right: 1.5vmax;">
+      <input type="checkbox" id="toggle-only-cross-certs" />
+      Show only cross-certs
+    </label>
+    END CROSS-CERT TOGGLES -->
+  </div>
+</div>
+
+
+<!-- Dark Mode Toggle -->
+<div id="dark-mode-toggle" style="padding: 0.5vmax; font-size: 0.75vmax;">
+  <label>
+    <input type="checkbox" id="dark-mode-checkbox" />
+    Enable Dark Mode
+  </label>
+</div>
+<div>
+  <label style="margin-left: 2vmax;">
+    Vendor Filter:
+    <select id="vendor-filter">
+      <option value="__ALL__">All Vendors</option>
+    </select>
+</label>
+</div>
+<div>
+  </label>
+  <!-- Skill Level Filter STARTS HERE, OUTSIDE the <select> -->
+  <span style="margin-left: 2vmax;">
+    Skill Level Filter:
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-beginner" checked />
+      Beginner
+    </label>
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-intermediate" checked />
+      Intermediate
+    </label>
+    <label style="margin-left: 0.5vmax;">
+      <input type="checkbox" id="skill-filter-expert" checked />
+      Expert
+    </label>
+  </span>
+</div>
+<!-- Dynamic Domain Filter Checkboxes -->
+<div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
+
+  <h1>Security Certification Roadmap</h1>
+<div id="roadmap-flex">
+  <div id="roadmap-wrapper">
+    <div id="roadmap">
+    </div>
+  </div>
+</div>
+<!-- Spacer below roadmap -->
+<div style="height: 2vmax;"></div>
+
+
+<script>
+
+
+// =============================================================================
+// RESERVED FOR TEMPORARY DEBUGGING /* Remove before production deployment */
+// =============================================================================
+
+// temporary debug function to verify home-only mode is working:
+
+function debugCertPlacement() {
+  console.log("=== CERT PLACEMENT DEBUG ===");
+  console.log("CROSS_CERT_MODE_ENABLED:", CROSS_CERT_MODE_ENABLED);
+  console.log("FilterState cross-cert flags:", {
+    showCrossDomainCerts: filterState.showCrossDomainCerts,
+    showCrossSubdomainCerts: filterState.showCrossSubdomainCerts, 
+    showOnlyCrossCerts: filterState.showOnlyCrossCerts
+  });
+  
+  // Count certs per domain to verify no cross-domain appearances
+  const certsByDomain = {};
+  document.querySelectorAll('.cert-tile').forEach(tile => {
+    const certId = tile.getAttribute('data-cert-id');
+    const domainId = tile.getAttribute('data-domain-id');
+    const parentDomain = tile.closest('.domain-container').classList[1].replace('domain-', '');
+    
+    if (!certsByDomain[parentDomain]) certsByDomain[parentDomain] = [];
+    certsByDomain[parentDomain].push({certId, certDomain: domainId, renderedIn: parentDomain});
+  });
+  
+  // Look for any cross-domain appearances (should be none in home-only mode)
+  Object.entries(certsByDomain).forEach(([renderDomain, certs]) => {
+    const crossDomainCerts = certs.filter(c => c.certDomain !== c.renderedIn);
+    if (crossDomainCerts.length > 0) {
+      console.warn(`Found ${crossDomainCerts.length} cross-domain certs in ${renderDomain}:`, crossDomainCerts);
+    }
+  });
+  
+  console.log("Certs per domain:", Object.fromEntries(
+    Object.entries(certsByDomain).map(([domain, certs]) => [domain, certs.length])
+  ));
+}
+
+
+
+
+
+// =============================================================================
+// RESERVED FOR TEMPORARY DEBUGGING /* Remove before production deployment */
+// =============================================================================
+
+
+// Control flag for cross-cert functionality
+const CROSS_CERT_MODE_ENABLED = false;
+
+// Centralized filter state — controls what gets shown on the roadmap
+    const filterState = {
+      showCrossDomainCerts: false,
+      showCrossSubdomainCerts: false,
+      showOnlyCrossCerts: false,
+      visibleDomains: [], // filled after loading domains.json
+      visibleVendors: [], // filled after loading certs.json
+      showAchieved: true,
+      showPlanned: true,
+      visibleSkillStrata: {
+        beginner: true,
+        intermediate: true,
+        expert: true
+      }
+    };
+
+    //
+    function getVisibleSkillRowCount(skillStrataList, filterState) {
+      let totalRows = 1; // row 1 is always the heading row
+      for (const level of skillStrataList) {
+        if (filterState.visibleSkillStrata[level.id]) {
+          totalRows += (level.end - level.start + 1);
+        }
+      }
+      return totalRows;
+    }
+
+    function getSkillLevelFromStrata(strataNumber, skillStrataList) {
+      for (const level of skillStrataList) {
+        if (strataNumber >= level.start && strataNumber <= level.end) {
+          return level.id;
+        }
+      }
+      return null;
+    }
+
+    // Skill level checkbox listeners
+    ["beginner", "intermediate", "expert"].forEach(level => {
+      const checkbox = document.getElementById(`skill-filter-${level}`);
+      if (checkbox) {
+        checkbox.addEventListener("change", (e) => {
+          filterState.visibleSkillStrata[level] = e.target.checked;
+          applyFiltersAndRedraw();
+        });
+      }
+    });
+  
+    async function loadJSON(path) {
+      const res = await fetch(path);
+      return res.json();
+    }
+
+    function applyGridSpanStyles(element) {
+      const colStart = element.getAttribute('data-grid-column-start');
+      const colSpan = element.getAttribute('data-grid-column-span');
+
+      if (colStart && colSpan) {
+        element.style.setProperty('--col-start', colStart);
+        element.style.setProperty('--col-span', colSpan);
+      }
+    }
+
+    function usedSkillRowsHasRowsInRange(start, end, usedSkillRows) {
+      for (let i = start; i <= end; i++) {
+        if (usedSkillRows.has(i)) return true;
+      }
+      return false;
+    }
+
+    function getCenterOutwardColumnOrder(span) {
+      const center = Math.ceil(span / 2);
+      const order = [center];
+
+      for (let offset = 1; order.length < span; offset++) {
+        if (center + offset <= span) order.push(center + offset);
+        if (center - offset >= 1) order.push(center - offset);
+      }
+
+      return order;
+    }
+
+    function getBiasDirection(cert, renderedDomain, allDomains) {
+      const homeDomainId = cert.domainId;
+      const renderedDomainId = renderedDomain.domainId;
+
+      if (renderedDomainId === homeDomainId && !cert.crossDomains?.length) {
+        return 0; // No guests, neutral
+      }
+
+      const home = allDomains.find(d => d.domainId === homeDomainId);
+      const guest = allDomains.find(d => d.domainId === renderedDomainId);
+
+      if (!home || !guest) return 0;
+
+      const homePos = home.domainDisplayOrder;
+
+      if (renderedDomainId !== homeDomainId) {
+        // Guest tile
+        const guestPos = guest.domainDisplayOrder;
+        if (guestPos < homePos) return -1; // Guest is left of home
+        if (guestPos > homePos) return 1;  // Guest is right of home
+        return 0;
+      }
+
+      // Home tile with guests — check if guests are left, right, or both
+      const guestPositions = cert.crossDomains
+        .map(g => allDomains.find(d => d.domainId === g)?.domainDisplayOrder)
+        .filter(pos => pos !== undefined);
+
+      const hasLeft = guestPositions.some(pos => pos < homePos);
+      const hasRight = guestPositions.some(pos => pos > homePos);
+
+      if (hasLeft && hasRight) return 99;  // Guests on both sides
+      if (hasLeft) return -1;
+      if (hasRight) return 1;
+
+      return 0;
+    }
+
+    function getColumnOrderWithProximityBias(cert, renderedDomain, sub, allDomains) {
+      const span = sub.gridColumnSpan;
+      const center = Math.ceil(span / 2);
+      const order = [];
+      const direction = getBiasDirection(cert, renderedDomain, allDomains);
+
+      if (direction === -1) {
+        // Bias left
+        for (let col = span; col >= 1; col--) {
+          order.push(col);
+        }
+      } else if (direction === 1) {
+        // Bias right
+        for (let col = 1; col <= span; col++) {
+          order.push(col);
+        }
+      } else if (direction === 99) {
+        // Guests on both sides → center-first
+        order.push(center);
+        for (let offset = 1; order.length < span; offset++) {
+          if (center - offset >= 1) order.push(center - offset);
+          if (center + offset <= span) order.push(center + offset);
+        }
+      } else {
+        // Neutral fallback
+        return getCenterOutwardColumnOrder(span);
+      }
+
+      return order;
+    }
+
+    function getColumnOrderWithBias(cert, renderedDomain, sub, allDomains) {
+      const span = sub.gridColumnSpan;
+      const homeDomainId = cert.domainId;
+      const renderedDomainId = renderedDomain.domainId;
+
+      // Neutral center-out fallback
+      const center = Math.ceil(span / 2);
+      const order = [center];
+
+      // Determine bias direction:
+      let biasDirection = 0; // 0=centered, -1=left, +1=right
+
+      if (renderedDomainId !== homeDomainId) {
+        // Guest cert
+        const home = allDomains.find(d => d.domainId === homeDomainId);
+        const guest = allDomains.find(d => d.domainId === renderedDomainId);
+        if (home && guest) {
+          if (home.domainDisplayOrder < guest.domainDisplayOrder) {
+            biasDirection = -1; // home is left of guest → bias left
+          } else if (home.domainDisplayOrder > guest.domainDisplayOrder) {
+            biasDirection = 1; // home is right of guest → bias right
+          }
+        }
+      } else if (cert.crossDomains?.length) {
+        // Home cert with guests → find average guest position
+        const guestPositions = cert.crossDomains
+          .map(g => allDomains.find(d => d.domainId === g))
+          .filter(Boolean)
+          .map(d => d.domainDisplayOrder);
+        const homePos = renderedDomain.domainDisplayOrder;
+        if (guestPositions.length) {
+          const avgGuest = guestPositions.reduce((a, b) => a + b, 0) / guestPositions.length;
+          if (avgGuest < homePos) biasDirection = -1;
+          else if (avgGuest > homePos) biasDirection = 1;
+        }
+      }
+
+      // Build fill order based on bias direction
+      for (let offset = 1; order.length < span; offset++) {
+        const right = center + offset;
+        const left = center - offset;
+
+        if (biasDirection === -1) {
+          if (left >= 1) order.push(left);
+          if (right <= span) order.push(right);
+        } else if (biasDirection === 1) {
+          if (right <= span) order.push(right);
+          if (left >= 1) order.push(left);
+        } else {
+          if (left >= 1) order.push(left);
+          if (right <= span) order.push(right);
+        }
+      }
+
+      return order;
+    }
+
+    function drawRoadmap(domains, subdomains, certs, skillStrata) {
+
+      const roadmapEl = document.getElementById('roadmap');
+
+      // Determine which skill rows are actually used (1–28) by any visible cert
+      const usedSkillRows = new Set();
+
+      certs.forEach(cert => {
+        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+        if (!filterState.visibleSkillStrata[certLevel]) return;
+        if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+        usedSkillRows.add(cert.certSkillStrata);
+      });
+
+      // Build a dynamic grid-template-rows string using actual skillStrata ranges
+      let prunedGridRows = '';
+      skillStrata.forEach(level => {
+        const start = level.start;
+        const end = level.end;
+        for (let row = start; row <= end; row++) {
+          prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
+        }
+      });
+      prunedGridRows = prunedGridRows.trim(); // Remove trailing space
+
+      // Skill unit (outermost container)
+      const skillUnit = document.createElement("div");
+      skillUnit.className = "domain-unit skill-unit";
+      skillUnit.style.gridColumnStart = 1;
+
+      // Skill heading — structurally identical to domain-title
+      const skillHeading = document.createElement("div");
+      skillHeading.className = "domain-title skill-heading";
+      skillHeading.textContent = ""; // Optionally use "Skill Level" or similar
+
+      // Skill wrapper — structurally identical to .domain-wrapper
+      const skillWrapper = document.createElement("div");
+      skillWrapper.className = "skill-wrapper";
+
+      // Skill container — structurally identical to .domain-container
+      const skillContainer = document.createElement("div");
+      skillContainer.className = "skill-container";
+      skillContainer.style.display = 'grid'; // REQUIRED for gridTemplateRows to work
+      // Use the same prunedGridRows as domain-side to enforce parity
+      // TEMP: disable for debug: skillContainer.style.gridTemplateRows = prunedGridRows;
+      skillContainer.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
+
+      // Add the container inside the wrapper (same as domain logic)
+      skillWrapper.appendChild(skillContainer);
+
+      skillStrata.forEach(level => {
+        const levelId = level.id;
+
+        const shouldRender =
+          filterState.visibleSkillStrata[levelId] &&
+          usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
+
+        if (!shouldRender) return;
+
+        // Conditionally draw skill canvas layer only if any rows in range are visible
+        const canvasHasVisibleRow = usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
+        if (canvasHasVisibleRow && filterState.visibleSkillStrata[levelId]) {
+          const canvas = document.createElement("div");
+          canvas.className = `skill-strata-canvas ${levelId}`;
+          canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
+          canvas.style.backgroundColor = `var(${level.color})`;
+          skillContainer.appendChild(canvas);
+        }
+
+        // Label overlay (e.g., "Beginner")
+        const label = document.createElement("div");
+        label.className = `skill-strata-label ${levelId}`;
+        label.textContent = level.label;
+        label.style.gridRow = `${level.start} / ${level.end + 1}`;
+        label.style.color = `var(${level.labelColor})`;
+        skillContainer.appendChild(label);
+
+        // Wrapper with skill-placeholder elements
+        const wrapper = document.createElement("div");
+        wrapper.className = `subskill-container ${levelId}`;
+        wrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
+        wrapper.style.gridColumnStart = 1;
+
+        for (let row = level.start; row <= level.end; row++) {
+          if (!usedSkillRows.has(row)) continue;
+
+          const placeholder = document.createElement("div");
+          placeholder.className = "skill-placeholder";
+          placeholder.style.gridRowStart = row;
+          placeholder.style.gridColumnStart = 1;
+          wrapper.appendChild(placeholder);
+        }
+        skillContainer.appendChild(wrapper);
+      });
+
+      // Assemble full structure
+      skillWrapper.appendChild(skillContainer);
+      skillUnit.appendChild(skillHeading);
+      skillUnit.appendChild(skillWrapper);
+
+      // Prepend skill unit before any domain units
+      roadmapEl.prepend(skillUnit);
+
+      domains
+        .filter(domain => filterState.visibleDomains.includes(domain.domainId))
+        .forEach(domain => {
+        const domainDiv = document.createElement('div');
+        domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+        // TEMP: disable for debug: domainDiv.style.gridTemplateRows = prunedGridRows;
+        // TEMP: force full 28 visible rows for layout testing
+        domainDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
+        domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
+
+        // Dynamically set how wide the domain container should be
+        const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
+
+        let maxColumn = 0;
+        allContainers.forEach(c => {
+          const endCol = c.gridColumnStart + c.gridColumnSpan - 1;
+          if (endCol > maxColumn) maxColumn = endCol;
+        });
+
+        domainDiv.style.gridTemplateColumns = `repeat(${maxColumn}, 2.3vmax)`;
+
+      const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
+      domainSubdomains.forEach(sub => {
+
+        // Subdomain container
+        const subDiv = document.createElement('div');
+        subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+
+        subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+        subDiv.style.gridTemplateRows = prunedGridRows;
+
+        subDiv.style.gridColumnStart = sub.gridColumnStart;
+        subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        subDiv.style.gridRowStart = sub.gridRowStart;
+        subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+
+        // Subdomain canvas (visual layer behind container)
+        const canvas = document.createElement('div');
+        canvas.classList.add('subdomain-canvas');
+        canvas.setAttribute('data-subdomain-id', sub.subdomainId);
+
+        // positioning based on grid math
+        canvas.style.gridRowStart = sub.gridRowStart;
+        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+        canvas.style.gridColumnStart = sub.gridColumnStart;
+        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+
+        canvas.style.position = 'relative';
+        canvas.style.zIndex = 0;
+        canvas.style.pointerEvents = 'none';
+        canvas.style.backgroundColor = sub.subdomainId.endsWith('_unspec')
+          ? 'transparent'
+          : `var(${sub.subdomainColor || '--domain-default-white'})`;
+        
+                
+        // Subdomain title overlay (only if not an unspecialized container)
+        if (!sub.subdomainId.endsWith('_unspec')) {
+          const titleOverlay = document.createElement('div');
+          titleOverlay.className = 'subdomain-title';
+          titleOverlay.textContent = sub.subdomainShortName;
+          subDiv.appendChild(titleOverlay);
+        }
+
+        domainDiv.appendChild(canvas); // Must go before the subdomain container
+
+        // Add cert tiles
+        const subCerts = certs.filter(cert => {
+          if (filterState.showOnlyCrossCerts) {
+            const isCrossDomain = Array.isArray(cert.crossDomains) && cert.crossDomains.length > 0;
+            const isCrossSub = Array.isArray(cert.crossSubdomains) && cert.crossSubdomains.length > 0;
+            if (!isCrossDomain && !isCrossSub) return false;
+          }
+
+          // Case 1: Cert belongs to this exact subdomain
+          const isDirectMatch = cert.subdomainId === sub.subdomainId;
+
+          // Case 2: Cross-subdomain guest
+          const isCrossSub = cert.crossSubdomains?.includes(sub.subdomainId);
+          const showCrossSub = filterState.showCrossSubdomainCerts;
+
+          // Case 3: Cross-domain guest logic
+          const isCrossDomainGuest = cert.crossDomains?.includes(domain.domainId);
+          const showCrossDomain = filterState.showCrossDomainCerts;
+
+          // Case 4: RSK guest logic - to preserve left/right visual
+          const isRSK = domain.domainId === "RSK";
+          let isValidRSKGuest = false;
+
+          if (isCrossDomainGuest && isRSK) {
+            const originDomain = domains.find(d => d.domainId === cert.domainId);
+            const rskDomain = domains.find(d => d.domainId === "RSK");
+
+            if (originDomain && rskDomain) {
+              const originOrder = originDomain.domainDisplayOrder;
+              const rskOrder = rskDomain.domainDisplayOrder;
+              const expectedSubdomain =
+                originOrder < rskOrder ? "RSK_left_unspec" : "RSK_right_unspec";
+
+              isValidRSKGuest = sub.subdomainId === expectedSubdomain;
+            }
+          }
+
+          // Final return condition
+          return (
+            isDirectMatch ||
+            (isCrossSub && showCrossSub) ||
+            ((isCrossDomainGuest && showCrossDomain) && (
+              (domain.domainId !== "RSK" && sub.subdomainId === `${domain.domainId}_unspec`) ||
+              isValidRSKGuest
+            ))
+          );
+        });
+
+        // Skip rendering this subdomain if it has no visible certs
+        const visibleSubCerts = subCerts.filter(cert => {
+          const level = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          return filterState.visibleSkillStrata[level] &&
+                filterState.visibleVendorIds.includes(cert.vendorId);
+        });
+
+        if (visibleSubCerts.length === 0) return;
+
+        const tileRowMap = {}; // { skillRow: currentTileIndex or placement cache }
+        const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
+        const columnOrders = {}; // { skillRow: [col1, col2, ...] }
+
+        // 🔹 Home certs are rendered first to claim their preferred spots
+        subCerts.filter(c => c.domainId === domain.domainId).forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          let colStart;
+
+          // 🔹 Determine preferred column based on guest proximity
+          if (cert.crossDomains?.length) {
+            const guestOrders = cert.crossDomains
+              .map(gid => domains.find(d => d.domainId === gid)?.domainDisplayOrder)
+              .filter(pos => pos !== undefined);
+            const homeOrder = domain.domainDisplayOrder;
+
+            const hasLeft = guestOrders.some(pos => pos < homeOrder);
+            const hasRight = guestOrders.some(pos => pos > homeOrder);
+
+            if (hasLeft && hasRight) colStart = Math.ceil(sub.gridColumnSpan / 2);
+            else if (hasLeft) colStart = 1;
+            else if (hasRight) colStart = sub.gridColumnSpan;
+            else colStart = Math.ceil(sub.gridColumnSpan / 2); // fallback
+          } else {
+            if (!tileRowMap[skillRow]) {
+              tileRowMap[skillRow] = 0;
+              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+            }
+            const colIndex = tileRowMap[skillRow];
+            colStart = columnOrders[skillRow][colIndex];
+            tileRowMap[skillRow]++;
+          }
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = colStart;
+          const finalKey = `${skillRow}-${colStart}`;
+          tileRowMap[finalKey] = true;
+
+          subDiv.appendChild(tile);
+        });
+
+        // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
+        subCerts
+          .filter(c => c.domainId !== domain.domainId)
+          .sort((a, b) => {
+            // 1. Fewer cross-domain appearances gets priority
+            const aCross = a.crossDomains?.length || 0;
+            const bCross = b.crossDomains?.length || 0;
+            if (aCross !== bCross) return aCross - bCross;
+
+            // 2. Closer proximity to the current domain
+            const aHome = domains.find(d => d.domainId === a.domainId);
+            const bHome = domains.find(d => d.domainId === b.domainId);
+            const guestOrder = domain.domainDisplayOrder;
+
+            const aDist = aHome ? Math.abs(aHome.domainDisplayOrder - guestOrder) : Infinity;
+            const bDist = bHome ? Math.abs(bHome.domainDisplayOrder - guestOrder) : Infinity;
+            if (aDist !== bDist) return aDist - bDist;
+
+            // 3. Subdomain proximity tie-breaker when domain proximity is equal
+            const aSub = subdomains.find(s => s.subdomainId === a.subdomainId);
+            const bSub = subdomains.find(s => s.subdomainId === b.subdomainId);
+            if (aSub && bSub) {
+              const aSubDist = Math.abs(aSub.gridColumnStart - sub.gridColumnStart);
+              const bSubDist = Math.abs(bSub.gridColumnStart - sub.gridColumnStart);
+              if (aSubDist !== bSubDist) return aSubDist - bSubDist;
+            }
+
+            // 4. Fallback: preserve original JSON order
+            return 0;
+          })
+          
+          .forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          const homeDomain = domains.find(d => d.domainId === cert.domainId);
+          const guestDomain = domains.find(d => d.domainId === domain.domainId);
+
+          if (homeDomain && guestDomain) {
+            const homeOrder = homeDomain.domainDisplayOrder;
+            const guestOrder = guestDomain.domainDisplayOrder;
+
+            const preferredCol = homeOrder < guestOrder ? 1 : sub.gridColumnSpan;
+            // 🔹 Check for any open slot in the same skill row before trying other rows
+            const sameRowOrder = getColumnOrderWithProximityBias(cert, domain, sub, domains);
+            for (const col of sameRowOrder) {
+              const key = `${skillRow}-${col}`;
+              if (!tileRowMap[key]) {
+                tileRowMap[key] = true;
+                tile.style.gridRowStart = skillRow;
+                tile.style.gridColumnStart = col;
+                subDiv.appendChild(tile);
+                return;
+              }
+            }
+            const maxRowOffset = 2;
+
+            // 🔹 Attempt deconflicted placement within ±2 rows of target row
+            for (let offset = 0; offset <= maxRowOffset; offset++) {
+              const candidateRows = [skillRow - offset, skillRow + offset];
+              for (const row of candidateRows) {
+                if (row < 1 || row > 28) continue;
+                const key = `${row}-${preferredCol}`;
+                if (!tileRowMap[key]) {
+                  tileRowMap[key] = true;
+                  tile.style.gridRowStart = row;
+                  tile.style.gridColumnStart = preferredCol;
+                  subDiv.appendChild(tile);
+                  return;
+                }
+              }
+            }
+          }
+
+          // 🔹 Fallback to center-outward placement
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 0;
+            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+          }
+          const colIndex = tileRowMap[skillRow];
+          const fallbackCol = columnOrders[skillRow][colIndex];
+          tileRowMap[skillRow]++;
+          const fallbackKey = `${skillRow}-${fallbackCol}`;
+          tileRowMap[fallbackKey] = true;
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = fallbackCol;
+          subDiv.appendChild(tile);
+        });
+
+        domainDiv.appendChild(subDiv);
+      });
+
+      // Wrap domain content in a domain-wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'domain-wrapper';
+      wrapper.appendChild(domainDiv);                     // Add the domain container
+      // Create the domain title
+      const domainTitle = document.createElement('div');
+      domainTitle.className = 'domain-title';
+      domainTitle.textContent = domain.domainShortName;
+      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
+      domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
+      domainTitle.style.textAlign = 'center';
+      domainTitle.style.width = '100%';
+      domainTitle.style.whiteSpace = 'normal';
+      domainTitle.style.wordBreak = 'normal';
+      domainTitle.style.overflowWrap = 'break-word';
+      domainTitle.style.textOverflow = 'unset';
+      domainTitle.style.overflow = 'visible';
+
+      const domainUnit = document.createElement('div');
+      domainUnit.className = 'domain-unit';
+      domainUnit.style.gridColumnStart = domain.domainDisplayOrder + 1;
+      domainUnit.appendChild(domainTitle);
+      domainUnit.appendChild(wrapper);
+
+      roadmapEl.appendChild(domainUnit);
+
+      });
+    }
+
+    function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
+      const tile = document.createElement('a');
+      tile.href = cert.certUrl;
+      tile.target = '_blank';
+      tile.className = 'cert-tile';
+      tile.textContent = cert.certTileLabel;
+      tile.title = cert.certTooltip;
+      tile.setAttribute('data-cert-id', cert.certId);
+      tile.setAttribute('data-domain-id', cert.domainId);
+      if (cert.subdomainId) {
+        tile.setAttribute('data-subdomain-id', cert.subdomainId);
+      }
+
+      tile.style.gridRowStart = cert.certSkillStrata;
+
+      const domain = domains.find(d => d.domainId === cert.domainId);
+      const teamRoles = domain.teamRoles || {};
+      const role = cert.teamRole || "DefaultTeam";
+
+      const domainIdLower = cert.domainId.toLowerCase();
+      const isGuestInThisDomain = renderedDomainId !== cert.domainId;
+      const isGuestInThisSubdomain = cert.crossSubdomains?.includes(renderedSubdomainId);
+      const isGuest = isGuestInThisDomain || isGuestInThisSubdomain;
+
+      if (teamRoles[role] && teamRoles[role].tileColor) {
+        const colorVar = isGuest
+          ? teamRoles[role].tileColorLight || teamRoles[role].tileColor
+          : teamRoles[role].tileColor;
+        const borderVar = teamRoles[role].borderColor || `--domain-${domainIdLower}-dark`;
+
+        tile.style.backgroundColor = `var(${colorVar})`;
+        tile.style.borderColor = `var(${borderVar})`;
+        tile.style.color = isGuest
+          ? `var(${borderVar})`
+          : 'white';
+      } else {
+        const fallbackBg = isGuest
+          ? `--domain-${domainIdLower}-light`
+          : `--domain-${domainIdLower}`;
+
+        tile.style.backgroundColor = `var(${fallbackBg})`;
+        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+        tile.style.color = isGuest
+          ? `var(--domain-${domainIdLower}-dark)`
+          : 'white';
+      }
+
+      return tile;
+    }
+
+    function updateDomainCenteringClass(domains) {
+      const body = document.body;
+      const allDomainIds = domains.map(d => d.domainId);
+      const visible = filterState.visibleDomains;
+
+      const isSubset = visible.length > 0 && visible.length < allDomainIds.length;
+
+      if (isSubset) {
+        body.classList.add("center-domains");
+      } else {
+        body.classList.remove("center-domains");
+      }
+    }
+
+    // Master redraw function — uses current filterState to rebuild roadmap
+    function applyFiltersAndRedraw() {
+      console.log("Redrawing with current filters:", filterState);
+
+      const roadmapEl = document.getElementById("roadmap");
+      roadmapEl.innerHTML = ""; // Clear all roadmap content
+
+      updateDomainCenteringClass(window.loadedDomains);
+
+      drawRoadmap(
+        window.loadedDomains,
+        window.loadedSubdomains,
+        window.loadedCerts,
+        window.loadedSkillStrata
+      );
+    }
+
+    Promise.all([
+      loadJSON('./data/domains.json'),
+      loadJSON('./data/subdomains.json'),
+      loadJSON('./data/certs.json'),
+      loadJSON('./data/vendors.json'),
+      loadJSON('./data/skillstrata.json'),
+    ]).then(([domains, subdomains, certs, vendors, skillStrata]) => {
+
+      // Seed the filter state with all available domains and vendors
+      filterState.visibleDomains = domains.map(d => d.domainId);
+      // Populate domain checkboxes
+      const domainCheckboxes = document.getElementById("domain-checkboxes");
+      domains.forEach(domain => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `domain-${domain.domainId}`;
+        checkbox.value = domain.domainId;
+        checkbox.checked = true;
+
+        const label = document.createElement("label");
+        label.htmlFor = checkbox.id;
+        label.style.marginRight = "1.5vmax";
+        label.appendChild(checkbox);
+        label.append(` ${domain.domainShortName}`);
+
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            if (!filterState.visibleDomains.includes(domain.domainId)) {
+              filterState.visibleDomains.push(domain.domainId);
+            }
+          } else {
+            filterState.visibleDomains = filterState.visibleDomains.filter(id => id !== domain.domainId);
+          }
+          applyFiltersAndRedraw();
+        });
+
+        domainCheckboxes.appendChild(label);
+      });
+      // Normalize vendors before doing anything else
+      const normalizedVendors = vendors.map(v => ({
+        vendorId: v.id,
+        vendorLabel: v.name
+      }));
+      window.normalizedVendors = normalizedVendors;
+
+      // Seed visibleVendorIds with the correct values
+      filterState.visibleVendorIds = normalizedVendors.map(v => v.vendorId);
+
+      // Store for later use (for debugging or reuse)
+      window.loadedDomains = domains;
+      window.loadedSubdomains = subdomains;
+      window.loadedSkillStrata = skillStrata;
+      window.loadedCerts = certs;
+      window.loadedVendors = vendors;          // Raw: [{ id, name }]
+      window.normalizedVendors = normalizedVendors;  // Normalized: [{ vendorId, vendorLabel }]
+
+      const vendorSelect = document.getElementById("vendor-filter");
+
+      // Clear old options (if any)
+      vendorSelect.innerHTML = "";
+
+      // “All Vendors” option — FIRST and selected by default
+        const allOption = document.createElement("option");
+        allOption.value = "__ALL__";
+        allOption.textContent = "All Vendors";
+        allOption.selected = true; // default on page load
+        vendorSelect.appendChild(allOption);
+
+        // “None” option — SECOND
+        const noneOption = document.createElement("option");
+        noneOption.value = "__NONE__";
+        noneOption.textContent = "None";
+        vendorSelect.appendChild(noneOption);
+
+      // Populate from normalizedVendors
+      normalizedVendors.forEach(vendor => {
+        const option = document.createElement("option");
+        option.value = vendor.vendorId;
+        option.textContent = vendor.vendorLabel || vendor.vendorId;
+        vendorSelect.appendChild(option);
+      });
+
+      // Initial draw
+      applyFiltersAndRedraw();
+    });
+
+    // Checkbox: Cross-domain certs
+    document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
+      const isChecked = e.target.checked;
+      filterState.showCrossDomainCerts = isChecked;
+
+      const subToggleContainer = document.getElementById("cross-cert-subtoggles");
+      const toggleCrossSub = document.getElementById("toggle-cross-subdomain");
+      const toggleOnlyCross = document.getElementById("toggle-only-cross-certs");
+
+      if (isChecked) {
+        subToggleContainer.style.display = "inline-block";
+        toggleCrossSub.checked = true;
+        toggleOnlyCross.checked = true;
+        filterState.showCrossSubdomainCerts = true;
+        filterState.showOnlyCrossCerts = true;
+      } else {
+        subToggleContainer.style.display = "none";
+        toggleCrossSub.checked = false;
+        toggleOnlyCross.checked = false;
+        filterState.showCrossSubdomainCerts = false;
+        filterState.showOnlyCrossCerts = false;
+      }
+
+      applyFiltersAndRedraw();
+    });
+
+    // Checkbox: Cross-subdomain certs
+    document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
+      filterState.showCrossSubdomainCerts = e.target.checked;
+      applyFiltersAndRedraw();
+    });
+
+        // checkbox: Show only cross-certs
+    document.getElementById("toggle-only-cross-certs").addEventListener("change", (e) => {
+      filterState.showOnlyCrossCerts = e.target.checked;
+      applyFiltersAndRedraw();
+    });
+
+    // Vendor dropdown
+    document.getElementById("vendor-filter").addEventListener("change", (e) => {
+    const selected = e.target.value;
+
+    if (selected === "__NONE__") {
+      // “None” was selected → show zero certs
+      filterState.visibleVendorIds = [];
+    } else if (selected === "__ALL__") {
+      // “All Vendors” was selected → reset to every vendorId
+      filterState.visibleVendorIds = window.normalizedVendors.map(v => v.vendorId);
+    } else {
+      // A single vendorId was selected → filter to just that one
+      filterState.visibleVendorIds = [selected];
+    }
+
+    applyFiltersAndRedraw();
+  });
+
+  // 🌙 Dark Mode Checkbox Listener
+  const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
+  darkModeCheckbox.addEventListener("change", () => {
+    document.body.classList.toggle("dark-mode", darkModeCheckbox.checked);
+  });
+
+</script>
