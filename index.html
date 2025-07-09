@@ -336,7 +336,14 @@
     .domain-unit.skill-unit {
       display: flex;                     /* Align title and wrapper vertically */
       flex-direction: column;           /* Stack title on top of wrapper */
-      align-items: stretch;             /* Stretch to container width */
+      align-items: center;              /* Match .domain-unit alignment */
+      width: min-content;               /* Shrink to fit skill-wrapper */
+      gap: 0.1vmax;                     /* Maintain vertical spacing */
+      flex: 0 0 auto;                   /* Prevent unwanted stretching */
+      margin: 0;                        /* Clean alignment */
+      padding: 0;                       /* Clean alignment */
+      min-width: 0;                     /* Prevent layout overflow */
+      max-width: none;                  /* Match domain unit behavior */
     }
 
     .skill-heading {
