@@ -384,19 +384,24 @@
     }
 
     /*
-      Visual color layer behind placeholders — matches .subdomain-canvas
+    // Visual color layer behind placeholders — matches .subdomain-canvas
+    // Inert version of subskill-canvas — structure remains for layout,
+    // but it has no color, no size, no visual impact.
+    // Used only as a structural placeholder if needed.
     */
 
     .subskill-canvas {
       grid-column: 1 / -1;              /* Span all columns */
       grid-row: 1 / -1;                 /* Span all rows in this strata */
-      background-color: var(--domain-default-white); /* Default fallback color */
-      position: absolute;              /* Full overlap for strata area */
-      inset: 0;         /* Top, right, bottom, left = 0 to fill container */
-      width: 100%;                      /* Fill width of container */
-      border-radius: 0.25vmax;         /* Match subdomain canvas */
-      z-index: 0;                       /* Behind placeholders and labels */
+      background-color: transparent;   /* No color */
+      position: absolute;              /* Absolute positioning for canvas layer */
+      height: 0;                        /* Zero height */
+      width: 0;                         /* Zero width */
+      border-radius: 0;                /* No rounding */
+      z-index: 0;                       /* Sits behind all tiles */
+      pointer-events: none;            /* Prevent any interaction */
     }
+
 
     .subskill-canvas.expert {
       background-color: var(--color-red-light);
