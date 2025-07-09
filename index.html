@@ -979,19 +979,34 @@ const CROSS_CERT_MODE_ENABLED = false;
           skillContainer.appendChild(canvas);
         }
 
-        // Label overlay (e.g., "Beginner")
+        // Subskill container (wraps canvas, label, and placeholders)
+        const subskillContainer = document.createElement("div");
+        subskillContainer.className = `subskill-container ${levelId}`;
+        subskillContainer.style.gridRow = `${level.start} / ${level.end + 1}`;
+        subskillContainer.style.gridColumnStart = 1;
+
+        // Visual canvas layer
+        const canvas = document.createElement("div");
+        canvas.className = `subskill-canvas ${levelId}`;
+        canvas.style.backgroundColor = `var(${level.color})`;
+        canvas.style.height = "100%";
+        canvas.style.width = "100%";
+        canvas.style.position = "relative";
+        canvas.style.pointerEvents = "none";
+        canvas.style.borderRadius = "0.25vmax";
+
+        // Skill label
         const label = document.createElement("div");
         label.className = `skill-strata-label ${levelId}`;
         label.textContent = level.label;
         label.style.gridRow = `${level.start} / ${level.end + 1}`;
         label.style.color = `var(${level.labelColor})`;
-        subskillContainer.appendChild(label);
 
-        // Wrapper with skill-placeholder elements
-        const wrapper = document.createElement("div");
-        wrapper.className = `subskill-container ${levelId}`;
-        wrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
-        wrapper.style.gridColumnStart = 1;
+        // Placeholder group
+        const placeholderWrapper = document.createElement("div");
+        placeholderWrapper.className = `skill-placeholder-wrapper ${levelId}`;
+        placeholderWrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
+        placeholderWrapper.style.gridColumnStart = 1;
 
         for (let row = level.start; row <= level.end; row++) {
           if (!usedSkillRows.has(row)) continue;
@@ -1000,9 +1015,14 @@ const CROSS_CERT_MODE_ENABLED = false;
           placeholder.className = "skill-placeholder";
           placeholder.style.gridRowStart = row;
           placeholder.style.gridColumnStart = 1;
-          wrapper.appendChild(placeholder);
+          placeholderWrapper.appendChild(placeholder);
         }
-        skillContainer.appendChild(wrapper);
+
+        // Build container
+        subskillContainer.appendChild(canvas);
+        subskillContainer.appendChild(label);
+        subskillContainer.appendChild(placeholderWrapper);
+        skillContainer.appendChild(subskillContainer);
       });
 
       // Assemble full structure
