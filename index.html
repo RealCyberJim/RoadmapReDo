@@ -364,13 +364,16 @@
     }
 
     .domain-wrapper .skill-container {
-      display: grid;                    /* Enable grid layout */
-      grid-template-columns: 1fr;      /* Single-column for skill strata */
-      grid-template-rows: repeat(28, 1.5vmax);  /* Match domain vertical rows */
-      gap: 0;                           /* No gaps between rows */
-      position: relative;              /* Anchor children */
-      box-sizing: border-box;          /* Consistent sizing with padding */
-      padding: 0.25vmax;               /* Align with domain padding */
+      background: white;                                 /* Match domain container background */
+      position: relative;                                /* Anchor canvas or children absolutely */
+      border: 2px solid;                                 /* Temporary: match domain border for visual debug */
+      border-radius: 0.25vmax;                           /* Match rounded corners */
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax;          /* Match domain internal spacing */
+      display: grid;                                     /* Enable vertical grid layout */
+      grid-template-rows: repeat(28, 1.5vmax);           /* Match domain grid structure */
+      gap: 0.1vmax;                                      /* Match cert tile gutter spacing */
+      width: max-content;                                /* Prevent full-width stretch */
+      box-sizing: border-box;                            /* Ensure padding included in size */
     }
 
     /*
@@ -379,15 +382,17 @@
     */
 
     .subskill-container {
-      display: grid;                    /* Nested grid layout */
-      grid-template-columns: 1fr;      /* One column (placeholder, label, etc.) */
-      grid-template-rows: subgrid;     /* Inherit vertical row grid */
-      gap: 0;                           /* No spacing between rows */
-      padding: 0.25vmax;               /* Align with subdomain padding */
-      border-radius: 0.25vmax;         /* Match rounded corners of subdomains */
-      pointer-events: none;            /* Prevent interaction */
-      position: relative;              /* Anchor canvases */
-      z-index: 0;                      /* Sit behind tiles */
+      display: grid;                          /* Nested grid layout */
+      grid-template-columns: 1fr;            /* One column (placeholder, label, etc.) */
+      grid-template-rows: repeat(28, 1.5vmax); /* Match domain vertical rows */
+      grid-auto-rows: 1.5vmax;               /* Prevent empty rows from collapsing */
+      gap: 0.1vmax;                          /* Match tile and container gutter */
+      padding: 0.1vmax;                      /* Match domain padding */
+      border-radius: 0.25vmax;               /* Match rounded corners of subdomains */
+      pointer-events: none;                  /* Prevent interaction */
+      position: relative;                    /* Anchor canvases */
+      justify-content: center;               /* Center inner contents */
+      border: none;                          /* Match domain visual baseline */
     }
 
     /*
@@ -398,15 +403,15 @@
     */
 
     .subskill-canvas {
-      grid-column: 1 / -1;              /* Span all columns */
-      grid-row: 1 / -1;                 /* Span all rows in this strata */
-      background-color: transparent;   /* No color */
-      position: absolute;              /* Absolute positioning for canvas layer */
-      height: 0;                        /* Zero height */
-      width: 0;                         /* Zero width */
-      border-radius: 0;                /* No rounding */
-      z-index: 0;                       /* Sits behind all tiles */
-      pointer-events: none;            /* Prevent any interaction */
+      position: absolute;        /* Anchor layer inside container */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;                /* Behind tiles */
+      pointer-events: none;      /* Non-interactive */
+      border-radius: 0.25vmax;   /* Match .subdomain-canvas */
+      background-color: transparent; /* Neutral by default */
     }
 
 
