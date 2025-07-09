@@ -158,7 +158,31 @@
       margin: 0;
       padding: 0;
     }
+
+    #roadmap-flex {
+      display: flex;
+      justify-content: flex-start; /* default: left-aligned */
+      width: 100%;
+    }
     
+    body.center-domains #roadmap-flex {
+      justify-content: center; /* center when this class is active */
+    }
+
+    #roadmap-wrapper {
+      display: grid;
+      grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
+      grid-template-rows: auto auto;
+      width: 100%;
+      max-width: 100vw;
+      height: auto;
+      max-height: none !important;
+      overflow-x: hidden;
+      overflow-y: visible;
+      box-sizing: border-box;
+      position: relative;
+    }
+        
     #roadmap {
       display: flex;
       overflow-x: hidden;
@@ -175,21 +199,14 @@
       overflow-y: visible;
       padding-right: 0.2vmax;
     }
-
+    
     body.center-domains #roadmap {
       justify-content: center; /* Override to center */
     }
 
-    #roadmap-flex {
-      display: flex;
-      justify-content: flex-start; /* default: left-aligned */
-      width: 100%;
-    }
 
-    body.center-domains #roadmap-flex {
-      justify-content: center; /* center when this class is active */
-    }
-
+    /* Domain Container Styles */
+    
     .domain-container {
       background: white;
       position: relative;
@@ -215,14 +232,6 @@
       max-width: none;
     }
 
-    .domain-wrapper {
-      display: grid;
-      grid-template-rows: auto 1fr; /* Title row on top, domain container below */
-      width: max-content;           /* Shrinks to fit the domain */
-      margin: 0;
-      padding: 0;
-    }
-    
     .domain-title {
       border: 2px solid; /* Matches domain border */
       background-color: transparent; /* Transparent to show underlying canvas */
@@ -248,18 +257,15 @@
       align-items: center;             /* center text to vertically */
       justify-content: center;      /* Horizontally center text */
     }
-    
-    .subdomain-canvas {
-      border-radius: 0.25vmax;
-      z-index: 0;              /* Keep behind tiles and labels */
-      pointer-events: none;
-      position: absolute;      /* Better isolation from layout flow */
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
 
+    .domain-wrapper {
+      display: grid;
+      grid-template-rows: auto 1fr; /* Title row on top, domain container below */
+      width: max-content;           /* Shrinks to fit the domain */
+      margin: 0;
+      padding: 0;
+    }
+    
     .subdomain-container {
       position: relative;             /* Enables absolute positioning for title */
       padding-top: 1vmax;             /* Reserve space for overlay title */
@@ -272,8 +278,19 @@
       justify-content: center;
       border: none;
     }
+        
+    .subdomain-canvas {          /* Background "canvas" for subdomain */
+      border-radius: 0.25vmax;
+      z-index: 0;              /* Keep behind tiles and labels */
+      pointer-events: none;
+      position: absolute;      /* Better isolation from layout flow */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
-    .subdomain-title {
+    .subdomain-title {          /* small title at the top of the subdomain canvas */
       position: absolute;
       top: 0;
       left: 0;
@@ -290,7 +307,7 @@
       z-index: 2;
     }
 
-    .cert-tile {
+    .cert-tile {                  /* Individual certification tile */
       width: 2.3vmax;
       height: 1.5vmax;
       display: flex;
@@ -310,44 +327,25 @@
       margin: 0;
       text-decoration: none;
     }
+    /*
+      Styles for the skill-level column.
+      These classes mirror the domain layout (e.g., .domain-unit, .domain-wrapper)
+      to ensure structural and visual parity with cert columns.
+    */
 
-    /* = ROADMAP GRID STRUCTURE = */
-    #roadmap-wrapper {
-      display: grid;
-      grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
-      grid-template-rows: auto auto;
-      width: 100%;
-      max-width: 100vw;
-      height: auto;
-      max-height: none !important;
-      overflow-x: hidden;
-      overflow-y: visible;
-      box-sizing: border-box;
-      position: relative;
-    }
-
-    .skill-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.1vmax;
-      flex: 0 0 auto;
-      margin: 0;
-      padding: 0;
-      min-width: 0;
-      max-width: none;
+    .domain-unit.skill-unit {
+      display: flex;                     /* Align title and wrapper vertically */
+      flex-direction: column;           /* Stack title on top of wrapper */
+      align-items: stretch;             /* Stretch to container width */
     }
 
     .skill-heading {
-      height: var(--domain-title-height);
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      font-size: 0.8vmax;
-      font-weight: 500;
-      color: transparent; /* visually blank */
-      pointer-events: none;
+      writing-mode: vertical-rl;        /* Rotate label vertically */
+      text-align: center;               /* Center skill label text */
+      font-weight: bold;                /* Emphasize label */
+      font-size: 1vmax;                 /* Responsive font size */
+      height: 100%;                     /* Occupy full height of container */
+      padding: 0.5vmax 0;               /* Add vertical spacing */
     }
 
     .skill-wrapper {
@@ -358,50 +356,46 @@
       padding: 0;
     }
 
-    .skill-container {
-      background: white;
-      position: relative;
-      border: none; /* No border here, handled by subskill-canvas */
-      border-radius: 0.25vmax;                 /* Visual consistency */
-      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax; /* Matchses .domain-container exactly */
-      display: grid;
-      grid-template-rows: repeat(28, 1.5vmax); /* Matches domain-container */
-      gap: 0.1vmax;                            /* Matches tile vertical gutter */
-      width: max-content;
+    .domain-wrapper .skill-container {
+      display: grid;                    /* Enable grid layout */
+      grid-template-columns: 1fr;      /* Single-column for skill strata */
+      grid-template-rows: repeat(28, 1.5vmax);  /* Match domain vertical rows */
+      gap: 0;                           /* No gaps between rows */
+      position: relative;              /* Anchor children */
+      box-sizing: border-box;          /* Consistent sizing with padding */
+      padding: 0.25vmax;               /* Align with domain padding */
     }
+
+    /*
+      Structural analog to .subdomain-container
+      Represents a grouped skill strata region (e.g., Beginner, Intermediate, Expert)
+    */
 
     .subskill-container {
-      position: relative;
-      display: grid;
-      padding: 0.1vmax;
-      gap: 0.1vmax;
-      border-radius: 0.25vmax;
-      pointer-events: none;
-      z-index: 0;
+      display: grid;                    /* Nested grid layout */
+      grid-template-columns: 1fr;      /* One column (placeholder, label, etc.) */
+      grid-template-rows: subgrid;     /* Inherit vertical row grid */
+      gap: 0;                           /* No spacing between rows */
+      padding: 0.25vmax;               /* Align with subdomain padding */
+      border-radius: 0.25vmax;         /* Match rounded corners of subdomains */
+      pointer-events: none;            /* Prevent interaction */
+      position: relative;              /* Anchor canvases */
+      z-index: 0;                      /* Sit behind tiles */
     }
 
-      /* saving for later, in case the changes are reverted
-      .subskill-canvas {
-      width: 100%;
-      grid-column: 1;
-      z-index: 0;
-      position: relative;
-      pointer-events: none;
-      border-radius: 0.25vmax;
-    }
+    /*
+      Visual color layer behind placeholders — matches .subdomain-canvas
     */
 
     .subskill-canvas {
-      grid-column: 1;
-      grid-row: 1 / 2; /* Temporary default, overridden dynamically */
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
-      border-radius: 0.25vmax;
+      grid-column: 1 / -1;              /* Span all columns */
+      grid-row: 1 / -1;                 /* Span all rows in this strata */
+      background-color: var(--domain-default-white); /* Default fallback color */
+      position: absolute;              /* Full overlap for strata area */
+      height: 100%;                     /* Fill height of container */
+      width: 100%;                      /* Fill width of container */
+      border-radius: 0.25vmax;         /* Match subdomain canvas */
+      z-index: 0;                       /* Behind placeholders and labels */
     }
 
     .subskill-canvas.expert {
@@ -419,44 +413,36 @@
       border: 1px solid var(--color-green-dark);
     }
 
+    /*
+      Atomic row object in skill column — mirrors cert tile height and position
+    */
+
     .skill-placeholder {
-      grid-column-start: 1;
-      grid-row-end: span 1;
-      height: 1.5vmax;         /* Matches cert-tile */
-      width: 0.5vmax;          /* Minimal width needed */
-      opacity: 0;
-      pointer-events: none;
-      margin: 0;
-      padding: 0.2vmax;        /* Match cert-tile padding */
-      box-sizing: border-box;
-      align-self: center;
+      height: 1.5vmax;                  /* Matches cert tile row height */
+      grid-column-start: 1;            /* Always in column 1 */
     }
+
+
+    /*
+      Placeholder wrapper to hold each skill-placeholder in strata
+    */
 
     .skill-placeholder-wrapper {
-      display: grid;
-      grid-template-columns: 1fr;       /* One placeholder column */
-      grid-auto-rows: 1.5vmax;          /* Matches cert-tile height */
-      padding: 0;
-      margin: 0;
-      gap: 0;
-      box-sizing: border-box;
-      pointer-events: none;
+      display: contents;                /* Pass grid alignment to children */
     }
 
+    /*
+      Vertical skill label aligned with each strata — matches .subdomain-title
+    */
+
     .skill-strata-label {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      font-size: 0.7vmax;
-      font-weight: 500;
-      text-align: right;
-      white-space: nowrap;
-      user-select: none;
-      position: relative;
-      z-index: 1;
-      pointer-events: none;
-      grid-column: 1;
-      align-self: center;
-      justify-self: center;
+      writing-mode: vertical-rl;        /* Vertical orientation */
+      text-align: center;               /* Centered text */
+      font-weight: bold;                /* Emphasize */
+      font-size: 1vmax;                 /* Responsive size */
+      padding: 0.5vmax 0;               /* Vertical spacing */
+      z-index: 1;                       /* On top of canvas */
+      pointer-events: none;            /* No interaction */
     }
 
     .skill-strata-label.expert {
@@ -920,9 +906,81 @@ const CROSS_CERT_MODE_ENABLED = false;
       return order;
     }
 
+    /**
+     * Draws the roadmap with domains, subdomains, certifications, and skill strata.
+     * @param {Array} domains - List of domain objects.
+     * @param {Array} subdomains - List of subdomain objects.
+     * @param {Array} certs - List of certification objects.
+     * @param {Array} skillStrata - List of skill strata objects.
+     */
     function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
+
+      // Add the skill "domain" column to the roadmap using domain-like structure
+      // This structure mimics a domain column but uses custom logic for skill placeholders and canvas
+      const skillUnit = document.createElement("div");  // Outer column unit
+      skillUnit.className = "domain-unit skill-unit";
+      skillUnit.style.gridColumnStart = 1;  // Always column 1 (leftmost)
+
+      const skillTitle = document.createElement("div");  // Optional visual heading
+      skillTitle.className = "domain-title skill-heading";
+      skillTitle.textContent = "";  // Optional: "Skill Levels" or leave blank
+      skillUnit.appendChild(skillTitle);
+
+      const skillWrapper = document.createElement("div");  // Wraps the skill content (like .domain-wrapper)
+      skillWrapper.className = "skill-wrapper";
+
+      const skillContainer = document.createElement("div");  // Acts like .domain-container
+      skillContainer.className = "skill-container";
+      skillContainer.style.display = "grid";
+      skillContainer.style.gridTemplateRows = 'repeat(28, 1.5vmax)';  // Match cert grid structure
+
+      // Skill strata (Beginner, Intermediate, Expert)
+      skillStrata.forEach(level => {
+        const subskill = document.createElement("div");
+        subskill.className = `subdomain-container subskill-container ${level.id}`;
+        subskill.style.display = "grid";
+        subskill.style.gridTemplateRows = `repeat(${level.end - level.start + 1}, 1.5vmax)`;
+        subskill.style.gridRowStart = level.start;
+        subskill.style.gridRowEnd = level.end + 1;
+        subskill.style.gridColumnStart = 1;
+        subskill.style.padding = "0.3vmax";  // Optional for spacing
+        subskill.style.borderRadius = "0.35vmax";  // Optional rounded corners
+        subskill.style.pointerEvents = "none";  // Non-interactive
+
+        // Optional canvas layer
+        const canvas = document.createElement("div");
+        canvas.className = `subskill-canvas ${level.id}`;
+        canvas.style.backgroundColor = `var(${level.color})`;
+        canvas.style.gridRow = `1 / -1`;  // Stretch full height of container
+        canvas.style.gridColumn = `1 / -1`;
+        canvas.style.borderRadius = "0.25vmax";
+        canvas.style.pointerEvents = "none";
+        subskill.appendChild(canvas);
+
+        // Optional label
+        const label = document.createElement("div");
+        label.className = `skill-strata-label ${level.id}`;
+        label.textContent = level.label;
+        label.style.color = `var(${level.labelColor})`;
+        subskill.appendChild(label);
+
+        // Optionally add placeholder blocks
+        for (let row = level.start; row <= level.end; row++) {
+          const placeholder = document.createElement("div");
+          placeholder.className = "skill-placeholder";
+          placeholder.style.gridRowStart = row;
+          placeholder.style.gridColumnStart = 1;
+          subskill.appendChild(placeholder);
+        }
+
+        skillContainer.appendChild(subskill);
+      });
+
+      skillWrapper.appendChild(skillContainer);
+      skillUnit.appendChild(skillWrapper);
+      roadmapEl.appendChild(skillUnit);  // This appears as the first "domain" column
 
       // Determine which skill rows are actually used (1–28) by any visible cert
       const usedSkillRows = new Set();
