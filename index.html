@@ -432,6 +432,17 @@
       align-self: center;
     }
 
+    .skill-placeholder-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;       /* One placeholder column */
+      grid-auto-rows: 1.5vmax;          /* Matches cert-tile height */
+      padding: 0;
+      margin: 0;
+      gap: 0;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
     .skill-strata-label {
       writing-mode: vertical-rl;
       transform: rotate(180deg);
