@@ -406,17 +406,17 @@
 
     .subskill-canvas.expert {
       background-color: var(--color-red-light);
-      border: 2px solid var(--color-red-dark);
+      border: 1px solid var(--color-red-dark);
     }
 
     .subskill-canvas.intermediate {
       background-color: var(--color-yellow-light);
-      border: 2px solid var(--color-yellow-dark);
+      border: 1px solid var(--color-yellow-dark);
     }
 
     .subskill-canvas.beginner {
       background-color: var(--color-green-light);
-      border: 2px solid var(--color-green-dark);
+      border: 1px solid var(--color-green-dark);
     }
 
     .skill-placeholder {
@@ -985,7 +985,7 @@ const CROSS_CERT_MODE_ENABLED = false;
         label.textContent = level.label;
         label.style.gridRow = `${level.start} / ${level.end + 1}`;
         label.style.color = `var(${level.labelColor})`;
-        skillContainer.appendChild(label);
+        subskillContainer.appendChild(label);
 
         // Wrapper with skill-placeholder elements
         const wrapper = document.createElement("div");
