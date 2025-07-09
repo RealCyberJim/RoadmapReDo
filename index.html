@@ -392,7 +392,7 @@
       grid-row: 1 / -1;                 /* Span all rows in this strata */
       background-color: var(--domain-default-white); /* Default fallback color */
       position: absolute;              /* Full overlap for strata area */
-      height: 100%;                     /* Fill height of container */
+      inset: 0;         /* Top, right, bottom, left = 0 to fill container */
       width: 100%;                      /* Fill width of container */
       border-radius: 0.25vmax;         /* Match subdomain canvas */
       z-index: 0;                       /* Behind placeholders and labels */
