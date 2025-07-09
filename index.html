@@ -340,12 +340,12 @@
     }
 
     .skill-heading {
-      writing-mode: vertical-rl;        /* Rotate label vertically */
-      text-align: center;               /* Center skill label text */
-      font-weight: bold;                /* Emphasize label */
-      font-size: 1vmax;                 /* Responsive font size */
-      height: 100%;                     /* Occupy full height of container */
-      padding: 0.5vmax 0;               /* Add vertical spacing */
+      grid-row: 1 / 2;              /* Occupy row 1 only */
+      height: 1.5vmax;              /* Match the grid row height exactly */
+      box-sizing: border-box;      /* Ensure height includes padding/border */
+      padding: 0;                   /* Remove any vertical offset */
+      margin: 0;                    /* No unintended spacing */
+      border: none;                /* Optional: remove border for now */
     }
 
     .skill-wrapper {
@@ -510,9 +510,11 @@
     }
 
 
-    /*
-    //END GRID DEBUG MODE
-    */
+   /*
+   // ======================================================
+   // END GRID DEBUG MODE
+   // ======================================================
+   */
 
     
   </style>
