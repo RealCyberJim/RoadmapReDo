@@ -1,0 +1,13 @@
+[
+    {
+      "subskillId": "text here",
+      "subskillLabel": "text here",
+      "tooltip": "text here",
+      "skillstrataId": "text here",
+      "subdomainColor": "--color-orange-light",
+      "gridRowStart": 1,
+      "gridRowSpan": 1,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    }
+  ]
