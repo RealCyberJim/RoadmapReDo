@@ -327,6 +327,32 @@
       margin: 0;
       text-decoration: none;
     }
+
+    /* .skill-tile — Atomic visual unit for skill strata placement */
+    /* Mirrors .cert-tile in layout, with half width for vertical labeling */
+    .skill-tile {                  /* Skill tile for skill column */
+      width: 1.15vmax;             /* Half width of .cert-tile */
+      height: 1.5vmax;             /* Match tile row height */
+      display: flex;
+      align-items: center;         /* Vertically center label inside tile */
+      justify-content: center;     /* Horizontally center label inside tile */
+      justify-self: center;        /* Center the tile inside the grid cell */
+      align-self: center;          /* Vertically center the tile inside its row */
+      text-align: center;
+      font-size: 0.6vmax;
+      font-weight: 400;
+      border-radius: 0.25vmax;     /* Match .cert-tile curvature */
+      background-color: var(--color-black-light); /* Temporary neutral background */
+      border: 1px solid var(--color-black-dark);  /* Darker contrast border */
+      color: white;
+      padding: 0.2vmax;            /* Slightly tighter padding for narrow label */
+      box-sizing: border-box;
+      margin: 0;
+      text-decoration: none;
+      pointer-events: none;                    /* Not interactive for now */
+    }
+
+
     /*
       Styles for the skill-level column.
       These classes mirror the domain layout (e.g., .domain-unit, .domain-wrapper)
