@@ -403,15 +403,18 @@
     */
 
     .subskill-canvas {
-      position: absolute;        /* Anchor layer inside container */
+      position: absolute;              /* Anchor inside subskill-container */
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 0;                /* Behind tiles */
-      pointer-events: none;      /* Non-interactive */
-      border-radius: 0.25vmax;   /* Match .subdomain-canvas */
-      background-color: transparent; /* Neutral by default */
+      z-index: 0;                      /* Behind all other elements */
+      pointer-events: none;           /* Allow interactions to pass through */
+      border-radius: 0;               /* No visual styling */
+      background-color: transparent;  /* Neutral background */
+      border: none;                   /* No borders */
+      height: 0;                      /* No size */
+      width: 0;
     }
 
 

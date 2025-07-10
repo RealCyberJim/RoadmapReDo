@@ -1535,7 +1535,7 @@
     "certTileLabel": "CIS LA"
   },
   {
-    "certId": "SOF_scspl",
+    "certId": "SOF_scssd",
     "domainId": "SOF",
     "crossDomains": [],
     "subdomainId": "SOF_unspec",
@@ -1543,8 +1543,8 @@
     "certSkillStrata": 13,
     "vendorId": "seco",
     "certUrl": "https://www.seco-institute.org/certifications/certified-secure-software-developer/",
-    "certTooltip": "SECO Secure Programming Certified Leader $460 exam",
-    "certTileLabel": "S-CSPL"
+    "certTooltip": "SECO Certified Secure Software Developer (S-CSSD) $460 exam",
+    "certTileLabel": "CSSD"
   },
   {
     "certId": "OPS_gcda",
