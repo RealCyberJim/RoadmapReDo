@@ -1499,43 +1499,49 @@ const CROSS_CERT_MODE_ENABLED = false;
       applyFiltersAndRedraw();
     });
 
-    // Checkbox: Cross-domain certs
-    document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
-      const isChecked = e.target.checked;
-      filterState.showCrossDomainCerts = isChecked;
-
-      const subToggleContainer = document.getElementById("cross-cert-subtoggles");
-      const toggleCrossSub = document.getElementById("toggle-cross-subdomain");
-      const toggleOnlyCross = document.getElementById("toggle-only-cross-certs");
-
-      if (isChecked) {
-        subToggleContainer.style.display = "inline-block";
-        toggleCrossSub.checked = true;
-        toggleOnlyCross.checked = true;
-        filterState.showCrossSubdomainCerts = true;
-        filterState.showOnlyCrossCerts = true;
-      } else {
-        subToggleContainer.style.display = "none";
-        toggleCrossSub.checked = false;
-        toggleOnlyCross.checked = false;
-        filterState.showCrossSubdomainCerts = false;
-        filterState.showOnlyCrossCerts = false;
-      }
-
-      applyFiltersAndRedraw();
-    });
-
-    // Checkbox: Cross-subdomain certs
-    document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
-      filterState.showCrossSubdomainCerts = e.target.checked;
-      applyFiltersAndRedraw();
-    });
-
-        // checkbox: Show only cross-certs
-    document.getElementById("toggle-only-cross-certs").addEventListener("change", (e) => {
-      filterState.showOnlyCrossCerts = e.target.checked;
-      applyFiltersAndRedraw();
-    });
+//   BEGIN block this function //
+//   // Checkbox: Cross-domain certs
+//   document.getElementById("toggle-cross-domain").addEventListener("change", (e) => {
+//     const isChecked = e.target.checked;
+//     filterState.showCrossDomainCerts = isChecked;
+//   
+//     const subToggleContainer = document.getElementById("cross-cert-subtoggles");
+//     const toggleCrossSub = document.getElementById("toggle-cross-subdomain");
+//     const toggleOnlyCross = document.getElementById("toggle-only-cross-certs");
+//   
+//     if (isChecked) {
+//       subToggleContainer.style.display = "inline-block";
+//       toggleCrossSub.checked = true;
+//       toggleOnlyCross.checked = true;
+//       filterState.showCrossSubdomainCerts = true;
+//       filterState.showOnlyCrossCerts = true;
+//     } else {
+//       subToggleContainer.style.display = "none";
+//       toggleCrossSub.checked = false;
+//       toggleOnlyCross.checked = false;
+//       filterState.showCrossSubdomainCerts = false;
+//       filterState.showOnlyCrossCerts = false;
+//     }
+//   
+//     applyFiltersAndRedraw();
+//   });
+//   
+//   // Checkbox: Cross-subdomain certs
+//   document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
+//     filterState.showCrossSubdomainCerts = e.target.checked;
+//     applyFiltersAndRedraw();
+//   });
+//   // Checkbox: Cross-subdomain certs
+//   document.getElementById("toggle-cross-subdomain").addEventListener("change", (e) => {
+//     filterState.showCrossSubdomainCerts = e.target.checked;
+//     applyFiltersAndRedraw();
+//   });
+//   // Checkbox: Show only cross-certs
+//   document.getElementById("toggle-only-cross-certs").addEventListener("change", (e) => {
+//     filterState.showOnlyCrossCerts = e.target.checked;
+//     applyFiltersAndRedraw();
+//   });
+//   END block this function //
 
     // Vendor dropdown
     document.getElementById("vendor-filter").addEventListener("change", (e) => {
