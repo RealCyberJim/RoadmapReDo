@@ -646,43 +646,6 @@
 // RESERVED FOR TEMPORARY DEBUGGING /* Remove before production deployment */
 // =============================================================================
 
-// temporary debug function to verify home-only mode is working:
-
-function debugCertPlacement() {
-  console.log("=== CERT PLACEMENT DEBUG ===");
-  console.log("CROSS_CERT_MODE_ENABLED:", CROSS_CERT_MODE_ENABLED);
-  console.log("FilterState cross-cert flags:", {
-    showCrossDomainCerts: filterState.showCrossDomainCerts,
-    showCrossSubdomainCerts: filterState.showCrossSubdomainCerts, 
-    showOnlyCrossCerts: filterState.showOnlyCrossCerts
-  });
-  
-  // Count certs per domain to verify no cross-domain appearances
-  const certsByDomain = {};
-  document.querySelectorAll('.cert-tile').forEach(tile => {
-    const certId = tile.getAttribute('data-cert-id');
-    const domainId = tile.getAttribute('data-domain-id');
-    const parentDomain = tile.closest('.domain-container').classList[1].replace('domain-', '');
-    
-    if (!certsByDomain[parentDomain]) certsByDomain[parentDomain] = [];
-    certsByDomain[parentDomain].push({certId, certDomain: domainId, renderedIn: parentDomain});
-  });
-  
-  // Look for any cross-domain appearances (should be none in home-only mode)
-  Object.entries(certsByDomain).forEach(([renderDomain, certs]) => {
-    const crossDomainCerts = certs.filter(c => c.certDomain !== c.renderedIn);
-    if (crossDomainCerts.length > 0) {
-      console.warn(`Found ${crossDomainCerts.length} cross-domain certs in ${renderDomain}:`, crossDomainCerts);
-    }
-  });
-  
-  console.log("Certs per domain:", Object.fromEntries(
-    Object.entries(certsByDomain).map(([domain, certs]) => [domain, certs.length])
-  ));
-}
-
-
-
 
 
 // =============================================================================
