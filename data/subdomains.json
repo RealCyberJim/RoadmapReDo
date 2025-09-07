@@ -1,4 +1,28 @@
 [
+      {
+      "subdomainId": "SKL_Expert",
+      "subdomainShortName": "Expert",
+      "subdomainLongName": "Expert",
+      "tooltip": "Skills at the expert level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-red-light",
+      "gridRowStart": 1,
+      "gridRowSpan": 8,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1 
+    },
+    {
+      "subdomainId": "SKL_Intermediate",
+      "subdomainShortName": "Intermediate",
+      "subdomainLongName": "Intermediate",
+      "tooltip": "Skills at the intermediate level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-yellow-light",
+      "gridRowStart": 9,
+      "gridRowSpan": 12,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
     {
       "subdomainId": "SKL_Beginner",
       "subdomainShortName": "Beginner",
