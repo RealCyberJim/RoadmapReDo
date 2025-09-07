@@ -1,5 +1,16 @@
 [
-
+    {
+      "subdomainId": "SKL_Beginner",
+      "subdomainShortName": "Beginner",
+      "subdomainLongName": "Beginner",
+      "tooltip": "Skills at the beginner level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-green-light",
+      "gridRowStart": 21,
+      "gridRowSpan": 8,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 1
+    },
     {
       "subdomainId": "ENG_cloudSysOps",
       "subdomainShortName": "Cloud/SysOps",
