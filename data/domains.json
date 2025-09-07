@@ -7,9 +7,9 @@
       "domainDescription": "The skill level domain approximates the level of proficiency for each certification.",
       "teamRoles": {
         "DefaultTeam": {
-          "tileColor": "",
-          "tileColorLight": "",
-          "borderColor": ""
+          "tileColor": "null",
+          "tileColorLight": "null",
+          "borderColor": "null"
         }
       }
     },
