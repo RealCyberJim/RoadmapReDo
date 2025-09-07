@@ -480,34 +480,10 @@ const CROSS_CERT_MODE_ENABLED = false;
       visibleDomains: [], // filled after loading domains.json
       visibleVendors: [], // filled after loading certs.json
       showAchieved: true,
-      showPlanned: true,
-      visibleSkillStrata: {
-        beginner: true,
-        intermediate: true,
-        expert: true
-      }
+      showPlanned: true
     };
 
     //
-    function getVisibleSkillRowCount(skillStrataList, filterState) {
-      let totalRows = 1; // row 1 is always the heading row
-      for (const level of skillStrataList) {
-        if (filterState.visibleSkillStrata[level.id]) {
-          totalRows += (level.end - level.start + 1);
-        }
-      }
-      return totalRows;
-    }
-
-    function getSkillLevelFromStrata(strataNumber, skillStrataList) {
-      for (const level of skillStrataList) {
-        if (strataNumber >= level.start && strataNumber <= level.end) {
-          return level.id;
-        }
-      }
-      return null;
-    }
-
     async function loadJSON(path) {
       const res = await fetch(path);
       return res.json();
@@ -679,27 +655,7 @@ const CROSS_CERT_MODE_ENABLED = false;
       const roadmapEl = document.getElementById('roadmap');
 
 
-      // Determine which skill rows are actually used (1–28) by any visible cert
-      const usedSkillRows = new Set();
-
-      certs.forEach(cert => {
-        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-        if (!filterState.visibleSkillStrata[certLevel]) return;
-        if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
-
-        usedSkillRows.add(cert.certSkillStrata);
-      });
-
-      // Build a dynamic grid-template-rows string using actual skillStrata ranges
-      let prunedGridRows = '';
-      skillStrata.forEach(level => {
-        const start = level.start;
-        const end = level.end;
-        for (let row = start; row <= end; row++) {
-          prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
-        }
-      });
-      prunedGridRows = prunedGridRows.trim(); // Remove trailing space
+      // Skill level visualization is now handled by CSS grid in the SKL domain
 
       
         /*
@@ -829,11 +785,9 @@ const CROSS_CERT_MODE_ENABLED = false;
         });
 
         // Skip rendering this subdomain if it has no visible certs
-        const visibleSubCerts = subCerts.filter(cert => {
-          const level = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          return filterState.visibleSkillStrata[level] &&
-                filterState.visibleVendorIds.includes(cert.vendorId);
-        });
+        const visibleSubCerts = subCerts.filter(cert => 
+          filterState.visibleVendorIds.includes(cert.vendorId)
+        );
 
         if (visibleSubCerts.length === 0) return;
 
@@ -843,12 +797,10 @@ const CROSS_CERT_MODE_ENABLED = false;
 
         // 🔹 Home certs are rendered first to claim their preferred spots
         subCerts.filter(c => c.domainId === domain.domainId).forEach(cert => {
-          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
 
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
-          const skillRow = cert.certSkillStrata;
+          const skillRow = cert.certSkillStrata; // Used for grid positioning only
 
           let colStart;
 
@@ -916,8 +868,6 @@ const CROSS_CERT_MODE_ENABLED = false;
           })
           
           .forEach(cert => {
-          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-          if (!filterState.visibleSkillStrata[certLevel]) return;
           if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
 
           const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
