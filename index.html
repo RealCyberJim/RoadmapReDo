@@ -457,7 +457,6 @@
 
 <script>
 
-
 // =============================================================================
 // RESERVED FOR TEMPORARY DEBUGGING /* Remove before production deployment */
 // =============================================================================
@@ -469,5 +468,379 @@
 // =============================================================================
 
 
+// Centralized filter state — controls what gets shown on the roadmap
+    const filterState = {
+      visibleDomains: [], // filled after loading domains.json
+      visibleVendors: [], // filled after loading certs.json
+      showAchieved: true,
+      showPlanned: true
+    };
+
+    //
+    async function loadJSON(path) {
+      const res = await fetch(path);
+      return res.json();
+    }
+
+    function applyGridSpanStyles(element) {
+      const colStart = element.getAttribute('data-grid-column-start');
+      const colSpan = element.getAttribute('data-grid-column-span');
+
+      if (colStart && colSpan) {
+        element.style.setProperty('--col-start', colStart);
+        element.style.setProperty('--col-span', colSpan);
+      }
+    }
+
+    function usedSkillRowsHasRowsInRange(start, end, usedSkillRows) {
+      for (let i = start; i <= end; i++) {
+        if (usedSkillRows.has(i)) return true;
+      }
+      return false;
+    }
+
+    function getCenterOutwardColumnOrder(span) {
+      const center = Math.ceil(span / 2);
+      const order = [center];
+
+      for (let offset = 1; order.length < span; offset++) {
+        if (center + offset <= span) order.push(center + offset);
+        if (center - offset >= 1) order.push(center - offset);
+      }
+
+      return order;
+    }
+
+    function getCenterOutwardColumnOrder(span) {
+      const center = Math.ceil(span / 2);
+      const order = [center];
+      
+      for (let offset = 1; order.length < span; offset++) {
+        if (center - offset >= 1) order.push(center - offset);
+        if (center + offset <= span) order.push(center + offset);
+      }
+      
+      return order;
+    }
+
+    /**
+     * Draws the roadmap with domains, subdomains, and certifications.
+     * @param {Array} domains - List of domain objects.
+     * @param {Array} subdomains - List of subdomain objects.
+     * @param {Array} certs - List of certification objects.
+     */
+    function drawRoadmap(domains, subdomains, certs) {
+
+      const roadmapEl = document.getElementById('roadmap');
+
+
+
+      domains
+        .filter(domain => filterState.visibleDomains.includes(domain.domainId))
+        .forEach(domain => {
+        const domainDiv = document.createElement('div');
+        domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+        // TEMP: disable for debug: domainDiv.style.gridTemplateRows = prunedGridRows;
+        // TEMP: force full 28 visible rows for layout testing
+        domainDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
+        domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
+
+        // Dynamically set how wide the domain container should be
+        const allContainers = subdomains.filter(sd => sd.domainId === domain.domainId);
+
+        let maxColumn = 0;
+        allContainers.forEach(c => {
+          const endCol = c.gridColumnStart + c.gridColumnSpan - 1;
+          if (endCol > maxColumn) maxColumn = endCol;
+        });
+
+        domainDiv.style.gridTemplateColumns = `repeat(${maxColumn}, 2.3vmax)`;
+
+      const domainSubdomains = subdomains.filter(sd => sd.domainId === domain.domainId);
+      domainSubdomains.forEach(sub => {
+
+        // Subdomain container
+        const subDiv = document.createElement('div');
+        subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
+
+        subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
+        subDiv.style.gridTemplateRows = prunedGridRows;
+
+        subDiv.style.gridColumnStart = sub.gridColumnStart;
+        subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+        subDiv.style.gridRowStart = sub.gridRowStart;
+        subDiv.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+
+        // Subdomain canvas (visual layer behind container)
+        const canvas = document.createElement('div');
+        canvas.classList.add('subdomain-canvas');
+        canvas.setAttribute('data-subdomain-id', sub.subdomainId);
+
+        // positioning based on grid math
+        canvas.style.gridRowStart = sub.gridRowStart;
+        canvas.style.gridRowEnd = `span ${sub.gridRowSpan}`;
+        canvas.style.gridColumnStart = sub.gridColumnStart;
+        canvas.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
+
+        canvas.style.position = 'relative';
+        canvas.style.zIndex = 0;
+        canvas.style.pointerEvents = 'none';
+        canvas.style.backgroundColor = sub.subdomainId.endsWith('_unspec')
+          ? 'transparent'
+          : `var(${sub.subdomainColor || '--domain-default-white'})`;
+        
+                
+        // Subdomain title overlay (only if not an unspecialized container)
+        if (!sub.subdomainId.endsWith('_unspec')) {
+          const titleOverlay = document.createElement('div');
+          titleOverlay.className = 'subdomain-title';
+          titleOverlay.textContent = sub.subdomainShortName;
+          subDiv.appendChild(titleOverlay);
+        }
+
+        domainDiv.appendChild(canvas); // Must go before the subdomain container
+
+        // Add cert tiles - only show certs that directly belong to this subdomain
+        const subCerts = certs.filter(cert => cert.subdomainId === sub.subdomainId);
+
+        // Skip rendering this subdomain if it has no visible certs
+        const visibleSubCerts = subCerts.filter(cert => 
+          filterState.visibleVendorIds.includes(cert.vendorId)
+        );
+
+        if (visibleSubCerts.length === 0) return;
+
+        const tileRowMap = {}; // { skillRow: currentTileIndex }
+        const columnOrders = {}; // { skillRow: [col1, col2, ...] }
+
+        // Render all certs that belong to this subdomain
+        subCerts.forEach(cert => {
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata; // Used for grid positioning only
+
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 0;
+            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+          }
+          const colIndex = tileRowMap[skillRow];
+          const colStart = columnOrders[skillRow][colIndex];
+          tileRowMap[skillRow]++;
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = colStart;
+          subDiv.appendChild(tile);
+        });
+
+        domainDiv.appendChild(subDiv);
+      });
+
+      // Wrap domain content in a domain-wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'domain-wrapper';
+      wrapper.appendChild(domainDiv);                     // Add the domain container
+      // Create the domain title
+      const domainTitle = document.createElement('div');
+      domainTitle.className = 'domain-title';
+      domainTitle.textContent = domain.domainShortName;
+      domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
+      domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
+      domainTitle.style.textAlign = 'center';
+      domainTitle.style.width = '100%';
+      domainTitle.style.whiteSpace = 'normal';
+      domainTitle.style.wordBreak = 'normal';
+      domainTitle.style.overflowWrap = 'break-word';
+      domainTitle.style.textOverflow = 'unset';
+      domainTitle.style.overflow = 'visible';
+
+      const domainUnit = document.createElement('div');
+      domainUnit.className = 'domain-unit';
+      domainUnit.style.gridColumnStart = domain.domainDisplayOrder + 1;
+      domainUnit.appendChild(domainTitle);
+      domainUnit.appendChild(wrapper);
+
+      roadmapEl.appendChild(domainUnit);
+
+      });
+    }
+
+    function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
+      const tile = document.createElement('a');
+      tile.href = cert.certUrl;
+      tile.target = '_blank';
+      tile.className = 'cert-tile';
+      tile.textContent = cert.certTileLabel;
+      tile.title = cert.certTooltip;
+      tile.setAttribute('data-cert-id', cert.certId);
+      tile.setAttribute('data-domain-id', cert.domainId);
+      if (cert.subdomainId) {
+        tile.setAttribute('data-subdomain-id', cert.subdomainId);
+      }
+
+      tile.style.gridRowStart = cert.certSkillStrata;
+
+      const domain = domains.find(d => d.domainId === cert.domainId);
+      const teamRoles = domain.teamRoles || {};
+      const role = cert.teamRole || "DefaultTeam";
+      const domainIdLower = cert.domainId.toLowerCase();
+
+      if (teamRoles[role] && teamRoles[role].tileColor) {
+        const colorVar = teamRoles[role].tileColor;
+        const borderVar = teamRoles[role].borderColor || `--domain-${domainIdLower}-dark`;
+
+        tile.style.backgroundColor = `var(${colorVar})`;
+        tile.style.borderColor = `var(${borderVar})`;
+        tile.style.color = 'white';
+      } else {
+        tile.style.backgroundColor = `var(--domain-${domainIdLower})`;
+        tile.style.borderColor = `var(--domain-${domainIdLower}-dark)`;
+        tile.style.color = 'white';
+      }
+
+      return tile;
+    }
+
+    function updateDomainCenteringClass(domains) {
+      const body = document.body;
+      const allDomainIds = domains.map(d => d.domainId);
+      const visible = filterState.visibleDomains;
+
+      const isSubset = visible.length > 0 && visible.length < allDomainIds.length;
+
+      if (isSubset) {
+        body.classList.add("center-domains");
+      } else {
+        body.classList.remove("center-domains");
+      }
+    }
+
+    // Master redraw function — uses current filterState to rebuild roadmap
+    function applyFiltersAndRedraw() {
+      console.log("Redrawing with current filters:", filterState);
+
+      const roadmapEl = document.getElementById("roadmap");
+      roadmapEl.innerHTML = ""; // Clear all roadmap content
+
+      updateDomainCenteringClass(window.loadedDomains);
+
+      drawRoadmap(
+        window.loadedDomains,
+        window.loadedSubdomains,
+        window.loadedCerts
+      );
+    }
+
+    Promise.all([
+      loadJSON('./data/domains.json'),
+      loadJSON('./data/subdomains.json'),
+      loadJSON('./data/certs.json'),
+      loadJSON('./data/vendors.json'),
+    ]).then(([domains, subdomains, certs, vendors]) => {
+
+      // Seed the filter state with all available domains and vendors
+      filterState.visibleDomains = domains.map(d => d.domainId);
+      // Populate domain checkboxes
+      const domainCheckboxes = document.getElementById("domain-checkboxes");
+      domains.forEach(domain => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `domain-${domain.domainId}`;
+        checkbox.value = domain.domainId;
+        checkbox.checked = true;
+
+        const label = document.createElement("label");
+        label.htmlFor = checkbox.id;
+        label.style.marginRight = "1.5vmax";
+        label.appendChild(checkbox);
+        label.append(` ${domain.domainShortName}`);
+
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            if (!filterState.visibleDomains.includes(domain.domainId)) {
+              filterState.visibleDomains.push(domain.domainId);
+            }
+          } else {
+            filterState.visibleDomains = filterState.visibleDomains.filter(id => id !== domain.domainId);
+          }
+          applyFiltersAndRedraw();
+        });
+
+        domainCheckboxes.appendChild(label);
+      });
+      // Normalize vendors before doing anything else
+      const normalizedVendors = vendors.map(v => ({
+        vendorId: v.id,
+        vendorLabel: v.name
+      }));
+      window.normalizedVendors = normalizedVendors;
+
+      // Seed visibleVendorIds with the correct values
+      filterState.visibleVendorIds = normalizedVendors.map(v => v.vendorId);
+
+      // Store for later use (for debugging or reuse)
+      window.loadedDomains = domains;
+      window.loadedSubdomains = subdomains;
+      window.loadedCerts = certs;
+      window.loadedVendors = vendors;          // Raw: [{ id, name }]
+      window.normalizedVendors = normalizedVendors;  // Normalized: [{ vendorId, vendorLabel }]
+
+      const vendorSelect = document.getElementById("vendor-filter");
+
+      // Clear old options (if any)
+      vendorSelect.innerHTML = "";
+
+      // “All Vendors” option — FIRST and selected by default
+        const allOption = document.createElement("option");
+        allOption.value = "__ALL__";
+        allOption.textContent = "All Vendors";
+        allOption.selected = true; // default on page load
+        vendorSelect.appendChild(allOption);
+
+        // “None” option — SECOND
+        const noneOption = document.createElement("option");
+        noneOption.value = "__NONE__";
+        noneOption.textContent = "None";
+        vendorSelect.appendChild(noneOption);
+
+      // Populate from normalizedVendors
+      normalizedVendors.forEach(vendor => {
+        const option = document.createElement("option");
+        option.value = vendor.vendorId;
+        option.textContent = vendor.vendorLabel || vendor.vendorId;
+        vendorSelect.appendChild(option);
+      });
+
+      // Initial draw
+      applyFiltersAndRedraw();
+    });
+
+
+
+    // Vendor dropdown
+    document.getElementById("vendor-filter").addEventListener("change", (e) => {
+    const selected = e.target.value;
+
+    if (selected === "__NONE__") {
+      // “None” was selected → show zero certs
+      filterState.visibleVendorIds = [];
+    } else if (selected === "__ALL__") {
+      // “All Vendors” was selected → reset to every vendorId
+      filterState.visibleVendorIds = window.normalizedVendors.map(v => v.vendorId);
+    } else {
+      // A single vendorId was selected → filter to just that one
+      filterState.visibleVendorIds = [selected];
+    }
+
+    applyFiltersAndRedraw();
+  });
+
+  // 🌙 Dark Mode Checkbox Listener
+  const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
+  darkModeCheckbox.addEventListener("change", () => {
+    document.body.classList.toggle("dark-mode", darkModeCheckbox.checked);
+  });
+
+</script>
 
 </script>
