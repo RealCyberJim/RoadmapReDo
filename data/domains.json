@@ -1,7 +1,7 @@
 [
     {
-      "domainId": "Skill",
-      "domainShortName": "Skill Level",
+      "domainId": "SKL",
+      "domainShortName": "Skil",
       "domainDisplayOrder": 2,
       "gridColumnSpan": 1,
       "domainDescription": "The skill level domain indicates the approximate level of proficiency for each certification.",
