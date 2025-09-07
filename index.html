@@ -68,6 +68,9 @@
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
       --domain-ops-light: var(--color-red-light);
+      --domain-skl: var(null); /* Placeholder for skill domain */
+      --domain-skl-dark: var(null); /* Placeholder for skill domain */
+      --domain-skl-light: var(null); /* Placeholder for skill domain */
 
       --domain-title-height: 2.8vmax;
     }
@@ -212,16 +215,16 @@
     }
 
     .domain-unit {
-      display: flex;
-      flex-direction: column;
+      display: flex; /* New addition */
+      flex-direction: column; /* Stack items vertically */
       width: min-content; /* Shrink to fit content */
-      align-items: center;
-      gap: 0.1vmax;
-      flex: 0 0 auto;
-      margin: 0;
-      padding: 0;
-      min-width: 0;
-      max-width: none;
+      align-items: center; /* Center items horizontally */
+      gap: 0.1vmax; /* Space between items */
+      flex: 0 0 auto; /* Prevent shrinking */
+      margin: 0; /* No margin to prevent shifting */
+      padding: 0; /* No padding to prevent shifting */
+      min-width: 0; /* Prevent overflow */
+      max-width: none; /* Prevent overflow */
     }
 
     .domain-title {
@@ -250,15 +253,15 @@
       justify-content: center;      /* Horizontally center text */
     }
 
-    .domain-wrapper {
-      display: grid;
+    .domain-wrapper { /* Wrapper for domain title + domain container */
+      display: grid;            /* Grid for title + domain container */
       grid-template-rows: auto 1fr; /* Title row on top, domain container below */
       width: max-content;           /* Shrinks to fit the domain */
-      margin: 0;
-      padding: 0;
+      margin: 0;                   /* No margin to prevent shifting */
+      padding: 0;                  /* No padding to prevent shifting */
     }
     
-    .subdomain-container {
+    .subdomain-container {     /* Container for each subdomain within a domain */
       position: relative;             /* Enables absolute positioning for title */
       padding-top: 1vmax;             /* Reserve space for overlay title */
       padding: 0.1vmax 0.1vmax 0.1vmax 0.1vmax;
