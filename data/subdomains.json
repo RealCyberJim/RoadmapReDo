@@ -1,4 +1,40 @@
 [
+      {
+      "subdomainId": "SKL_Expert",
+      "subdomainShortName": "Expert",
+      "subdomainLongName": "Expert",
+      "tooltip": "Skills at the expert level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-red-light",
+      "gridRowStart": 1,
+      "gridRowSpan": 1,
+      "gridColumnStart": 1,
+      "gridColumnSpan": 8
+    },
+    {
+      "subdomainId": "SKL_Intermediate",
+      "subdomainShortName": "Intermediate",
+      "subdomainLongName": "Intermediate",
+      "tooltip": "Skills at the intermediate level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-orange-light",
+      "gridRowStart": 1,
+      "gridRowSpan": 1,
+      "gridColumnStart": 9,
+      "gridColumnSpan": 12
+    },
+    {
+      "subdomainId": "SKL_Beginner",
+      "subdomainShortName": "Beginner",
+      "subdomainLongName": "Beginner",
+      "tooltip": "Skills at the beginner level.",
+      "domainId": "SKL",
+      "subdomainColor": "--color-green-light",
+      "gridRowStart": 1,
+      "gridRowSpan": 1,
+      "gridColumnStart": 21,
+      "gridColumnSpan": 27
+    },
     {
       "subdomainId": "ENG_cloudSysOps",
       "subdomainShortName": "Cloud/SysOps",
