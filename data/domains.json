@@ -4,7 +4,7 @@
       "domainShortName": "",
       "domainDisplayOrder": 1,
       "gridColumnSpan": 1,
-      "domainDescription": "The skill level domain indicates the approximate level of proficiency for each certification.",
+      "domainDescription": "The skill level domain approximates the level of proficiency for each certification.",
       "teamRoles": {
         "DefaultTeam": {
           "tileColor": "",
