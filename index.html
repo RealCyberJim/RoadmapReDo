@@ -115,20 +115,13 @@
       color: var(--domain-ops-dark);
     }
 
-    .skill-unit .domain-title {
-      background-color: transparent !important;
-      color: transparent !important;
-      border-color: transparent !important;
-    }
-
     /* BEGIN Dark Mode Styling */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
     }
 
-    body.dark-mode .domain-container,
-    body.dark-mode .skill-container {
+    body.dark-mode .domain-container {
       background-color: #1e1e1e;
       border-color: #444;
     }
@@ -139,8 +132,7 @@
       color: white;
     }
 
-    body.dark-mode .subdomain-canvas,
-    body.dark-mode .skill-strata-canvas {
+    body.dark-mode .subdomain-canvas {
       opacity: 0.15; /* Subtle, but visible on dark bg */
     }
 
@@ -407,25 +399,6 @@
     </select>
 </label>
 </div>
-<div>
-  </label>
-  <!-- Skill Level Filter STARTS HERE, OUTSIDE the <select> -->
-  <span style="margin-left: 2vmax;">
-    Skill Level Filter:
-    <label style="margin-left: 0.5vmax;">
-      <input type="checkbox" id="skill-filter-beginner" checked />
-      Beginner
-    </label>
-    <label style="margin-left: 0.5vmax;">
-      <input type="checkbox" id="skill-filter-intermediate" checked />
-      Intermediate
-    </label>
-    <label style="margin-left: 0.5vmax;">
-      <input type="checkbox" id="skill-filter-expert" checked />
-      Expert
-    </label>
-  </span>
-</div>
 <!-- Dynamic Domain Filter Checkboxes -->
 <div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
 
@@ -493,17 +466,6 @@ const CROSS_CERT_MODE_ENABLED = false;
       return null;
     }
 
-    // Skill level checkbox listeners
-    ["beginner", "intermediate", "expert"].forEach(level => {
-      const checkbox = document.getElementById(`skill-filter-${level}`);
-      if (checkbox) {
-        checkbox.addEventListener("change", (e) => {
-          filterState.visibleSkillStrata[level] = e.target.checked;
-          applyFiltersAndRedraw();
-        });
-      }
-    });
-  
     async function loadJSON(path) {
       const res = await fetch(path);
       return res.json();
@@ -698,57 +660,7 @@ const CROSS_CERT_MODE_ENABLED = false;
       });
       prunedGridRows = prunedGridRows.trim(); // Remove trailing space
 
-      // Skill unit (outermost container)
-      const skillUnit = document.createElement("div");
-      skillUnit.className = "domain-unit skill-unit";
-      skillUnit.style.gridColumnStart = 1;
-
-      // Skill heading — structurally identical to domain-title
-      const skillHeading = document.createElement("div");
-      skillHeading.className = "domain-title skill-heading";
-      skillHeading.textContent = ""; // Optionally use "Skill Level" or similar
-
-      // Skill wrapper — structurally identical to .domain-wrapper
-      const skillWrapper = document.createElement("div");
-      skillWrapper.className = "skill-wrapper";
-
-      // Skill container — structurally identical to .domain-container
-      const skillContainer = document.createElement("div");
-      skillContainer.className = "skill-container";
-      skillContainer.style.display = 'grid'; // REQUIRED for gridTemplateRows to work
-      // Use the same prunedGridRows as domain-side to enforce parity
-      // TEMP: disable for debug: skillContainer.style.gridTemplateRows = prunedGridRows;
-      skillContainer.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
-
-      // Add the container inside the wrapper (same as domain logic)
-      skillWrapper.appendChild(skillContainer);
-
-      skillStrata.forEach(level => {
-        const levelId = level.id;
-
-        const shouldRender =
-          filterState.visibleSkillStrata[levelId] &&
-          usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
-
-        if (!shouldRender) return;
-
-        // Conditionally draw skill canvas layer only if any rows in range are visible
-        const canvasHasVisibleRow = usedSkillRowsHasRowsInRange(level.start, level.end, usedSkillRows);
-        if (canvasHasVisibleRow && filterState.visibleSkillStrata[levelId]) {
-          const canvas = document.createElement("div");
-          canvas.className = `subskill-canvas ${levelId}`;
-          canvas.style.gridRow = `${level.start} / ${level.end + 1}`;
-          canvas.style.backgroundColor = `var(${level.color})`;
-          skillContainer.appendChild(canvas);
-        }
-
-        // Subskill container (wraps canvas, label, and placeholders)
-        const subskillContainer = document.createElement("div");
-        subskillContainer.className = `subskill-container ${levelId}`;
-        subskillContainer.style.gridRow = `${level.start} / ${level.end + 1}`;
-        subskillContainer.style.gridColumnStart = 1;
-
-
+      
         /*
         // This canvas layer is currently inert and not used visually,
         // Visual canvas layer
@@ -761,44 +673,6 @@ const CROSS_CERT_MODE_ENABLED = false;
         canvas.style.pointerEvents = "none";
         canvas.style.borderRadius = "0.25vmax";
         */
-
-
-        // Skill label
-        const label = document.createElement("div");
-        label.className = `skill-strata-label ${levelId}`;
-        label.textContent = level.label;
-        label.style.gridRow = `${level.start} / ${level.end + 1}`;
-        label.style.color = `var(${level.labelColor})`;
-
-        // Placeholder group
-        const placeholderWrapper = document.createElement("div");
-        placeholderWrapper.className = `skill-placeholder-wrapper ${levelId}`;
-        placeholderWrapper.style.gridRow = `${level.start} / ${level.end + 1}`;
-        placeholderWrapper.style.gridColumnStart = 1;
-
-        for (let row = level.start; row <= level.end; row++) {
-          if (!usedSkillRows.has(row)) continue;
-
-          const placeholder = document.createElement("div");
-          placeholder.className = "skill-placeholder";
-          placeholder.style.gridRowStart = row;
-          placeholder.style.gridColumnStart = 1;
-          placeholderWrapper.appendChild(placeholder);
-        }
-
-        // Build container
-        subskillContainer.appendChild(label);
-        subskillContainer.appendChild(placeholderWrapper);
-        skillContainer.appendChild(subskillContainer);
-      });
-
-      // Assemble full structure
-      skillWrapper.appendChild(skillContainer);
-      skillUnit.appendChild(skillHeading);
-      skillUnit.appendChild(skillWrapper);
-
-      // Prepend skill unit before any domain units
-      roadmapEl.prepend(skillUnit);
 
       domains
         .filter(domain => filterState.visibleDomains.includes(domain.domainId))
