@@ -576,12 +576,19 @@
           : `var(${sub.subdomainColor || '--domain-default-white'})`;
         
                 
-        // Subdomain title overlay (only if not an unspecialized container)
+        // Subdomain title overlay handling
         if (!sub.subdomainId.endsWith('_unspec')) {
           const titleOverlay = document.createElement('div');
           titleOverlay.className = 'subdomain-title';
           titleOverlay.textContent = sub.subdomainShortName;
-          subDiv.appendChild(titleOverlay);
+          
+          if (domain.domainId === 'SKL') {
+            // SKL domain titles go in the subDiv for rotated vertical display
+            subDiv.appendChild(titleOverlay);
+          } else {
+            // Non-SKL domain titles go on the canvas background
+            canvas.appendChild(titleOverlay);
+          }
         }
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
