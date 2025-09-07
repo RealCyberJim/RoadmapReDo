@@ -9,7 +9,7 @@
       "gridRowStart": 1,
       "gridRowSpan": 8,
       "gridColumnStart": 1,
-      "gridColumnSpan": 0.75
+      "gridColumnSpan": 1
     },
     {
       "subdomainId": "SKL_Intermediate",
@@ -21,7 +21,7 @@
       "gridRowStart": 9,
       "gridRowSpan": 12,
       "gridColumnStart": 1,
-      "gridColumnSpan": 0.75
+      "gridColumnSpan": 1
     },
     {
       "subdomainId": "SKL_Beginner",
@@ -33,7 +33,7 @@
       "gridRowStart": 21,
       "gridRowSpan": 8,
       "gridColumnStart": 1,
-      "gridColumnSpan": 0.75
+      "gridColumnSpan": 1
     },
     {
       "subdomainId": "ENG_cloudSysOps",
