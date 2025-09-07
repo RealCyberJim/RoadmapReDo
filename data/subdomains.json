@@ -17,7 +17,7 @@
       "subdomainLongName": "Intermediate",
       "tooltip": "Skills at the intermediate level.",
       "domainId": "SKL",
-      "subdomainColor": "--color-orange-light",
+      "subdomainColor": "--color-yellow-light",
       "gridRowStart": 9,
       "gridRowSpan": 12,
       "gridColumnStart": 1,
@@ -31,7 +31,7 @@
       "domainId": "SKL",
       "subdomainColor": "--color-green-light",
       "gridRowStart": 21,
-      "gridRowSpan": 27,
+      "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 1
     },
