@@ -68,9 +68,7 @@
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
       --domain-ops-light: var(--color-red-light);
-      --domain-skl: var(null); /* Placeholder for skill domain */
-      --domain-skl-dark: var(null); /* Placeholder for skill domain */
-      --domain-skl-light: var(null); /* Placeholder for skill domain */
+
 
       --domain-title-height: 2.8vmax;
     }
@@ -84,7 +82,7 @@
     .domain-TST     { border-color: var(--domain-tst); }
     .domain-SOF     { border-color: var(--domain-sof); }
     .domain-OPS     { border-color: var(--domain-ops); }
-    .domain-SKL     { border-color: var(--domain-skl); }  /* Placeholder for skill domain */
+    .domain-SKL     { border-color: transparent; }  /* No border for skill domain */
 
     .domain-NET .domain-title {
       background-color: var(--domain-net-light);
@@ -119,9 +117,10 @@
       color: var(--domain-ops-dark);
     }
     .domain-SKL .domain-title {
-      background-color: var(--domain-skl-light);
-      color: var(--domain-skl-dark);
-    }  /* Placeholder for skill domain */
+      background-color: transparent;
+      color: var(--color-black-dark);
+      border: none;
+    }  /* No background or border for skill domain title */
 
     /* BEGIN Dark Mode Styling */
     body.dark-mode {
