@@ -42,7 +42,7 @@
       "tooltip": "Security for cloud infrastructure, virtualization, cloud platforms, and systems operations including deployment pipelines and infrastructure-as-code.",
       "domainId": "ENG",
       "subdomainColor": "--color-orange-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 3
@@ -66,7 +66,7 @@
       "tooltip": "Focuses on securing industrial control systems (ICS), SCADA networks, and connected IoT devices against cyber threats and vulnerabilities.",
       "domainId": "ENG",
       "subdomainColor": "--color-orange-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 5,
       "gridColumnSpan": 1
@@ -78,7 +78,7 @@
       "tooltip": "Covers GRC frameworks, compliance requirements, security policy design, and risk management methodologies.",
       "domainId": "RSK",
       "subdomainColor": "--color-black-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 3,
       "gridColumnSpan": 4
@@ -90,7 +90,7 @@
       "tooltip": "Techniques and tools for collecting, preserving, and analyzing digital evidence from systems and networks.",
       "domainId": "OPS",
       "subdomainColor": "--color-blue-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 3,
       "gridColumnSpan": 2
@@ -102,7 +102,7 @@
       "tooltip": "Processes, tools, and methodologies for identifying, analyzing, and responding to cybersecurity incidents.",
       "domainId": "OPS",
       "subdomainColor": "--color-blue-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 5,
       "gridColumnSpan": 2
@@ -114,7 +114,7 @@
       "tooltip": "Offensive security testing to identify vulnerabilities through simulated cyberattacks and red team exercises.",
       "domainId": "OPS",
       "subdomainColor": "--color-red-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 7,
       "gridColumnSpan": 4
@@ -126,7 +126,7 @@
       "tooltip": "Developing and using exploits to test the resilience and security of applications and systems.",
       "domainId": "OPS",
       "subdomainColor": "--color-red-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 11,
       "gridColumnSpan": 2
@@ -138,7 +138,7 @@
       "tooltip": null,
       "domainId": "NET",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 3
@@ -150,7 +150,7 @@
       "tooltip": null,
       "domainId": "IAM",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
@@ -162,7 +162,7 @@
       "tooltip": null,
       "domainId": "ENG",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 6,
       "gridColumnSpan": 1
@@ -174,7 +174,7 @@
       "tooltip": null,
       "domainId": "AST",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
@@ -186,7 +186,7 @@
       "tooltip": null,
       "domainId": "RSK",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
@@ -198,7 +198,7 @@
       "tooltip": null,
       "domainId": "RSK",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 7,
       "gridColumnSpan": 2
@@ -210,7 +210,7 @@
       "tooltip": null,
       "domainId": "TST",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
@@ -222,7 +222,7 @@
       "tooltip": null,
       "domainId": "SOF",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
@@ -234,7 +234,7 @@
       "tooltip": null,
       "domainId": "OPS",
       "subdomainColor": "--domain-default-white",
-      "gridRowStart": 2,
+      "gridRowStart": 1,
       "gridRowSpan": 28,
       "gridColumnStart": 1,
       "gridColumnSpan": 2
