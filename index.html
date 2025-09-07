@@ -259,8 +259,12 @@
       height: var(--domain-title-height);
       margin: 0;
       line-height: 1;
-      border: 2px solid;         /* Default border for all domain titles */
-      border-radius: 0.25vmax;
+    }
+
+    /* Standard domain titles */
+    .domain-container:not(.domain-SKL) .domain-title {
+        border: 2px solid;
+        border-radius: 0.25vmax;
     }
 
     /* Skill domain title styles - removes border */
