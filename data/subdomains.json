@@ -7,7 +7,7 @@
       "domainId": "SKL",
       "subdomainColor": "--color-red-light",
       "gridRowStart": 1,
-      "gridRowSpan": 7,
+      "gridRowSpan": 8
       "gridColumnStart": 1,
       "gridColumnSpan": 1 
     },
@@ -54,7 +54,7 @@
       "tooltip": "Security topics related to Unix, Linux, and other *nix-based operating systems, including hardening, access controls, and secure configurations.",
       "domainId": "ENG",
       "subdomainColor": "--color-orange-light",
-      "gridRowStart": 2,
+      "gridRowStart": 1
       "gridRowSpan": 28,
       "gridColumnStart": 4,
       "gridColumnSpan": 1
