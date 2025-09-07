@@ -259,11 +259,7 @@
       height: var(--domain-title-height);
       margin: 0;
       line-height: 1;
-    }
-
-    /* Standard domain title styles - applied by default */
-    .domain-container .domain-title {
-      border: 2px solid;
+      border: 2px solid;         /* Default border for all domain titles */
       border-radius: 0.25vmax;
       background-color: transparent;
       white-space: normal;
@@ -272,25 +268,10 @@
       overflow: visible;
     }
 
-    /* Skill domain title styles - overrides standard styles */
+    /* Skill domain title styles - removes border */
     .domain-SKL .domain-title {
       border: none;
       background: none;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(270deg);
-      transform-origin: center;
-      white-space: nowrap;
-      font-weight: bold;
-    }
-      pointer-events: none;     /* Disable pointer events */
-      line-height: 1;              /* Tighter line spacing */
-      margin: 0; /* No margin to prevent shifting */
-      height: var(--domain-title-height); /* Fixed height to prevent shifting */
-      display: flex;           /* Use flexbox for centering */
-      align-items: center;             /* center text to vertically */
-      justify-content: center;      /* Horizontally center text */
     }
 
     .domain-wrapper { /* Wrapper for domain title + domain container */
