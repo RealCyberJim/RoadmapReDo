@@ -576,12 +576,19 @@
           : `var(${sub.subdomainColor || '--domain-default-white'})`;
         
                 
-        // Subdomain title overlay (only if not an unspecialized container)
+        // Subdomain title overlay handling
         if (!sub.subdomainId.endsWith('_unspec')) {
           const titleOverlay = document.createElement('div');
           titleOverlay.className = 'subdomain-title';
           titleOverlay.textContent = sub.subdomainShortName;
-          subDiv.appendChild(titleOverlay);
+          
+          if (domain.domainId === 'SKL') {
+            // SKL domain titles go in the subDiv for rotated vertical display
+            subDiv.appendChild(titleOverlay);
+          } else {
+            // Non-SKL domain titles go on the canvas background
+            canvas.appendChild(titleOverlay);
+          }
         }
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
@@ -624,7 +631,7 @@
 
       // Wrap domain content in a domain-wrapper
       const wrapper = document.createElement('div');
-      wrapper.className = 'domain-wrapper';
+      wrapper.className = `domain-wrapper domain-${domain.domainId}`;  // Add domain class here
       wrapper.appendChild(domainDiv);                     // Add the domain container
       // Create the domain title
       const domainTitle = document.createElement('div');
@@ -634,11 +641,6 @@
       domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
       domainTitle.style.textAlign = 'center';
       domainTitle.style.width = '100%';
-      domainTitle.style.whiteSpace = 'normal';
-      domainTitle.style.wordBreak = 'normal';
-      domainTitle.style.overflowWrap = 'break-word';
-      domainTitle.style.textOverflow = 'unset';
-      domainTitle.style.overflow = 'visible';
 
       const domainUnit = document.createElement('div');
       domainUnit.className = 'domain-unit';
