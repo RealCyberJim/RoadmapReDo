@@ -206,16 +206,27 @@
 
     /* Domain Container Styles */
     
+    /* Base domain container - structural styles */
     .domain-container {
-      background: white;
       position: relative;
+      display: grid;
+      grid-template-rows: repeat(28, 1.5vmax);
+      gap: 0.1vmax;
+      width: max-content;
+      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax;
+    }
+
+    /* Standard domain visual styles */
+    .domain-container:not(.domain-SKL) {
+      background: white;
       border: 2px solid;
       border-radius: 0.25vmax;
-      padding: 0.05vmax 0.2vmax 0.2vmax 0.2vmax;
-      display: grid;
-      grid-template-rows: repeat(28, 1.5vmax); /* 1 top buffer for subdomain title + 27 skill rows + 1 bottom buffer */
-      gap: 0.1vmax; /* Matches tile and container gutter */
-      width: max-content; /* Prevent full-width stretching */
+    }
+
+    /* Skill domain specific styles */
+    .domain-SKL.domain-container {
+      background: transparent;
+      border: none;
     }
 
     .domain-unit {
@@ -231,23 +242,48 @@
       max-width: none; /* Prevent overflow */
     }
 
+    /* Base domain title - structural styles */
     .domain-title {
-      border: 2px solid; /* Matches domain border */
-      background-color: transparent; /* Transparent to show underlying canvas */
-      border-radius: 0.25vmax; /* Matches domain border radius */
-      z-index: 3;              /* Above canvas, below tiles */
-      text-align: center;             /* Center text horizontally */
-      width: 100%;                  /* Full width of the domain box */
-      box-sizing: border-box;       /* Include padding in width */
-      font-weight: 500;               /* Bold for emphasis */
-      font-size: 0.8vmax;            /* Responsive scaling */
-      padding: 0.2vmax 0 0.2vmax 0; /* Top + Bottom: keeps descenders from touching */
-      white-space: normal;           /* Allow multi-line if needed */
-      word-break: normal;            /* Never break mid-word */
-      text-overflow: unset;      /* Prevent ellipsis */
-      overflow-wrap: break-word;     /* Wrap only at spaces */
-      overflow: visible;             /* Allow overflow */
-      max-width: 100%;               /* Constrain to domain box */
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.8vmax;
+      padding: 0.2vmax 0;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--domain-title-height);
+      margin: 0;
+      line-height: 1;
+    }
+
+    /* Standard domain title styles - applied by default */
+    .domain-container .domain-title {
+      border: 2px solid;
+      border-radius: 0.25vmax;
+      background-color: transparent;
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: break-word;
+      overflow: visible;
+    }
+
+    /* Skill domain title styles - overrides standard styles */
+    .domain-SKL .domain-title {
+      border: none;
+      background: none;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(270deg);
+      transform-origin: center;
+      white-space: nowrap;
+      font-weight: bold;
+    }
       pointer-events: none;     /* Disable pointer events */
       line-height: 1;              /* Tighter line spacing */
       margin: 0; /* No margin to prevent shifting */
