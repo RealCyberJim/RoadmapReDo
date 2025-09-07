@@ -1,15 +1,15 @@
 [
     {
       "domainId": "SKL",
-      "domainShortName": "Skil",
+      "domainShortName": "",
       "domainDisplayOrder": 1,
       "gridColumnSpan": 1,
       "domainDescription": "The skill level domain indicates the approximate level of proficiency for each certification.",
       "teamRoles": {
         "DefaultTeam": {
-          "tileColor": "--domain-net",
-          "tileColorLight": "--domain-net-light",
-          "borderColor": "--domain-net-dark"
+          "tileColor": "",
+          "tileColorLight": "",
+          "borderColor": ""
         }
       }
     },
