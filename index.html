@@ -528,6 +528,7 @@
         .forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
+
         domainDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
 
@@ -550,7 +551,6 @@
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
         subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
-        subDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
 
         subDiv.style.gridColumnStart = sub.gridColumnStart;
         subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
@@ -576,19 +576,12 @@
           : `var(${sub.subdomainColor || '--domain-default-white'})`;
         
                 
-        // Subdomain title overlay handling
+        // Subdomain title overlay (only if not an unspecialized container)
         if (!sub.subdomainId.endsWith('_unspec')) {
           const titleOverlay = document.createElement('div');
           titleOverlay.className = 'subdomain-title';
           titleOverlay.textContent = sub.subdomainShortName;
-          
-          if (domain.domainId === 'SKL') {
-            // SKL domain titles go in the subDiv for rotated vertical display
-            subDiv.appendChild(titleOverlay);
-          } else {
-            // Non-SKL domain titles go on the canvas background
-            canvas.appendChild(titleOverlay);
-          }
+          subDiv.appendChild(titleOverlay);
         }
 
         domainDiv.appendChild(canvas); // Must go before the subdomain container
@@ -631,7 +624,7 @@
 
       // Wrap domain content in a domain-wrapper
       const wrapper = document.createElement('div');
-      wrapper.className = `domain-wrapper domain-${domain.domainId}`;  // Add domain class here
+      wrapper.className = 'domain-wrapper';
       wrapper.appendChild(domainDiv);                     // Add the domain container
       // Create the domain title
       const domainTitle = document.createElement('div');
@@ -641,6 +634,11 @@
       domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
       domainTitle.style.textAlign = 'center';
       domainTitle.style.width = '100%';
+      domainTitle.style.whiteSpace = 'normal';
+      domainTitle.style.wordBreak = 'normal';
+      domainTitle.style.overflowWrap = 'break-word';
+      domainTitle.style.textOverflow = 'unset';
+      domainTitle.style.overflow = 'visible';
 
       const domainUnit = document.createElement('div');
       domainUnit.className = 'domain-unit';
