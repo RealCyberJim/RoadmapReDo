@@ -669,12 +669,13 @@ const CROSS_CERT_MODE_ENABLED = false;
     }
 
     /**
-     * Draws the roadmap with domains, subdomains, and certifications.
+     * Draws the roadmap with domains, subdomains, certifications, and skill strata.
      * @param {Array} domains - List of domain objects.
      * @param {Array} subdomains - List of subdomain objects.
      * @param {Array} certs - List of certification objects.
+     * @param {Array} skillStrata - List of skill strata objects.
      */
-    function drawRoadmap(domains, subdomains, certs) {
+    function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
 
@@ -1086,7 +1087,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       drawRoadmap(
         window.loadedDomains,
         window.loadedSubdomains,
-        window.loadedCerts
+        window.loadedCerts,
+        window.loadedSkillStrata
       );
     }
 
@@ -1095,7 +1097,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       loadJSON('./data/subdomains.json'),
       loadJSON('./data/certs.json'),
       loadJSON('./data/vendors.json'),
-    ]).then(([domains, subdomains, certs, vendors]) => {
+      loadJSON('./data/skillstrata.json'),
+    ]).then(([domains, subdomains, certs, vendors, skillStrata]) => {
 
       // Seed the filter state with all available domains and vendors
       filterState.visibleDomains = domains.map(d => d.domainId);
@@ -1140,6 +1143,7 @@ const CROSS_CERT_MODE_ENABLED = false;
       // Store for later use (for debugging or reuse)
       window.loadedDomains = domains;
       window.loadedSubdomains = subdomains;
+      window.loadedSkillStrata = skillStrata;
       window.loadedCerts = certs;
       window.loadedVendors = vendors;          // Raw: [{ id, name }]
       window.normalizedVendors = normalizedVendors;  // Normalized: [{ vendorId, vendorLabel }]
