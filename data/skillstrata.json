@@ -1,0 +1,26 @@
+[
+  {
+    "id": "expert",
+    "label": "Expert",
+    "start": 2,
+    "end": 8,
+    "color": "--color-red-light",
+    "labelColor": "--color-red-dark"
+  },
+  {
+    "id": "intermediate",
+    "label": "Intermediate",
+    "start": 9,
+    "end": 20,
+    "color": "--color-yellow-light",
+    "labelColor": "--color-yellow-dark"
+  },
+  {
+    "id": "beginner",
+    "label": "Beginner",
+    "start": 21,
+    "end": 27,
+    "color": "--color-green-light",
+    "labelColor": "--color-green-dark"
+  }
+]

@@ -1,34 +1,10 @@
 [
   { 
-  "skillTileId": "E7", 
+  "skillTileId": "E2", 
   "subskillId": "SKL_unspec",
-  "label": "E7", 
+  "label": "E2", 
   "level": "expert", 
   "row": 2, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "E6", 
-  "subskillId": "SKL_unspec",
-  "label": "E6", 
-  "level": "expert", 
-  "row": 3, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "E5", 
-  "subskillId": "SKL_unspec",
-  "label": "E5", 
-  "level": "expert", 
-  "row": 4, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "E4", 
-  "subskillId": "SKL_unspec",
-  "label": "E4", 
-  "level": "expert", 
-  "row": 5, 
   "columnSpan": 1 
 },
   { 
@@ -36,47 +12,47 @@
   "subskillId": "SKL_unspec",
   "label": "E3", 
   "level": "expert", 
+  "row": 3, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "E4", 
+  "subskillId": "SKL_unspec",
+  "label": "E4", 
+  "level": "expert", 
+  "row": 4, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "E5", 
+  "subskillId": "SKL_unspec",
+  "label": "E5", 
+  "level": "expert", 
+  "row": 5, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "E6", 
+  "subskillId": "SKL_unspec",
+  "label": "E6", 
+  "level": "expert", 
   "row": 6, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "E2", 
+  "skillTileId": "E7", 
   "subskillId": "SKL_unspec",
-  "label": "E2", 
+  "label": "E7", 
   "level": "expert", 
   "row": 7, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "E1", 
+  "skillTileId": "E8", 
   "subskillId": "SKL_unspec",
-  "label": "E1", 
+  "label": "E8", 
   "level": "expert", 
   "row": 8, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "I12", 
-  "subskillId": "SKL_unspec",
-  "label": "I12", 
-  "level": "intermediate", 
-  "row": 9, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "I11", 
-  "subskillId": "SKL_unspec",
-  "label": "I11", 
-  "level": "intermediate", 
-  "row": 10, 
-  "columnSpan": 1 
-},
-  { 
-  "skillTileId": "I10", 
-  "subskillId": "SKL_unspec",
-  "label": "I10", 
-  "level": "intermediate", 
-  "row": 11, 
   "columnSpan": 1 
 },
   { 
@@ -84,125 +60,149 @@
   "subskillId": "SKL_unspec",
   "label": "I9", 
   "level": "intermediate", 
+  "row": 9, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "I10", 
+  "subskillId": "SKL_unspec",
+  "label": "I10", 
+  "level": "intermediate", 
+  "row": 10, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "I11", 
+  "subskillId": "SKL_unspec",
+  "label": "I11", 
+  "level": "intermediate", 
+  "row": 11, 
+  "columnSpan": 1 
+},
+  { 
+  "skillTileId": "I12", 
+  "subskillId": "SKL_unspec",
+  "label": "I12", 
+  "level": "intermediate", 
   "row": 12, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I8", 
+  "skillTileId": "I13", 
   "subskillId": "SKL_unspec",
-  "label": "I8", 
+  "label": "I13", 
   "level": "intermediate", 
   "row": 13, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I7", 
+  "skillTileId": "I14", 
   "subskillId": "SKL_unspec",
-  "label": "I7", 
+  "label": "I14", 
   "level": "intermediate", 
   "row": 14, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I6", 
+  "skillTileId": "I15", 
   "subskillId": "SKL_unspec",
-  "label": "I6", 
+  "label": "I15", 
   "level": "intermediate", 
   "row": 15, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I5", 
+  "skillTileId": "I16", 
   "subskillId": "SKL_unspec",
-  "label": "I5", 
+  "label": "I16", 
   "level": "intermediate", 
   "row": 16, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I4", 
+  "skillTileId": "I17", 
   "subskillId": "SKL_unspec",
-  "label": "I4", 
+  "label": "I17", 
   "level": "intermediate", 
   "row": 17, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I3", 
+  "skillTileId": "I18", 
   "subskillId": "SKL_unspec",
-  "label": "I3", 
+  "label": "I18", 
   "level": "intermediate", 
   "row": 18, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I2", 
+  "skillTileId": "I19", 
   "subskillId": "SKL_unspec",
-  "label": "I2", 
+  "label": "I19", 
   "level": "intermediate", 
   "row": 19, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "I1", 
+  "skillTileId": "I20", 
   "subskillId": "SKL_unspec",
-  "label": "I1", 
+  "label": "I20", 
   "level": "intermediate", 
   "row": 20, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B7", 
+  "skillTileId": "B21", 
   "subskillId": "SKL_unspec",
-  "label": "B7", 
+  "label": "B21", 
   "level": "beginner", 
   "row": 21, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B6", 
+  "skillTileId": "B22", 
   "subskillId": "SKL_unspec",
-  "label": "B6", 
+  "label": "B22", 
   "level": "beginner", 
   "row": 22, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B5", 
+  "skillTileId": "B23", 
   "subskillId": "SKL_unspec",
-  "label": "B5", 
+  "label": "B23", 
   "level": "beginner", 
   "row": 23, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B4", 
+  "skillTileId": "B24", 
   "subskillId": "SKL_unspec",
-  "label": "B4", 
+  "label": "B24", 
   "level": "beginner", 
   "row": 24, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B3", 
+  "skillTileId": "B25", 
   "subskillId": "SKL_unspec",
-  "label": "B3", 
+  "label": "B25", 
   "level": "beginner", 
   "row": 25, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B2", 
+  "skillTileId": "B26", 
   "subskillId": "SKL_unspec",
-  "label": "B2", 
+  "label": "B26", 
   "level": "beginner", 
   "row": 26, 
   "columnSpan": 1 
 },
   { 
-  "skillTileId": "B1", 
+  "skillTileId": "B27", 
   "subskillId": "SKL_unspec",
-  "label": "B1", 
+  "label": "B27", 
   "level": "beginner", 
   "row": 27, 
   "columnSpan": 1 
