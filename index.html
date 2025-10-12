@@ -2,7 +2,7 @@
   <style>
     /* 03JUN2025 2316 - last commit prior to skill level refactor*/
     :root {
-      --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
+      /* --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
 
       
 
@@ -71,6 +71,27 @@
 
 
       --domain-title-height: 2.8vmax;
+
+      /* Scalable sizing tokens */
+      --filter-font-size: clamp(0.55rem, 0.9vmax, 14px);
+      --filter-label-font-size: var(--filter-font-size);
+      --pill-font-size: var(--filter-font-size);
+      --pill-padding-y: clamp(0.18rem, 0.32vmax, 0.5rem);
+      --pill-padding-x: clamp(0.5rem, 0.72vmax, 0.9rem);
+      --pill-radius: 1vmax;
+      --pill-border-width: 2px;
+      --filter-line-gap: 0.55vmax;
+      --filter-stack-vertical-gap: 0.45vmax;
+      --filter-label-offset: 0.08vmax;
+      --vendor-select-padding-y: clamp(0.18rem, 0.28vmax, 0.4rem);
+      --vendor-select-padding-x: clamp(0.45rem, 0.6vmax, 0.8rem);
+      --vendor-select-radius: 0.55vmax;
+      --focus-ring: 0 0 0 0.15vmax rgba(0,0,0,0.25);
+      --filter-row-vertical-padding: 0.18vmax;
+      --filter-interline-spacing: 0.4vmax;
+      /* Track width tokens (Option C) */
+      --cert-track-width: 2.3vmax;   /* Standard certification tile track */
+      --skill-track-width: 0.6vmax;  /* Narrow skill column track */
     }
 
     /* Domain-specific border and title coloring */
@@ -145,6 +166,155 @@
 
     /* END Dark Mode Styling */
 
+    /* Domain Filter Pills */
+    #domain-checkboxes.domain-filter-bar {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.35vmax;
+      padding: 0.25vmax 0.4vmax;
+      overflow-x: auto; /* allow horizontal scroll instead of wrapping */
+      overflow-y: hidden;
+      white-space: nowrap; /* prevent wrapping */
+      scrollbar-width: thin;
+    }
+    #domain-checkboxes.domain-filter-bar::-webkit-scrollbar {
+      height: 0.4vmax;
+    }
+    #domain-checkboxes.domain-filter-bar::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+    #domain-checkboxes.domain-filter-bar::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 1vmax;
+    }
+    /* Unified pill styling */
+    .domain-filter-tile, .strata-filter-tile, .mode-filter-tile {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--pill-font-size);
+      font-weight: 600;
+      padding: var(--pill-padding-y) var(--pill-padding-x);
+      border-radius: var(--pill-radius);
+      border: var(--pill-border-width) solid transparent;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1;
+      letter-spacing: 0.5px;
+      transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+      box-shadow: 0 0 0 0 rgba(0,0,0,0);
+      white-space: nowrap;
+    }
+    .domain-filter-tile:focus-within, .strata-filter-tile:focus-within, .mode-filter-tile:focus-within {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+    .domain-filter-tile input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .domain-filter-tile.is-off {
+      background: transparent !important;
+      color: #555 !important;
+      border-style: dashed !important;
+      opacity: 0.55;
+    }
+    .domain-filter-tile:hover {
+      filter: brightness(1.06);
+    }
+    body.dark-mode .domain-filter-tile.is-off {
+      color: #aaa !important;
+      border-color: #555 !important;
+    }
+    body.dark-mode .domain-filter-tile {
+      box-shadow: none;
+    }
+    /* Filter stack (separate rows) */
+  .filter-stack { display:flex; flex-direction:column; gap:var(--filter-stack-vertical-gap); padding:0.4vmax 1vmax 0.3vmax 2vmax; box-sizing:border-box; }
+  .filter-stack-header { display:flex; align-items:center; gap:0.5vmax; font-size:0.7vmax; font-weight:600; cursor:pointer; user-select:none; padding:0.25vmax 0.4vmax; width:max-content; border-radius:0.4vmax; transition:background-color .18s; }
+  .filter-stack-header:hover { background:rgba(0,0,0,0.05); }
+  body.dark-mode .filter-stack-header:hover { background:rgba(255,255,255,0.08); }
+  .filter-stack-arrow { display:inline-block; transition:transform .2s ease; font-size:0.8vmax; }
+  .filter-stack.collapsed .filter-stack-arrow { transform:rotate(-90deg); }
+  .filter-line { display:flex; flex-direction:row; align-items:center; gap:var(--filter-line-gap); flex-wrap:nowrap; padding: var(--filter-row-vertical-padding) 0; }
+    .filter-line .domain-filter-bar,
+    .filter-line .strata-filter-bar,
+    .filter-line .mode-filter-bar { display:flex; flex-direction:row; align-items:stretch; max-width:min(80vw,140vmax); }
+  .mode-filter-bar { display:flex; gap:0.35vmax; align-items:center; padding:0.25vmax 0.4vmax; margin-top: var(--filter-interline-spacing); }
+  /* .mode-filter-tile intentionally inherits unified pill styling */
+    .mode-filter-tile input { position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
+    .mode-filter-tile.is-off { background:transparent !important; color:#555 !important; border-style:dashed !important; opacity:.55; }
+    .mode-filter-tile:hover { filter:brightness(1.08); }
+    body.dark-mode .mode-filter-tile.is-off { color:#aaa !important; border-color:#555 !important; }
+    :root { --mode-dark-light: var(--color-black-light); --mode-dark-dark: var(--color-black-dark); }
+
+    /* Unified secondary filter row (Domain + Skill) */
+    .filter-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.9vmax 1vmax; /* row gap then column gap */
+      padding: 0.4vmax 1vmax 0.2vmax 2vmax; /* left padding aligns with vendor filter */
+      box-sizing: border-box;
+    }
+    .filter-label {
+      font-size: var(--filter-label-font-size);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      white-space: nowrap;
+      position: relative;
+      top: var(--filter-label-offset);
+    }
+    .filter-row .domain-filter-bar,
+    .filter-row .strata-filter-bar {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      max-width: min(70vw, 120vmax);
+    }
+
+    /* Strata Filter Pills (mirrors domain pill styling, slightly different colors) */
+    #strata-pills.strata-filter-bar {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.35vmax;
+      padding: 0.25vmax 0.4vmax;
+      margin-top: var(--filter-interline-spacing);
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+    #strata-pills.strata-filter-bar::-webkit-scrollbar { height: 0.35vmax; }
+    #strata-pills.strata-filter-bar::-webkit-scrollbar-track { background: #f4f4f4; }
+    #strata-pills.strata-filter-bar::-webkit-scrollbar-thumb { background: #bdbdbd; border-radius: 1vmax; }
+  /* .strata-filter-tile intentionally inherits unified pill styling */
+    .strata-filter-tile input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; width:0; height:0; }
+    .strata-filter-tile.is-off { background: transparent !important; color: #555 !important; border-style: dashed !important; opacity: 0.55; }
+    .strata-filter-tile:hover { filter: brightness(1.08); }
+    body.dark-mode .strata-filter-tile.is-off { color: #aaa !important; border-color: #555 !important; }
+    body.dark-mode .strata-filter-tile { box-shadow: none; }
+    /* Level-specific color tokens (light/dark pairs) */
+    :root {
+      /* Strata color mapping updated: Beginner=Green, Intermediate=Yellow, Expert=Red */
+      --strata-beginner-light: var(--color-green-light);
+      --strata-beginner-dark: var(--color-green-dark);
+      --strata-intermediate-light: var(--color-yellow-light);
+      --strata-intermediate-dark: var(--color-yellow-dark);
+      --strata-expert-light: var(--color-red-light);
+      --strata-expert-dark: var(--color-red-dark);
+    }
+
     html, body {
       overflow-x: hidden;
       overflow-y: auto;
@@ -189,7 +359,7 @@
       align-items: start;
       flex-direction: row;
       flex-wrap: nowrap;
-      gap: 0.2vmax;
+      gap: 0.12vmax; /* tightened from 0.2vmax */
       grid-column: 2;
       grid-row: 2;
       max-height: none;
@@ -198,6 +368,29 @@
       overflow-y: visible;
       padding-right: 0.2vmax;
     }
+
+    /* Skill Strata Rail */
+  :root { --skill-rail-width: 0.9vmax; --skill-rail-gap-right: 0.25vmax; --skill-row-height: 1.5vmax; --skill-label-font-size: 0.55vmax; --skill-rail-top-offset: var(--domain-title-height); }
+  #skill-strata-rail { position: relative; display: block; flex: 0 0 var(--skill-rail-width); width: var(--skill-rail-width); margin-right: var(--skill-rail-gap-right); min-height: calc(var(--skill-rail-top-offset) + 28 * var(--skill-row-height)); }
+    .skill-strata-segment { position: absolute; left:0; width:100%; box-sizing:border-box; border:1px solid transparent; display:flex; align-items:center; justify-content:center; padding:0.12vmax 0.1vmax; overflow:hidden; border-radius:0.25vmax; transition: opacity .18s ease, filter .18s ease; }
+    .skill-strata-segment .strata-label { font-size: var(--skill-label-font-size); font-weight:700; letter-spacing:0.05vmax; text-transform:uppercase; line-height:1; transform:rotate(270deg); white-space:nowrap; color:inherit; pointer-events:none; }
+    .skill-strata-segment.strata-expert { background: var(--color-red-light); border-color: var(--color-red-dark); color: var(--color-red-dark); }
+    .skill-strata-segment.strata-intermediate { background: var(--color-yellow-light); border-color: var(--color-yellow-dark); color: var(--color-yellow-dark); }
+    .skill-strata-segment.strata-beginner { background: var(--color-green-light); border-color: var(--color-green-dark); color: var(--color-green-dark); }
+    .skill-strata-segment.is-dimmed { opacity:0.25; filter:grayscale(60%) brightness(1.05); }
+    body.dark-mode .skill-strata-segment { filter:brightness(.95) contrast(1.05); }
+    body.dark-mode .skill-strata-segment.is-dimmed { opacity:0.28; filter:grayscale(65%) brightness(1.15); }
+  /* Learner Mode status styling */
+  .cert-tile.cert-status-achieved { outline: 2px solid limegreen; outline-offset: -2px; color: limegreen !important; border-color: limegreen !important; }
+  .cert-tile.cert-status-planned { outline: 2px dashed darkgoldenrod; outline-offset: -2px; color: darkgoldenrod !important; border-color: darkgoldenrod !important; }
+  .learner-popup-menu { position:absolute; z-index:9999; background:#ffffff; border:1px solid #ccc; border-radius:0.45vmax; padding:0.3vmax 0; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.18); font-size:0.6vmax; min-width:8vmax; }
+  body.dark-mode .learner-popup-menu { background:#222; border-color:#444; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.55); }
+  .learner-popup-menu button { display:block; width:100%; background:none; border:none; text-align:left; padding:0.38vmax 0.65vmax; cursor:pointer; font-size:inherit; font-family:inherit; color:#222; letter-spacing:0.3px; }
+  body.dark-mode .learner-popup-menu button { color:#eee; }
+  .learner-popup-menu button:hover, .learner-popup-menu button:focus { background:rgba(0,0,0,0.07); outline:none; }
+  body.dark-mode .learner-popup-menu button:hover, body.dark-mode .learner-popup-menu button:focus { background:rgba(255,255,255,0.12); }
+  .learner-popup-menu button.danger { color:#a00; }
+  .learner-popup-menu button.danger:hover { background:rgba(255,0,0,0.12); }
     
     body.center-domains #roadmap {
       justify-content: center; /* Override to center */
@@ -227,6 +420,7 @@
     .domain-SKL.domain-container {
       background: transparent;
       border: none;
+      padding: 0.02vmax 0.05vmax 0.08vmax 0.05vmax; /* tighter padding */
     }
 
     .domain-unit {
@@ -261,6 +455,11 @@
       line-height: 1;
       border: 2px solid;         /* Default border for all domain titles */
       border-radius: 0.25vmax;
+    }
+
+    /* Ensure skill domain title has no border even though it is not a descendant of .domain-SKL container */
+    .domain-title.domain-SKL { /* Domain class is added directly to the title element in JS */
+      border: none;
     }
 
     /* Skill domain title styles - removes border */
@@ -361,7 +560,7 @@
     /* .skill-tile — Atomic visual unit for skill strata placement */
     /* Mirrors .cert-tile in layout, with half width for vertical labeling */
     .skill-tile {                  /* Skill tile for skill column */
-      width: 1.15vmax;             /* Half width of .cert-tile */
+      width: 0.6vmax;              /* Narrowed per user request (was 1.15vmax) */
       height: 1.5vmax;             /* Match tile row height */
       display: flex;
       align-items: center;         /* Vertically center label inside tile */
@@ -422,25 +621,60 @@
 </div>
 
 
-<!-- Dark Mode Toggle -->
-<div id="dark-mode-toggle" style="padding: 0.5vmax; font-size: 0.75vmax;">
-  <label>
-    <input type="checkbox" id="dark-mode-checkbox" />
-    Enable Dark Mode
-  </label>
+<!-- Dark Mode checkbox removed; now part of Display Mode pill group -->
+
+
+<!-- Vendor filter moved into collapsible stack -->
+
+
+<!-- Domain / Skill / Mode Filters (stacked rows, collapsible) -->
+<div id="filters-secondary" class="filter-stack">
+  <div class="filter-stack-header" id="filter-stack-toggle" role="button" tabindex="0" aria-expanded="true" aria-controls="filter-stack-lines">
+    <span class="filter-stack-arrow" id="filter-stack-arrow">▾</span>
+    <span class="filter-stack-title">Filters</span>
+  </div>
+  <div id="filter-stack-lines">
+    <div class="filter-line">
+      <span class="filter-label">Vendor:</span>
+  <label class="vendor-filter-wrapper">
+        <select id="vendor-filter" style="font-size:0.9vmax; padding:0.18vmax 0.5vmax; border-radius:0.5vmax;">
+          <option value="__ALL__">All Vendors</option>
+        </select>
+      </label>
+    </div>
+    <div class="filter-line">
+      <span class="filter-label">Domain Filter:</span>
+      <div id="domain-checkboxes" class="domain-filter-bar"></div>
+    </div>
+    <div class="filter-line">
+      <span class="filter-label">Skill Level:</span>
+      <div id="strata-pills" class="strata-filter-bar" aria-label="Skill Level Toggles"></div>
+    </div>
+    <div class="filter-line">
+      <span class="filter-label">Display Mode:</span>
+      <div id="mode-pills" class="mode-filter-bar" aria-label="Display Mode"></div>
+    </div>
+  </div>
 </div>
-<div>
-  <label style="margin-left: 2vmax;">
-    Vendor Filter:
-    <select id="vendor-filter">
-      <option value="__ALL__">All Vendors</option>
-    </select>
-</label>
-</div>
-<!-- Dynamic Domain Filter Checkboxes -->
-<div id="domain-checkboxes" style="padding: 0.5vmax 0; font-size: 0.75vmax;"></div>
 
   <h1>Security Certification Roadmap</h1>
+<!-- Learner Mode Collapsible Stack -->
+<div id="learner-stack" class="filter-stack">
+  <div class="filter-stack-header" id="learner-stack-toggle" role="button" tabindex="0" aria-expanded="true" aria-controls="learner-stack-lines">
+    <span class="filter-stack-arrow" id="learner-stack-arrow">▾</span>
+    <span class="filter-stack-title">Options</span>
+  </div>
+  <div id="learner-stack-lines">
+    <div class="filter-line" style="align-items:center;">
+      <span class="filter-label">Learner Mode:</span>
+      <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
+    </div>
+    <div class="filter-line" style="align-items:center;">
+      <span class="filter-label">Actions:</span>
+      <div id="learner-action-pills" class="mode-filter-bar" aria-label="Learner Actions"></div>
+    </div>
+  </div>
+</div>
 <div id="roadmap-flex">
   <div id="roadmap-wrapper">
     <div id="roadmap">
@@ -481,8 +715,175 @@ const CROSS_CERT_MODE_ENABLED = false;
         beginner: true,
         intermediate: true,
         expert: true
-      }
+      },
+      darkMode: false,
+      filtersExpanded: true,
+      selectedVendorMode: '__ALL__', // tracks raw selection value for vendor dropdown
+      learnerMode: false,
+      learnerEdit: false,
+      learnerStackExpanded: true
     };
+
+    // When true, the roadmap keeps all skill strata row heights constant (no vertical compression)
+    // so tiles retain their absolute vertical positioning numbers even when filters hide most tiles.
+    // Set to false to restore previous behavior where unused rows collapse (causing upward shift).
+    const PRESERVE_SKILL_ROW_LAYOUT = true;
+
+    // ================================
+    // Persistence Utilities (localStorage)
+    // ================================
+  /*
+   * PERSISTENCE OVERVIEW
+   * --------------------------------------------------
+   * We persist a subset of the user's UI preferences and filter selections
+   * in localStorage so that returning sessions reopen with the same view.
+   * This is a lightweight, client-only approach intended as a stepping stone
+   * toward a future authenticated profile (OAuth or similar) where this
+   * state would instead round-trip to a backend service.
+   *
+   * VERSIONING
+   * The STORAGE_KEY includes a semantic suffix ("v1"). Increment this when
+   * the shape of the stored snapshot changes incompatibly (e.g., rename keys,
+   * remove fields, or change types). For additive changes (adding new keys),
+   * you generally DO NOT need to bump the version—just supply defaults and
+   * merge new values on load. For breaking changes, bump to v2 and optionally
+   * implement a one-time migration reading the old key.
+   *
+   * WHAT WE STORE NOW
+   *  - visibleDomains: [String] domain IDs the user has left checked
+   *  - visibleVendorIds: [String] vendor IDs actively included (redundant but
+   *    kept for explicitness; can be recomputed but storing simplifies future diffs)
+   *  - selectedVendorMode: '__ALL__' | '__NONE__' | vendorId (raw dropdown value)
+   *  - darkMode: Boolean
+   *  - visibleSkillStrata: { beginner, intermediate, expert } (future-proof)
+   *
+   * FIELDS TO ADD LATER (GUIDANCE)
+   *  - compressSkillRows (Boolean)
+   *  - showCrossDomainCerts / showCrossSubdomainCerts / showOnlyCrossCerts
+   *  - userSortPreference (if manual reordering is introduced)
+   *  - layoutVersion (if tile sizing changes and you need migrations)
+   *
+   * ADDING A NEW FIELD
+   * 1. Add default to filterState.
+   * 2. Include in saveState() snapshot.
+   * 3. Merge in applyPersistedState() if present.
+   * 4. Trigger saveStateDebounced() whenever it changes.
+   *
+   * MIGRATION STRATEGY (WHEN MOVING TO SERVER PROFILES)
+   *  - Encapsulate save/load behind an abstraction (e.g., persistence.get() / set()).
+   *  - Replace localStorage calls with fetch/POST once auth is active.
+   *  - Maintain localStorage as an offline cache fallback until confidence.
+   *  - Introduce a 'lastUpdated' timestamp to support conflict resolution.
+   *
+   * PRIVACY NOTE
+   * Only non-sensitive UI preference data is stored. Do NOT persist secrets
+   * or PII here. Future authenticated sync should still treat these fields as
+   * user-owned preferences.
+   *
+   * ERROR HANDLING
+   * All reads/writes wrapped in try/catch. Failures degrade gracefully with
+   * console warnings. If storage quota is exceeded, user simply loses persistence.
+   *
+   * RESET INSTRUCTIONS
+   *   localStorage.removeItem('roadmapState.v1');
+   * or programmatically call a future resetPreferences() helper.
+   *
+   * PERFORMANCE
+   * Saves are debounced (300ms) to prevent thrashing; snapshot is small.
+   *
+   * TESTING / VERIFICATION STEPS
+   *  - Change vendor filter, toggle dark mode, uncheck a domain → refresh → state persists.
+   *  - Corrupt the stored JSON manually → load should warn and ignore.
+   */
+    const STORAGE_KEY = 'roadmapState.v1'; // increment suffix if structure changes
+  const LEARNER_STATE_KEY = 'learnerCertStatuses.v1';
+
+    function saveState() {
+      try {
+        const snapshot = {
+          visibleDomains: filterState.visibleDomains,
+          visibleVendorIds: filterState.visibleVendorIds,
+          selectedVendorMode: filterState.selectedVendorMode,
+          darkMode: filterState.darkMode,
+          visibleSkillStrata: filterState.visibleSkillStrata,
+          filtersExpanded: filterState.filtersExpanded
+          , learnerMode: filterState.learnerMode
+          , learnerEdit: filterState.learnerEdit
+          , learnerStackExpanded: filterState.learnerStackExpanded
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+      } catch (e) {
+        console.warn('Could not save roadmap state:', e);
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        console.warn('Could not load roadmap state:', e);
+        return null;
+      }
+    }
+
+    // Debounce helper to avoid excessive writes
+    function debounce(fn, delay=250) {
+      let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
+    }
+    const saveStateDebounced = debounce(saveState, 300);
+
+    function applyPersistedState(persisted, domains, normalizedVendors) {
+      if (!persisted) return;
+
+      // Domains: only keep those that still exist
+      if (Array.isArray(persisted.visibleDomains)) {
+        const domainSet = new Set(domains.map(d=>d.domainId));
+        filterState.visibleDomains = persisted.visibleDomains.filter(d=>domainSet.has(d));
+      }
+
+      // Vendors
+      if (Array.isArray(persisted.visibleVendorIds)) {
+        filterState.visibleVendorIds = persisted.visibleVendorIds.filter(v=>normalizedVendors.some(n=>n.vendorId===v));
+      }
+      if (persisted.selectedVendorMode) {
+        filterState.selectedVendorMode = persisted.selectedVendorMode;
+      }
+
+      // Dark mode
+      if (typeof persisted.darkMode === 'boolean') {
+        filterState.darkMode = persisted.darkMode;
+        document.body.classList.toggle('dark-mode', filterState.darkMode);
+        const dmToggle = document.getElementById('dark-mode-checkbox');
+        if (dmToggle) dmToggle.checked = filterState.darkMode;
+      }
+
+      // Skill strata visibility (future-proof if you add toggles)
+      if (persisted.visibleSkillStrata) {
+        filterState.visibleSkillStrata = { ...filterState.visibleSkillStrata, ...persisted.visibleSkillStrata };
+      }
+      if (typeof persisted.filtersExpanded === 'boolean') {
+        filterState.filtersExpanded = persisted.filtersExpanded;
+      }
+      if (typeof persisted.learnerMode === 'boolean') {
+        filterState.learnerMode = persisted.learnerMode;
+      }
+      if (typeof persisted.learnerEdit === 'boolean') {
+        filterState.learnerEdit = persisted.learnerEdit;
+      }
+      if (typeof persisted.learnerStackExpanded === 'boolean') {
+        filterState.learnerStackExpanded = persisted.learnerStackExpanded;
+      }
+    }
+
+    function loadLearnerStatuses(){
+      try { const raw = localStorage.getItem(LEARNER_STATE_KEY); if(!raw) return {}; return JSON.parse(raw); } catch(e){ console.warn('Could not load learner statuses:', e); return {}; }
+    }
+    function saveLearnerStatuses(){
+      try { localStorage.setItem(LEARNER_STATE_KEY, JSON.stringify(window.learnerCertStatuses)); } catch(e){ console.warn('Could not save learner statuses:', e); }
+    }
+    window.learnerCertStatuses = loadLearnerStatuses();
 
     //
     function getVisibleSkillRowCount(skillStrataList, filterState) {
@@ -671,32 +1072,141 @@ const CROSS_CERT_MODE_ENABLED = false;
      * @param {Array} certs - List of certification objects.
      * @param {Array} skillStrata - List of skill strata objects.
      */
+    function buildSkillStrataRail(skillStrata) {
+      const rail = document.getElementById('skill-strata-rail');
+      if (!rail) return;
+      rail.innerHTML = '';
+  const totalRows = 28; // could derive dynamically later
+  rail.style.minHeight = `calc(var(--skill-rail-top-offset) + ${totalRows} * var(--skill-row-height))`;
+  const topOffset = getComputedStyle(document.documentElement).getPropertyValue('--skill-rail-top-offset').trim() || '0px';
+      skillStrata.forEach(level => {
+        const seg = document.createElement('div');
+        seg.className = `skill-strata-segment strata-${level.id}`;
+        seg.setAttribute('data-strata-id', level.id);
+        const label = document.createElement('span');
+        label.className = 'strata-label';
+        label.textContent = level.label.toUpperCase();
+        seg.appendChild(label);
+        const rowSpan = (level.end - level.start + 1);
+  seg.style.top = `calc(${topOffset} + (${level.start - 1} * var(--skill-row-height)))`;
+        seg.style.height = `calc(${rowSpan} * var(--skill-row-height))`;
+        rail.appendChild(seg);
+      });
+      updateStrataRailVisibility();
+    }
+
+    /**
+     * Global calibration: derive a single baseline top and uniform row height
+     * from currently rendered cert tiles, then place EVERY strata segment from
+     * that math. This keeps alignment stable even when an entire level is
+     * filtered (dimmed) and its tiles are absent.
+     * Strategy:
+     *  1. Collect all cert tiles having data-skill-row.
+     *  2. Build ordered list of distinct row indices present.
+     *  3. Compute rowHeight as the median delta between consecutive row tops (robust vs. outliers).
+     *  4. Use the smallest observed row as baselineRow with its top offset.
+     *  5. For each segment (level.start..level.end) set:
+     *       top = baselineTop + (level.start - baselineRow) * rowHeight
+     *       height = (rowSpan) * rowHeight
+     *  6. Fallback: if fewer than 2 rows measurable, skip (CSS calc() stays).
+     */
+    function calibrateSkillStrataSegments(skillStrata) {
+      const rail = document.getElementById('skill-strata-rail');
+      if (!rail) return;
+      const railRect = rail.getBoundingClientRect();
+      const tiles = Array.from(document.querySelectorAll('.cert-tile[data-skill-row]'));
+      if (tiles.length === 0) return; // nothing to measure
+
+      // Map row -> first tile element
+      const rowMap = new Map();
+      tiles.forEach(t => {
+        const row = parseInt(t.getAttribute('data-skill-row'), 10);
+        if (!rowMap.has(row)) rowMap.set(row, t);
+      });
+      const measuredRows = Array.from(rowMap.keys()).sort((a,b)=>a-b);
+      if (measuredRows.length < 2) return; // need at least two for a delta
+
+      // Collect top positions
+      const rowTops = measuredRows.map(r => ({
+        row: r,
+        top: rowMap.get(r).getBoundingClientRect().top
+      }));
+      // Compute deltas between consecutive rows
+      const deltas = [];
+      for (let i=1;i<rowTops.length;i++) {
+        const d = rowTops[i].top - rowTops[i-1].top;
+        if (d>0) deltas.push(d);
+      }
+      if (!deltas.length) return;
+      // Median delta for robustness
+      deltas.sort((a,b)=>a-b);
+      const mid = Math.floor(deltas.length/2);
+      const rowHeightPx = deltas.length % 2 ? deltas[mid] : (deltas[mid-1]+deltas[mid])/2;
+
+      const baselineRow = rowTops[0].row;
+      const baselineTopPx = rowTops[0].top - railRect.top; // relative to rail
+
+      skillStrata.forEach(level => {
+        const seg = rail.querySelector(`.skill-strata-segment.strata-${level.id}`);
+        if (!seg) return;
+        const rowSpan = level.end - level.start + 1;
+        const topPx = baselineTopPx + (level.start - baselineRow) * rowHeightPx;
+        const heightPx = rowSpan * rowHeightPx;
+        if (heightPx > 0) {
+          seg.style.top = `${topPx}px`;
+          seg.style.height = `${heightPx}px`;
+          seg.classList.add('is-calibrated');
+        }
+      });
+    }
+
+    function updateStrataRailVisibility() {
+      const rail = document.getElementById('skill-strata-rail');
+      if (!rail) return;
+      rail.querySelectorAll('.skill-strata-segment').forEach(seg => {
+        const id = seg.getAttribute('data-strata-id');
+        if (!filterState.visibleSkillStrata[id]) seg.classList.add('is-dimmed');
+        else seg.classList.remove('is-dimmed');
+      });
+    }
+
     function drawRoadmap(domains, subdomains, certs, skillStrata) {
 
       const roadmapEl = document.getElementById('roadmap');
+      // Ensure rail placeholder exists at start
+      let rail = document.getElementById('skill-strata-rail');
+      if (!rail) {
+        rail = document.createElement('div');
+        rail.id = 'skill-strata-rail';
+        rail.setAttribute('role','img');
+        rail.setAttribute('aria-label','Skill levels: Expert, Intermediate, Beginner');
+      }
+      // Always (re)insert rail as first child
+      if (roadmapEl.firstChild !== rail) {
+        roadmapEl.insertBefore(rail, roadmapEl.firstChild);
+      }
+      let gridRowsTemplate;
 
-
-      // Determine which skill rows are actually used (1–28) by any visible cert
-      const usedSkillRows = new Set();
-
-      certs.forEach(cert => {
-        const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
-        if (!filterState.visibleSkillStrata[certLevel]) return;
-        if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
-
-        usedSkillRows.add(cert.certSkillStrata);
-      });
-
-      // Build a dynamic grid-template-rows string using actual skillStrata ranges
-      let prunedGridRows = '';
-      skillStrata.forEach(level => {
-        const start = level.start;
-        const end = level.end;
-        for (let row = start; row <= end; row++) {
-          prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
-        }
-      });
-      prunedGridRows = prunedGridRows.trim(); // Remove trailing space
+      if (PRESERVE_SKILL_ROW_LAYOUT) {
+        // Keep a fixed height for all 28 rows so row indices remain visually stable.
+        gridRowsTemplate = 'repeat(28, 1.5vmax)';
+      } else {
+        // Previous behavior: collapse unused rows to 0 height (causes vertical shifting on filter changes).
+        const usedSkillRows = new Set();
+        certs.forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+            if (!filterState.visibleSkillStrata[certLevel]) return;
+            if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+            usedSkillRows.add(cert.certSkillStrata);
+        });
+        let prunedGridRows = '';
+        skillStrata.forEach(level => {
+          for (let row = level.start; row <= level.end; row++) {
+            prunedGridRows += usedSkillRows.has(row) ? '1.5vmax ' : '0 ';
+          }
+        });
+        gridRowsTemplate = prunedGridRows.trim();
+      }
 
       
         /*
@@ -712,14 +1222,16 @@ const CROSS_CERT_MODE_ENABLED = false;
         canvas.style.borderRadius = "0.25vmax";
         */
 
+      buildSkillStrataRail(skillStrata);
+
       domains
+        .filter(domain => domain.domainId !== 'SKL')
         .filter(domain => filterState.visibleDomains.includes(domain.domainId))
         .forEach(domain => {
         const domainDiv = document.createElement('div');
         domainDiv.classList.add('domain-container', `domain-${domain.domainId}`);
-        // TEMP: disable for debug: domainDiv.style.gridTemplateRows = prunedGridRows;
-        // TEMP: force full 28 visible rows for layout testing
-        domainDiv.style.gridTemplateRows = 'repeat(28, 1.5vmax)';
+  // Use unified grid row template (either fixed or pruned based on flag)
+  domainDiv.style.gridTemplateRows = gridRowsTemplate;
         domainDiv.style.borderColor = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
 
         // Dynamically set how wide the domain container should be
@@ -741,7 +1253,7 @@ const CROSS_CERT_MODE_ENABLED = false;
         subDiv.classList.add('subdomain-container', `subdomain-${sub.subdomainId}`);
 
         subDiv.style.gridTemplateColumns = `repeat(${sub.gridColumnSpan}, 2.3vmax)`;
-        subDiv.style.gridTemplateRows = prunedGridRows;
+  subDiv.style.gridTemplateRows = gridRowsTemplate;
 
         subDiv.style.gridColumnStart = sub.gridColumnStart;
         subDiv.style.gridColumnEnd = `span ${sub.gridColumnSpan}`;
@@ -879,6 +1391,7 @@ const CROSS_CERT_MODE_ENABLED = false;
           tileRowMap[finalKey] = true;
 
           subDiv.appendChild(tile);
+          applyLearnerStatusToTile(tile);
         });
 
         // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
@@ -937,6 +1450,7 @@ const CROSS_CERT_MODE_ENABLED = false;
                 tile.style.gridRowStart = skillRow;
                 tile.style.gridColumnStart = col;
                 subDiv.appendChild(tile);
+                applyLearnerStatusToTile(tile);
                 return;
               }
             }
@@ -973,6 +1487,7 @@ const CROSS_CERT_MODE_ENABLED = false;
           tile.style.gridRowStart = skillRow;
           tile.style.gridColumnStart = fallbackCol;
           subDiv.appendChild(tile);
+          applyLearnerStatusToTile(tile);
         });
 
         domainDiv.appendChild(subDiv);
@@ -985,6 +1500,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       // Create the domain title
       const domainTitle = document.createElement('div');
       domainTitle.className = 'domain-title';
+  // Add domain class directly so domain-specific CSS (including SKL override) can target it
+  domainTitle.classList.add(`domain-${domain.domainId}`);
       domainTitle.textContent = domain.domainShortName;
       domainTitle.style.color = `var(--domain-${domain.domainId.toLowerCase()}-dark)`;
       domainTitle.style.backgroundColor = `var(--domain-${domain.domainId.toLowerCase()}-light)`;
@@ -1005,6 +1522,9 @@ const CROSS_CERT_MODE_ENABLED = false;
       roadmapEl.appendChild(domainUnit);
 
       });
+      // After all tiles are laid out, perform pixel alignment calibration
+      requestAnimationFrame(() => calibrateSkillStrataSegments(skillStrata));
+      requestAnimationFrame(()=>{ document.querySelectorAll('.cert-tile').forEach(applyLearnerStatusToTile); });
     }
 
     function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
@@ -1019,6 +1539,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       if (cert.subdomainId) {
         tile.setAttribute('data-subdomain-id', cert.subdomainId);
       }
+      // Add a stable data attribute for the skill row to support alignment calibration
+      tile.setAttribute('data-skill-row', cert.certSkillStrata);
 
       tile.style.gridRowStart = cert.certSkillStrata;
 
@@ -1055,6 +1577,16 @@ const CROSS_CERT_MODE_ENABLED = false;
       }
 
       return tile;
+    }
+
+    // Apply learner status classes (achieved / planned)
+    function applyLearnerStatusToTile(tile){
+      if(!tile) return;
+      tile.classList.remove('cert-status-achieved','cert-status-planned');
+      const cid = tile.getAttribute('data-cert-id');
+      const status = window.learnerCertStatuses && window.learnerCertStatuses[cid];
+      if(status==='achieved') tile.classList.add('cert-status-achieved');
+      else if(status==='planned') tile.classList.add('cert-status-planned');
     }
 
     function updateDomainCenteringClass(domains) {
@@ -1096,36 +1628,61 @@ const CROSS_CERT_MODE_ENABLED = false;
       loadJSON('./data/skillstrata.json'),
     ]).then(([domains, subdomains, certs, vendors, skillStrata]) => {
 
-      // Seed the filter state with all available domains and vendors
-      filterState.visibleDomains = domains.map(d => d.domainId);
-      // Populate domain checkboxes
+  // Seed visible domains excluding SKL (skill rail now replaces it)
+  filterState.visibleDomains = domains.filter(d=> d.domainId !== 'SKL').map(d => d.domainId);
+      // Populate domain checkboxes (styled as pill tiles)
       const domainCheckboxes = document.getElementById("domain-checkboxes");
-      domains.forEach(domain => {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = `domain-${domain.domainId}`;
-        checkbox.value = domain.domainId;
-        checkbox.checked = true;
+      domainCheckboxes.classList.add('domain-filter-bar');
+      domains.filter(d=> d.domainId !== 'SKL')
+        .slice()
+        .sort((a,b)=> a.domainDisplayOrder - b.domainDisplayOrder)
+        .forEach(domain => {
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = `domain-${domain.domainId}`;
+          checkbox.value = domain.domainId;
+          checkbox.checked = true;
 
-        const label = document.createElement("label");
-        label.htmlFor = checkbox.id;
-        label.style.marginRight = "1.5vmax";
-        label.appendChild(checkbox);
-        label.append(` ${domain.domainShortName}`);
+          const label = document.createElement('label');
+          label.className = 'domain-filter-tile';
+          label.htmlFor = checkbox.id;
+          label.title = domain.domainShortName || domain.domainId; // tooltip with full name
+          label.setAttribute('data-domain-id', domain.domainId);
+          label.textContent = domain.domainId; // use abbreviated domainId text
 
-        checkbox.addEventListener("change", () => {
-          if (checkbox.checked) {
-            if (!filterState.visibleDomains.includes(domain.domainId)) {
-              filterState.visibleDomains.push(domain.domainId);
+          // Apply domain color styling
+          const idLower = domain.domainId.toLowerCase();
+          label.style.backgroundColor = `var(--domain-${idLower}-light)`;
+          label.style.color = `var(--domain-${idLower}-dark)`;
+          label.style.borderColor = `var(--domain-${idLower}-dark)`;
+
+          // Insert checkbox inside label for larger click target
+          label.appendChild(checkbox);
+
+          function updateVisualState() {
+            if (checkbox.checked) {
+              label.classList.remove('is-off');
+            } else {
+              label.classList.add('is-off');
             }
-          } else {
-            filterState.visibleDomains = filterState.visibleDomains.filter(id => id !== domain.domainId);
           }
-          applyFiltersAndRedraw();
-        });
 
-        domainCheckboxes.appendChild(label);
-      });
+          checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+              if (!filterState.visibleDomains.includes(domain.domainId)) {
+                filterState.visibleDomains.push(domain.domainId);
+              }
+            } else {
+              filterState.visibleDomains = filterState.visibleDomains.filter(id => id !== domain.domainId);
+            }
+            updateVisualState();
+            saveStateDebounced();
+            applyFiltersAndRedraw();
+          });
+
+          updateVisualState();
+          domainCheckboxes.appendChild(label);
+        });
       // Normalize vendors before doing anything else
       const normalizedVendors = vendors.map(v => ({
         vendorId: v.id,
@@ -1171,8 +1728,106 @@ const CROSS_CERT_MODE_ENABLED = false;
       });
 
       // Initial draw
-      applyFiltersAndRedraw();
+      // Load persisted state AFTER UI elements exist
+      const persisted = loadState();
+      applyPersistedState(persisted, domains, normalizedVendors);
+
+      // Sync domain checkbox visual state after persistence load
+      if (persisted && Array.isArray(persisted.visibleDomains)) {
+        const currentVisible = new Set(filterState.visibleDomains);
+        domains.forEach(d => {
+          const cb = document.getElementById(`domain-${d.domainId}`);
+          if (cb) {
+            cb.checked = currentVisible.has(d.domainId);
+            const tile = cb.parentElement;
+            if (tile && tile.classList.contains('domain-filter-tile')) {
+              if (cb.checked) tile.classList.remove('is-off'); else tile.classList.add('is-off');
+            }
+          }
+        });
+      }
+
+      // Adjust vendor dropdown selection
+      const vendorSelectEl = document.getElementById('vendor-filter');
+      if (vendorSelectEl && filterState.selectedVendorMode) {
+        vendorSelectEl.value = filterState.selectedVendorMode;
+        // If custom single vendor persisted
+        if (filterState.selectedVendorMode !== '__ALL__' && filterState.selectedVendorMode !== '__NONE__') {
+          filterState.visibleVendorIds = [filterState.selectedVendorMode];
+        } else if (filterState.selectedVendorMode === '__ALL__') {
+          filterState.visibleVendorIds = normalizedVendors.map(v=>v.vendorId);
+        } else if (filterState.selectedVendorMode === '__NONE__') {
+          filterState.visibleVendorIds = [];
+        }
+      }
+
+      // Build skill strata toggle pills (Beginner / Intermediate / Expert)
+      const strataContainer = document.getElementById('strata-pills');
+      strataContainer.classList.add('strata-filter-bar');
+      const strataDefinitions = [
+        { id: 'beginner', label: 'Beginner', light: '--strata-beginner-light', dark: '--strata-beginner-dark' },
+        { id: 'intermediate', label: 'Intermediate', light: '--strata-intermediate-light', dark: '--strata-intermediate-dark' },
+        { id: 'expert', label: 'Expert', light: '--strata-expert-light', dark: '--strata-expert-dark' }
+      ];
+
+      strataDefinitions.forEach(level => {
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.id = `strata-${level.id}`;
+        cb.value = level.id;
+        cb.checked = filterState.visibleSkillStrata[level.id];
+
+        const label = document.createElement('label');
+        label.className = 'strata-filter-tile';
+        label.htmlFor = cb.id;
+        label.setAttribute('data-strata-id', level.id);
+        label.title = `${level.label} skill level`; // tooltip
+        label.textContent = level.label;
+        label.appendChild(cb);
+
+        function updateVisual() {
+          if (cb.checked) {
+            label.classList.remove('is-off');
+            label.style.backgroundColor = `var(${level.light})`;
+            label.style.color = `var(${level.dark})`;
+            label.style.borderColor = `var(${level.dark})`;
+          } else {
+            label.classList.add('is-off');
+            label.style.backgroundColor = 'transparent';
+            label.style.color = '#555';
+            label.style.borderColor = '#777';
+          }
+        }
+
+        cb.addEventListener('change', () => {
+          // Prevent all-off state (keep at least one level visible)
+            cb.checked = cb.checked; // ensure state stable
+          filterState.visibleSkillStrata[level.id] = cb.checked;
+          if (!Object.values(filterState.visibleSkillStrata).some(v => v)) {
+            // Re-enable this one to avoid blank roadmap
+            filterState.visibleSkillStrata[level.id] = true;
+            cb.checked = true;
+          }
+          updateVisual();
+          saveStateDebounced();
+          applyFiltersAndRedraw();
+          updateStrataRailVisibility();
+        });
+
+        updateVisual();
+        strataContainer.appendChild(label);
+      });
+
+  applyFiltersAndRedraw();
+  updateStrataRailVisibility();
+      saveStateDebounced(); // Ensure any missing new fields are persisted
     });
+
+    // Recalibrate on viewport resize (debounced) to keep alignment accurate
+    const recalibrateRailDebounced = debounce(() => {
+      if (window.loadedSkillStrata) calibrateSkillStrataSegments(window.loadedSkillStrata);
+    }, 120);
+    window.addEventListener('resize', recalibrateRailDebounced);
 
 //   BEGIN block this function //
 //   // Checkbox: Cross-domain certs
@@ -1232,14 +1887,240 @@ const CROSS_CERT_MODE_ENABLED = false;
       // A single vendorId was selected → filter to just that one
       filterState.visibleVendorIds = [selected];
     }
+      filterState.selectedVendorMode = selected;
+      saveStateDebounced();
 
     applyFiltersAndRedraw();
   });
 
-  // 🌙 Dark Mode Checkbox Listener
-  const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
-  darkModeCheckbox.addEventListener("change", () => {
-    document.body.classList.toggle("dark-mode", darkModeCheckbox.checked);
-  });
+  // Build Light/Dark mode two-state pill pair
+  const modePills = document.getElementById('mode-pills');
+  if (modePills) {
+    const modes = [
+      { id: 'light', label: 'Light', active: !filterState.darkMode, light: '--mode-light-light', dark: '--mode-light-dark' },
+      { id: 'dark', label: 'Dark', active: filterState.darkMode, light: '--mode-dark-light', dark: '--mode-dark-dark' }
+    ];
+    function renderModePills() {
+      modePills.innerHTML='';
+      modes.forEach(m => {
+        const cb = document.createElement('input');
+        cb.type='radio';
+        cb.name='display-mode';
+        cb.id=`mode-${m.id}`;
+        cb.checked = m.active;
+        const label = document.createElement('label');
+        label.className='mode-filter-tile';
+        label.htmlFor=cb.id;
+        label.textContent=m.label;
+        label.appendChild(cb);
+        function updateVisual(){
+          if (cb.checked){
+            label.classList.remove('is-off');
+            label.style.backgroundColor=`var(${m.light})`;
+            label.style.color=`var(${m.dark})`;
+            label.style.borderColor=`var(${m.dark})`;
+          } else {
+            label.classList.add('is-off');
+            label.style.background='transparent';
+            label.style.color='#555';
+            label.style.borderColor='#777';
+          }
+        }
+        cb.addEventListener('change', ()=>{
+          if (!cb.checked) return;
+          modes.forEach(x=> x.active = (x.id===m.id));
+          filterState.darkMode = (m.id === 'dark');
+            document.body.classList.toggle('dark-mode', filterState.darkMode);
+          saveStateDebounced();
+          renderModePills(); // re-render to refresh visuals uniformly
+        });
+        updateVisual();
+        modePills.appendChild(label);
+      });
+    }
+    renderModePills();
+  }
+
+  // Collapsible filter stack behavior
+  const filterStack = document.getElementById('filters-secondary');
+  const filterToggle = document.getElementById('filter-stack-toggle');
+  const filterArrow = document.getElementById('filter-stack-arrow');
+  function applyFilterStackState() {
+    const expanded = filterState.filtersExpanded;
+    if (filterStack) filterStack.classList.toggle('collapsed', !expanded);
+    if (filterToggle) filterToggle.setAttribute('aria-expanded', expanded ? 'true':'false');
+    if (filterArrow) {
+      filterArrow.style.transform = expanded ? 'rotate(0deg)' : 'rotate(-90deg)';
+    }
+    const lines = document.getElementById('filter-stack-lines');
+    if (lines) {
+      lines.style.display = expanded ? '' : 'none';
+    }
+    console.log('[Filters] applyFilterStackState expanded=', expanded);
+  }
+  if (filterToggle) {
+    const toggleFn = () => { filterState.filtersExpanded = !filterState.filtersExpanded; applyFilterStackState(); saveStateDebounced(); };
+    filterToggle.addEventListener('click', toggleFn);
+    filterToggle.addEventListener('keydown', (e)=>{ if (e.key==='Enter' || e.key===' ') { e.preventDefault(); toggleFn(); }});
+  }
+  applyFilterStackState();
+
+  // ================= Learner Mode Stack / Logic =================
+  const learnerStack = document.getElementById('learner-stack');
+  const learnerToggleHeader = document.getElementById('learner-stack-toggle');
+  const learnerArrow = document.getElementById('learner-stack-arrow');
+  function applyLearnerStackState(){
+    const expanded = filterState.learnerStackExpanded;
+    if (learnerStack) learnerStack.classList.toggle('collapsed', !expanded);
+    const lines = document.getElementById('learner-stack-lines');
+    if (lines) lines.style.display = expanded ? '' : 'none';
+    if (learnerToggleHeader) learnerToggleHeader.setAttribute('aria-expanded', expanded? 'true':'false');
+    if (learnerArrow) learnerArrow.style.transform = expanded ? 'rotate(0deg)' : 'rotate(-90deg)';
+  }
+  if (learnerToggleHeader){
+    const toggleLearner = () => { filterState.learnerStackExpanded = !filterState.learnerStackExpanded; applyLearnerStackState(); saveStateDebounced(); };
+    learnerToggleHeader.addEventListener('click', toggleLearner);
+    learnerToggleHeader.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleLearner(); }});
+  }
+  applyLearnerStackState();
+
+  const learnerModePills = document.getElementById('learner-mode-pills');
+  function renderLearnerModePills(){
+    if(!learnerModePills) return; learnerModePills.innerHTML='';
+    const modes=[{id:'off',label:'Off',active:!filterState.learnerMode},{id:'on',label:'On',active:filterState.learnerMode}];
+    modes.forEach(m=>{
+      const input=document.createElement('input'); input.type='radio'; input.name='learner-mode'; input.id=`learner-mode-${m.id}`; input.checked=m.active; input.style.display='none';
+      const label=document.createElement('label'); label.className='mode-filter-tile'; label.htmlFor=input.id; label.textContent=m.label; label.appendChild(input);
+      function style(){
+        if(input.checked){
+          label.classList.remove('is-off');
+          if(m.id==='on'){
+            label.style.background='rgba(144,238,144,0.35)'; // light green
+            label.style.color='darkgreen';
+            label.style.borderColor='darkgreen';
+          } else { // off
+            label.style.background='rgba(255,182,193,0.4)'; // light red (pinkish)
+            label.style.color='darkred';
+            label.style.borderColor='darkred';
+          }
+          if(filterState.darkMode){
+            if(m.id==='on'){
+              label.style.background='rgba(0,128,0,0.35)';
+              label.style.color='#c3f7c3';
+              label.style.borderColor='#5ec75e';
+            } else {
+              label.style.background='rgba(139,0,0,0.45)';
+              label.style.color='#ffb3b3';
+              label.style.borderColor='#ff7a7a';
+            }
+          }
+        } else {
+          label.classList.add('is-off');
+          label.style.background='transparent';
+          label.style.color='#555';
+          label.style.borderColor='#777';
+        }
+      }
+      input.addEventListener('change',()=>{ if(!input.checked) return; filterState.learnerMode = (m.id==='on'); console.debug('[LearnerMode] toggled ->', filterState.learnerMode); if(!filterState.learnerMode){ filterState.learnerEdit=false; renderLearnerActionPills(); removeLearnerPopup(); } updateLearnerModeStatusBadge(); saveStateDebounced(); renderLearnerModePills(); });
+      // Redundant label click safety (some browsers swallow hidden input change under rapid clicks)
+      label.addEventListener('click', (ev)=>{ if(!input.checked){ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); } ev.stopPropagation(); });
+      style(); learnerModePills.appendChild(label);
+    });
+  }
+  renderLearnerModePills();
+
+  const learnerActionPills = document.getElementById('learner-action-pills');
+  function renderLearnerActionPills(){
+    if(!learnerActionPills) return; learnerActionPills.innerHTML='';
+    const edit=document.createElement('label'); edit.className='mode-filter-tile'; edit.textContent='Edit My Certs'; edit.tabIndex=0; edit.role='button';
+    function paint(){ if(filterState.learnerEdit && filterState.learnerMode){ edit.classList.remove('is-off'); edit.style.background='#d0ebff'; edit.style.borderColor='#3399cc'; edit.style.color='#004466'; } else { edit.classList.add('is-off'); edit.style.background='transparent'; edit.style.borderColor='#777'; edit.style.color='#555'; } if(!filterState.learnerMode){ edit.style.opacity='.4'; edit.style.pointerEvents='none'; } else { edit.style.opacity='1'; edit.style.pointerEvents='auto'; } }
+    edit.addEventListener('click',()=>{ if(!filterState.learnerMode) return; filterState.learnerEdit=!filterState.learnerEdit; saveStateDebounced(); paint(); });
+    edit.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); edit.click(); }});
+    paint(); learnerActionPills.appendChild(edit);
+  }
+  renderLearnerActionPills();
+
+  // Status badge (debug / feedback)
+  const learnerStatusBadge = document.createElement('div');
+  learnerStatusBadge.id = 'learner-mode-status';
+  learnerStatusBadge.style.fontSize='0.55vmax';
+  learnerStatusBadge.style.opacity='0.75';
+  learnerStatusBadge.style.padding='0 0.4vmax';
+  const learnerActionsContainer = document.getElementById('learner-action-pills');
+  if(learnerActionsContainer) learnerActionsContainer.parentElement.appendChild(learnerStatusBadge);
+  function updateLearnerModeStatusBadge(){
+    if(!learnerStatusBadge) return;
+    learnerStatusBadge.textContent = filterState.learnerMode ? 'Learner Mode: ON' : 'Learner Mode: OFF';
+  }
+  updateLearnerModeStatusBadge();
+
+  // Popup menu for status changes
+  let currentLearnerPopup=null;
+  function removeLearnerPopup(){ if(currentLearnerPopup && currentLearnerPopup.parentNode){ currentLearnerPopup.parentNode.removeChild(currentLearnerPopup); currentLearnerPopup=null; } }
+  function createLearnerPopup(tile){
+    console.debug('[LearnerPopup] create invoked for certId=', tile && tile.getAttribute('data-cert-id'));
+    removeLearnerPopup();
+    const rect=tile.getBoundingClientRect();
+    const menu=document.createElement('div');
+    menu.className='learner-popup-menu'; menu.setAttribute('role','menu');
+    function addBtn(label,fn,cls){ const b=document.createElement('button'); b.type='button'; b.textContent=label; if(cls)b.classList.add(cls); b.addEventListener('click',e=>{ e.stopPropagation(); fn(); removeLearnerPopup(); }); menu.appendChild(b); }
+    const cid=tile.getAttribute('data-cert-id');
+    addBtn('Mark as Achieved',()=>{ window.learnerCertStatuses[cid]='achieved'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },null);
+    addBtn('Mark as Planned',()=>{ window.learnerCertStatuses[cid]='planned'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },null);
+    addBtn('Clear Status',()=>{ delete window.learnerCertStatuses[cid]; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },'danger');
+    document.body.appendChild(menu);
+    const top = rect.bottom + 6 + window.scrollY;
+    const left = rect.left + (rect.width/2) - (menu.offsetWidth/2) + window.scrollX;
+    menu.style.top = `${Math.max(4, top)}px`;
+    menu.style.left = `${Math.max(4, left)}px`;
+    currentLearnerPopup=menu;
+  }
+  document.addEventListener('click',e=>{ if(currentLearnerPopup && !currentLearnerPopup.contains(e.target)) removeLearnerPopup(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') removeLearnerPopup(); });
+
+  // Intercept cert tile clicks in learner mode
+  document.addEventListener('click',(e)=>{
+    const tile=e.target.closest('.cert-tile');
+    if(!tile) return; // not a cert click
+    // Only act on unmodified primary button clicks
+    if(e.button!==0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if(filterState.learnerMode){
+      e.preventDefault();
+      console.debug('[LearnerMode] Popup via delegated click. learnerMode=', filterState.learnerMode);
+      createLearnerPopup(tile);
+    } else {
+      const href = tile.getAttribute('href');
+      console.debug('[LearnerMode] Normal nav attempt (learner OFF) href=', href, 'defaultPrevented?', e.defaultPrevented);
+      if(!href){ console.warn('[LearnerMode] Tile missing href attribute; cannot navigate. certId=', tile.getAttribute('data-cert-id')); }
+      // Do NOT call preventDefault here. Allow browser default.
+    }
+  }, false);
+
+  // Capture-phase safeguard: if some earlier code prevented default while learnerMode is OFF, force navigation.
+  document.addEventListener('click',(e)=>{
+    const tile=e.target.closest('.cert-tile');
+    if(!tile) return;
+    if(filterState.learnerMode) return; // Only safeguard when OFF
+    if(e.button!==0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // only plain left clicks
+    const href = tile.getAttribute('href');
+    if(!href) return;
+    if(e.defaultPrevented){
+      console.debug('[LearnerMode][Safeguard] defaultPrevented detected while OFF. Forcing navigation to', href);
+      // Manual navigation fallback
+      try { window.open(href, tile.target || '_blank'); } catch(err){ console.warn('[LearnerMode][Safeguard] window.open failed', err); }
+    }
+  }, true);
+
+  // (Replaced with safeguard above)
+  document.addEventListener('contextmenu',(e)=>{
+    const tile=e.target.closest('.cert-tile');
+    if(!tile) return;
+    if(filterState.learnerMode){ e.preventDefault(); console.debug('[LearnerMode] contextmenu popup'); createLearnerPopup(tile);} }
+  );
+
+  window.addEventListener('load',()=>{ setTimeout(()=>{ document.querySelectorAll('.cert-tile').forEach(applyLearnerStatusToTile); },100); });
+
+  // Fallback: attach per-tile listeners after each redraw to guarantee popup
+  // Remove complex per-tile binding: delegation now handles all clicks.
 
 </script>
