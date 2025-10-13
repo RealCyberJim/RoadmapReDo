@@ -17,6 +17,8 @@
       --color-blue: #2e5688;
       --color-red: #c0514d;
       --color-magenta: #a500a1;
+  /* Extended accent */
+  --color-blue-bright: #0000ff; /* Bright blue used for Reach Goal status */
       
       /* Dark variants */      
       --color-green-dark: #548235;
@@ -92,6 +94,17 @@
       /* Track width tokens (Option C) */
       --cert-track-width: 2.3vmax;   /* Standard certification tile track */
       --skill-track-width: 0.6vmax;  /* Narrow skill column track */
+  /* Learner neutral pill scheme */
+  --learner-neutral-bg: var(--color-black-light);
+  --learner-neutral-border: var(--color-black-dark);
+  --learner-neutral-text: var(--color-black-dark);
+  --learner-achieved-text: limegreen; /* explicit brighter text */
+  --learner-achieved-border: limegreen;
+  --learner-planned-text: darkgoldenrod;
+  --learner-planned-border: darkgoldenrod;
+  --learner-reach-text: var(--color-blue-bright);
+  --learner-reach-border: var(--color-blue-bright);
+  --learner-reach-bg: #dbe1ff; /* light blue background */
     }
 
     /* Domain-specific border and title coloring */
@@ -342,30 +355,28 @@
       display: grid;
       grid-template-columns: 1vmax 1fr; /* LEFT: skill label column, RIGHT: roadmap */
       grid-template-rows: auto auto;
-      width: 100%;
-      max-width: 100vw;
+      width: max-content; /* expand to fit roadmap instead of forcing 100% viewport width */
+      max-width: none;    /* remove viewport clamp */
       height: auto;
       max-height: none !important;
-      overflow-x: hidden;
-      overflow-y: visible;
+      overflow: visible;  /* allow roadmap content to be fully visible */
       box-sizing: border-box;
       position: relative;
     }
         
     #roadmap {
       display: flex;
-      overflow-x: hidden;
-      width: 100%;
+      overflow: visible; /* no clipping */
+      width: max-content; /* size to its contents (domains) */
       align-items: start;
       flex-direction: row;
-      flex-wrap: nowrap;
+      flex-wrap: nowrap; /* single horizontal row of domains */
       gap: 0.12vmax; /* tightened from 0.2vmax */
       grid-column: 2;
       grid-row: 2;
       max-height: none;
-      max-width: 100%;
+      max-width: none;
       min-width: 0;
-      overflow-y: visible;
       padding-right: 0.2vmax;
     }
 
@@ -383,6 +394,7 @@
   /* Learner Mode status styling */
   .cert-tile.cert-status-achieved { outline: 2px solid limegreen; outline-offset: -2px; color: limegreen !important; border-color: limegreen !important; }
   .cert-tile.cert-status-planned { outline: 2px dashed darkgoldenrod; outline-offset: -2px; color: darkgoldenrod !important; border-color: darkgoldenrod !important; }
+  .cert-tile.cert-status-reach { outline: 2px solid var(--color-blue-bright); outline-offset: -2px; color: var(--color-blue-bright) !important; border-color: var(--color-blue-bright) !important; }
   .learner-popup-menu { position:absolute; z-index:9999; background:#ffffff; border:1px solid #ccc; border-radius:0.45vmax; padding:0.3vmax 0; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.18); font-size:0.6vmax; min-width:8vmax; }
   body.dark-mode .learner-popup-menu { background:#222; border-color:#444; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.55); }
   .learner-popup-menu button { display:block; width:100%; background:none; border:none; text-align:left; padding:0.38vmax 0.65vmax; cursor:pointer; font-size:inherit; font-family:inherit; color:#222; letter-spacing:0.3px; }
@@ -391,6 +403,36 @@
   body.dark-mode .learner-popup-menu button:hover, body.dark-mode .learner-popup-menu button:focus { background:rgba(255,255,255,0.12); }
   .learner-popup-menu button.danger { color:#a00; }
   .learner-popup-menu button.danger:hover { background:rgba(255,0,0,0.12); }
+  /* Popup flips above tile when there isn't space below */
+  .learner-popup-menu.placement-above { /* hook */ transform-origin: bottom center; }
+  /* Learner status badge (placed in Filters header) */
+  .learner-status-badge { display:inline-flex; align-items:center; font-size:0.55vmax; font-weight:600; letter-spacing:0.4px; padding:0.25vmax 0.6vmax; border-radius:var(--pill-radius); border:1px solid transparent; line-height:1; white-space:nowrap; margin-left:auto; }
+  .learner-status-badge.learner-status-on { background:var(--color-green-light); color:var(--color-green-dark); border-color:var(--color-green-dark); }
+  .learner-status-badge.learner-status-off { background:var(--color-red-light); color:var(--color-red-dark); border-color:var(--color-red-dark); }
+  body.dark-mode .learner-status-badge { filter:brightness(.95) contrast(1.05); }
+  /* Ensure learner (Options) stack header can flex contents to right-align badge */
+  /* Learner stack header should size to its content so badge doesn't push overall layout width */
+  #learner-stack-toggle { width:auto; justify-content:flex-start; gap:0.8vmax; }
+  /* Reset confirmation modal */
+  .learner-reset-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; z-index:10000; }
+  .learner-reset-dialog { background:#fff; color:#222; padding:1.2vmax 1.4vmax; border-radius:0.6vmax; width:clamp(18rem,28vmax,30rem); box-shadow:0 0.6vmax 2vmax rgba(0,0,0,0.35); font-size:0.7vmax; line-height:1.35; position:relative; }
+  body.dark-mode .learner-reset-dialog { background:#1e1e1e; color:#eee; }
+  .learner-reset-dialog h3 { margin:0 0 0.8vmax 0; font-size:0.9vmax; }
+  .learner-reset-actions { display:flex; gap:0.6vmax; justify-content:flex-end; margin-top:1vmax; }
+  .learner-reset-btn { font:inherit; padding:0.4vmax 0.9vmax; border-radius:0.5vmax; cursor:pointer; font-weight:600; border:2px solid transparent; letter-spacing:0.4px; background:var(--color-black-light); color:var(--color-black-dark); }
+  .learner-reset-btn:focus { outline:none; box-shadow:var(--focus-ring); }
+  body.dark-mode .learner-reset-btn { background:#333; color:#ddd; }
+  .learner-reset-btn.confirm { background:var(--color-red-light); color:var(--color-red-dark); border-color:var(--color-red-dark); }
+  .learner-reset-btn.confirm:hover { filter:brightness(1.05); }
+  .learner-reset-btn.cancel { background:var(--color-purple-light); color:var(--color-purple-dark); border-color:var(--color-purple-dark); }
+  .learner-reset-btn.cancel:hover { filter:brightness(1.05); }
+  .learner-reset-dialog p { margin:0; }
+  /* Constrained overall layout shell to prevent helper UI from widening page */
+  #app-shell { max-width:1600px; margin:0 auto; padding:0 1.5rem 2rem; box-sizing:border-box; }
+  @media (max-width:1200px){ #app-shell { padding:0 1rem 2rem; } }
+  @media (max-width:800px){ #app-shell { padding:0 0.6rem 2rem; } }
+  /* Roadmap now lives outside #app-shell; prevent unintended horizontal scroll container */
+  #app-shell #roadmap-flex { overflow-x:visible; }
     
     body.center-domains #roadmap {
       justify-content: center; /* Override to center */
@@ -617,8 +659,6 @@
 <link rel="icon" href="data:,"> <!-- Prevents favicon request -->
 <body>
 <!-- Filter Control Panel -->
-  </div>
-</div>
 
 
 <!-- Dark Mode checkbox removed; now part of Display Mode pill group -->
@@ -626,8 +666,10 @@
 
 <!-- Vendor filter moved into collapsible stack -->
 
-<!-- Learner Mode Collapsible Stack -->
-<div id="learner-stack" class="filter-stack">
+<!-- Layout Constraining Wrapper -->
+<div id="app-shell">
+  <!-- Learner Mode Collapsible Stack -->
+  <div id="learner-stack" class="filter-stack">
   <div class="filter-stack-header" id="learner-stack-toggle" role="button" tabindex="0" aria-expanded="true" aria-controls="learner-stack-lines">
     <span class="filter-stack-arrow" id="learner-stack-arrow">▾</span>
     <span class="filter-stack-title">Options</span>
@@ -638,13 +680,13 @@
       <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
     </div>
     <div class="filter-line" style="align-items:center;">
-      <span class="filter-label">Actions:</span>
+      <span class="filter-label">Learner Views:</span>
       <div id="learner-action-pills" class="mode-filter-bar" aria-label="Learner Actions"></div>
     </div>
   </div>
-</div>
-<!-- Domain / Skill / Mode Filters (stacked rows, collapsible) -->
-<div id="filters-secondary" class="filter-stack">
+  </div>
+  <!-- Domain / Skill / Mode Filters (stacked rows, collapsible) -->
+  <div id="filters-secondary" class="filter-stack">
   <div class="filter-stack-header" id="filter-stack-toggle" role="button" tabindex="0" aria-expanded="true" aria-controls="filter-stack-lines">
     <span class="filter-stack-arrow" id="filter-stack-arrow">▾</span>
     <span class="filter-stack-title">Filters</span>
@@ -671,13 +713,15 @@
       <div id="mode-pills" class="mode-filter-bar" aria-label="Display Mode"></div>
     </div>
   </div>
-</div>
+  </div>
   <h1>Security Certification Roadmap</h1>
+  <!-- End of constrained header/filter region -->
+</div> <!-- /#app-shell -->
 
+<!-- Roadmap placed outside #app-shell to avoid width clipping -->
 <div id="roadmap-flex">
   <div id="roadmap-wrapper">
-    <div id="roadmap">
-    </div>
+    <div id="roadmap"></div>
   </div>
 </div>
 <!-- Spacer below roadmap -->
@@ -720,7 +764,8 @@ const CROSS_CERT_MODE_ENABLED = false;
       selectedVendorMode: '__ALL__', // tracks raw selection value for vendor dropdown
       learnerMode: false,
       learnerEdit: false,
-      learnerStackExpanded: true
+      learnerStackExpanded: true,
+      learnerView: 'all'
     };
 
     // When true, the roadmap keeps all skill strata row heights constant (no vertical compression)
@@ -809,6 +854,7 @@ const CROSS_CERT_MODE_ENABLED = false;
           , learnerMode: filterState.learnerMode
           , learnerEdit: filterState.learnerEdit
           , learnerStackExpanded: filterState.learnerStackExpanded
+          , learnerView: filterState.learnerView
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
       } catch (e) {
@@ -873,6 +919,9 @@ const CROSS_CERT_MODE_ENABLED = false;
       }
       if (typeof persisted.learnerStackExpanded === 'boolean') {
         filterState.learnerStackExpanded = persisted.learnerStackExpanded;
+      }
+      if (typeof persisted.learnerView === 'string') {
+        filterState.learnerView = persisted.learnerView;
       }
     }
 
@@ -1578,14 +1627,36 @@ const CROSS_CERT_MODE_ENABLED = false;
       return tile;
     }
 
-    // Apply learner status classes (achieved / planned)
+    // Apply learner status classes (achieved / planned / reach)
     function applyLearnerStatusToTile(tile){
       if(!tile) return;
-      tile.classList.remove('cert-status-achieved','cert-status-planned');
+      tile.classList.remove('cert-status-achieved','cert-status-planned','cert-status-reach');
       const cid = tile.getAttribute('data-cert-id');
       const status = window.learnerCertStatuses && window.learnerCertStatuses[cid];
       if(status==='achieved') tile.classList.add('cert-status-achieved');
       else if(status==='planned') tile.classList.add('cert-status-planned');
+      else if(status==='reach') tile.classList.add('cert-status-reach');
+    }
+
+    // Filter tiles based on learner view mode
+    function updateLearnerViewVisibility(){
+      /* View semantics:
+         default: show every cert tile (ignore statuses entirely)
+         achieved/planned/reach: show only tiles with that status
+         all: show only tiles that have ANY learner status (achieved/planned/reach)
+      */
+      const mode = filterState.learnerMode;
+      const view = filterState.learnerView; // default|achieved|planned|reach|all
+      document.querySelectorAll('.cert-tile').forEach(tile=>{
+        if(!mode || view==='default'){ tile.style.display=''; return; }
+        const cid = tile.getAttribute('data-cert-id');
+        const status = window.learnerCertStatuses && window.learnerCertStatuses[cid];
+        if(view==='all'){
+          tile.style.display = (status==='achieved'||status==='planned'||status==='reach') ? '' : 'none';
+        } else {
+          tile.style.display = (status===view) ? '' : 'none';
+        }
+      });
     }
 
     function updateDomainCenteringClass(domains) {
@@ -1991,27 +2062,23 @@ const CROSS_CERT_MODE_ENABLED = false;
       const input=document.createElement('input'); input.type='radio'; input.name='learner-mode'; input.id=`learner-mode-${m.id}`; input.checked=m.active; input.style.display='none';
       const label=document.createElement('label'); label.className='mode-filter-tile'; label.htmlFor=input.id; label.textContent=m.label; label.appendChild(input);
       function style(){
+        // Unified palette-based styling (same in light & dark mode)
+        const greenBg='var(--color-green-light)';
+        const greenBorder='var(--color-green-dark)';
+        const greenText='var(--color-green-dark)';
+        const redBg='var(--color-red-light)';
+        const redBorder='var(--color-red-dark)';
+        const redText='var(--color-red-dark)';
         if(input.checked){
           label.classList.remove('is-off');
           if(m.id==='on'){
-            label.style.background='rgba(144,238,144,0.35)'; // light green
-            label.style.color='darkgreen';
-            label.style.borderColor='darkgreen';
-          } else { // off
-            label.style.background='rgba(255,182,193,0.4)'; // light red (pinkish)
-            label.style.color='darkred';
-            label.style.borderColor='darkred';
-          }
-          if(filterState.darkMode){
-            if(m.id==='on'){
-              label.style.background='rgba(0,128,0,0.35)';
-              label.style.color='#c3f7c3';
-              label.style.borderColor='#5ec75e';
-            } else {
-              label.style.background='rgba(139,0,0,0.45)';
-              label.style.color='#ffb3b3';
-              label.style.borderColor='#ff7a7a';
-            }
+            label.style.background=greenBg;
+            label.style.borderColor=greenBorder;
+            label.style.color=greenText;
+          } else {
+            label.style.background=redBg;
+            label.style.borderColor=redBorder;
+            label.style.color=redText;
           }
         } else {
           label.classList.add('is-off');
@@ -2020,7 +2087,17 @@ const CROSS_CERT_MODE_ENABLED = false;
           label.style.borderColor='#777';
         }
       }
-      input.addEventListener('change',()=>{ if(!input.checked) return; filterState.learnerMode = (m.id==='on'); console.debug('[LearnerMode] toggled ->', filterState.learnerMode); if(!filterState.learnerMode){ filterState.learnerEdit=false; renderLearnerActionPills(); removeLearnerPopup(); } updateLearnerModeStatusBadge(); saveStateDebounced(); renderLearnerModePills(); });
+      input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode); if(!filterState.learnerMode){
+          // When turning OFF, force roadmap back to Default view semantics
+          filterState.learnerView = 'default';
+          removeLearnerPopup();
+        }
+        updateLearnerModeStatusBadge();
+        saveStateDebounced();
+        renderLearnerModePills();
+        renderLearnerActionPills();
+        updateLearnerViewVisibility();
+      });
       // Redundant label click safety (some browsers swallow hidden input change under rapid clicks)
       label.addEventListener('click', (ev)=>{ if(!input.checked){ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); } ev.stopPropagation(); });
       style(); learnerModePills.appendChild(label);
@@ -2031,27 +2108,118 @@ const CROSS_CERT_MODE_ENABLED = false;
   const learnerActionPills = document.getElementById('learner-action-pills');
   function renderLearnerActionPills(){
     if(!learnerActionPills) return; learnerActionPills.innerHTML='';
-    const edit=document.createElement('label'); edit.className='mode-filter-tile'; edit.textContent='Edit My Certs'; edit.tabIndex=0; edit.role='button';
-    function paint(){ if(filterState.learnerEdit && filterState.learnerMode){ edit.classList.remove('is-off'); edit.style.background='#d0ebff'; edit.style.borderColor='#3399cc'; edit.style.color='#004466'; } else { edit.classList.add('is-off'); edit.style.background='transparent'; edit.style.borderColor='#777'; edit.style.color='#555'; } if(!filterState.learnerMode){ edit.style.opacity='.4'; edit.style.pointerEvents='none'; } else { edit.style.opacity='1'; edit.style.pointerEvents='auto'; } }
-    edit.addEventListener('click',()=>{ if(!filterState.learnerMode) return; filterState.learnerEdit=!filterState.learnerEdit; saveStateDebounced(); paint(); });
-    edit.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); edit.click(); }});
-    paint(); learnerActionPills.appendChild(edit);
+  const neutralBg = 'var(--learner-neutral-bg)';
+  const neutralBorder = 'var(--learner-neutral-border)';
+  const neutralText = 'var(--learner-neutral-text)';
+    const views=[
+      // Default: show full roadmap (ignores learner status filtering)
+      {id:'default', label:'Default', bg:neutralBg, border:neutralBorder, text:neutralText},
+  {id:'achieved', label:'Achieved', bg:'var(--color-green-light)', border:'var(--learner-achieved-border)', text:'var(--learner-achieved-text)'},
+  {id:'planned', label:'Planned', bg:'var(--color-yellow-light)', border:'var(--learner-planned-border)', text:'var(--learner-planned-text)', dashed:true},
+  {id:'reach', label:'Reach Goal', bg:'var(--learner-reach-bg)', border:'var(--learner-reach-border)', text:'var(--learner-reach-text)'},
+      {id:'all', label:'All', bg:neutralBg, border:neutralBorder, text:neutralText},
+      // Reset does not represent a persistent view state (use neutral scheme for visual consistency)
+      {id:'reset', label:'Reset', bg:neutralBg, border:neutralBorder, text:neutralText}
+    ];
+    views.forEach(v=>{
+      const input=document.createElement('input'); input.type='radio'; input.name='learner-view'; input.id=`learner-view-${v.id}`; input.style.display='none';
+      if(v.id!=='reset'){ input.checked = (filterState.learnerView===v.id); }
+      const label=document.createElement('label'); label.className='mode-filter-tile'; label.htmlFor=input.id; label.textContent=v.label; label.appendChild(input);
+      function paint(){
+        const active = v.id==='reset' ? false : input.checked;
+        if(active){
+          label.classList.remove('is-off');
+          label.style.background=v.bg; label.style.borderColor=v.border; label.style.color=v.text;
+          label.style.borderStyle = v.dashed ? 'dashed' : 'solid';
+        } else {
+          label.classList.add('is-off');
+          label.style.background='transparent'; label.style.borderColor='#777'; label.style.color='#555';
+          label.style.borderStyle='solid';
+        }
+        if(!filterState.learnerMode){ label.style.opacity='.45'; } else { label.style.opacity='1'; }
+      }
+      if(v.id==='reset'){
+        label.addEventListener('click',(e)=>{ e.stopPropagation(); if(!filterState.learnerMode){ return; } showLearnerResetModal(); });
+      } else {
+        input.addEventListener('change',()=>{ if(!input.checked) return; filterState.learnerView=v.id; saveStateDebounced(); renderLearnerActionPills(); updateLearnerViewVisibility(); });
+        label.addEventListener('click', (e)=>{ if(!filterState.learnerMode){ return; } if(!input.checked){ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); } e.stopPropagation(); });
+      }
+      // Disable non-default view pills when learner mode is OFF
+      if(!filterState.learnerMode){
+        if(v.id==='default'){
+          // Force default to appear active
+          input.checked = true;
+          label.classList.remove('is-off');
+          label.style.background = v.bg; label.style.borderColor = v.border; label.style.color = v.text; label.style.borderStyle = v.dashed ? 'dashed' : 'solid';
+          label.setAttribute('aria-current','true');
+        } else if(v.id!=='reset') {
+          label.style.pointerEvents='none';
+          label.setAttribute('aria-disabled','true');
+          label.title = 'Enable Learner Mode to use this filter';
+        } else { // reset pill
+          label.style.pointerEvents='none';
+          label.setAttribute('aria-disabled','true');
+          label.title = 'Enable Learner Mode to reset statuses';
+        }
+      }
+      paint(); learnerActionPills.appendChild(label);
+    });
   }
   renderLearnerActionPills();
 
   // Status badge (debug / feedback)
   const learnerStatusBadge = document.createElement('div');
   learnerStatusBadge.id = 'learner-mode-status';
-  learnerStatusBadge.style.fontSize='0.55vmax';
-  learnerStatusBadge.style.opacity='0.75';
-  learnerStatusBadge.style.padding='0 0.4vmax';
-  const learnerActionsContainer = document.getElementById('learner-action-pills');
-  if(learnerActionsContainer) learnerActionsContainer.parentElement.appendChild(learnerStatusBadge);
+  learnerStatusBadge.className = 'learner-status-badge learner-status-off';
+  const optionsHeader = document.getElementById('learner-stack-toggle');
+  if(optionsHeader){
+    // Insert badge at end of Options (learner) stack header, preserving existing content
+    optionsHeader.appendChild(learnerStatusBadge);
+  }
   function updateLearnerModeStatusBadge(){
     if(!learnerStatusBadge) return;
-    learnerStatusBadge.textContent = filterState.learnerMode ? 'Learner Mode: ON' : 'Learner Mode: OFF';
+    const on = !!filterState.learnerMode;
+  learnerStatusBadge.textContent = on ? 'Learner ON' : 'Learner OFF';
+    learnerStatusBadge.classList.toggle('learner-status-on', on);
+    learnerStatusBadge.classList.toggle('learner-status-off', !on);
+    learnerStatusBadge.setAttribute('aria-label', on ? 'Learner Mode is ON' : 'Learner Mode is OFF');
   }
   updateLearnerModeStatusBadge();
+
+  // ================= Reset Modal (for learner statuses) =================
+  function showLearnerResetModal(){
+    // Remove existing if any
+    const existing = document.querySelector('.learner-reset-overlay');
+    if(existing) existing.remove();
+    const overlay = document.createElement('div');
+    overlay.className='learner-reset-overlay';
+    overlay.innerHTML = `\n      <div class="learner-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="learner-reset-title">\n        <h3 id="learner-reset-title">Reset Learner Selections?</h3>\n        <p>This will clear ALL Achieved / Planned / Reach Goal statuses you have set. This action cannot be undone. Are you sure you want to proceed?</p>\n        <div class="learner-reset-actions">\n          <button type="button" class="learner-reset-btn cancel" data-action="cancel">Cancel</button>\n          <button type="button" class="learner-reset-btn confirm" data-action="confirm">Yes, Reset</button>\n        </div>\n      </div>`;
+    document.body.appendChild(overlay);
+    const dialog = overlay.querySelector('.learner-reset-dialog');
+    // Focus management
+    const cancelBtn = overlay.querySelector('[data-action="cancel"]');
+    const confirmBtn = overlay.querySelector('[data-action="confirm"]');
+    cancelBtn.focus();
+    function close(){ overlay.remove(); }
+    function doReset(){
+      window.learnerCertStatuses = {}; // clear statuses in memory
+      saveLearnerStatuses();
+      // Reset learnerView to 'all' so user sees zero (since no statuses remain)
+      filterState.learnerView = 'all';
+      saveStateDebounced();
+      document.querySelectorAll('.cert-tile').forEach(tile=>{ applyLearnerStatusToTile(tile); });
+      renderLearnerActionPills();
+      updateLearnerViewVisibility();
+      close();
+    }
+    overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+    cancelBtn.addEventListener('click', close);
+    confirmBtn.addEventListener('click', doReset);
+    overlay.addEventListener('keydown', e=>{
+      if(e.key==='Escape'){ e.preventDefault(); close(); }
+      if(e.key==='Enter' && document.activeElement===confirmBtn){ e.preventDefault(); doReset(); }
+    });
+  }
 
   // Popup menu for status changes
   let currentLearnerPopup=null;
@@ -2064,14 +2232,55 @@ const CROSS_CERT_MODE_ENABLED = false;
     menu.className='learner-popup-menu'; menu.setAttribute('role','menu');
     function addBtn(label,fn,cls){ const b=document.createElement('button'); b.type='button'; b.textContent=label; if(cls)b.classList.add(cls); b.addEventListener('click',e=>{ e.stopPropagation(); fn(); removeLearnerPopup(); }); menu.appendChild(b); }
     const cid=tile.getAttribute('data-cert-id');
-    addBtn('Mark as Achieved',()=>{ window.learnerCertStatuses[cid]='achieved'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },null);
-    addBtn('Mark as Planned',()=>{ window.learnerCertStatuses[cid]='planned'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },null);
-    addBtn('Clear Status',()=>{ delete window.learnerCertStatuses[cid]; applyLearnerStatusToTile(tile); saveLearnerStatuses(); },'danger');
+  addBtn('Mark as Achieved',()=>{ window.learnerCertStatuses[cid]='achieved'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
+  addBtn('Mark as Planned',()=>{ window.learnerCertStatuses[cid]='planned'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
+  addBtn('Mark as Reach Goal',()=>{ window.learnerCertStatuses[cid]='reach'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
+  addBtn('Clear Status',()=>{ delete window.learnerCertStatuses[cid]; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },'danger');
     document.body.appendChild(menu);
-    const top = rect.bottom + 6 + window.scrollY;
-    const left = rect.left + (rect.width/2) - (menu.offsetWidth/2) + window.scrollX;
-    menu.style.top = `${Math.max(4, top)}px`;
-    menu.style.left = `${Math.max(4, left)}px`;
+    // ----- Viewport-safe positioning -----
+    const viewportW = document.documentElement.clientWidth;
+    const viewportH = document.documentElement.clientHeight;
+    const scrollX = window.scrollX; const scrollY = window.scrollY;
+    const margin = 6; // minimum gap from tile, also used as viewport inset
+    // Initial preferred position: below, horizontally centered on tile
+    let top = rect.bottom + margin + scrollY;
+    let left = rect.left + (rect.width/2) - (menu.offsetWidth/2) + scrollX;
+    // Clamp horizontally so popup fully visible
+    if(left < margin + scrollX) left = margin + scrollX;
+    const maxLeft = scrollX + viewportW - menu.offsetWidth - margin;
+    if(left > maxLeft) left = Math.max(margin + scrollX, maxLeft);
+    // If bottom overflows viewport, try placing above the tile
+    const menuHeight = menu.offsetHeight;
+    if(top + menuHeight - scrollY > viewportH - margin){
+      const flippedTop = rect.top - menuHeight - margin + scrollY;
+      if(flippedTop >= margin + scrollY){
+        top = flippedTop;
+        menu.classList.add('placement-above'); // (optional styling hook)
+      } else {
+        // Constrain height if still doesn't fit (rare on very small viewports)
+        const availableBelow = viewportH - rect.bottom - (margin*2);
+        const availableAbove = rect.top - (margin*2);
+        let maxHeight = Math.max(availableBelow, availableAbove);
+        if(maxHeight < menuHeight){
+          menu.style.maxHeight = Math.max(80, maxHeight) + 'px';
+          menu.style.overflowY = 'auto';
+        }
+        // Choose side with more space
+        if(availableAbove > availableBelow){
+          top = Math.max(margin + scrollY, rect.top - (menu.offsetHeight || maxHeight) - margin + scrollY);
+          menu.classList.add('placement-above');
+        } else {
+          top = rect.bottom + margin + scrollY;
+        }
+      }
+    }
+    // Final clamp vertically (in case of resize between measurements)
+    const minTop = margin + scrollY;
+    const maxTop = scrollY + viewportH - menu.offsetHeight - margin;
+    if(top < minTop) top = minTop;
+    if(top > maxTop) top = Math.max(minTop, maxTop);
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
     currentLearnerPopup=menu;
   }
   document.addEventListener('click',e=>{ if(currentLearnerPopup && !currentLearnerPopup.contains(e.target)) removeLearnerPopup(); });
