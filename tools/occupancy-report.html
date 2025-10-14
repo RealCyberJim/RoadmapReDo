@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Roadmap Occupancy Report</title>
+<style>
+  body { font-family: system-ui, Arial, sans-serif; margin: 1rem 1.5rem; }
+  h1 { font-size: 1.2rem; margin: 0 0 1rem; }
+  table { border-collapse: collapse; font-size: 0.72rem; }
+  th, td { border: 1px solid #ccc; padding: 0.25rem 0.4rem; text-align: center; }
+  th.sticky { position: sticky; top: 0; background: #f5f5f5; z-index: 2; }
+  th.subdomain-header { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; min-width: 1.8rem; font-size: 0.6rem; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  .over { background: #ffdddd !important; font-weight: bold; }
+  .capacity { background: #fff5d1; }
+  .zero { color: #bbb; }
+  .legend { margin: 0.8rem 0; font-size: 0.7rem; }
+  .summary { margin: 0.8rem 0 1.2rem; font-size: 0.75rem; }
+  .note { font-size: 0.65rem; color: #555; }
+  .scroller { overflow: auto; max-width: 100%; border: 1px solid #ddd; }
+  .subdomain-meta { font-size: 0.6rem; margin: 0.3rem 0 1rem; line-height: 1.2; }
+  .filter-box { margin: 0.6rem 0 1rem; }
+  .warn { color: #b00; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>Certification Grid Occupancy (Static Data Analysis)</h1>
+<p class="note">This tool loads <code>domains.json</code>, <code>subdomains.json</code>, and <code>certs.json</code> and produces a matrix: Rows = skill strata (1..28), Columns = subdomains. Each cell shows count of certs whose (subdomainId, certSkillStrata) matches. It does <strong>not</strong> simulate layout heuristics; it reveals raw density. Cells highlighted in red exceed the subdomain's column capacity for that row (potential collisions).</p>
+<div class="filter-box">
+  <label>Vendor Filter: <select id="vendorFilter"><option value="__ALL__">All Vendors</option></select></label>
+  <label style="margin-left:1rem;">Domain Filter: <select id="domainFilter"><option value="__ALL__">All Domains</option></select></label>
+  <button id="recalcBtn">Recalculate</button>
+</div>
+<div class="legend">
+  <strong>Legend:</strong>
+  <span style="background:#ffdddd; padding:2px 4px; border:1px solid #ccc;">&gt; span</span> Over capacity (collision risk) &nbsp; 
+  <span style="background:#fff5d1; padding:2px 4px; border:1px solid #ccc;">= span</span> At capacity &nbsp; 
+  <span style="color:#bbb;">0</span> empty row.
+</div>
+<div id="summary" class="summary"></div>
+<div class="scroller"><table id="occupancyTable"></table></div>
+<div id="subdomainMeta" class="subdomain-meta"></div>
+<script>
+(async function(){
+  const [domains, subdomains, certs, vendors] = await Promise.all([
+    fetch('../data/domains.json').then(r=>r.json()),
+    fetch('../data/subdomains.json').then(r=>r.json()),
+    fetch('../data/certs.json').then(r=>r.json()),
+    fetch('../data/vendors.json').then(r=>r.json()),
+  ]);
+
+  // Build vendor map & populate dropdown
+  const vendorMap = new Map();
+  vendors.forEach(v => { vendorMap.set(v.id, v.name); });
+  const vendorFilter = document.getElementById('vendorFilter');
+  vendors.slice().sort((a,b)=> a.name.localeCompare(b.name)).forEach(v =>{
+    const opt = document.createElement('option');
+    opt.value = v.id; opt.textContent = v.name; vendorFilter.appendChild(opt);
+  });
+
+  // Domain dropdown
+  const domainFilter = document.getElementById('domainFilter');
+  domains.slice().sort((a,b)=> a.domainDisplayOrder - b.domainDisplayOrder).forEach(d => {
+    if (d.domainId === 'SKL') return; // skip skill pseudo-domain
+    const opt = document.createElement('option');
+    opt.value = d.domainId; opt.textContent = d.domainShortName || d.domainId; domainFilter.appendChild(opt);
+  });
+
+  const tableEl = document.getElementById('occupancyTable');
+  const summaryEl = document.getElementById('summary');
+  const subMetaEl = document.getElementById('subdomainMeta');
+  const MAX_ROW = 28;
+
+  function compute(subdomainScope, vendorScope){
+    // Build occupancy: key = subdomainId -> row -> count
+    const occ = new Map();
+    subdomainScope.forEach(sd => {
+      const rowCounts = new Array(MAX_ROW+1).fill(0); // 1..28
+      occ.set(sd.subdomainId, { meta: sd, rows: rowCounts });
+    });
+
+    certs.forEach(c => {
+      if (vendorScope && vendorScope !== '__ALL__' && c.vendorId !== vendorScope) return;
+      const sd = occ.get(c.subdomainId);
+      if (!sd) return; // filtered out or domain filter mismatch
+      if (c.certSkillStrata < 1 || c.certSkillStrata > MAX_ROW) return;
+      sd.rows[c.certSkillStrata] += 1;
+    });
+    return occ;
+  }
+
+  function render(){
+    const vendorSel = vendorFilter.value;
+    const domainSel = domainFilter.value;
+
+    const subdomainScope = subdomains.filter(sd => {
+      if (domainSel !== '__ALL__' && sd.domainId !== domainSel) return false;
+      if (sd.domainId === 'SKL') return false; // skip skill rail pseudo-domain
+      return true;
+    }).sort((a,b)=>{
+      if (a.domainId === b.domainId) return a.gridColumnStart - b.gridColumnStart;
+      const ad = domains.find(d=>d.domainId===a.domainId)?.domainDisplayOrder || 999;
+      const bd = domains.find(d=>d.domainId===b.domainId)?.domainDisplayOrder || 999;
+      return ad - bd;
+    });
+
+    const occ = compute(subdomainScope, vendorSel);
+
+    // Build header row
+    const headerCells = ['<th class="sticky">Row</th>'];
+    subdomainScope.forEach(sd => {
+      headerCells.push(`<th class="sticky subdomain-header" title="${sd.subdomainLongName || ''}\nColumns: span ${sd.gridColumnSpan}">${sd.subdomainId}</th>`);
+    });
+
+    let html = `<thead><tr>${headerCells.join('')}</tr></thead><tbody>`;
+    let collisionCells = 0; let atCapacity = 0; let totalFilled = 0; let maxRowLoad = 0;
+
+    for (let row=1; row<=MAX_ROW; row++) {
+      const cells = [`<th>${row}</th>`];
+      subdomainScope.forEach(sd => {
+        const cell = occ.get(sd.subdomainId);
+        const count = cell ? cell.rows[row] : 0;
+        if (count>0) totalFilled++;
+        if (count > maxRowLoad) maxRowLoad = count;
+        let cls = '';
+        if (count === 0) cls = 'zero';
+        if (count === sd.gridColumnSpan) cls = 'capacity';
+        if (count > sd.gridColumnSpan) { cls = 'over'; collisionCells++; }
+        if (count === sd.gridColumnSpan) atCapacity++;
+        cells.push(`<td class="${cls}" data-subdomain="${sd.subdomainId}" data-row="${row}">${count||''}</td>`);
+      });
+      html += `<tr>${cells.join('')}</tr>`;
+    }
+    html += '</tbody>';
+    tableEl.innerHTML = html;
+
+    // Summary
+    summaryEl.innerHTML = `Vendor: <strong>${vendorSel==='__ALL__'?'All':(vendorMap.get(vendorSel)||vendorSel)}</strong> | Domain: <strong>${domainSel==='__ALL__'?'All':domainSel}</strong><br>`+
+      `Collision-risk cells (> span): <strong>${collisionCells}</strong> | At capacity (= span): <strong>${atCapacity}</strong> | Rows with any tiles: <strong>${totalFilled}</strong>`;
+
+    // Meta list of subdomains with any collision rows
+    const collisionSummary = [];
+    subdomainScope.forEach(sd => {
+      const cell = occ.get(sd.subdomainId);
+      if (!cell) return;
+      const overRows = [];
+      for (let r=1;r<=MAX_ROW;r++){ if (cell.rows[r] > sd.gridColumnSpan) overRows.push(r); }
+      if (overRows.length) collisionSummary.push({ subdomainId: sd.subdomainId, span: sd.gridColumnSpan, overRows });
+    });
+
+    if (collisionSummary.length === 0) {
+      subMetaEl.innerHTML = '<span>No over-capacity rows detected for current filters.</span>';
+    } else {
+      subMetaEl.innerHTML = '<div class="warn">Over-capacity (collision) rows:</div>' +
+        '<ul style="margin:0.3rem 0 0.6rem; padding-left:1rem;">' +
+        collisionSummary.map(c => `<li><code>${c.subdomainId}</code> span=${c.span} rows: ${c.overRows.join(', ')}</li>`).join('') + '</ul>';
+    }
+  }
+
+  document.getElementById('recalcBtn').addEventListener('click', render);
+  vendorFilter.addEventListener('change', render);
+  domainFilter.addEventListener('change', render);
+  render();
+})();
+</script>
+</body>
+</html>

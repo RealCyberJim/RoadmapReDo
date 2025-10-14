@@ -23,6 +23,10 @@
     "id": "bcs",
     "name": "British Computer Society (BCS)"
   },
+    {
+    "id": "broadcom",
+    "name": "Broadcom"
+  },
   {
     "id": "ciisec",
     "name": "CIISec"
@@ -346,10 +350,6 @@
   {
     "id": "various",
     "name": "Various"
-  },
-  {
-    "id": "vmware",
-    "name": "Vmware"
   },
   {
     "id": "zachman",
