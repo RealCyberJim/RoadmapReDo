@@ -392,9 +392,10 @@
     body.dark-mode .skill-strata-segment { filter:brightness(.95) contrast(1.05); }
     body.dark-mode .skill-strata-segment.is-dimmed { opacity:0.28; filter:grayscale(65%) brightness(1.15); }
   /* Learner Mode status styling */
-  .cert-tile.cert-status-achieved { outline: 2px solid limegreen; outline-offset: -2px; }
-  .cert-tile.cert-status-planned { outline: 2px dashed darkgoldenrod; outline-offset: -2px; }
-  .cert-tile.cert-status-reach { outline: 2px solid var(--color-blue-bright); outline-offset: -2px; }
+  /* Learner status classes now rely on background + border color only (no outlines) */
+  .cert-tile.cert-status-achieved,
+  .cert-tile.cert-status-planned,
+  .cert-tile.cert-status-reach { outline: none; }
   .learner-popup-menu { position:absolute; z-index:9999; background:#ffffff; border:1px solid #ccc; border-radius:0.45vmax; padding:0.3vmax 0; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.18); font-size:0.6vmax; min-width:8vmax; }
   body.dark-mode .learner-popup-menu { background:#222; border-color:#444; box-shadow:0 0.4vmax 1vmax rgba(0,0,0,0.55); }
   .learner-popup-menu button { display:block; width:100%; background:none; border:none; text-align:left; padding:0.38vmax 0.65vmax; cursor:pointer; font-size:inherit; font-family:inherit; color:#222; letter-spacing:0.3px; }
@@ -427,6 +428,12 @@
   .learner-reset-btn.cancel { background:var(--color-purple-light); color:var(--color-purple-dark); border-color:var(--color-purple-dark); }
   .learner-reset-btn.cancel:hover { filter:brightness(1.05); }
   .learner-reset-dialog p { margin:0; }
+  /* Reach replace dialog variant (shares base reset dialog styles) */
+  .reach-replace-dialog h3 { color: var(--color-blue-dark); }
+  body.dark-mode .reach-replace-dialog h3 { color: var(--color-skyblue-light); }
+  /* Planned limit dialog variant */
+  .planned-limit-dialog h3 { color: var(--color-yellow-dark); }
+  body.dark-mode .planned-limit-dialog h3 { color: var(--color-yellow-light); }
   /* Constrained overall layout shell to prevent helper UI from widening page */
   #app-shell { max-width:1600px; margin:0 auto; padding:0 1.5rem 2rem; box-sizing:border-box; }
   @media (max-width:1200px){ #app-shell { padding:0 1rem 2rem; } }
@@ -676,6 +683,10 @@
   </div>
   <div id="learner-stack-lines">
     <div class="filter-line" style="align-items:center;">
+      <span class="filter-label">Display Mode:</span>
+      <div id="mode-pills" class="mode-filter-bar" aria-label="Display Mode"></div>
+    </div>
+    <div class="filter-line" style="align-items:center;">
       <span class="filter-label">Learner Mode:</span>
       <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
     </div>
@@ -707,10 +718,6 @@
     <div class="filter-line">
       <span class="filter-label">Skill Level:</span>
       <div id="strata-pills" class="strata-filter-bar" aria-label="Skill Level Toggles"></div>
-    </div>
-    <div class="filter-line">
-      <span class="filter-label">Display Mode:</span>
-      <div id="mode-pills" class="mode-filter-bar" aria-label="Display Mode"></div>
     </div>
   </div>
   </div>
@@ -750,6 +757,45 @@ const CROSS_CERT_MODE_ENABLED = false;
 //  - Guest certs ignore proximity bias helpers and also use center-out sequence
 //  - Bias helper functions remain defined but are unused (left in place for easy revert)
 const DISABLE_HOME_GUEST_BIAS_TEST = true;
+
+// ==============================
+// Planned Certifications Limit (focus enforcement)
+// ==============================
+const MAX_PLANNED_CERTS = 5; // Hard cap for planned focus
+const LEARNER_PLANNED_ORDER_KEY = 'learnerPlannedOrder.v1'; // Persist insertion order
+
+function loadPlannedOrder(){
+  try { const raw = localStorage.getItem(LEARNER_PLANNED_ORDER_KEY); if(!raw) return []; const arr = JSON.parse(raw); return Array.isArray(arr)?arr:[]; } catch(e){ console.warn('Could not load planned order', e); return []; }
+}
+function savePlannedOrder(){
+  try { localStorage.setItem(LEARNER_PLANNED_ORDER_KEY, JSON.stringify(window.learnerPlannedOrder||[])); } catch(e){ console.warn('Could not save planned order', e); }
+}
+window.learnerPlannedOrder = loadPlannedOrder();
+
+function addPlannedCertToOrder(certId){
+  if(!window.learnerPlannedOrder.includes(certId)) { window.learnerPlannedOrder.push(certId); savePlannedOrder(); }
+}
+function removePlannedCertFromOrder(certId){
+  const idx = window.learnerPlannedOrder.indexOf(certId);
+  if(idx!==-1){ window.learnerPlannedOrder.splice(idx,1); savePlannedOrder(); }
+}
+function enforceLegacyPlannedLimit(){
+  // Legacy reconciliation: ensures order list exists, aligns with current statuses, and trims overflow
+  // Build list of currently planned from statuses
+  const plannedIds = Object.entries(window.learnerCertStatuses||{}).filter(([,s])=>s==='planned').map(([id])=>id);
+  // Ensure order array only references still-planned IDs
+  window.learnerPlannedOrder = window.learnerPlannedOrder.filter(id=>plannedIds.includes(id));
+  // Add any planned IDs missing from order (legacy) preserving discovery order
+  plannedIds.forEach(id=>{ if(!window.learnerPlannedOrder.includes(id)) window.learnerPlannedOrder.push(id); });
+  if(window.learnerPlannedOrder.length>MAX_PLANNED_CERTS){
+    const toKeep = window.learnerPlannedOrder.slice(0,MAX_PLANNED_CERTS);
+    const toDrop = window.learnerPlannedOrder.slice(MAX_PLANNED_CERTS);
+    toDrop.forEach(id=>{ if(window.learnerCertStatuses[id]==='planned'){ delete window.learnerCertStatuses[id]; } });
+    window.learnerPlannedOrder = toKeep;
+    saveLearnerStatuses();
+  }
+  savePlannedOrder();
+}
 
 // Centralized filter state — controls what gets shown on the roadmap
     const filterState = {
@@ -1634,24 +1680,40 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
     function applyLearnerStatusToTile(tile){
       if(!tile) return;
       tile.classList.remove('cert-status-achieved','cert-status-planned','cert-status-reach');
+      // Suppress any learner status visualization when learner mode is OFF
+      if(!filterState.learnerMode) return;
       const cid = tile.getAttribute('data-cert-id');
       const status = window.learnerCertStatuses && window.learnerCertStatuses[cid];
-      if(status==='achieved') tile.classList.add('cert-status-achieved');
-      else if(status==='planned') tile.classList.add('cert-status-planned');
-      else if(status==='reach') tile.classList.add('cert-status-reach');
+      // Apply unified learner palette overriding domain colors for clarity
+      if(status==='achieved'){
+        tile.classList.add('cert-status-achieved');
+        tile.style.backgroundColor = 'var(--color-green-light)';
+        tile.style.borderColor = 'var(--color-green-dark)';
+        tile.style.color = 'var(--color-green-dark)';
+      } else if(status==='planned') {
+        tile.classList.add('cert-status-planned');
+        tile.style.backgroundColor = 'var(--color-yellow-light)';
+        tile.style.borderColor = 'var(--color-yellow-dark)';
+        tile.style.color = 'var(--color-yellow-dark)';
+      } else if(status==='reach') {
+        tile.classList.add('cert-status-reach');
+        tile.style.backgroundColor = 'var(--color-skyblue-light)';
+        tile.style.borderColor = 'var(--color-skyblue-dark)';
+        tile.style.color = 'var(--color-skyblue-dark)';
+      }
     }
 
     // Filter tiles based on learner view mode
     function updateLearnerViewVisibility(){
-      /* View semantics:
-         default: show every cert tile (ignore statuses entirely)
+      /* View semantics (renamed):
+         baseline (formerly default): show every cert tile; statuses still visually applied for assigned certs (only when learner mode ON)
          achieved/planned/reach: show only tiles with that status
          all: show only tiles that have ANY learner status (achieved/planned/reach)
       */
       const mode = filterState.learnerMode;
       const view = filterState.learnerView; // default|achieved|planned|reach|all
       document.querySelectorAll('.cert-tile').forEach(tile=>{
-        if(!mode || view==='default'){ tile.style.display=''; return; }
+        if(!mode || view==='baseline'){ tile.style.display=''; return; }
         const cid = tile.getAttribute('data-cert-id');
         const status = window.learnerCertStatuses && window.learnerCertStatuses[cid];
         if(view==='all'){
@@ -1803,6 +1865,13 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
       // Initial draw
       // Load persisted state AFTER UI elements exist
       const persisted = loadState();
+      if(!persisted){
+        // First visit: default to dark mode
+        filterState.darkMode = true;
+        document.body.classList.add('dark-mode');
+        // Persist immediately so subsequent loads treat it as user state until they change it
+        saveState();
+      }
       applyPersistedState(persisted, domains, normalizedVendors);
 
       // Sync domain checkbox visual state after persistence load
@@ -1969,9 +2038,10 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
   // Build Light/Dark mode two-state pill pair
   const modePills = document.getElementById('mode-pills');
   if (modePills) {
+    // Modes array defined without static active flags; active resolved each render so early body class changes are reflected
     const modes = [
-      { id: 'light', label: 'Light', active: !filterState.darkMode, light: '--mode-light-light', dark: '--mode-light-dark' },
-      { id: 'dark', label: 'Dark', active: filterState.darkMode, light: '--mode-dark-light', dark: '--mode-dark-dark' }
+      { id: 'light', label: 'Light', light: '--mode-light-light', dark: '--mode-light-dark' },
+      { id: 'dark', label: 'Dark', light: '--mode-dark-light', dark: '--mode-dark-dark' }
     ];
     function renderModePills() {
       modePills.innerHTML='';
@@ -1980,7 +2050,7 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
         cb.type='radio';
         cb.name='display-mode';
         cb.id=`mode-${m.id}`;
-        cb.checked = m.active;
+        cb.checked = (m.id==='dark') === filterState.darkMode; // dark is checked when darkMode true
         const label = document.createElement('label');
         label.className='mode-filter-tile';
         label.htmlFor=cb.id;
@@ -2001,7 +2071,6 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
         }
         cb.addEventListener('change', ()=>{
           if (!cb.checked) return;
-          modes.forEach(x=> x.active = (x.id===m.id));
           filterState.darkMode = (m.id === 'dark');
             document.body.classList.toggle('dark-mode', filterState.darkMode);
           saveStateDebounced();
@@ -2092,8 +2161,19 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
       }
       input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode); if(!filterState.learnerMode){
           // When turning OFF, force roadmap back to Default view semantics
-          filterState.learnerView = 'default';
+          filterState.learnerView = 'baseline';
           removeLearnerPopup();
+          // Strip learner inline styles & classes so roadmap returns to native palette
+          document.querySelectorAll('.cert-tile').forEach(t=>{
+            t.classList.remove('cert-status-achieved','cert-status-planned','cert-status-reach');
+            t.style.backgroundColor='';
+            t.style.borderColor='';
+            t.style.color='';
+          });
+          // Rebuild roadmap immediately so domain palette reapplies without waiting for another filter interaction
+          const prevScrollY = window.scrollY; const prevScrollX = window.scrollX;
+          applyFiltersAndRedraw();
+          window.scrollTo(prevScrollX, prevScrollY);
         }
         updateLearnerModeStatusBadge();
         saveStateDebounced();
@@ -2109,19 +2189,23 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
   renderLearnerModePills();
 
   const learnerActionPills = document.getElementById('learner-action-pills');
+  function getLearnerStatusCounts(){
+    let achieved=0, planned=0, reach=0; const statuses = window.learnerCertStatuses||{};
+    for(const v of Object.values(statuses)){ if(v==='achieved') achieved++; else if(v==='planned') planned++; else if(v==='reach') reach++; }
+    return {achieved, planned, reach};
+  }
   function renderLearnerActionPills(){
     if(!learnerActionPills) return; learnerActionPills.innerHTML='';
-  const neutralBg = 'var(--learner-neutral-bg)';
-  const neutralBorder = 'var(--learner-neutral-border)';
-  const neutralText = 'var(--learner-neutral-text)';
+    const neutralBg = 'var(--learner-neutral-bg)';
+    const neutralBorder = 'var(--learner-neutral-border)';
+    const neutralText = 'var(--learner-neutral-text)';
+    const counts = getLearnerStatusCounts();
     const views=[
-      // Default: show full roadmap (ignores learner status filtering)
-      {id:'default', label:'Default', bg:neutralBg, border:neutralBorder, text:neutralText},
-  {id:'achieved', label:'Achieved', bg:'var(--color-green-light)', border:'var(--learner-achieved-border)', text:'var(--learner-achieved-text)'},
-  {id:'planned', label:'Planned', bg:'var(--color-yellow-light)', border:'var(--learner-planned-border)', text:'var(--learner-planned-text)', dashed:true},
-  {id:'reach', label:'Reach Goal', bg:'var(--learner-reach-bg)', border:'var(--learner-reach-border)', text:'var(--learner-reach-text)'},
-      {id:'all', label:'All', bg:neutralBg, border:neutralBorder, text:neutralText},
-      // Reset does not represent a persistent view state (use neutral scheme for visual consistency)
+      {id:'baseline', label:'Baseline', bg:neutralBg, border:neutralBorder, text:neutralText},
+      {id:'achieved', label:`My Achieved (${counts.achieved})`, bg:'var(--color-green-light)', border:'var(--color-green-dark)', text:'var(--color-green-dark)'},
+      {id:'planned', label:`My Planned (${counts.planned} of ${MAX_PLANNED_CERTS})`, bg:'var(--color-yellow-light)', border:'var(--color-yellow-dark)', text:'var(--color-yellow-dark)', dashed:true},
+      {id:'reach', label:`My Reach Goal (${counts.reach} of 1)`, bg:'var(--color-blue-light)', border:'var(--color-blue-dark)', text:'var(--color-blue-dark)'},
+      {id:'all', label:'My Roadmap', bg:neutralBg, border:neutralBorder, text:neutralText},
       {id:'reset', label:'Reset', bg:neutralBg, border:neutralBorder, text:neutralText}
     ];
     views.forEach(v=>{
@@ -2144,12 +2228,12 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
       if(v.id==='reset'){
         label.addEventListener('click',(e)=>{ e.stopPropagation(); if(!filterState.learnerMode){ return; } showLearnerResetModal(); });
       } else {
-        input.addEventListener('change',()=>{ if(!input.checked) return; filterState.learnerView=v.id; saveStateDebounced(); renderLearnerActionPills(); updateLearnerViewVisibility(); });
+  input.addEventListener('change',()=>{ if(!input.checked) return; filterState.learnerView=v.id; saveStateDebounced(); renderLearnerActionPills(); updateLearnerViewVisibility(); });
         label.addEventListener('click', (e)=>{ if(!filterState.learnerMode){ return; } if(!input.checked){ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); } e.stopPropagation(); });
       }
       // Disable non-default view pills when learner mode is OFF
       if(!filterState.learnerMode){
-        if(v.id==='default'){
+        if(v.id==='baseline'){
           // Force default to appear active
           input.checked = true;
           label.classList.remove('is-off');
@@ -2208,7 +2292,7 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
       window.learnerCertStatuses = {}; // clear statuses in memory
       saveLearnerStatuses();
       // Reset learnerView to 'all' so user sees zero (since no statuses remain)
-      filterState.learnerView = 'all';
+  filterState.learnerView = 'all'; // remains the same semantic (All My Certs)
       saveStateDebounced();
       document.querySelectorAll('.cert-tile').forEach(tile=>{ applyLearnerStatusToTile(tile); });
       renderLearnerActionPills();
@@ -2235,10 +2319,88 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
     menu.className='learner-popup-menu'; menu.setAttribute('role','menu');
     function addBtn(label,fn,cls){ const b=document.createElement('button'); b.type='button'; b.textContent=label; if(cls)b.classList.add(cls); b.addEventListener('click',e=>{ e.stopPropagation(); fn(); removeLearnerPopup(); }); menu.appendChild(b); }
     const cid=tile.getAttribute('data-cert-id');
-  addBtn('Mark as Achieved',()=>{ window.learnerCertStatuses[cid]='achieved'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
-  addBtn('Mark as Planned',()=>{ window.learnerCertStatuses[cid]='planned'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
-  addBtn('Mark as Reach Goal',()=>{ window.learnerCertStatuses[cid]='reach'; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },null);
-  addBtn('Clear Status',()=>{ delete window.learnerCertStatuses[cid]; applyLearnerStatusToTile(tile); saveLearnerStatuses(); updateLearnerViewVisibility(); },'danger');
+  addBtn('Mark as Achieved',()=>{
+    const prev = window.learnerCertStatuses[cid];
+    if(prev==='planned') removePlannedCertFromOrder(cid); // leaving planned → achieved
+    // If previously reach, just overwrite.
+    window.learnerCertStatuses[cid]='achieved';
+    applyLearnerStatusToTile(tile);
+    saveLearnerStatuses();
+    updateLearnerViewVisibility();
+    renderLearnerActionPills();
+  },null);
+  addBtn('Mark as Planned',()=>{
+    // Planned selection with cap + replacement confirmation when at limit
+    const currentStatus = window.learnerCertStatuses[cid];
+    if(currentStatus==='planned') return; // already planned
+    // If shifting from reach or achieved, that's fine; only need to add to order if not already.
+    if(currentStatus==='reach'){ /* reach → planned */ }
+    if(currentStatus==='achieved'){ /* achieved → planned is allowed, rare */ }
+    const plannedIds = window.learnerPlannedOrder.slice();
+    if(plannedIds.length < MAX_PLANNED_CERTS){
+      window.learnerCertStatuses[cid]='planned';
+      addPlannedCertToOrder(cid);
+      applyLearnerStatusToTile(tile);
+      saveLearnerStatuses();
+      updateLearnerViewVisibility();
+      renderLearnerActionPills();
+    } else {
+      const oldestId = plannedIds[0];
+      if(oldestId===cid){ return; }
+      const oldestTile = document.querySelector(`.cert-tile[data-cert-id="${oldestId}"]`);
+      const oldestName = oldestTile ? oldestTile.textContent.trim() : oldestId;
+      const newName = tile.textContent.trim();
+      showPlannedLimitModal(oldestId,cid,newName,oldestName,()=>{
+        // Replace logic
+        if(window.learnerCertStatuses[oldestId]==='planned') delete window.learnerCertStatuses[oldestId];
+        removePlannedCertFromOrder(oldestId);
+        window.learnerCertStatuses[cid]='planned';
+        addPlannedCertToOrder(cid);
+        if(oldestTile) applyLearnerStatusToTile(oldestTile);
+        applyLearnerStatusToTile(tile);
+        saveLearnerStatuses();
+        updateLearnerViewVisibility();
+        renderLearnerActionPills();
+      });
+    }
+  },null);
+  addBtn('Mark as Reach Goal',()=>{
+    const existingId = getCurrentReachGoalCertId();
+    const priorStatus = window.learnerCertStatuses[cid];
+    if(existingId && existingId !== cid){
+      // Need tile names for dialog messaging
+      const existingTile = document.querySelector(`.cert-tile[data-cert-id="${existingId}"]`);
+      const existingName = existingTile ? existingTile.textContent.trim() : existingId;
+      const newName = tile.textContent.trim();
+      showReachReplaceConfirm(existingId,cid,newName,existingName,()=>{
+        delete window.learnerCertStatuses[existingId];
+        if(priorStatus==='planned') removePlannedCertFromOrder(cid); // planned → reach
+        window.learnerCertStatuses[cid]='reach';
+        applyLearnerStatusToTile(tile);
+        if(existingTile) applyLearnerStatusToTile(existingTile); // clear old styling
+        saveLearnerStatuses();
+        updateLearnerViewVisibility();
+        renderLearnerActionPills();
+      });
+    } else {
+      if(priorStatus==='planned') removePlannedCertFromOrder(cid); // planned → reach
+      window.learnerCertStatuses[cid]='reach';
+      applyLearnerStatusToTile(tile);
+      saveLearnerStatuses();
+      updateLearnerViewVisibility();
+      renderLearnerActionPills();
+    }
+  },null);
+  addBtn('Clear Status',()=>{ 
+    const status = window.learnerCertStatuses[cid];
+    if(status==='planned') removePlannedCertFromOrder(cid);
+    if(status==='reach') {/* reach replacement handled elsewhere */}
+    delete window.learnerCertStatuses[cid]; 
+    applyLearnerStatusToTile(tile); 
+    saveLearnerStatuses(); 
+    updateLearnerViewVisibility(); 
+    renderLearnerActionPills();
+  },'danger');
     document.body.appendChild(menu);
     // ----- Viewport-safe positioning -----
     const viewportW = document.documentElement.clientWidth;
@@ -2330,6 +2492,95 @@ const DISABLE_HOME_GUEST_BIAS_TEST = true;
   );
 
   window.addEventListener('load',()=>{ setTimeout(()=>{ document.querySelectorAll('.cert-tile').forEach(applyLearnerStatusToTile); },100); });
+  
+  // ==============================
+  // Single Reach Goal Enforcement
+  // Option 3 UX: Confirm replacement
+  // ==============================
+  function getCurrentReachGoalCertId(){
+    for(const [cid,status] of Object.entries(window.learnerCertStatuses||{})){
+      if(status==='reach') return cid;
+    }
+    return null;
+  }
+
+  function enforceSingleReachGoal(){
+    // If multiple reach goals somehow exist (older sessions), keep the first encountered
+    let first=null; const removals=[];
+    for(const [cid,status] of Object.entries(window.learnerCertStatuses||{})){
+      if(status==='reach'){
+        if(first===null) first=cid; else removals.push(cid);
+      }
+    }
+    if(removals.length){
+      removals.forEach(r=>{ delete window.learnerCertStatuses[r]; });
+      saveLearnerStatuses();
+    }
+  }
+
+  function showReachReplaceConfirm(oldId,newId,newName,oldName,onConfirm){
+    // Reuse styling pattern from learner-reset-dialog
+    const overlay=document.createElement('div');
+    overlay.className='learner-reset-overlay reach-replace-overlay';
+    overlay.setAttribute('role','dialog');
+    overlay.setAttribute('aria-modal','true');
+    overlay.setAttribute('aria-label','Confirm Reach Goal Replacement');
+    const dialog=document.createElement('div');
+    dialog.className='learner-reset-dialog reach-replace-dialog';
+    const title=document.createElement('h3');
+    title.textContent='Replace Reach Goal?';
+    const p=document.createElement('p');
+    p.innerHTML = oldName
+      ? `You already set <strong>${oldName}</strong> as your Reach Goal. Do you want to replace it with <strong>${newName}</strong>?`
+      : `Confirm setting <strong>${newName}</strong> as your Reach Goal.`; // fallback (should not hit when oldId exists)
+    const actions=document.createElement('div');
+    actions.className='learner-reset-actions';
+    const cancel=document.createElement('button');
+    cancel.className='learner-reset-btn cancel';
+    cancel.type='button';
+    cancel.textContent='Cancel';
+    cancel.addEventListener('click',()=>{ document.body.removeChild(overlay); });
+    const confirm=document.createElement('button');
+    confirm.className='learner-reset-btn confirm';
+    confirm.type='button';
+    confirm.textContent='Replace';
+    confirm.addEventListener('click',()=>{ document.body.removeChild(overlay); onConfirm(); });
+    actions.appendChild(cancel); actions.appendChild(confirm);
+    dialog.appendChild(title); dialog.appendChild(p); dialog.appendChild(actions);
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    // Basic focus management
+    setTimeout(()=>confirm.focus(),30);
+  }
+
+  // Run enforcement early after statuses loaded
+  enforceSingleReachGoal();
+  enforceLegacyPlannedLimit();
+
+  // ==============================
+  // Planned Limit Replacement Modal
+  // ==============================
+  function showPlannedLimitModal(oldestId,newId,newName,oldestName,onConfirm){
+    const overlay=document.createElement('div');
+    overlay.className='learner-reset-overlay planned-limit-overlay';
+    overlay.setAttribute('role','dialog');
+    overlay.setAttribute('aria-modal','true');
+    overlay.setAttribute('aria-label','Planned Certifications Limit');
+    const dialog=document.createElement('div');
+    dialog.className='learner-reset-dialog planned-limit-dialog';
+    const title=document.createElement('h3'); title.textContent='Planned Focus Limit';
+    const p=document.createElement('p');
+    p.innerHTML=`You already have <strong>${MAX_PLANNED_CERTS}</strong> certifications planned. Replace the oldest (<strong>${oldestName}</strong>) with <strong>${newName}</strong>?`;
+    const actions=document.createElement('div'); actions.className='learner-reset-actions';
+    const cancel=document.createElement('button'); cancel.type='button'; cancel.className='learner-reset-btn cancel'; cancel.textContent='Cancel';
+    cancel.addEventListener('click',()=>{ document.body.removeChild(overlay); });
+    const replace=document.createElement('button'); replace.type='button'; replace.className='learner-reset-btn confirm'; replace.textContent='Replace';
+    replace.addEventListener('click',()=>{ document.body.removeChild(overlay); onConfirm(); });
+    actions.appendChild(cancel); actions.appendChild(replace);
+    dialog.appendChild(title); dialog.appendChild(p); dialog.appendChild(actions);
+    overlay.appendChild(dialog); document.body.appendChild(overlay);
+    setTimeout(()=>replace.focus(),30);
+  }
 
   // Fallback: attach per-tile listeners after each redraw to guarantee popup
   // Remove complex per-tile binding: delegation now handles all clicks.
