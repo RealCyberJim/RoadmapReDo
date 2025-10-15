@@ -744,6 +744,12 @@
 
 // Control flag for cross-cert functionality
 const CROSS_CERT_MODE_ENABLED = false;
+// Temporary test flag: disables home/guest bias logic so we can observe pure center-out placement
+// without refactoring larger structural code. When true:
+//  - Home certs with crossDomains no longer force left/center/right; they use center-out sequence
+//  - Guest certs ignore proximity bias helpers and also use center-out sequence
+//  - Bias helper functions remain defined but are unused (left in place for easy revert)
+const DISABLE_HOME_GUEST_BIAS_TEST = true;
 
 // Centralized filter state — controls what gets shown on the roadmap
     const filterState = {
@@ -773,171 +779,111 @@ const CROSS_CERT_MODE_ENABLED = false;
     // Set to false to restore previous behavior where unused rows collapse (causing upward shift).
     const PRESERVE_SKILL_ROW_LAYOUT = true;
 
-        // ============================================================================
-        // Feature Flags (Step 1 Scaffold)
-        // ----------------------------------------------------------------------------
-        // USE_NEW_PLACEMENT
-        //   When true, roadmap tile placement will delegate to a new deterministic,
-        //   occupancy-based engine that prevents silent collisions by consulting an
-        //   in-memory occupancy grid before assigning gridRow / gridColumn.
-        //   Currently OFF so behavior is identical to pre-refactor layout.
-        // ENABLE_PLACEMENT_DIAGNOSTICS
-        //   When true, lightweight invariant diagnostics will run after drawRoadmap()
-        //   collecting collision counts, duplicate IDs, and per-subdomain row density.
-        //   Diagnostics are side-effect free (console only) and safe to leave on.
-        // MAX_ROW_OFFSET_NEW_ENGINE
-        //   Upper bound of how far (in rows) the new engine may search above/below
-        //   a preferred skill row while resolving conflicts. Ignored while flag off.
-        // ----------------------------------------------------------------------------
-        // NOTE: Do not remove legacy placement logic until parity is validated with
-        //       USE_NEW_PLACEMENT toggled on in a controlled test pass.
-        // ============================================================================
-  const USE_NEW_PLACEMENT = true; // Enabled after parity verification
-        const ENABLE_PLACEMENT_DIAGNOSTICS = false; // set true to log invariants
-        const MAX_ROW_OFFSET_NEW_ENGINE = 2;
+    // ================================
+    // Persistence Utilities (localStorage)
+    // ================================
+  /*
+   * PERSISTENCE OVERVIEW
+   * --------------------------------------------------
+   * We persist a subset of the user's UI preferences and filter selections
+   * in localStorage so that returning sessions reopen with the same view.
+   * This is a lightweight, client-only approach intended as a stepping stone
+   * toward a future authenticated profile (OAuth or similar) where this
+   * state would instead round-trip to a backend service.
+   *
+   * VERSIONING
+   * The STORAGE_KEY includes a semantic suffix ("v1"). Increment this when
+   * the shape of the stored snapshot changes incompatibly (e.g., rename keys,
+   * remove fields, or change types). For additive changes (adding new keys),
+   * you generally DO NOT need to bump the version—just supply defaults and
+   * merge new values on load. For breaking changes, bump to v2 and optionally
+   * implement a one-time migration reading the old key.
+   *
+   * WHAT WE STORE NOW
+   *  - visibleDomains: [String] domain IDs the user has left checked
+   *  - visibleVendorIds: [String] vendor IDs actively included (redundant but
+   *    kept for explicitness; can be recomputed but storing simplifies future diffs)
+   *  - selectedVendorMode: '__ALL__' | '__NONE__' | vendorId (raw dropdown value)
+   *  - darkMode: Boolean
+   *  - visibleSkillStrata: { beginner, intermediate, expert } (future-proof)
+   *
+   * FIELDS TO ADD LATER (GUIDANCE)
+   *  - compressSkillRows (Boolean)
+   *  - showCrossDomainCerts / showCrossSubdomainCerts / showOnlyCrossCerts
+   *  - userSortPreference (if manual reordering is introduced)
+   *  - layoutVersion (if tile sizing changes and you need migrations)
+   *
+   * ADDING A NEW FIELD
+   * 1. Add default to filterState.
+   * 2. Include in saveState() snapshot.
+   * 3. Merge in applyPersistedState() if present.
+   * 4. Trigger saveStateDebounced() whenever it changes.
+   *
+   * MIGRATION STRATEGY (WHEN MOVING TO SERVER PROFILES)
+   *  - Encapsulate save/load behind an abstraction (e.g., persistence.get() / set()).
+   *  - Replace localStorage calls with fetch/POST once auth is active.
+   *  - Maintain localStorage as an offline cache fallback until confidence.
+   *  - Introduce a 'lastUpdated' timestamp to support conflict resolution.
+   *
+   * PRIVACY NOTE
+   * Only non-sensitive UI preference data is stored. Do NOT persist secrets
+   * or PII here. Future authenticated sync should still treat these fields as
+   * user-owned preferences.
+   *
+   * ERROR HANDLING
+   * All reads/writes wrapped in try/catch. Failures degrade gracefully with
+   * console warnings. If storage quota is exceeded, user simply loses persistence.
+   *
+   * RESET INSTRUCTIONS
+   *   localStorage.removeItem('roadmapState.v1');
+   * or programmatically call a future resetPreferences() helper.
+   *
+   * PERFORMANCE
+   * Saves are debounced (300ms) to prevent thrashing; snapshot is small.
+   *
+   * TESTING / VERIFICATION STEPS
+   *  - Change vendor filter, toggle dark mode, uncheck a domain → refresh → state persists.
+   *  - Corrupt the stored JSON manually → load should warn and ignore.
+   */
+    const STORAGE_KEY = 'roadmapState.v1'; // increment suffix if structure changes
+  const LEARNER_STATE_KEY = 'learnerCertStatuses.v1';
 
-        /**
-         * Run non-invasive diagnostics on the current, already-rendered roadmap.
-         * (Only active when ENABLE_PLACEMENT_DIAGNOSTICS === true.)
-         * Reports:
-         *  - Total cert tiles rendered & unique cert IDs
-         *  - Any duplicate grid coordinate collisions per subdomain container
-         *  - Per (subdomain, skillRow) counts for quick density checks
-         */
-        function runPlacementDiagnostics(){
-          if(!ENABLE_PLACEMENT_DIAGNOSTICS) return;
-          try {
-            const tiles = Array.from(document.querySelectorAll('.cert-tile'));
-            const seenIds = new Set();
-            const coordMap = new Map(); // key: subdomainId|row|col -> array of certIds
-            let dupIdCount = 0;
-            tiles.forEach(t => {
-              const cid = t.getAttribute('data-cert-id');
-                if(seenIds.has(cid)) dupIdCount++;
-                else seenIds.add(cid);
-              const subId = t.getAttribute('data-subdomain-id') || '(none)';
-              const row = t.style.gridRowStart || t.getAttribute('data-skill-row') || '?';
-              const col = t.style.gridColumnStart || '?';
-              const key = `${subId}|${row}|${col}`;
-              if(!coordMap.has(key)) coordMap.set(key, []);
-              coordMap.get(key).push(cid);
-            });
-            const collisions = [];
-            coordMap.forEach((list, key) => { if(list.length > 1) collisions.push({key, list}); });
-            const density = {}; // subdomain -> row -> count
-            coordMap.forEach((list, key) => {
-              const [sub,row] = key.split('|');
-              if(!density[sub]) density[sub] = {};
-              density[sub][row] = (density[sub][row]||0) + list.length; // counts duplicates separately for visibility
-            });
-            // Summarize density minimally for console
-            const densitySummary = Object.fromEntries(Object.entries(density).map(([sub, rows]) => [sub, Object.entries(rows).length + ' rows']));
-            console.groupCollapsed('[placement-diagnostics] Summary');
-            console.log('Total tiles:', tiles.length, 'Unique cert IDs:', seenIds.size, 'Duplicate cert IDs:', dupIdCount);
-            console.log('Collisions (same subdomain,row,col with >1 tile):', collisions.length);
-            if(collisions.length){ console.table(collisions.map(c => ({cell: c.key, certIds: c.list.join(',')}))); }
-            console.log('Density (subdomain -> distinct skill rows used):', densitySummary);
-            console.groupEnd();
-          } catch(err){
-            console.warn('[placement-diagnostics] Error while computing diagnostics', err);
-          }
+    function saveState() {
+      try {
+        const snapshot = {
+          visibleDomains: filterState.visibleDomains,
+          visibleVendorIds: filterState.visibleVendorIds,
+          selectedVendorMode: filterState.selectedVendorMode,
+          darkMode: filterState.darkMode,
+          visibleSkillStrata: filterState.visibleSkillStrata,
+          filtersExpanded: filterState.filtersExpanded
+          , learnerMode: filterState.learnerMode
+          , learnerEdit: filterState.learnerEdit
+          , learnerStackExpanded: filterState.learnerStackExpanded
+          , learnerView: filterState.learnerView
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+      } catch (e) {
+        console.warn('Could not save roadmap state:', e);
+      }
+    }
 
-        // ============================================================================
-        // Parity / Diff Verification Helpers (Todo 7) - Restored
-        // ============================================================================
-        const parityHarness = (function(){
-          function snapshotFrom(root){
-            const map={};
-            root.querySelectorAll('.cert-tile').forEach(t=>{
-              const cid = t.getAttribute('data-cert-id');
-              map[cid] = {
-                row: parseInt(t.style.gridRowStart||t.getAttribute('data-skill-row')||'-1',10),
-                col: parseInt(t.style.gridColumnStart||'-1',10),
-                sub: t.getAttribute('data-subdomain-id')||''
-              };
-            });
-            return map;
-          }
-          function collisionCount(root){
-            const cellMap=new Map();
-            root.querySelectorAll('.cert-tile').forEach(t=>{
-              const sub=t.getAttribute('data-subdomain-id')||'';
-              const row=t.style.gridRowStart||t.getAttribute('data-skill-row')||'?';
-              const col=t.style.gridColumnStart||'?';
-              const key=sub+'|'+row+'|'+col; cellMap.set(key,(cellMap.get(key)||0)+1);
-            });
-            let c=0; cellMap.forEach(v=>{ if(v>1) c++; }); return c;
-          }
-          async function loadAll(){
-            const [domains, subdomains, certs, skillStrata] = await Promise.all([
-              fetch('data/domains.json').then(r=>r.json()),
-              fetch('data/subdomains.json').then(r=>r.json()),
-              fetch('data/certs.json').then(r=>r.json()),
-              fetch('data/skillstrata.json').then(r=>r.json())
-            ]); return {domains, subdomains, certs, skillStrata};
-          }
-          function renderInto(root, data, useNew){
-            // Create isolated container emulating live roadmap
-            const sandboxWrapper = document.createElement('div');
-            sandboxWrapper.className='parity-sandbox';
-            const sandbox = document.createElement('div');
-            sandbox.id='roadmap';
-            sandboxWrapper.appendChild(sandbox); root.appendChild(sandboxWrapper);
-            // Temporarily expose flag to new engine by redefining global property look-up (engine reads lexical const so we replay logic manually)
-            // We directly invoke placement by iterating domains/subdomains replicating minimal portion of drawRoadmap.
-            // For simplicity we clone needed arrays.
-            const {domains, subdomains, certs, skillStrata} = data;
-            domains.filter(d=>d.domainId!=='SKL').forEach(domain=>{
-              const domainDiv=document.createElement('div'); domainDiv.className='domain-container';
-              const domainSubdomains=subdomains.filter(sd=>sd.domainId===domain.domainId);
-              domainSubdomains.forEach(sub=>{
-                const subDiv=document.createElement('div'); subDiv.className='subdomain-container';
-                const visibleSubCerts = certs.filter(c=> c.subdomainId===sub.subdomainId || c.crossSubdomains?.includes(sub.subdomainId));
-                if(!visibleSubCerts.length) return;
-                placeTilesNewEngine(subDiv, visibleSubCerts, domain, sub, domains);
-                domainDiv.appendChild(subDiv);
-              });
-              sandbox.appendChild(domainDiv);
-            });
-            return snapshotFrom(sandbox);
-          }
-          function diffSnapshots(a,b){
-            const moved=[]; let same=0;
-            Object.keys(a).forEach(cid=>{ if(!b[cid]) return; const A=a[cid], B=b[cid]; if(A.row===B.row && A.col===B.col && A.sub===B.sub) same++; else moved.push({certId:cid, from:`${A.sub}:${A.row},${A.col}`, to:`${B.sub}:${B.row},${B.col}`}); });
-            return {moved, same};
-          }
-            async function captureBoth(){
-              const data=await loadAll();
-              const root=document.createElement('div'); root.style.position='absolute'; root.style.left='-9999px'; document.body.appendChild(root);
-              const legacySnap = renderInto(root, data, false); // using new engine path for both due to simplified harness
-              const legacyCollisions = collisionCount(root);
-              root.innerHTML='';
-              const newSnap = renderInto(root, data, true);
-              const newCollisions = collisionCount(root);
-              root.remove();
-              const diff = diffSnapshots(legacySnap, newSnap);
-              return {legacySnap, newSnap, diff, legacyCollisions, newCollisions};
-            }
-          function report(result){
-            const {legacySnap,newSnap,diff,legacyCollisions,newCollisions}=result;
-            console.group('[parity] Placement Comparison');
-            console.log('Legacy tiles:', Object.keys(legacySnap).length, 'New tiles:', Object.keys(newSnap).length);
-            console.log('Legacy collisions:', legacyCollisions, 'New collisions:', newCollisions);
-            console.log('Unmoved:', diff.same, 'Moved:', diff.moved.length);
-            if(diff.moved.length){ console.table(diff.moved.slice(0,50)); }
-            console.groupEnd();
-            return result;
-          }
-          return {captureBoth, report};
-        })();
-        window.parityHarness = parityHarness;
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        console.warn('Could not load roadmap state:', e);
+        return null;
+      }
+    }
 
-        // Persistence utilities (restored)
-        const STORAGE_KEY = 'roadmapFiltersState.v1';
-        function saveState(){ try { const snapshot={ visibleDomains: filterState.visibleDomains.slice(), visibleVendorIds: (filterState.visibleVendorIds||[]).slice(), selectedVendorMode: filterState.selectedVendorMode, darkMode: filterState.darkMode, visibleSkillStrata: {...filterState.visibleSkillStrata}, filtersExpanded: filterState.filtersExpanded, learnerMode: filterState.learnerMode, learnerEdit: filterState.learnerEdit, learnerStackExpanded: filterState.learnerStackExpanded, learnerView: filterState.learnerView }; localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot)); } catch(e){ console.warn('Could not save roadmap state:', e); }}
-        function loadState(){ try { const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return null; return JSON.parse(raw); } catch(e){ console.warn('Could not load roadmap state:', e); return null; } }
-        function debounce(fn, delay=250){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), delay); }; }
-        const saveStateDebounced = debounce(saveState, 300);
+    // Debounce helper to avoid excessive writes
+    function debounce(fn, delay=250) {
+      let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), delay); };
+    }
+    const saveStateDebounced = debounce(saveState, 300);
 
     function applyPersistedState(persisted, domains, normalizedVendors) {
       if (!persisted) return;
@@ -1171,153 +1117,6 @@ const CROSS_CERT_MODE_ENABLED = false;
       }
 
       return order;
-    }
-
-    // ============================================================================
-    // New Occupancy-Based Placement Engine (Feature Flag Controlled)
-    // ----------------------------------------------------------------------------
-    // Provides deterministic, collision-free placement of certification tiles
-    // within a subdomain grid. Activated only when USE_NEW_PLACEMENT === true.
-    // Current strategy:
-    //   1. Separate home vs guest certs (home first for anchor stability).
-    //   2. For each cert derive an ordered list of preferred columns at target row.
-    //   3. Attempt placement at target row using candidate columns.
-    //   4. If blocked, search symmetrical row offsets up to MAX_ROW_OFFSET_NEW_ENGINE
-    //      reusing the same column preference sequence each row.
-    //   5. Fallback: exhaustive first-free scan of grid (should be rare / logged).
-    // Determinism: ordering uses original JSON order for home; guests apply the
-    //   existing multi-criteria sort (cross count, domain distance, subdomain distance).
-    // Diagnostics: placements optionally logged when ENABLE_PLACEMENT_DIAGNOSTICS.
-    // ============================================================================
-
-    function computeHomeColumnPreference(cert, sub, renderedDomain, allDomains){
-      const span = sub.gridColumnSpan;
-      const center = Math.ceil(span/2);
-      const guests = cert.crossDomains||[];
-      if(!guests.length){
-        return getCenterOutwardColumnOrder(span); // neutral
-      }
-      const renderedOrder = renderedDomain.domainDisplayOrder;
-      const guestOrders = guests
-        .map(g=> allDomains.find(d=>d.domainId===g)?.domainDisplayOrder)
-        .filter(v=> v!==undefined);
-      const hasLeft = guestOrders.some(o=> o < renderedOrder);
-      const hasRight = guestOrders.some(o=> o > renderedOrder);
-      if(hasLeft && hasRight){
-        // center-outward
-        return getCenterOutwardColumnOrder(span);
-      } else if(hasLeft){
-        const order=[]; for(let c=1;c<=span;c++) order.push(c); return order; // left to right
-      } else if(hasRight){
-        const order=[]; for(let c=span;c>=1;c--) order.push(c); return order; // right to left
-      }
-      return getCenterOutwardColumnOrder(span);
-    }
-
-    function computeGuestColumnPreference(cert, sub, renderedDomain, allDomains){
-      // Reuse existing bias logic for initial ordering
-      return getColumnOrderWithProximityBias(cert, renderedDomain, sub, allDomains);
-    }
-
-    function attemptPlace(occupancy, row, col){
-      if(row < 1 || row > 28) return false;
-      if(!occupancy[row]) occupancy[row] = {};
-      if(occupancy[row][col]) return false;
-      occupancy[row][col] = true;
-      return true;
-    }
-
-    function exhaustiveFallbackPlacement(occupancy, sub){
-      for(let row=1; row<=28; row++){
-        for(let col=1; col<=sub.gridColumnSpan; col++){
-          if(attemptPlace(occupancy,row,col)) return {row,col};
-        }
-      }
-      return null; // grid genuinely full (should not occur under normal data)
-    }
-
-    function placeOneCert(cert, type, occupancy, sub, renderedDomain, allDomains){
-      const targetRow = cert.certSkillStrata;
-      const span = sub.gridColumnSpan;
-      const colPrefs = type === 'home'
-        ? computeHomeColumnPreference(cert, sub, renderedDomain, allDomains)
-        : computeGuestColumnPreference(cert, sub, renderedDomain, allDomains);
-
-      // Phase 1: try target row
-      for(const col of colPrefs){
-        if(col < 1 || col > span) continue;
-        if(attemptPlace(occupancy, targetRow, col)) return {row: targetRow, col};
-      }
-      // Phase 2: row offset search
-      for(let offset=1; offset <= MAX_ROW_OFFSET_NEW_ENGINE; offset++){
-        const candidateRows = [targetRow - offset, targetRow + offset];
-        for(const row of candidateRows){
-          if(row < 1 || row > 28) continue;
-          for(const col of colPrefs){
-            if(col < 1 || col > span) continue;
-            if(attemptPlace(occupancy, row, col)) return {row, col};
-          }
-        }
-      }
-      // Phase 3: exhaustive fallback
-      const fallback = exhaustiveFallbackPlacement(occupancy, sub);
-      if(fallback) return fallback;
-      return {row: targetRow, col: colPrefs[0]||1}; // last resort (overwrites) — but should never trigger
-    }
-
-    function placeTilesNewEngine(subDiv, visibleSubCerts, domain, sub, domains){
-      const occupancy = {}; // occupancy[row][col] = true
-      const renderedDomain = domain;
-      const home = visibleSubCerts.filter(c=> c.domainId === domain.domainId);
-      const guests = visibleSubCerts
-        .filter(c=> c.domainId !== domain.domainId)
-        .sort((a,b)=>{
-          const aCross = a.crossDomains?.length || 0;
-          const bCross = b.crossDomains?.length || 0;
-          if(aCross !== bCross) return aCross - bCross;
-          const aHome = domains.find(d=> d.domainId === a.domainId);
-          const bHome = domains.find(d=> d.domainId === b.domainId);
-          const guestOrder = domain.domainDisplayOrder;
-          const aDist = aHome ? Math.abs(aHome.domainDisplayOrder - guestOrder) : Infinity;
-          const bDist = bHome ? Math.abs(bHome.domainDisplayOrder - guestOrder) : Infinity;
-          if(aDist !== bDist) return aDist - bDist;
-          const aSub = domains && subdomains && subdomains.find ? subdomains.find(s=> s.subdomainId === a.subdomainId) : null; // defensive
-          const bSub = domains && subdomains && subdomains.find ? subdomains.find(s=> s.subdomainId === b.subdomainId) : null;
-          if(aSub && bSub){
-            const aSubDist = Math.abs(aSub.gridColumnStart - sub.gridColumnStart);
-            const bSubDist = Math.abs(bSub.gridColumnStart - sub.gridColumnStart);
-            if(aSubDist !== bSubDist) return aSubDist - bSubDist;
-          }
-          return 0;
-        });
-      const placements = [];
-
-      // Home first
-      home.forEach(cert => {
-        const pos = placeOneCert(cert, 'home', occupancy, sub, renderedDomain, domains);
-        const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
-        tile.style.gridRowStart = pos.row;
-        tile.style.gridColumnStart = pos.col;
-        subDiv.appendChild(tile);
-        applyLearnerStatusToTile(tile);
-        placements.push({certId: cert.certId, type:'home', ...pos});
-      });
-      // Guests
-      guests.forEach(cert => {
-        const pos = placeOneCert(cert, 'guest', occupancy, sub, renderedDomain, domains);
-        const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
-        tile.style.gridRowStart = pos.row;
-        tile.style.gridColumnStart = pos.col;
-        subDiv.appendChild(tile);
-        applyLearnerStatusToTile(tile);
-        placements.push({certId: cert.certId, type:'guest', ...pos});
-      });
-
-      if(ENABLE_PLACEMENT_DIAGNOSTICS){
-        console.groupCollapsed('[new-placement] placements', sub.subdomainId);
-        console.table(placements);
-        console.groupEnd();
-      }
     }
 
     /**
@@ -1605,8 +1404,142 @@ const CROSS_CERT_MODE_ENABLED = false;
         const occupiedCells = {}; // key = `${row}-${col}`, value = true if taken
         const columnOrders = {}; // { skillRow: [col1, col2, ...] }
 
-        // New deterministic engine handles all tiles
-        placeTilesNewEngine(subDiv, visibleSubCerts, domain, sub, domains);
+        // 🔹 Home certs are rendered first to claim their preferred spots
+        subCerts.filter(c => c.domainId === domain.domainId).forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          let colStart;
+
+          // 🔹 Determine column placement
+          // Bias removed when DISABLE_HOME_GUEST_BIAS_TEST === true
+          if (!DISABLE_HOME_GUEST_BIAS_TEST && cert.crossDomains?.length) {
+            // (Original biased placement kept for quick toggle testing)
+            const guestOrders = cert.crossDomains
+              .map(gid => domains.find(d => d.domainId === gid)?.domainDisplayOrder)
+              .filter(pos => pos !== undefined);
+            const homeOrder = domain.domainDisplayOrder;
+            const hasLeft = guestOrders.some(pos => pos < homeOrder);
+            const hasRight = guestOrders.some(pos => pos > homeOrder);
+            if (hasLeft && hasRight) colStart = Math.ceil(sub.gridColumnSpan / 2);
+            else if (hasLeft) colStart = 1;
+            else if (hasRight) colStart = sub.gridColumnSpan;
+            else colStart = Math.ceil(sub.gridColumnSpan / 2);
+          } else {
+            // Unified center-out placement with occupancy awareness
+            if (!tileRowMap[skillRow]) {
+              tileRowMap[skillRow] = 0;
+              columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+            }
+            const colIndex = tileRowMap[skillRow];
+            colStart = columnOrders[skillRow][colIndex];
+            tileRowMap[skillRow]++;
+          }
+
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = colStart;
+          const finalKey = `${skillRow}-${colStart}`;
+          tileRowMap[finalKey] = true;
+
+          subDiv.appendChild(tile);
+          applyLearnerStatusToTile(tile);
+        });
+
+        // 🔹 Guest certs rendered after home certs (yielding to occupied slots)
+        subCerts
+          .filter(c => c.domainId !== domain.domainId)
+          .sort((a, b) => {
+            // 1. Fewer cross-domain appearances gets priority
+            const aCross = a.crossDomains?.length || 0;
+            const bCross = b.crossDomains?.length || 0;
+            if (aCross !== bCross) return aCross - bCross;
+
+            // 2. Closer proximity to the current domain
+            const aHome = domains.find(d => d.domainId === a.domainId);
+            const bHome = domains.find(d => d.domainId === b.domainId);
+            const guestOrder = domain.domainDisplayOrder;
+
+            const aDist = aHome ? Math.abs(aHome.domainDisplayOrder - guestOrder) : Infinity;
+            const bDist = bHome ? Math.abs(bHome.domainDisplayOrder - guestOrder) : Infinity;
+            if (aDist !== bDist) return aDist - bDist;
+
+            // 3. Subdomain proximity tie-breaker when domain proximity is equal
+            const aSub = subdomains.find(s => s.subdomainId === a.subdomainId);
+            const bSub = subdomains.find(s => s.subdomainId === b.subdomainId);
+            if (aSub && bSub) {
+              const aSubDist = Math.abs(aSub.gridColumnStart - sub.gridColumnStart);
+              const bSubDist = Math.abs(bSub.gridColumnStart - sub.gridColumnStart);
+              if (aSubDist !== bSubDist) return aSubDist - bSubDist;
+            }
+
+            // 4. Fallback: preserve original JSON order
+            return 0;
+          })
+          
+          .forEach(cert => {
+          const certLevel = getSkillLevelFromStrata(cert.certSkillStrata, skillStrata);
+          if (!filterState.visibleSkillStrata[certLevel]) return;
+          if (!filterState.visibleVendorIds.includes(cert.vendorId)) return;
+
+          const tile = makeCertTile(cert, domains, domain.domainId, sub.subdomainId);
+          const skillRow = cert.certSkillStrata;
+
+          const homeDomain = domains.find(d => d.domainId === cert.domainId);
+          const guestDomain = domains.find(d => d.domainId === domain.domainId);
+
+          if (!DISABLE_HOME_GUEST_BIAS_TEST && homeDomain && guestDomain) {
+            // Original biased + proximity-first algorithm retained (not executed when test flag is true)
+            const homeOrder = homeDomain.domainDisplayOrder;
+            const guestOrder = guestDomain.domainDisplayOrder;
+            const preferredCol = homeOrder < guestOrder ? 1 : sub.gridColumnSpan;
+            const sameRowOrder = getColumnOrderWithProximityBias(cert, domain, sub, domains);
+            for (const col of sameRowOrder) {
+              const key = `${skillRow}-${col}`;
+              if (!tileRowMap[key]) {
+                tileRowMap[key] = true;
+                tile.style.gridRowStart = skillRow;
+                tile.style.gridColumnStart = col;
+                subDiv.appendChild(tile);
+                applyLearnerStatusToTile(tile);
+                return;
+              }
+            }
+            const maxRowOffset = 2;
+            for (let offset = 0; offset <= maxRowOffset; offset++) {
+              const candidateRows = [skillRow - offset, skillRow + offset];
+              for (const row of candidateRows) {
+                if (row < 1 || row > 28) continue;
+                const key = `${row}-${preferredCol}`;
+                if (!tileRowMap[key]) {
+                  tileRowMap[key] = true;
+                  tile.style.gridRowStart = row;
+                  tile.style.gridColumnStart = preferredCol;
+                  subDiv.appendChild(tile);
+                  return;
+                }
+              }
+            }
+          }
+
+          // Unified simple center-out placement (always used when test flag is true)
+          if (!tileRowMap[skillRow]) {
+            tileRowMap[skillRow] = 0;
+            columnOrders[skillRow] = getCenterOutwardColumnOrder(sub.gridColumnSpan);
+          }
+          const colIndex = tileRowMap[skillRow];
+          const chosenCol = columnOrders[skillRow][colIndex];
+          tileRowMap[skillRow]++;
+          const keyFinal = `${skillRow}-${chosenCol}`;
+          tileRowMap[keyFinal] = true;
+          tile.style.gridRowStart = skillRow;
+          tile.style.gridColumnStart = chosenCol;
+          subDiv.appendChild(tile);
+          applyLearnerStatusToTile(tile);
+        });
 
         domainDiv.appendChild(subDiv);
       });
@@ -1643,8 +1576,6 @@ const CROSS_CERT_MODE_ENABLED = false;
       // After all tiles are laid out, perform pixel alignment calibration
       requestAnimationFrame(() => calibrateSkillStrataSegments(skillStrata));
       requestAnimationFrame(()=>{ document.querySelectorAll('.cert-tile').forEach(applyLearnerStatusToTile); });
-      // Run optional diagnostics (no-op unless feature flag enabled)
-      requestAnimationFrame(runPlacementDiagnostics);
     }
 
     function makeCertTile(cert, domains, renderedDomainId, renderedSubdomainId) {
