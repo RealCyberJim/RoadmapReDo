@@ -98,13 +98,16 @@
   --learner-neutral-bg: var(--color-black-light);
   --learner-neutral-border: var(--color-black-dark);
   --learner-neutral-text: var(--color-black-dark);
-  --learner-achieved-text: limegreen; /* explicit brighter text */
-  --learner-achieved-border: limegreen;
-  --learner-planned-text: darkgoldenrod;
-  --learner-planned-border: darkgoldenrod;
-  --learner-reach-text: var(--color-blue-bright);
-  --learner-reach-border: var(--color-blue-bright);
-  --learner-reach-bg: #dbe1ff; /* light blue background */
+  /* Learner status palette aligned to existing domain color system */
+  --learner-achieved-bg: var(--color-green-light);
+  --learner-achieved-border: var(--color-green-dark);
+  --learner-achieved-text: var(--color-green-dark);
+  --learner-planned-bg: var(--color-yellow-light);
+  --learner-planned-border: var(--color-yellow-dark);
+  --learner-planned-text: var(--color-yellow-dark);
+  --learner-reach-bg: var(--color-skyblue-light);
+  --learner-reach-border: var(--color-skyblue-dark);
+  --learner-reach-text: var(--color-skyblue-dark);
     }
 
     /* Domain-specific border and title coloring */
@@ -408,8 +411,16 @@
   .learner-popup-menu.placement-above { /* hook */ transform-origin: bottom center; }
   /* Learner status badge (placed in Filters header) */
   .learner-status-badge { display:inline-flex; align-items:center; font-size:0.55vmax; font-weight:600; letter-spacing:0.4px; padding:0.25vmax 0.6vmax; border-radius:var(--pill-radius); border:1px solid transparent; line-height:1; white-space:nowrap; margin-left:auto; }
-  .learner-status-badge.learner-status-on { background:var(--color-green-light); color:var(--color-green-dark); border-color:var(--color-green-dark); }
+  .learner-status-badge.learner-status-on { background:var(--learner-achieved-bg); color:var(--learner-achieved-text); border-color:var(--learner-achieved-border); }
   .learner-status-badge.learner-status-off { background:var(--color-red-light); color:var(--color-red-dark); border-color:var(--color-red-dark); }
+  /* Mini learner badge (8 domains x 3 skill tiers abstract) */
+  #learner-mini-badge { display:inline-flex; align-items:center; justify-content:center; margin-left:0.6vmax; }
+  #learner-mini-badge svg { width:80px; height:60px; display:block; border-radius:4px; box-shadow:0 0.3vmax 0.8vmax rgba(0,0,0,0.15); background:#ffffff; }
+  body.dark-mode #learner-mini-badge svg { background:#1e1e1e; box-shadow:0 0.3vmax 0.9vmax rgba(0,0,0,0.55); }
+  #learner-mini-badge svg .col-frame { stroke:#444; stroke-width:0.6; fill:none; }
+  body.dark-mode #learner-mini-badge svg .col-frame { stroke:#888; }
+  #learner-mini-badge svg .tier-line { stroke:rgba(0,0,0,0.15); stroke-width:0.4; }
+  body.dark-mode #learner-mini-badge svg .tier-line { stroke:rgba(255,255,255,0.16); }
   body.dark-mode .learner-status-badge { filter:brightness(.95) contrast(1.05); }
   /* Ensure learner (Options) stack header can flex contents to right-align badge */
   /* Learner stack header should size to its content so badge doesn't push overall layout width */
@@ -1687,19 +1698,19 @@ function enforceLegacyPlannedLimit(){
       // Apply unified learner palette overriding domain colors for clarity
       if(status==='achieved'){
         tile.classList.add('cert-status-achieved');
-        tile.style.backgroundColor = 'var(--color-green-light)';
-        tile.style.borderColor = 'var(--color-green-dark)';
-        tile.style.color = 'var(--color-green-dark)';
+        tile.style.backgroundColor = 'var(--learner-achieved-bg)';
+        tile.style.borderColor = 'var(--learner-achieved-border)';
+        tile.style.color = 'var(--learner-achieved-text)';
       } else if(status==='planned') {
         tile.classList.add('cert-status-planned');
-        tile.style.backgroundColor = 'var(--color-yellow-light)';
-        tile.style.borderColor = 'var(--color-yellow-dark)';
-        tile.style.color = 'var(--color-yellow-dark)';
+        tile.style.backgroundColor = 'var(--learner-planned-bg)';
+        tile.style.borderColor = 'var(--learner-planned-border)';
+        tile.style.color = 'var(--learner-planned-text)';
       } else if(status==='reach') {
         tile.classList.add('cert-status-reach');
-        tile.style.backgroundColor = 'var(--color-skyblue-light)';
-        tile.style.borderColor = 'var(--color-skyblue-dark)';
-        tile.style.color = 'var(--color-skyblue-dark)';
+        tile.style.backgroundColor = 'var(--learner-reach-bg)';
+        tile.style.borderColor = 'var(--learner-reach-border)';
+        tile.style.color = 'var(--learner-reach-text)';
       }
     }
 
@@ -2202,9 +2213,9 @@ function enforceLegacyPlannedLimit(){
     const counts = getLearnerStatusCounts();
     const views=[
       {id:'baseline', label:'Baseline', bg:neutralBg, border:neutralBorder, text:neutralText},
-      {id:'achieved', label:`My Achieved (${counts.achieved})`, bg:'var(--color-green-light)', border:'var(--color-green-dark)', text:'var(--color-green-dark)'},
-      {id:'planned', label:`My Planned (${counts.planned} of ${MAX_PLANNED_CERTS})`, bg:'var(--color-yellow-light)', border:'var(--color-yellow-dark)', text:'var(--color-yellow-dark)', dashed:true},
-      {id:'reach', label:`My Reach Goal (${counts.reach} of 1)`, bg:'var(--color-blue-light)', border:'var(--color-blue-dark)', text:'var(--color-blue-dark)'},
+      {id:'achieved', label:`My Achieved (${counts.achieved})`, bg:'var(--learner-achieved-bg)', border:'var(--learner-achieved-border)', text:'var(--learner-achieved-text)'},
+      {id:'planned', label:`My Planned (${counts.planned} of ${MAX_PLANNED_CERTS})`, bg:'var(--learner-planned-bg)', border:'var(--learner-planned-border)', text:'var(--learner-planned-text)'},
+      {id:'reach', label:`My Reach Goal (${counts.reach} of 1)`, bg:'var(--learner-reach-bg)', border:'var(--learner-reach-border)', text:'var(--learner-reach-text)'},
       {id:'all', label:'My Roadmap', bg:neutralBg, border:neutralBorder, text:neutralText},
       {id:'reset', label:'Reset', bg:neutralBg, border:neutralBorder, text:neutralText}
     ];
@@ -2217,7 +2228,7 @@ function enforceLegacyPlannedLimit(){
         if(active){
           label.classList.remove('is-off');
           label.style.background=v.bg; label.style.borderColor=v.border; label.style.color=v.text;
-          label.style.borderStyle = v.dashed ? 'dashed' : 'solid';
+          label.style.borderStyle = 'solid';
         } else {
           label.classList.add('is-off');
           label.style.background='transparent'; label.style.borderColor='#777'; label.style.color='#555';
@@ -2270,8 +2281,108 @@ function enforceLegacyPlannedLimit(){
     learnerStatusBadge.classList.toggle('learner-status-on', on);
     learnerStatusBadge.classList.toggle('learner-status-off', !on);
     learnerStatusBadge.setAttribute('aria-label', on ? 'Learner Mode is ON' : 'Learner Mode is OFF');
+    // Badge is always visible; no change needed here
   }
   updateLearnerModeStatusBadge();
+
+  // ================= Mini Learner Badge (SVG) =================
+  function getHighestAchievedLevels(){
+    if(!window.loadedCerts || !window.loadedSkillStrata) return {};
+    const achievedCerts = window.loadedCerts.filter(c => window.learnerCertStatuses && window.learnerCertStatuses[c.certId] === 'achieved');
+    const levelRank = { beginner:1, intermediate:2, expert:3 };
+    const levels = {};
+    achievedCerts.forEach(cert => {
+      const levelId = getSkillLevelFromStrata(cert.certSkillStrata, window.loadedSkillStrata);
+      if(!levelId) return;
+      const existing = levels[cert.domainId];
+      if(!existing || levelRank[levelId] > levelRank[existing]) levels[cert.domainId] = levelId;
+    });
+    return levels; // domainId -> highest achieved level id
+  }
+  function ensureMiniBadgeContainer(){
+    let wrap = document.getElementById('learner-mini-badge');
+    if(!wrap){
+      wrap = document.createElement('div');
+      wrap.id = 'learner-mini-badge';
+      const header = document.getElementById('learner-stack-toggle');
+      if(header){ header.appendChild(wrap); }
+      else { document.body.appendChild(wrap); }
+    }
+    return wrap;
+  }
+  function renderLearnerMiniBadge(){
+    const wrap = ensureMiniBadgeContainer();
+    const domains = (window.loadedDomains||[]).filter(d=>d.domainId!=='SKL').sort((a,b)=>a.domainDisplayOrder-b.domainDisplayOrder);
+    if(domains.length===0){ wrap.innerHTML=''; return; }
+    const achievedLevels = getHighestAchievedLevels();
+    const width = 80, height = 60; // viewBox units
+    const colCount = domains.length;
+    const gap = 2; // gap between columns
+    const colWidth = (width - (gap * (colCount-1))) / colCount;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
+    svg.setAttribute('role','img');
+    svg.setAttribute('aria-label','Mini learner badge showing highest achieved domain skill levels');
+    // Background handled by CSS
+    // Tier separator lines (horizontal thirds)
+    [1/3,2/3].forEach(f=>{
+      const y = height - f*height;
+      const line = document.createElementNS(svgNS,'line');
+      line.setAttribute('x1','0');
+      line.setAttribute('x2',String(width));
+      line.setAttribute('y1',String(y));
+      line.setAttribute('y2',String(y));
+      line.setAttribute('class','tier-line');
+      svg.appendChild(line);
+    });
+    domains.forEach((d,i)=>{
+      const x = i * (colWidth + gap);
+      const group = document.createElementNS(svgNS,'g');
+      group.setAttribute('data-domain-id', d.domainId);
+      const frame = document.createElementNS(svgNS,'rect');
+      frame.setAttribute('x', String(x));
+      frame.setAttribute('y','0');
+      frame.setAttribute('width', String(colWidth));
+      frame.setAttribute('height', String(height));
+      frame.setAttribute('rx','1.2');
+      frame.setAttribute('class','col-frame');
+      frame.setAttribute('fill','none');
+      group.appendChild(frame);
+      // Determine fill fraction based on highest achieved
+      const level = achievedLevels[d.domainId] || 'none';
+      let fraction = 0;
+      if(level==='beginner') fraction = 1/3;
+      else if(level==='intermediate') fraction = 2/3;
+      else if(level==='expert') fraction = 1;
+      if(fraction>0){
+        const fillHeight = fraction * height;
+        const yFill = height - fillHeight;
+        const fillRect = document.createElementNS(svgNS,'rect');
+        fillRect.setAttribute('x', String(x));
+        fillRect.setAttribute('y', String(yFill));
+        fillRect.setAttribute('width', String(colWidth));
+        fillRect.setAttribute('height', String(fillHeight));
+        // Use domain light color via inline style referencing CSS variable
+        const lightVar = `--domain-${d.domainId.toLowerCase()}-light`;
+        fillRect.setAttribute('fill', getComputedStyle(document.documentElement).getPropertyValue(lightVar).trim() || '#ccc');
+        group.appendChild(fillRect);
+      }
+      // Accessible title (tooltip)
+      const titleEl = document.createElementNS(svgNS,'title');
+      titleEl.textContent = `${d.domainId}: ${level}`;
+      group.appendChild(titleEl);
+      svg.appendChild(group);
+    });
+    wrap.innerHTML='';
+    wrap.appendChild(svg);
+  }
+  function updateLearnerMiniBadge(){
+    // Always visible, reflect highest achieved regardless of learnerMode ON/OFF
+    renderLearnerMiniBadge();
+  }
+  // Initial render after load events later once data sets populated
+
 
   // ================= Reset Modal (for learner statuses) =================
   function showLearnerResetModal(){
@@ -2297,6 +2408,7 @@ function enforceLegacyPlannedLimit(){
       document.querySelectorAll('.cert-tile').forEach(tile=>{ applyLearnerStatusToTile(tile); });
       renderLearnerActionPills();
       updateLearnerViewVisibility();
+  updateLearnerMiniBadge();
       close();
     }
     overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
@@ -2328,6 +2440,7 @@ function enforceLegacyPlannedLimit(){
     saveLearnerStatuses();
     updateLearnerViewVisibility();
     renderLearnerActionPills();
+    updateLearnerMiniBadge();
   },null);
   addBtn('Mark as Planned',()=>{
     // Planned selection with cap + replacement confirmation when at limit
@@ -2344,6 +2457,7 @@ function enforceLegacyPlannedLimit(){
       saveLearnerStatuses();
       updateLearnerViewVisibility();
       renderLearnerActionPills();
+      updateLearnerMiniBadge();
     } else {
       const oldestId = plannedIds[0];
       if(oldestId===cid){ return; }
@@ -2361,6 +2475,7 @@ function enforceLegacyPlannedLimit(){
         saveLearnerStatuses();
         updateLearnerViewVisibility();
         renderLearnerActionPills();
+        updateLearnerMiniBadge();
       });
     }
   },null);
@@ -2381,6 +2496,7 @@ function enforceLegacyPlannedLimit(){
         saveLearnerStatuses();
         updateLearnerViewVisibility();
         renderLearnerActionPills();
+        updateLearnerMiniBadge();
       });
     } else {
       if(priorStatus==='planned') removePlannedCertFromOrder(cid); // planned → reach
@@ -2389,6 +2505,7 @@ function enforceLegacyPlannedLimit(){
       saveLearnerStatuses();
       updateLearnerViewVisibility();
       renderLearnerActionPills();
+      updateLearnerMiniBadge();
     }
   },null);
   addBtn('Clear Status',()=>{ 
@@ -2400,6 +2517,7 @@ function enforceLegacyPlannedLimit(){
     saveLearnerStatuses(); 
     updateLearnerViewVisibility(); 
     renderLearnerActionPills();
+    updateLearnerMiniBadge();
   },'danger');
     document.body.appendChild(menu);
     // ----- Viewport-safe positioning -----
