@@ -3,9 +3,6 @@
     /* 03JUN2025 2316 - last commit prior to skill level refactor*/
     :root {
       /* --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
-
-      
-
       /* Base color palette */
       --color-green: #70AD47;
       --color-teal: #008080;
@@ -17,10 +14,8 @@
       --color-blue: #2e5688;
       --color-red: #c0514d;
       --color-magenta: #a500a1;
-  /* Extended accent */
-  --color-blue-bright: #0000ff; /* Bright blue used for Reach Goal status */
-      
-      /* Dark variants */      
+      --color-blue-bright: #0000ff; /* Bright blue used for Reach Goal status */
+      /* Dark variants */
       --color-green-dark: #548235;
       --color-teal-dark: #003F3E;
       --color-orange-dark: #c06216;
@@ -31,7 +26,6 @@
       --color-blue-dark: #1f3147;
       --color-red-dark: #8c3736;
       --color-magenta-dark: #490e49;
-      
       /* Light variants */
       --color-green-light: #c3dbb8;
       --color-teal-light: #8fc6c6;
@@ -43,7 +37,6 @@
       --color-blue-light: #dce6f2;
       --color-red-light: #f2dcdb;
       --color-magenta-light: #f1d4e0;
-      
       /* Domain-specific colors */
       --domain-default-white: #ffffff;
       --domain-net: var(--color-green);
@@ -70,11 +63,8 @@
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
       --domain-ops-light: var(--color-red-light);
-
-
       --domain-title-height: 2.8vmax;
-
-      /* Scalable sizing tokens */
+      /* Sizing tokens */
       --filter-font-size: clamp(0.55rem, 0.9vmax, 14px);
       --filter-label-font-size: var(--filter-font-size);
       --pill-font-size: var(--filter-font-size);
@@ -83,31 +73,45 @@
       --pill-radius: 1vmax;
       --pill-border-width: 2px;
       --filter-line-gap: 0.55vmax;
-      --filter-stack-vertical-gap: 0.45vmax;
-      --filter-label-offset: 0.08vmax;
-      --vendor-select-padding-y: clamp(0.18rem, 0.28vmax, 0.4rem);
-      --vendor-select-padding-x: clamp(0.45rem, 0.6vmax, 0.8rem);
-      --vendor-select-radius: 0.55vmax;
-      --focus-ring: 0 0 0 0.15vmax rgba(0,0,0,0.25);
-      --filter-row-vertical-padding: 0.18vmax;
-      --filter-interline-spacing: 0.4vmax;
-      /* Track width tokens (Option C) */
-      --cert-track-width: 2.3vmax;   /* Standard certification tile track */
-      --skill-track-width: 0.6vmax;  /* Narrow skill column track */
-  /* Learner neutral pill scheme */
-  --learner-neutral-bg: var(--color-black-light);
-  --learner-neutral-border: var(--color-black-dark);
-  --learner-neutral-text: var(--color-black-dark);
-  /* Learner status palette aligned to existing domain color system */
-  --learner-achieved-bg: var(--color-green-light);
-  --learner-achieved-border: var(--color-green-dark);
-  --learner-achieved-text: var(--color-green-dark);
-  --learner-planned-bg: var(--color-yellow-light);
-  --learner-planned-border: var(--color-yellow-dark);
-  --learner-planned-text: var(--color-yellow-dark);
-  --learner-reach-bg: var(--color-skyblue-light);
-  --learner-reach-border: var(--color-skyblue-dark);
-  --learner-reach-text: var(--color-skyblue-dark);
+      /* Learner palette */
+      --learner-neutral-bg: var(--color-black-light);
+      --learner-neutral-border: var(--color-black-dark);
+      --learner-neutral-text: var(--color-black-dark);
+      --learner-achieved-bg: var(--color-green-light);
+      --learner-achieved-border: var(--color-green-dark);
+      --learner-achieved-text: var(--color-green-dark);
+      --learner-planned-bg: var(--color-yellow-light);
+      --learner-planned-border: var(--color-yellow-dark);
+      --learner-planned-text: var(--color-yellow-dark);
+      --learner-reach-bg: var(--color-skyblue-light);
+      --learner-reach-border: var(--color-skyblue-dark);
+      --learner-reach-text: var(--color-skyblue-dark);
+    }
+  .menu-trigger { position:fixed; top:0.6vmax; left:0.6vmax; z-index:1200; background:var(--color-green-light); color:var(--color-green-dark); border:1px solid var(--color-green-dark); padding:0.4vmax 0.7vmax; font-size:1.3vmax; line-height:1; border-radius:0.4vmax; cursor:pointer; }
+  body.dark-mode .menu-trigger { background:var(--color-green-dark); color:var(--color-green-light); }
+  .menu-trigger:focus { outline:2px solid var(--color-green-dark); }
+  .side-drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1199; }
+  .side-drawer { position:fixed; top:0; left:0; height:100vh; width:26vmax; max-width:420px; background:#ffffff; color:#222; box-shadow:0 0 1.6vmax rgba(0,0,0,0.4); z-index:1200; display:flex; flex-direction:column; padding:1vmax 1.2vmax; gap:0.8vmax; }
+  body.dark-mode .side-drawer { background:#1e1e1e; color:#ddd; box-shadow:0 0 1.6vmax rgba(0,0,0,0.75); }
+  .side-drawer-header { display:flex; align-items:center; justify-content:space-between; }
+  .drawer-close { background:transparent; color:inherit; border:1px solid currentColor; border-radius:0.4vmax; padding:0.3vmax 0.6vmax; cursor:pointer; }
+  .drawer-nav { border-top:1px solid rgba(0,0,0,0.15); padding-top:0.6vmax; }
+  body.dark-mode .drawer-nav { border-color:rgba(255,255,255,0.15); }
+  .drawer-top-level { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.4vmax; }
+  .drawer-top-level button { width:100%; text-align:left; background:var(--learner-neutral-bg); color:var(--learner-neutral-text); border:1px solid var(--learner-neutral-border); padding:0.5vmax 0.7vmax; border-radius:0.5vmax; font-size:0.95vmax; cursor:pointer; }
+  body.dark-mode .drawer-top-level button { background:#2b2b2b; color:#ddd; border-color:#555; }
+  .drawer-top-level button:focus { outline:2px solid var(--color-green-dark); }
+  .drawer-panel-region { flex:1; overflow-y:auto; border-top:1px solid rgba(0,0,0,0.12); }
+  body.dark-mode .drawer-panel-region { border-color:rgba(255,255,255,0.12); }
+  .drawer-panel { animation:fadeIn 160ms ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
+  .drawer-back { margin-bottom:0.6vmax; background:transparent; color:inherit; border:1px solid currentColor; border-radius:0.4vmax; padding:0.35vmax 0.6vmax; cursor:pointer; font-size:0.8vmax; }
+  .drawer-section { display:flex; flex-direction:column; gap:0.6vmax; }
+  .drawer-section h3 { margin:0; font-size:1.05vmax; }
+  /* Hide original stacks when drawer present */
+  .filter-stack { display:none !important; }
+      
+
     }
 
     /* Domain-specific border and title coloring */
@@ -679,6 +683,18 @@
 </head>
 <link rel="icon" href="data:,"> <!-- Prevents favicon request -->
 <body>
+<button id="menu-trigger" class="menu-trigger" aria-label="Open Menu" aria-haspopup="true" aria-controls="side-drawer" aria-expanded="false">≡</button>
+<div id="side-drawer-overlay" class="side-drawer-overlay" hidden></div>
+<div id="side-drawer" class="side-drawer" role="dialog" aria-modal="true" aria-labelledby="side-drawer-title" hidden>
+  <div class="side-drawer-header">
+    <h2 id="side-drawer-title">Roadmap Menu</h2>
+    <button type="button" class="drawer-close" aria-label="Close Menu">✕</button>
+  </div>
+  <nav class="drawer-nav" aria-label="Primary Menu">
+    <ul class="drawer-top-level" id="drawer-top-level"></ul>
+  </nav>
+  <div class="drawer-panel-region" id="drawer-panel-region" aria-live="polite"></div>
+</div>
 <!-- Filter Control Panel -->
 
 
@@ -2797,5 +2813,101 @@ function enforceLegacyPlannedLimit(){
 
   // Fallback: attach per-tile listeners after each redraw to guarantee popup
   // Remove complex per-tile binding: delegation now handles all clicks.
+
+  // =============================
+  // Side Drawer (Hamburger Menu)
+  // =============================
+  function initSideDrawer(){
+    const trigger = document.getElementById('menu-trigger');
+    const drawer = document.getElementById('side-drawer');
+    const overlay = document.getElementById('side-drawer-overlay');
+    const topLevelUl = document.getElementById('drawer-top-level');
+    const panelRegion = document.getElementById('drawer-panel-region');
+    if(!trigger || !drawer || !overlay || !topLevelUl || !panelRegion){ console.warn('[Drawer] Missing elements; abort init'); return; }
+
+    const panels = [
+      { id:'panel-display', label:'Display Mode', el: document.getElementById('mode-pills') },
+      { id:'panel-learner-mode', label:'Learner Mode', el: document.getElementById('learner-mode-pills') },
+      { id:'panel-learner-views', label:'Learner Views', el: document.getElementById('learner-action-pills') },
+      { id:'panel-domains', label:'Domains', el: document.getElementById('domain-checkboxes') },
+      { id:'panel-skill', label:'Skill Levels', el: document.getElementById('strata-pills') },
+      { id:'panel-vendors', label:'Vendors', el: document.getElementById('vendor-filter') }
+    ];
+
+    // Build top-level buttons
+    panels.forEach(p=>{
+      if(!p.el) return;
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type='button';
+      btn.textContent=p.label;
+      btn.setAttribute('data-panel-target', p.id);
+      btn.addEventListener('click', ()=> showPanel(p.id));
+      li.appendChild(btn); topLevelUl.appendChild(li);
+    });
+
+    function showPanel(id){
+      panelRegion.innerHTML='';
+      const def = panels.find(pp=>pp.id===id);
+      if(!def || !def.el){ panelRegion.textContent='Panel not found.'; return; }
+      const wrap = document.createElement('div');
+      wrap.className='drawer-panel';
+      const back = document.createElement('button'); back.type='button'; back.className='drawer-back'; back.textContent='‹ Back';
+      back.addEventListener('click', ()=>{ panelRegion.innerHTML=''; trigger.focus(); });
+      const h3 = document.createElement('h3'); h3.textContent=def.label; h3.id=id+'-heading';
+      wrap.appendChild(back); wrap.appendChild(h3);
+      // Move the existing element (preserving event handlers)
+      wrap.appendChild(def.el);
+      panelRegion.appendChild(wrap);
+      panelRegion.setAttribute('aria-labelledby', h3.id);
+      // Focus first interactive inside panel
+      setTimeout(()=>{ const first = wrap.querySelector('input,button,select,[tabindex]:not([tabindex="-1"])'); if(first) first.focus(); },30);
+    }
+
+    let lastFocused = null;
+    function openDrawer(){
+      lastFocused = document.activeElement;
+      drawer.hidden=false; overlay.hidden=false;
+      trigger.setAttribute('aria-expanded','true');
+      // Focus first top-level button
+      const firstBtn = topLevelUl.querySelector('button');
+      if(firstBtn) firstBtn.focus();
+      document.body.classList.add('drawer-open');
+    }
+    function closeDrawer(){
+      drawer.hidden=true; overlay.hidden=true;
+      trigger.setAttribute('aria-expanded','false');
+      document.body.classList.remove('drawer-open');
+      // Return moved panels to original positions to avoid layout surprises when printing etc.
+      panels.forEach(p=>{
+        if(!p.el) return;
+        // If element currently inside drawer-panel, detach and place in a hidden staging area appended to body
+        if(drawer.contains(p.el)){
+          // Create / find staging container
+          let staging = document.getElementById('drawer-staging');
+          if(!staging){ staging = document.createElement('div'); staging.id='drawer-staging'; staging.style.display='none'; document.body.appendChild(staging); }
+          staging.appendChild(p.el);
+        }
+      });
+      if(lastFocused && lastFocused.focus) setTimeout(()=> lastFocused.focus(), 30);
+    }
+
+    trigger.addEventListener('click', ()=>{ if(drawer.hidden) openDrawer(); else closeDrawer(); });
+    overlay.addEventListener('click', closeDrawer);
+    drawer.querySelector('.drawer-close')?.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !drawer.hidden){ e.preventDefault(); closeDrawer(); }});
+
+    // Simple focus trap
+    document.addEventListener('focusin', e=>{
+      if(drawer.hidden) return;
+      if(!drawer.contains(e.target) && e.target!==trigger){
+        // Redirect focus back inside drawer
+        const focusable = drawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if(focusable.length) focusable[0].focus();
+      }
+    });
+  }
+
+  window.addEventListener('load', ()=>{ try { initSideDrawer(); } catch(err){ console.warn('[Drawer] init error', err); } });
 
 </script>
