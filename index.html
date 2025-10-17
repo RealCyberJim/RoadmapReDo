@@ -264,7 +264,7 @@
   .filter-line.learner-mode-composite { flex-direction:column; align-items:flex-start; gap:0.35vmax; }
   .learner-mode-row, .learner-views-row { display:flex; flex-direction:row; align-items:center; gap:var(--filter-line-gap); }
   /* Learner views row: visible-but-inert when learner mode OFF */
-  .learner-views-row { transition: opacity .18s ease; position: relative; }
+  .learner-views-row { transition: opacity .18s ease; position: relative; margin-left: 6.5ch; } /* Align with pills above */
   .learner-views-row.is-inert { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
   .learner-views-row.is-inert .mode-filter-tile { opacity: 0.6; }
   .learner-views-row.is-inert::after { 
@@ -288,7 +288,7 @@
   /* Dark mode tooltip */
   body.dark-mode .learner-views-row.is-inert::after { background: rgba(40,40,40,0.95); }
   /* Ensure inner rows don't stretch full width awkwardly */
-  .learner-mode-row > .filter-label, .learner-views-row > .filter-label { min-width:6.5ch; }
+  .learner-mode-row > .filter-label { min-width:6.5ch; }
     .filter-line .domain-filter-bar,
     .filter-line .strata-filter-bar,
     .filter-line .mode-filter-bar { display:flex; flex-direction:row; align-items:stretch; max-width:min(80vw,140vmax); }
@@ -781,7 +781,6 @@
         <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
       </div>
       <div class="learner-views-row is-inert" id="learner-views-row" data-tooltip="Turn Learner Mode ON to activate these views.">
-        <span class="filter-label">Learner Views:</span>
         <div id="learner-action-pills" class="mode-filter-bar" aria-label="Learner Views (enable Learner Mode to activate)"></div>
       </div>
     </div>
