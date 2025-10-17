@@ -414,7 +414,10 @@
   .learner-status-badge.learner-status-on { background:var(--learner-achieved-bg); color:var(--learner-achieved-text); border-color:var(--learner-achieved-border); }
   .learner-status-badge.learner-status-off { background:var(--color-red-light); color:var(--color-red-dark); border-color:var(--color-red-dark); }
   /* Mini learner badge (8 domains x 3 skill tiers abstract) */
-  #learner-mini-badge { display:inline-flex; align-items:center; justify-content:center; margin-left:0.6vmax; }
+  .page-header { display:flex; align-items:flex-end; justify-content:space-between; gap:1vmax; padding:0.4vmax 0; }
+  .page-header .page-title { margin:0; font-size:2.2vmax; line-height:1.1; }
+  .mini-badge-host { display:flex; align-items:center; justify-content:flex-end; min-width:90px; }
+  #learner-mini-badge { display:inline-flex; align-items:center; justify-content:center; margin:0; }
   #learner-mini-badge svg { width:80px; height:60px; display:block; border-radius:4px; box-shadow:0 0.3vmax 0.8vmax rgba(0,0,0,0.15); background:#ffffff; }
   body.dark-mode #learner-mini-badge svg { background:#1e1e1e; box-shadow:0 0.3vmax 0.9vmax rgba(0,0,0,0.55); }
   #learner-mini-badge svg .col-frame { stroke:#444; stroke-width:0.6; fill:none; }
@@ -732,7 +735,10 @@
     </div>
   </div>
   </div>
-  <h1>Security Certification Roadmap</h1>
+  <div class="page-header" role="banner" aria-label="Roadmap Header">
+    <h1 class="page-title">Security Certification Roadmap</h1>
+    <div id="learner-mini-badge-host" class="mini-badge-host" aria-hidden="true"></div>
+  </div>
   <!-- End of constrained header/filter region -->
 </div> <!-- /#app-shell -->
 
@@ -829,6 +835,7 @@ function enforceLegacyPlannedLimit(){
       learnerEdit: false,
       learnerStackExpanded: true,
       learnerView: 'all'
+  , showMiniBadge: true
     };
 
     // When true, the roadmap keeps all skill strata row heights constant (no vertical compression)
@@ -918,6 +925,7 @@ function enforceLegacyPlannedLimit(){
           , learnerEdit: filterState.learnerEdit
           , learnerStackExpanded: filterState.learnerStackExpanded
           , learnerView: filterState.learnerView
+          , showMiniBadge: filterState.showMiniBadge
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
       } catch (e) {
@@ -985,6 +993,9 @@ function enforceLegacyPlannedLimit(){
       }
       if (typeof persisted.learnerView === 'string') {
         filterState.learnerView = persisted.learnerView;
+      }
+      if (typeof persisted.showMiniBadge === 'boolean') {
+        filterState.showMiniBadge = persisted.showMiniBadge;
       }
     }
 
@@ -1884,6 +1895,9 @@ function enforceLegacyPlannedLimit(){
         saveState();
       }
       applyPersistedState(persisted, domains, normalizedVendors);
+  // Enforce learner mode OFF on initial load display (persisted statuses remain but styling not applied until user turns ON)
+  filterState.learnerMode = false;
+  filterState.learnerView = 'baseline';
 
       // Sync domain checkbox visual state after persistence load
       if (persisted && Array.isArray(persisted.visibleDomains)) {
@@ -1973,6 +1987,7 @@ function enforceLegacyPlannedLimit(){
 
   applyFiltersAndRedraw();
   updateStrataRailVisibility();
+  updateLearnerMiniBadge(); // initial badge render
       saveStateDebounced(); // Ensure any missing new fields are persisted
     });
 
@@ -2170,7 +2185,13 @@ function enforceLegacyPlannedLimit(){
           label.style.borderColor='#777';
         }
       }
-      input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode); if(!filterState.learnerMode){
+      input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode);
+        if(filterState.learnerMode){
+          // Apply learner styling to all tiles based on persisted statuses
+          document.querySelectorAll('.cert-tile').forEach(t=>{ applyLearnerStatusToTile(t); });
+          updateLearnerViewVisibility();
+        }
+        if(!filterState.learnerMode){
           // When turning OFF, force roadmap back to Default view semantics
           filterState.learnerView = 'baseline';
           removeLearnerPopup();
@@ -2190,7 +2211,7 @@ function enforceLegacyPlannedLimit(){
         saveStateDebounced();
         renderLearnerModePills();
         renderLearnerActionPills();
-        updateLearnerViewVisibility();
+        if(filterState.learnerMode){ updateLearnerViewVisibility(); }
       });
       // Redundant label click safety (some browsers swallow hidden input change under rapid clicks)
       label.addEventListener('click', (ev)=>{ if(!input.checked){ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); } ev.stopPropagation(); });
@@ -2262,6 +2283,44 @@ function enforceLegacyPlannedLimit(){
       }
       paint(); learnerActionPills.appendChild(label);
     });
+    // Additional toggle pill pairs (non-radio) for badge visibility and counter
+    const extraToggles = [
+      { key:'showMiniBadge', label:'Mini Badge', onBg:'var(--learner-achieved-bg)', onBorder:'var(--learner-achieved-border)', onText:'var(--learner-achieved-text)' }
+    ];
+    extraToggles.forEach(tg=>{
+      const wrapLabel = document.createElement('label');
+      wrapLabel.className='mode-filter-tile';
+      wrapLabel.setAttribute('data-toggle-key', tg.key);
+      wrapLabel.tabIndex=0;
+      function restyle(){
+        const active = !!filterState[tg.key];
+        if(active){
+          wrapLabel.classList.remove('is-off');
+          wrapLabel.style.background = tg.onBg;
+          wrapLabel.style.borderColor = tg.onBorder;
+          wrapLabel.style.color = tg.onText;
+        } else {
+          wrapLabel.classList.add('is-off');
+          wrapLabel.style.background='transparent';
+          wrapLabel.style.borderColor='#777';
+          wrapLabel.style.color='#555';
+        }
+      }
+  wrapLabel.textContent = tg.label + ' ' + (filterState[tg.key] ? 'On' : 'Off');
+      const toggleFn = ()=>{
+        filterState[tg.key] = !filterState[tg.key];
+        wrapLabel.textContent = tg.label + ' ' + (filterState[tg.key] ? 'On' : 'Off');
+        restyle();
+        saveStateDebounced();
+        updateLearnerMiniBadge();
+      };
+      wrapLabel.addEventListener('click', e=>{ e.stopPropagation(); if(!filterState.learnerMode){ return; } toggleFn(); });
+      wrapLabel.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); if(!filterState.learnerMode){ return; } toggleFn(); }});
+      // Disable interaction when learner mode is OFF but still show state
+      if(!filterState.learnerMode){ wrapLabel.style.opacity='.45'; wrapLabel.style.pointerEvents='none'; wrapLabel.title='Enable Learner Mode to toggle'; }
+      restyle();
+      learnerActionPills.appendChild(wrapLabel);
+    });
   }
   renderLearnerActionPills();
 
@@ -2304,14 +2363,20 @@ function enforceLegacyPlannedLimit(){
     if(!wrap){
       wrap = document.createElement('div');
       wrap.id = 'learner-mini-badge';
-      const header = document.getElementById('learner-stack-toggle');
-      if(header){ header.appendChild(wrap); }
-      else { document.body.appendChild(wrap); }
+      // Prefer dedicated host in page header
+      const host = document.getElementById('learner-mini-badge-host');
+      if(host){ host.appendChild(wrap); }
+      else {
+        // Fallback: append to body to avoid coupling with learner stack toggle
+        document.body.appendChild(wrap);
+      }
     }
     return wrap;
   }
   function renderLearnerMiniBadge(){
     const wrap = ensureMiniBadgeContainer();
+    // Visibility toggle
+    wrap.style.display = filterState.showMiniBadge ? '' : 'none';
     const domains = (window.loadedDomains||[]).filter(d=>d.domainId!=='SKL').sort((a,b)=>a.domainDisplayOrder-b.domainDisplayOrder);
     if(domains.length===0){ wrap.innerHTML=''; return; }
     const achievedLevels = getHighestAchievedLevels();
