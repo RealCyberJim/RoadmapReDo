@@ -3,6 +3,9 @@
     /* 03JUN2025 2316 - last commit prior to skill level refactor*/
     :root {
       /* --domain-count: 8; /* ← TEMPORARY fallback for CSS grid */
+
+      
+
       /* Base color palette */
       --color-green: #70AD47;
       --color-teal: #008080;
@@ -14,8 +17,10 @@
       --color-blue: #2e5688;
       --color-red: #c0514d;
       --color-magenta: #a500a1;
-      --color-blue-bright: #0000ff; /* Bright blue used for Reach Goal status */
-      /* Dark variants */
+  /* Extended accent */
+  --color-blue-bright: #0000ff; /* Bright blue used for Reach Goal status */
+      
+      /* Dark variants */      
       --color-green-dark: #548235;
       --color-teal-dark: #003F3E;
       --color-orange-dark: #c06216;
@@ -26,6 +31,7 @@
       --color-blue-dark: #1f3147;
       --color-red-dark: #8c3736;
       --color-magenta-dark: #490e49;
+      
       /* Light variants */
       --color-green-light: #c3dbb8;
       --color-teal-light: #8fc6c6;
@@ -37,6 +43,7 @@
       --color-blue-light: #dce6f2;
       --color-red-light: #f2dcdb;
       --color-magenta-light: #f1d4e0;
+      
       /* Domain-specific colors */
       --domain-default-white: #ffffff;
       --domain-net: var(--color-green);
@@ -63,8 +70,11 @@
       --domain-ops: var(--color-red);
       --domain-ops-dark: var(--color-red-dark);
       --domain-ops-light: var(--color-red-light);
+
+
       --domain-title-height: 2.8vmax;
-      /* Sizing tokens */
+
+      /* Scalable sizing tokens */
       --filter-font-size: clamp(0.55rem, 0.9vmax, 14px);
       --filter-label-font-size: var(--filter-font-size);
       --pill-font-size: var(--filter-font-size);
@@ -73,45 +83,31 @@
       --pill-radius: 1vmax;
       --pill-border-width: 2px;
       --filter-line-gap: 0.55vmax;
-      /* Learner palette */
-      --learner-neutral-bg: var(--color-black-light);
-      --learner-neutral-border: var(--color-black-dark);
-      --learner-neutral-text: var(--color-black-dark);
-      --learner-achieved-bg: var(--color-green-light);
-      --learner-achieved-border: var(--color-green-dark);
-      --learner-achieved-text: var(--color-green-dark);
-      --learner-planned-bg: var(--color-yellow-light);
-      --learner-planned-border: var(--color-yellow-dark);
-      --learner-planned-text: var(--color-yellow-dark);
-      --learner-reach-bg: var(--color-skyblue-light);
-      --learner-reach-border: var(--color-skyblue-dark);
-      --learner-reach-text: var(--color-skyblue-dark);
-    }
-  .menu-trigger { position:fixed; top:0.6vmax; left:0.6vmax; z-index:1200; background:var(--color-green-light); color:var(--color-green-dark); border:1px solid var(--color-green-dark); padding:0.4vmax 0.7vmax; font-size:1.3vmax; line-height:1; border-radius:0.4vmax; cursor:pointer; }
-  body.dark-mode .menu-trigger { background:var(--color-green-dark); color:var(--color-green-light); }
-  .menu-trigger:focus { outline:2px solid var(--color-green-dark); }
-  .side-drawer-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1199; }
-  .side-drawer { position:fixed; top:0; left:0; height:100vh; width:26vmax; max-width:420px; background:#ffffff; color:#222; box-shadow:0 0 1.6vmax rgba(0,0,0,0.4); z-index:1200; display:flex; flex-direction:column; padding:1vmax 1.2vmax; gap:0.8vmax; }
-  body.dark-mode .side-drawer { background:#1e1e1e; color:#ddd; box-shadow:0 0 1.6vmax rgba(0,0,0,0.75); }
-  .side-drawer-header { display:flex; align-items:center; justify-content:space-between; }
-  .drawer-close { background:transparent; color:inherit; border:1px solid currentColor; border-radius:0.4vmax; padding:0.3vmax 0.6vmax; cursor:pointer; }
-  .drawer-nav { border-top:1px solid rgba(0,0,0,0.15); padding-top:0.6vmax; }
-  body.dark-mode .drawer-nav { border-color:rgba(255,255,255,0.15); }
-  .drawer-top-level { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.4vmax; }
-  .drawer-top-level button { width:100%; text-align:left; background:var(--learner-neutral-bg); color:var(--learner-neutral-text); border:1px solid var(--learner-neutral-border); padding:0.5vmax 0.7vmax; border-radius:0.5vmax; font-size:0.95vmax; cursor:pointer; }
-  body.dark-mode .drawer-top-level button { background:#2b2b2b; color:#ddd; border-color:#555; }
-  .drawer-top-level button:focus { outline:2px solid var(--color-green-dark); }
-  .drawer-panel-region { flex:1; overflow-y:auto; border-top:1px solid rgba(0,0,0,0.12); }
-  body.dark-mode .drawer-panel-region { border-color:rgba(255,255,255,0.12); }
-  .drawer-panel { animation:fadeIn 160ms ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
-  .drawer-back { margin-bottom:0.6vmax; background:transparent; color:inherit; border:1px solid currentColor; border-radius:0.4vmax; padding:0.35vmax 0.6vmax; cursor:pointer; font-size:0.8vmax; }
-  .drawer-section { display:flex; flex-direction:column; gap:0.6vmax; }
-  .drawer-section h3 { margin:0; font-size:1.05vmax; }
-  /* Hide original stacks when drawer present */
-  .filter-stack { display:none !important; }
-      
-
+      --filter-stack-vertical-gap: 0.45vmax;
+      --filter-label-offset: 0.08vmax;
+      --vendor-select-padding-y: clamp(0.18rem, 0.28vmax, 0.4rem);
+      --vendor-select-padding-x: clamp(0.45rem, 0.6vmax, 0.8rem);
+      --vendor-select-radius: 0.55vmax;
+      --focus-ring: 0 0 0 0.15vmax rgba(0,0,0,0.25);
+      --filter-row-vertical-padding: 0.18vmax;
+      --filter-interline-spacing: 0.4vmax;
+      /* Track width tokens (Option C) */
+      --cert-track-width: 2.3vmax;   /* Standard certification tile track */
+      --skill-track-width: 0.6vmax;  /* Narrow skill column track */
+  /* Learner neutral pill scheme */
+  --learner-neutral-bg: var(--color-black-light);
+  --learner-neutral-border: var(--color-black-dark);
+  --learner-neutral-text: var(--color-black-dark);
+  /* Learner status palette aligned to existing domain color system */
+  --learner-achieved-bg: var(--color-green-light);
+  --learner-achieved-border: var(--color-green-dark);
+  --learner-achieved-text: var(--color-green-dark);
+  --learner-planned-bg: var(--color-yellow-light);
+  --learner-planned-border: var(--color-yellow-dark);
+  --learner-planned-text: var(--color-yellow-dark);
+  --learner-reach-bg: var(--color-skyblue-light);
+  --learner-reach-border: var(--color-skyblue-dark);
+  --learner-reach-text: var(--color-skyblue-dark);
     }
 
     /* Domain-specific border and title coloring */
@@ -264,6 +260,35 @@
   .filter-stack-arrow { display:inline-block; transition:transform .2s ease; font-size:0.8vmax; }
   .filter-stack.collapsed .filter-stack-arrow { transform:rotate(-90deg); }
   .filter-line { display:flex; flex-direction:row; align-items:center; gap:var(--filter-line-gap); flex-wrap:nowrap; padding: var(--filter-row-vertical-padding) 0; }
+  /* Composite learner mode block: two stacked internal rows */
+  .filter-line.learner-mode-composite { flex-direction:column; align-items:flex-start; gap:0.35vmax; }
+  .learner-mode-row, .learner-views-row { display:flex; flex-direction:row; align-items:center; gap:var(--filter-line-gap); }
+  /* Learner views row: visible-but-inert when learner mode OFF */
+  .learner-views-row { transition: opacity .18s ease; position: relative; }
+  .learner-views-row.is-inert { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+  .learner-views-row.is-inert .mode-filter-tile { opacity: 0.6; }
+  .learner-views-row.is-inert::after { 
+    content: attr(data-tooltip); 
+    position: absolute; 
+    top: -2.2em; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: rgba(0,0,0,0.8); 
+    color: white; 
+    padding: 0.3em 0.6em; 
+    border-radius: 0.3em; 
+    font-size: 0.55em; 
+    white-space: nowrap; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.2s; 
+    z-index: 1000;
+  }
+  .learner-views-row.is-inert:hover::after { opacity: 1; }
+  /* Dark mode tooltip */
+  body.dark-mode .learner-views-row.is-inert::after { background: rgba(40,40,40,0.95); }
+  /* Ensure inner rows don't stretch full width awkwardly */
+  .learner-mode-row > .filter-label, .learner-views-row > .filter-label { min-width:6.5ch; }
     .filter-line .domain-filter-bar,
     .filter-line .strata-filter-bar,
     .filter-line .mode-filter-bar { display:flex; flex-direction:row; align-items:stretch; max-width:min(80vw,140vmax); }
@@ -452,6 +477,49 @@
   /* Planned limit dialog variant */
   .planned-limit-dialog h3 { color: var(--color-yellow-dark); }
   body.dark-mode .planned-limit-dialog h3 { color: var(--color-yellow-light); }
+  /* ================= Hamburger Menu System ================ */
+  .hamburger-trigger { position:fixed; top:0.5vmax; left:0.6vmax; z-index:12000; background:var(--color-black-light); color:var(--color-black-dark); border:2px solid var(--color-black-dark); padding:0.35vmax 0.6vmax; border-radius:0.5vmax; font-size:0.9vmax; line-height:1; cursor:pointer; font-weight:700; letter-spacing:0.5px; }
+  body.dark-mode .hamburger-trigger { background:#222; color:#eee; border-color:#555; }
+  .hamburger-trigger:focus { outline:none; box-shadow:var(--focus-ring); }
+  #hamburger-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:11999; display:none; }
+  #hamburger-overlay.active { display:block; }
+  .hamburger-panel-stack { position:fixed; top:1.8vmax; left:1.6vmax; z-index:12001; pointer-events:none; }
+  .hamburger-panel { position:absolute; top:0; left:0; background:#fff; color:#222; border:1px solid #ccc; border-radius:0.7vmax; padding:0.9vmax 1vmax 1vmax; min-width:15vmax; box-shadow:0 0.5vmax 1.4vmax rgba(0,0,0,0.28); font-size:0.7vmax; line-height:1.3; opacity:0; transform:translateY(-4px) scale(.97); transition:opacity .16s ease, transform .16s ease; pointer-events:auto; }
+  .hamburger-panel.auto-wide { width:auto; max-width:none; display:inline-block; }
+  .hamburger-panel { white-space:normal; }
+  .hamburger-panel.level-0 { left:1.6vmax; }
+  .hamburger-panel.level-1 { left:5.6vmax; }
+  .hamburger-panel.level-2 { left:9.6vmax; }
+  .hamburger-menu-list button { white-space:nowrap; }
+  .hamburger-panel-content { overflow-x:hidden; }
+  body.dark-mode .hamburger-panel { background:#1f1f1f; color:#eee; border-color:#444; box-shadow:0 0.5vmax 1.6vmax rgba(0,0,0,0.55); }
+  .hamburger-panel.active { opacity:1; transform:translateY(0) scale(1); }
+  .hamburger-panel.layer-offset-1 { left:0.8vmax; top:0.6vmax; }
+  .hamburger-panel.layer-offset-2 { left:1.6vmax; top:1.2vmax; }
+  .hamburger-panel-header { display:flex; align-items:center; justify-content:space-between; gap:0.6vmax; margin-bottom:0.6vmax; }
+  .hamburger-panel-header h3 { margin:0; font-size:0.85vmax; letter-spacing:0.5px; }
+  .hamburger-close-btn, .hamburger-back-btn { background:transparent; border:1px solid #888; color:#333; font:inherit; font-size:0.6vmax; padding:0.25vmax 0.6vmax; border-radius:0.45vmax; cursor:pointer; letter-spacing:0.4px; }
+  body.dark-mode .hamburger-close-btn, body.dark-mode .hamburger-back-btn { color:#ddd; border-color:#666; }
+  .hamburger-close-btn:hover, .hamburger-back-btn:hover { background:rgba(0,0,0,0.06); }
+  body.dark-mode .hamburger-close-btn:hover, body.dark-mode .hamburger-back-btn:hover { background:rgba(255,255,255,0.12); }
+  .hamburger-menu-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.35vmax; }
+  .hamburger-menu-list button { text-align:left; width:100%; background:#f3f3f3; border:1px solid #bbb; color:#222; padding:0.45vmax 0.6vmax; border-radius:0.5vmax; cursor:pointer; font:inherit; font-size:0.65vmax; font-weight:600; letter-spacing:0.4px; }
+  .hamburger-menu-list button:hover, .hamburger-menu-list button:focus { background:#e7e7e7; outline:none; }
+  body.dark-mode .hamburger-menu-list button { background:#2a2a2a; border-color:#555; color:#ddd; }
+  body.dark-mode .hamburger-menu-list button:hover, body.dark-mode .hamburger-menu-list button:focus { background:#333; }
+  .hamburger-panel-content { max-height:50vh; overflow-y:auto; overflow-x:visible; padding-right:0.3vmax; }
+  .hamburger-panel.level-1 .hamburger-panel-content { white-space:nowrap; }
+  .hamburger-panel.level-1 #domain-checkboxes, .hamburger-panel.level-1 #learner-action-pills { white-space:nowrap; }
+  .hamburger-panel.level-1 #domain-checkboxes .domain-filter-tile, .hamburger-panel.level-1 #learner-action-pills .mode-filter-tile { flex:0 0 auto; }
+  .hamburger-panel-content::-webkit-scrollbar { width:0.5vmax; }
+  .hamburger-panel-content::-webkit-scrollbar-track { background:transparent; }
+  .hamburger-panel-content::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.25); border-radius:1vmax; }
+  body.dark-mode .hamburger-panel-content::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.25); }
+  .hamburger-breadcrumb { font-size:0.55vmax; letter-spacing:0.4px; color:#555; margin:0 0 0.5vmax 0; }
+  body.dark-mode .hamburger-breadcrumb { color:#aaa; }
+  .hidden-in-hamburger { display:none !important; }
+  @media (max-width: 900px){ .hamburger-panel { min-width:60vw; max-width:80vw; } }
+  @media (max-width: 600px){ .hamburger-panel { top:0.8vmax; left:0.8vmax; } .hamburger-panel.layer-offset-1 { left:1.0vmax; } .hamburger-panel.layer-offset-2 { left:1.4vmax; } }
   /* Constrained overall layout shell to prevent helper UI from widening page */
   #app-shell { max-width:1600px; margin:0 auto; padding:0 1.5rem 2rem; box-sizing:border-box; }
   @media (max-width:1200px){ #app-shell { padding:0 1rem 2rem; } }
@@ -683,19 +751,10 @@
 </head>
 <link rel="icon" href="data:,"> <!-- Prevents favicon request -->
 <body>
-<button id="menu-trigger" class="menu-trigger" aria-label="Open Menu" aria-haspopup="true" aria-controls="side-drawer" aria-expanded="false">≡</button>
-<div id="side-drawer-overlay" class="side-drawer-overlay" hidden></div>
-<div id="side-drawer" class="side-drawer" role="dialog" aria-modal="true" aria-labelledby="side-drawer-title" hidden>
-  <div class="side-drawer-header">
-    <h2 id="side-drawer-title">Roadmap Menu</h2>
-    <button type="button" class="drawer-close" aria-label="Close Menu">✕</button>
-  </div>
-  <nav class="drawer-nav" aria-label="Primary Menu">
-    <ul class="drawer-top-level" id="drawer-top-level"></ul>
-  </nav>
-  <div class="drawer-panel-region" id="drawer-panel-region" aria-live="polite"></div>
-</div>
 <!-- Filter Control Panel -->
+
+<!-- Hamburger Menu Trigger -->
+<button id="hamburger-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="hamburger-overlay" class="hamburger-trigger" type="button">☰</button>
 
 
 <!-- Dark Mode checkbox removed; now part of Display Mode pill group -->
@@ -716,13 +775,15 @@
       <span class="filter-label">Display Mode:</span>
       <div id="mode-pills" class="mode-filter-bar" aria-label="Display Mode"></div>
     </div>
-    <div class="filter-line" style="align-items:center;">
-      <span class="filter-label">Learner Mode:</span>
-      <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
-    </div>
-    <div class="filter-line" style="align-items:center;">
-      <span class="filter-label">Learner Views:</span>
-      <div id="learner-action-pills" class="mode-filter-bar" aria-label="Learner Actions"></div>
+    <div class="filter-line learner-mode-composite" id="learner-mode-composite" aria-label="Learner Mode Controls">
+      <div class="learner-mode-row">
+        <span class="filter-label">Learner Mode:</span>
+        <div id="learner-mode-pills" class="mode-filter-bar" aria-label="Learner Mode Toggle"></div>
+      </div>
+      <div class="learner-views-row is-inert" id="learner-views-row" data-tooltip="Turn Learner Mode ON to activate these views.">
+        <span class="filter-label">Learner Views:</span>
+        <div id="learner-action-pills" class="mode-filter-bar" aria-label="Learner Views (enable Learner Mode to activate)"></div>
+      </div>
     </div>
   </div>
   </div>
@@ -1929,6 +1990,10 @@ function enforceLegacyPlannedLimit(){
   // Enforce learner mode OFF on initial load display (persisted statuses remain but styling not applied until user turns ON)
   filterState.learnerMode = false;
   filterState.learnerView = 'baseline';
+  // Ensure body reflects learner mode state for possible future styling hooks
+  document.body.classList.toggle('learner-mode-on', filterState.learnerMode);
+  // Make sure learner views row starts disabled visually
+  if(typeof updateLearnerViewsInteractivity === 'function') { updateLearnerViewsInteractivity(); }
 
       // Sync domain checkbox visual state after persistence load
       if (persisted && Array.isArray(persisted.visibleDomains)) {
@@ -2199,6 +2264,23 @@ function enforceLegacyPlannedLimit(){
   applyLearnerStackState();
 
   const learnerModePills = document.getElementById('learner-mode-pills');
+  const learnerViewsRow = document.getElementById('learner-views-row');
+  function updateLearnerViewsInteractivity(){
+    if(!learnerViewsRow) return; const enabled = !!filterState.learnerMode;
+    if(!enabled){
+      learnerViewsRow.classList.add('is-inert');
+      learnerViewsRow.setAttribute('aria-disabled','true');
+    } else {
+      learnerViewsRow.classList.remove('is-inert');
+      learnerViewsRow.removeAttribute('aria-disabled');
+    }
+    // Adjust focusability of contained pills
+    const pills = learnerViewsRow.querySelectorAll('.mode-filter-tile');
+    pills.forEach(p=>{
+      if(!enabled){ p.setAttribute('tabindex','-1'); p.setAttribute('aria-disabled','true'); }
+      else { p.setAttribute('tabindex','0'); p.removeAttribute('aria-disabled'); }
+    });
+  }
   function renderLearnerModePills(){
     if(!learnerModePills) return; learnerModePills.innerHTML='';
     const modes=[{id:'off',label:'Off',active:!filterState.learnerMode},{id:'on',label:'On',active:filterState.learnerMode}];
@@ -2231,7 +2313,7 @@ function enforceLegacyPlannedLimit(){
           label.style.borderColor='#777';
         }
       }
-      input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode);
+  input.addEventListener('change',()=>{ if(!input.checked) return; const turningOn = (m.id==='on'); filterState.learnerMode = turningOn; console.debug('[LearnerMode] toggled ->', filterState.learnerMode); document.body.classList.toggle('learner-mode-on', filterState.learnerMode);
         if(filterState.learnerMode){
           // Apply learner styling to all tiles based on persisted statuses
           document.querySelectorAll('.cert-tile').forEach(t=>{ applyLearnerStatusToTile(t); });
@@ -2257,6 +2339,7 @@ function enforceLegacyPlannedLimit(){
         saveStateDebounced();
         renderLearnerModePills();
         renderLearnerActionPills();
+  updateLearnerViewsInteractivity();
         if(filterState.learnerMode){ updateLearnerViewVisibility(); }
       });
       // Redundant label click safety (some browsers swallow hidden input change under rapid clicks)
@@ -2367,8 +2450,11 @@ function enforceLegacyPlannedLimit(){
       restyle();
       learnerActionPills.appendChild(wrapLabel);
     });
+    updateLearnerViewsInteractivity();
   }
   renderLearnerActionPills();
+  // Dispatch custom event signaling learner action pills ready
+  document.dispatchEvent(new CustomEvent('learnerActionPillsReady'));
 
   // Status badge (debug / feedback)
   const learnerStatusBadge = document.createElement('div');
@@ -2721,6 +2807,135 @@ function enforceLegacyPlannedLimit(){
   );
 
   window.addEventListener('load',()=>{ setTimeout(()=>{ document.querySelectorAll('.cert-tile').forEach(applyLearnerStatusToTile); },100); });
+
+  /* ===================== HAMBURGER MENU SYSTEM ===================== */
+  (function initHamburger(){
+    const trigger = document.getElementById('hamburger-trigger');
+    if(!trigger) return;
+    // Build overlay + stack container lazily when first opened
+  let overlay = null; let stackHost = null; const openPanels = [];
+  // Staging area for original controls (kept hidden)
+  let staging = document.getElementById('control-staging');
+  if(!staging){ staging = document.createElement('div'); staging.id='control-staging'; staging.style.display='none'; document.body.appendChild(staging); }
+    const FOCUSABLE_SEL = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    function buildBase(){
+      if(overlay) return;
+      overlay = document.createElement('div'); overlay.id='hamburger-overlay'; overlay.setAttribute('aria-hidden','true');
+      document.body.appendChild(overlay);
+      stackHost = document.createElement('div'); stackHost.className='hamburger-panel-stack'; document.body.appendChild(stackHost);
+      overlay.addEventListener('click', (e)=>{ if(e.target===overlay){ closeAll(); }});
+      document.addEventListener('keydown', (e)=>{ if(!overlay.classList.contains('active')) return; if(e.key==='Escape'){ e.preventDefault(); closeTop(); }});
+    }
+    function focusTrap(e){
+      if(!overlay || !overlay.classList.contains('active')) return;
+      if(e.key!=='Tab') return;
+      const panel = openPanels[openPanels.length-1]; if(!panel) return;
+      const focusables = panel.querySelectorAll(FOCUSABLE_SEL); if(!focusables.length) return;
+      const first = focusables[0]; const last = focusables[focusables.length-1];
+      if(e.shiftKey){ if(document.activeElement===first){ e.preventDefault(); last.focus(); }}
+      else { if(document.activeElement===last){ e.preventDefault(); first.focus(); }}
+    }
+    document.addEventListener('keydown', focusTrap);
+    function openRoot(){ buildBase(); overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false');
+      const root = createRootPanel(); stackHost.appendChild(root); requestAnimationFrame(()=>root.classList.add('active')); openPanels.push(root); trigger.setAttribute('aria-expanded','true');
+      // focus first button
+      const firstBtn = root.querySelector('.hamburger-menu-list button'); if(firstBtn) firstBtn.focus();
+    }
+  function closeTop(){ if(!openPanels.length){ closeAll(); return; } const top = openPanels.pop(); top.classList.remove('active'); setTimeout(()=>{ top.remove(); if(!openPanels.some(p=>p.classList.contains('level-1'))){ restoreMovedNodes(); highlightActiveRoot(null); } if(openPanels.length){ openPanels[openPanels.length-1].focus(); } else { closeAll(); } },120); }
+  function closeAll(){ if(overlay){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); } openPanels.splice(0); document.querySelectorAll('.hamburger-panel').forEach(p=>p.remove()); restoreMovedNodes(); highlightActiveRoot(null); trigger.setAttribute('aria-expanded','false'); trigger.focus(); }
+    trigger.addEventListener('click', ()=>{ if(openPanels.length){ closeAll(); } else { openRoot(); }});
+    // Panel creation helpers
+    function createPanel(title, layerIndex){
+      const panel = document.createElement('div'); panel.className='hamburger-panel active layer-offset-'+layerIndex; panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','false');
+      const header = document.createElement('div'); header.className='hamburger-panel-header';
+      const h = document.createElement('h3'); h.textContent=title; header.appendChild(h);
+      const controlsWrap = document.createElement('div'); controlsWrap.style.display='flex'; controlsWrap.style.gap='0.4vmax';
+      if(layerIndex>0){ const back = document.createElement('button'); back.type='button'; back.className='hamburger-back-btn'; back.textContent='Back'; back.addEventListener('click', ()=>{ closeTop(); }); controlsWrap.appendChild(back); }
+      const close = document.createElement('button'); close.type='button'; close.className='hamburger-close-btn'; close.textContent='Close'; close.addEventListener('click', ()=>closeAll()); controlsWrap.appendChild(close);
+      header.appendChild(controlsWrap); panel.appendChild(header);
+      const breadcrumb = document.createElement('div'); breadcrumb.className='hamburger-breadcrumb'; breadcrumb.textContent = buildBreadcrumb(layerIndex, title); panel.appendChild(breadcrumb);
+      const content = document.createElement('div'); content.className='hamburger-panel-content'; panel.appendChild(content);
+      return {panel, content};
+    }
+    function buildBreadcrumb(layerIndex, current){
+      const names = openPanels.map(p=>p.getAttribute('data-title')).concat([current]);
+      return names.join(' › ');
+    }
+    function pushPanel(panel, level){ panel.classList.add('level-'+level); stackHost.appendChild(panel); requestAnimationFrame(()=>panel.classList.add('active')); openPanels.push(panel); }
+    function removePanelAtLevel(level){ const idx = openPanels.findIndex(p=>p.classList.contains('level-'+level)); if(idx>-1){ const p=openPanels[idx]; openPanels.splice(idx,1); p.classList.remove('active'); setTimeout(()=>p.remove(),120); } }
+    function ensureSingleLevel(level){ // remove any existing panel for this level
+      openPanels.filter(p=>p.classList.contains('level-'+level)).forEach(p=>{ p.classList.remove('active'); setTimeout(()=>{ p.remove(); },120); openPanels.splice(openPanels.indexOf(p),1); }); }
+    function drill(title, builder){ const level = 1; // current max depth for user requirements
+      ensureSingleLevel(level); const {panel, content} = createPanel(title, level); panel.setAttribute('data-title', title); builder(content);
+      // Apply auto-wide for domains & learner views panels
+      if(title==='Domains' || title==='Learner Views'){ panel.classList.add('auto-wide'); }
+      pushPanel(panel, level); highlightActiveRoot(title); const first = panel.querySelector(FOCUSABLE_SEL); if(first) first.focus(); }
+    function createRootPanel(){
+      const {panel, content} = createPanel('Menu', 0); panel.setAttribute('data-title', 'Menu');
+      const ul = document.createElement('ul'); ul.className='hamburger-menu-list'; ul.setAttribute('role','menu');
+      const items = [
+        { id:'display', label:'Display Mode', build: mountDisplay },
+        { id:'learner-mode', label:'Learner Mode', build: mountLearnerMode },
+        { id:'learner-views', label:'Learner Views', build: mountLearnerViews },
+        { id:'domains', label:'Domains', build: mountDomains },
+        { id:'skill', label:'Skill Levels', build: mountSkillLevels },
+        { id:'vendors', label:'Vendors', build: mountVendors }
+      ];
+      items.forEach(it=>{ const b=document.createElement('button'); b.type='button'; b.textContent=it.label; b.setAttribute('data-root-item', it.label); b.addEventListener('click', ()=>{ drill(it.label, it.build); }); ul.appendChild(b); });
+      content.appendChild(ul); return panel;
+    }
+    // Vertical level indicator builder
+    // Mount helpers (move nodes; restore on close handled globally)
+    const moveMap = {}; // key -> original parent
+    function moveNode(id, container){
+      let el = document.getElementById(id);
+      if(!el){
+        // Element may not be built yet (async render). Provide a placeholder and retry.
+        const placeholder = document.createElement('div');
+        placeholder.textContent = 'Loading…';
+        placeholder.style.fontSize='0.6vmax';
+        placeholder.style.opacity='0.7';
+        container.appendChild(placeholder);
+        let attempts = 0;
+        const maxAttempts = 15; // ~1.5s total with 100ms interval
+        const interval = setInterval(()=>{
+          el = document.getElementById(id);
+          if(el){
+            clearInterval(interval);
+            if(!moveMap[id]) moveMap[id]=el.parentElement;
+            // Replace placeholder
+            if(placeholder.parentNode===container) container.removeChild(placeholder);
+            container.appendChild(el);
+          } else if(++attempts>=maxAttempts){
+            clearInterval(interval);
+            placeholder.textContent = 'Unavailable: '+id;
+          }
+        },100);
+        return;
+      }
+      if(!moveMap[id]){ moveMap[id]=el.parentElement; }
+      container.appendChild(el);
+    }
+    function restoreMovedNodes(){ Object.entries(moveMap).forEach(([id,parent])=>{ const el=document.getElementById(id); if(el && parent){ parent.appendChild(el); } }); }
+  function mountDisplay(container){ moveNode('mode-pills', container); }
+  function mountLearnerMode(container){ moveNode('learner-mode-pills', container); }
+    function mountLearnerViews(container){
+      const ready = !!document.getElementById('learner-action-pills');
+      if(ready){ moveNode('learner-action-pills', container); return; }
+      const placeholder = document.createElement('div'); placeholder.textContent='Loading learner views…'; placeholder.style.fontSize='0.6vmax'; placeholder.style.opacity='.7'; container.appendChild(placeholder);
+      const handler = ()=>{ const el=document.getElementById('learner-action-pills'); if(el){ document.removeEventListener('learnerActionPillsReady', handler); if(placeholder.parentNode===container) container.removeChild(placeholder); moveNode('learner-action-pills', container); } };
+      document.addEventListener('learnerActionPillsReady', handler);
+    }
+  function mountDomains(container){ moveNode('domain-checkboxes', container); }
+  function mountSkillLevels(container){ moveNode('strata-pills', container); }
+  function mountVendors(container){ const wrap=document.createElement('div'); wrap.style.display='flex'; wrap.style.flexDirection='column'; wrap.style.gap='0.4vmax'; const sel=document.getElementById('vendor-filter'); if(sel){ wrap.appendChild(sel); } container.appendChild(wrap); }
+  function mountReset(container){ const btn=document.createElement('button'); btn.type='button'; btn.textContent='Reset Learner Statuses'; btn.addEventListener('click', ()=>{ showLearnerResetModal(); }); container.appendChild(btn); }
+    function highlightActiveRoot(label){ const rootButtons = stackHost.querySelectorAll('.hamburger-menu-list button[data-root-item]'); rootButtons.forEach(rb=>{ if(rb.getAttribute('data-root-item')===label){ rb.style.background='var(--learner-neutral-bg)'; rb.style.borderColor='var(--learner-neutral-border)'; rb.style.color='var(--learner-neutral-text)'; rb.setAttribute('aria-current','true'); } else { rb.style.background=''; rb.style.borderColor=''; rb.style.color=''; rb.removeAttribute('aria-current'); } }); }
+    // Override closeTop to restore moved nodes when last level1 removed
+    const originalCloseTop = closeTop; // not defined yet? adjust logic
+    // Hide original stacks to avoid layout impact
+    const orig1=document.getElementById('learner-stack'); const orig2=document.getElementById('filters-secondary'); if(orig1) orig1.classList.add('hidden-in-hamburger'); if(orig2) orig2.classList.add('hidden-in-hamburger');
+  })();
   
   // ==============================
   // Single Reach Goal Enforcement
@@ -2813,101 +3028,5 @@ function enforceLegacyPlannedLimit(){
 
   // Fallback: attach per-tile listeners after each redraw to guarantee popup
   // Remove complex per-tile binding: delegation now handles all clicks.
-
-  // =============================
-  // Side Drawer (Hamburger Menu)
-  // =============================
-  function initSideDrawer(){
-    const trigger = document.getElementById('menu-trigger');
-    const drawer = document.getElementById('side-drawer');
-    const overlay = document.getElementById('side-drawer-overlay');
-    const topLevelUl = document.getElementById('drawer-top-level');
-    const panelRegion = document.getElementById('drawer-panel-region');
-    if(!trigger || !drawer || !overlay || !topLevelUl || !panelRegion){ console.warn('[Drawer] Missing elements; abort init'); return; }
-
-    const panels = [
-      { id:'panel-display', label:'Display Mode', el: document.getElementById('mode-pills') },
-      { id:'panel-learner-mode', label:'Learner Mode', el: document.getElementById('learner-mode-pills') },
-      { id:'panel-learner-views', label:'Learner Views', el: document.getElementById('learner-action-pills') },
-      { id:'panel-domains', label:'Domains', el: document.getElementById('domain-checkboxes') },
-      { id:'panel-skill', label:'Skill Levels', el: document.getElementById('strata-pills') },
-      { id:'panel-vendors', label:'Vendors', el: document.getElementById('vendor-filter') }
-    ];
-
-    // Build top-level buttons
-    panels.forEach(p=>{
-      if(!p.el) return;
-      const li = document.createElement('li');
-      const btn = document.createElement('button');
-      btn.type='button';
-      btn.textContent=p.label;
-      btn.setAttribute('data-panel-target', p.id);
-      btn.addEventListener('click', ()=> showPanel(p.id));
-      li.appendChild(btn); topLevelUl.appendChild(li);
-    });
-
-    function showPanel(id){
-      panelRegion.innerHTML='';
-      const def = panels.find(pp=>pp.id===id);
-      if(!def || !def.el){ panelRegion.textContent='Panel not found.'; return; }
-      const wrap = document.createElement('div');
-      wrap.className='drawer-panel';
-      const back = document.createElement('button'); back.type='button'; back.className='drawer-back'; back.textContent='‹ Back';
-      back.addEventListener('click', ()=>{ panelRegion.innerHTML=''; trigger.focus(); });
-      const h3 = document.createElement('h3'); h3.textContent=def.label; h3.id=id+'-heading';
-      wrap.appendChild(back); wrap.appendChild(h3);
-      // Move the existing element (preserving event handlers)
-      wrap.appendChild(def.el);
-      panelRegion.appendChild(wrap);
-      panelRegion.setAttribute('aria-labelledby', h3.id);
-      // Focus first interactive inside panel
-      setTimeout(()=>{ const first = wrap.querySelector('input,button,select,[tabindex]:not([tabindex="-1"])'); if(first) first.focus(); },30);
-    }
-
-    let lastFocused = null;
-    function openDrawer(){
-      lastFocused = document.activeElement;
-      drawer.hidden=false; overlay.hidden=false;
-      trigger.setAttribute('aria-expanded','true');
-      // Focus first top-level button
-      const firstBtn = topLevelUl.querySelector('button');
-      if(firstBtn) firstBtn.focus();
-      document.body.classList.add('drawer-open');
-    }
-    function closeDrawer(){
-      drawer.hidden=true; overlay.hidden=true;
-      trigger.setAttribute('aria-expanded','false');
-      document.body.classList.remove('drawer-open');
-      // Return moved panels to original positions to avoid layout surprises when printing etc.
-      panels.forEach(p=>{
-        if(!p.el) return;
-        // If element currently inside drawer-panel, detach and place in a hidden staging area appended to body
-        if(drawer.contains(p.el)){
-          // Create / find staging container
-          let staging = document.getElementById('drawer-staging');
-          if(!staging){ staging = document.createElement('div'); staging.id='drawer-staging'; staging.style.display='none'; document.body.appendChild(staging); }
-          staging.appendChild(p.el);
-        }
-      });
-      if(lastFocused && lastFocused.focus) setTimeout(()=> lastFocused.focus(), 30);
-    }
-
-    trigger.addEventListener('click', ()=>{ if(drawer.hidden) openDrawer(); else closeDrawer(); });
-    overlay.addEventListener('click', closeDrawer);
-    drawer.querySelector('.drawer-close')?.addEventListener('click', closeDrawer);
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !drawer.hidden){ e.preventDefault(); closeDrawer(); }});
-
-    // Simple focus trap
-    document.addEventListener('focusin', e=>{
-      if(drawer.hidden) return;
-      if(!drawer.contains(e.target) && e.target!==trigger){
-        // Redirect focus back inside drawer
-        const focusable = drawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        if(focusable.length) focusable[0].focus();
-      }
-    });
-  }
-
-  window.addEventListener('load', ()=>{ try { initSideDrawer(); } catch(err){ console.warn('[Drawer] init error', err); } });
 
 </script>
