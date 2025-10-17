@@ -970,7 +970,7 @@ function enforceLegacyPlannedLimit(){
       // Dark mode
       if (typeof persisted.darkMode === 'boolean') {
         filterState.darkMode = persisted.darkMode;
-        document.body.classList.toggle('dark-mode', filterState.darkMode);
+        // Defer body class management to unified sync helper
         const dmToggle = document.getElementById('dark-mode-checkbox');
         if (dmToggle) dmToggle.checked = filterState.darkMode;
       }
@@ -997,6 +997,19 @@ function enforceLegacyPlannedLimit(){
       if (typeof persisted.showMiniBadge === 'boolean') {
         filterState.showMiniBadge = persisted.showMiniBadge;
       }
+    }
+
+    // Unified display mode synchronization
+    function syncDisplayMode(force){
+      // If force provided use that, else trust filterState.darkMode
+      if(typeof force === 'boolean') filterState.darkMode = force;
+      const shouldBeDark = !!filterState.darkMode;
+      const hasDark = document.body.classList.contains('dark-mode');
+      if(shouldBeDark !== hasDark){
+        document.body.classList.toggle('dark-mode', shouldBeDark);
+        console.debug('[DisplayMode] body class updated. darkMode=', shouldBeDark);
+      }
+      return shouldBeDark;
     }
 
     function loadLearnerStatuses(){
@@ -1887,14 +1900,16 @@ function enforceLegacyPlannedLimit(){
       // Initial draw
       // Load persisted state AFTER UI elements exist
       const persisted = loadState();
+      const rawStored = localStorage.getItem(STORAGE_KEY);
+      console.debug('[Startup] Raw stored snapshot:', rawStored);
       if(!persisted){
         // First visit: default to dark mode
         filterState.darkMode = true;
-        document.body.classList.add('dark-mode');
-        // Persist immediately so subsequent loads treat it as user state until they change it
-        saveState();
+        saveState(); // create initial snapshot
+        console.debug('[Startup] No persisted state; initialized darkMode=true');
       }
       applyPersistedState(persisted, domains, normalizedVendors);
+      syncDisplayMode();
   // Enforce learner mode OFF on initial load display (persisted statuses remain but styling not applied until user turns ON)
   filterState.learnerMode = false;
   filterState.learnerView = 'baseline';
@@ -2071,12 +2086,25 @@ function enforceLegacyPlannedLimit(){
     ];
     function renderModePills() {
       modePills.innerHTML='';
+      console.debug('[ModePills] render start. filterState.darkMode=', filterState.darkMode, 'bodyHasClass?', document.body.classList.contains('dark-mode'));
+      // Auto-correct mismatch between body class and filterState to avoid pill desync
+      const bodyIsDark = document.body.classList.contains('dark-mode');
+      if(bodyIsDark !== !!filterState.darkMode){
+        console.warn('[ModePills] Detected mismatch bodyIsDark=', bodyIsDark, 'filterState.darkMode=', filterState.darkMode, '-> rectifying');
+        filterState.darkMode = bodyIsDark;
+        saveStateDebounced();
+        syncDisplayMode();
+      }
+      // Final safety sync
+      syncDisplayMode();
       modes.forEach(m => {
         const cb = document.createElement('input');
         cb.type='radio';
         cb.name='display-mode';
         cb.id=`mode-${m.id}`;
-        cb.checked = (m.id==='dark') === filterState.darkMode; // dark is checked when darkMode true
+  // Checked mapping: dark pill checked when darkMode true; light pill checked when darkMode false
+  cb.checked = (m.id==='dark' && filterState.darkMode) || (m.id==='light' && !filterState.darkMode);
+        cb.setAttribute('aria-checked', cb.checked ? 'true':'false');
         const label = document.createElement('label');
         label.className='mode-filter-tile';
         label.htmlFor=cb.id;
@@ -2098,13 +2126,15 @@ function enforceLegacyPlannedLimit(){
         cb.addEventListener('change', ()=>{
           if (!cb.checked) return;
           filterState.darkMode = (m.id === 'dark');
-            document.body.classList.toggle('dark-mode', filterState.darkMode);
+          syncDisplayMode();
+          console.debug('[ModePills] change -> darkMode=', filterState.darkMode);
           saveStateDebounced();
           renderModePills(); // re-render to refresh visuals uniformly
         });
         updateVisual();
         modePills.appendChild(label);
       });
+      console.debug('[ModePills] render complete. darkMode=', filterState.darkMode);
     }
     renderModePills();
   }
